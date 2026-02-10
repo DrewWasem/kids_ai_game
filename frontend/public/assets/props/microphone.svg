@@ -1,0 +1,23 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="64" cy="115" rx="24" ry="4" fill="#000000" opacity="0.2"/>
+  <!-- Stand base -->
+  <ellipse cx="64" cy="112" rx="20" ry="6" fill="#4B5563"/>
+  <!-- Stand pole -->
+  <rect x="61" y="45" width="6" height="68" fill="#6B7280"/>
+  <!-- Mic clip -->
+  <path d="M 54 45 Q 54 38, 64 38 Q 74 38, 74 45" stroke="#4B5563" stroke-width="4" fill="none"/>
+  <!-- Mic head top -->
+  <ellipse cx="64" cy="28" rx="12" ry="6" fill="#D1D5DB"/>
+  <!-- Mic head body -->
+  <rect x="52" y="22" width="24" height="16" fill="#9CA3AF"/>
+  <ellipse cx="64" cy="38" rx="12" ry="6" fill="#6B7280"/>
+  <!-- Mesh texture -->
+  <line x1="56" y1="24" x2="56" y2="36" stroke="#6B7280" stroke-width="1" opacity="0.3"/>
+  <line x1="60" y1="24" x2="60" y2="36" stroke="#6B7280" stroke-width="1" opacity="0.3"/>
+  <line x1="64" y1="24" x2="64" y2="36" stroke="#6B7280" stroke-width="1" opacity="0.3"/>
+  <line x1="68" y1="24" x2="68" y2="36" stroke="#6B7280" stroke-width="1" opacity="0.3"/>
+  <line x1="72" y1="24" x2="72" y2="36" stroke="#6B7280" stroke-width="1" opacity="0.3"/>
+  <!-- Highlight -->
+  <ellipse cx="58" cy="26" rx="4" ry="6" fill="#FFFFFF" opacity="0.4"/>
+</svg>

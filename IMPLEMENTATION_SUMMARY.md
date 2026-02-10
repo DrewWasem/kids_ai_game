@@ -22,37 +22,25 @@
 | `prompts/monster-party.ts` | System prompt for Monster Birthday Party task |
 | `stores/gameStore.ts` | Zustand store wired to resolver |
 
-### Asset Library (frontend/public/assets/)
+### Asset Library (frontend/public/assets/) — 53/53 Complete
 
 | Directory | Contents | Status |
 |-----------|----------|--------|
-| `raw-packs/` | 13 Kenney.nl CC0 packs (5,161 PNGs, 125MB) | Downloaded & extracted |
-| `actors/` | Character sprites | Empty — needs selection from packs |
-| `props/` | Static object images | Empty — needs selection from packs |
-| `backdrops/` | 1024x576 scene backgrounds | Empty — needs composition |
-| `reactions/` | Effect overlays | Empty — using emoji fallback |
-| `effects/` | Particle textures | Empty — needs selection from packs |
-| `ui/` | UI elements | Empty — needs selection from packs |
-| `sfx/` | Sound effects | Empty — not yet sourced |
-| `ASSET-MANIFEST.md` | 141 assets catalogued with priorities | Complete |
+| `raw-packs/` | 29 Kenney + 5 third-party CC0 packs (14,274 files, 221MB) | Downloaded & extracted |
+| `actors/` | 9 character sprites (monster, dog, trex, octopus, robot, wizard, kid, fish, squirrel) | Complete |
+| `props/` | 28 props (PNG from Kenney + custom SVGs) | Complete |
+| `backdrops/` | 6 scene backgrounds (1 PNG + 5 SVGs) | Complete |
+| `reactions/` | 10 effect overlays (hearts, stars, confetti, etc.) | Complete |
+| `effects/` | 5 particle textures (copies from reactions) | Complete |
+| `ui/` | 9 UI icons (star, trophy, audio, home, etc.) | Complete |
+| `sfx/` | 19 sound effects (clicks, jingles, impacts) | Complete |
+| `ASSET-MANIFEST.md` | Full library manifest | Complete |
 
-### Downloaded Kenney Packs (all CC0)
-
-| Priority | Pack | Size | Covers |
-|----------|------|------|--------|
-| HIGH | Particle Pack | 15MB | Stars, hearts, sparkles, fire, magic particles |
-| HIGH | Toon Characters 1 | 6.9MB | Robot (45 poses), Kid/Human (45 poses) |
-| HIGH | Food Kit | 15MB | Cake, pizza, bowls, plates, various food |
-| HIGH | Emotes Pack | 2.2MB | Hearts, question marks, expressions |
-| HIGH | Game Icons | 4.7MB | Stars, arrows, buttons, checkmarks |
-| MEDIUM | Animal Pack Redux | 5.2MB | Dog + 29 animals (round/square styles) |
-| MEDIUM | Space Shooter Redux | 2.4MB | Rockets, space backgrounds, meteors |
-| MEDIUM | Furniture Kit | 20MB | Desk, chair, fridge, toaster, table |
-| MEDIUM | Fish Pack | 1.8MB | Fish varieties, underwater elements |
-| MEDIUM | RPG Urban Pack | 2.1MB | City street tiles (16x16) |
-| MEDIUM | UI Pack | 5.3MB | Buttons, panels, arrows (themed) |
-| MEDIUM | Platformer Enemies | 1.8MB | Slime, bat, bee, frog, mouse, snake sprites |
-| MEDIUM | Background Elements | 1.6MB | Clouds, castles, trees, grass, fences |
+### Asset Sources (all CC0)
+- **29 Kenney.nl packs**: Particle, Toon Characters, Food Kit, Emotes, Game Icons, Animal Pack, Space Shooter, Furniture Kit, Fish Pack, Monster Builder, Smoke Particles, Music Jingles, Interface Sounds, Impact Sounds, etc.
+- **5 third-party CC0 packs**: Free Dino Sprites, Octopus, Squirrel, Wizard, Cute Characters (all from OpenGameArt)
+- **10 custom SVGs**: balloon, bone, drums, guitar, lunchbox, microphone, present, river, pillow-fort, fire-extinguisher
+- **5 backdrop SVGs**: party-room, wizard-kitchen, classroom, underwater-stage, city-street
 
 ### Configuration & DevOps
 
@@ -99,16 +87,16 @@ User types prompt
    Feedback Panel shows tips
 ```
 
-## Coverage Gaps (Next Steps)
+## Next Steps (Day 1 Evening → Day 2)
 
-### Assets Still Needed
-- **Actors**: monster, trex, octopus, squirrel, wizard (not in Kenney packs)
-- **Props**: balloon, present, bone, instruments (guitar, drums, keyboard, mic), lunchbox, river, pillow-fort, fire-extinguisher
-- **Backdrops**: All 6 need composition (party-room, space, wizard-kitchen, classroom, underwater-stage, city-street)
-- **Custom SVGs**: For any prop not found in downloaded packs
-
-### Day 1 Remaining Tasks
+### Ready to Build
 - [ ] Clone Phaser React template and verify it works
 - [ ] Install dependencies (Zustand, Anthropic SDK, shadcn/ui)
 - [ ] Set up Claude API client and test with Monster Party prompt
-- [ ] Select and rename best assets from downloaded packs
+- [ ] Wire organized assets into Phaser preload (MonsterPartyScene.ts)
+- [ ] Test SceneScriptPlayer with real assets instead of placeholders
+
+### Asset Improvements (Nice-to-Have)
+- Upgrade SVG props to raster art when time allows
+- Compose monster from monster-builder-pack parts (currently using single body shape)
+- Add actor pose variants (idle, cheer, hurt) from toon-characters-1

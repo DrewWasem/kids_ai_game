@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import EventBus from '../EventBus';
 import { SceneScriptPlayer } from '../SceneScriptPlayer';
+import { preloadGameAssets } from '../AssetLoader';
 import type { SceneScript } from '../../types/scene-script';
 
 export class MonsterPartyScene extends Phaser.Scene {
@@ -14,14 +15,16 @@ export class MonsterPartyScene extends Phaser.Scene {
   }
 
   preload() {
-    // Asset loading will happen here once images are sourced.
-    // The SceneScriptPlayer handles missing textures gracefully
-    // by creating colored placeholder rectangles.
+    preloadGameAssets(this);
   }
 
   create() {
-    // Party room background
-    this.cameras.main.setBackgroundColor('#1a0533');
+    // Party room backdrop
+    if (this.textures.exists('party-room')) {
+      this.add.image(512, 288, 'party-room').setOrigin(0.5);
+    } else {
+      this.cameras.main.setBackgroundColor('#1a0533');
+    }
 
     // Title text
     this.add.text(
@@ -64,13 +67,14 @@ export class MonsterPartyScene extends Phaser.Scene {
   }
 
   private spawnMonster() {
-    // Create the monster as a persistent scene element
-    // The SceneScriptPlayer will also reference "monster" by key
     const cx = this.cameras.main.centerX;
     const cy = this.cameras.main.centerY + 40;
 
     if (this.textures.exists('monster')) {
-      this.add.image(cx, cy, 'monster').setScale(1.2);
+      const img = this.add.image(cx, cy, 'monster');
+      // Scale to fit nicely (~120px tall)
+      const targetH = 120;
+      img.setScale(targetH / img.height);
     } else {
       // Placeholder monster
       const gfx = this.add.graphics();
@@ -82,13 +86,10 @@ export class MonsterPartyScene extends Phaser.Scene {
       gfx.fillStyle(0x000000, 1);
       gfx.fillCircle(cx - 15, cy - 20, 5);
       gfx.fillCircle(cx + 15, cy - 20, 5);
-      // Smile
       gfx.lineStyle(3, 0xffffff, 1);
       gfx.beginPath();
       gfx.arc(cx, cy, 20, 0.2, Math.PI - 0.2, false);
       gfx.strokePath();
-
-      // Label
       this.add.text(cx, cy + 65, 'Monster', {
         fontSize: '14px',
         color: '#B8A9D4',

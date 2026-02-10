@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <rect x="28" y="22" width="6" height="92" fill="#000000" opacity="0.15" transform="translate(2, 2)"/>
+  <!-- Pole -->
+  <rect x="28" y="22" width="6" height="92" rx="2" fill="#8B4513"/>
+  <!-- Flag body -->
+  <path d="M 34 28 L 90 28 L 85 48 L 90 68 L 34 68 Z" fill="#EF4444"/>
+  <!-- Flag wave effect -->
+  <path d="M 34 38 L 88 38" stroke="#DC2626" stroke-width="2" opacity="0.3"/>
+  <path d="M 34 48 L 86 48" stroke="#FFFFFF" stroke-width="2" opacity="0.3"/>
+  <path d="M 34 58 L 88 58" stroke="#DC2626" stroke-width="2" opacity="0.3"/>
+  <!-- Pole topper -->
+  <circle cx="31" cy="22" r="5" fill="#FCD34D"/>
+  <!-- Pole base -->
+  <rect x="24" y="114" width="14" height="4" fill="#654321"/>
+</svg>

@@ -7,11 +7,13 @@ import type {
   AnimateAction,
   ReactAction,
   EmoteAction,
+  SfxAction,
   WaitAction,
   RemoveAction,
   Position,
   MoveStyle,
 } from '../types/scene-script';
+import { SoundManager } from './SoundManager';
 
 // Position mapping for 1024x576 canvas
 const POSITIONS: Record<Position, { x: number; y: number }> = {
@@ -39,12 +41,14 @@ const SPAWN_SCALE_DURATION = 300;
  */
 export class SceneScriptPlayer {
   private scene: Phaser.Scene;
+  private sound: SoundManager;
   private actors: Map<string, Phaser.GameObjects.Image | Phaser.GameObjects.Sprite> = new Map();
   private emotes: Map<string, Phaser.GameObjects.Text> = new Map();
   private effects: Phaser.GameObjects.Particles.ParticleEmitter[] = [];
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
+    this.sound = new SoundManager(scene);
   }
 
   /** Clear all spawned objects from a previous script. */
@@ -97,8 +101,7 @@ export class SceneScriptPlayer {
       case 'emote':
         return this.doEmote(action);
       case 'sfx':
-        // Sound effects: skip if audio not loaded (graceful degradation)
-        return;
+        return this.doSfx(action);
       case 'wait':
         return this.doWait(action);
       case 'remove':
@@ -112,23 +115,28 @@ export class SceneScriptPlayer {
     const pos = POSITIONS[action.position] ?? POSITIONS['center'];
 
     let obj: Phaser.GameObjects.Image;
+    let targetScale = 1;
 
     // Try to use a loaded texture; fall back to a colored rectangle placeholder
     if (this.scene.textures.exists(key)) {
       obj = this.scene.add.image(pos.x, pos.y, key);
+      // Scale assets to a consistent display size (~80px tall)
+      const targetH = 80;
+      targetScale = targetH / obj.height;
     } else {
-      // Placeholder: colored rectangle with label
       obj = this.createPlaceholder(key, pos.x, pos.y);
     }
 
     obj.setScale(0);
     this.actors.set(key, obj);
 
+    this.sound.play('pop', 0.3);
+
     // Pop-in animation
     await this.tween({
       targets: obj,
-      scaleX: 1,
-      scaleY: 1,
+      scaleX: targetScale,
+      scaleY: targetScale,
       duration: SPAWN_SCALE_DURATION,
       ease: 'Back.easeOut',
     });
@@ -360,6 +368,7 @@ export class SceneScriptPlayer {
 
     switch (action.effect) {
       case 'confetti-burst':
+        this.sound.play('celebration', 0.4);
         await this.effectConfetti(pos);
         break;
       case 'explosion-cartoon':
@@ -548,6 +557,11 @@ export class SceneScriptPlayer {
 
     obj.destroy();
     this.actors.delete(action.target);
+  }
+
+  // ─── SFX ──────────────────────────────────────────────
+  private async doSfx(action: SfxAction): Promise<void> {
+    this.sound.play(action.sound, action.volume ?? 0.5);
   }
 
   // ─── HELPERS ───────────────────────────────────────────

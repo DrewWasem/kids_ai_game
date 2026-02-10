@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 1024 576">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff6b9d"/>
+      <stop offset="100%" stop-color="#c44569"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8b6914"/>
+      <stop offset="100%" stop-color="#6b4f12"/>
+    </linearGradient>
+  </defs>
+  <!-- Wall -->
+  <rect width="1024" height="420" fill="url(#wall)"/>
+  <!-- Floor -->
+  <rect y="420" width="1024" height="156" fill="url(#floor)"/>
+  <!-- Floor line -->
+  <line x1="0" y1="420" x2="1024" y2="420" stroke="#5a3e10" stroke-width="3"/>
+  <!-- Bunting/banner -->
+  <polyline points="0,60 80,90 160,60 240,90 320,60 400,90 480,60 560,90 640,60 720,90 800,60 880,90 960,60 1024,80" fill="none" stroke="#ffd93d" stroke-width="4"/>
+  <polyline points="0,65 80,95 160,65 240,95 320,65 400,95 480,65 560,95 640,65 720,95 800,65 880,95 960,65 1024,85" fill="none" stroke="#6c5ce7" stroke-width="4"/>
+  <!-- Balloons -->
+  <ellipse cx="150" cy="140" rx="30" ry="38" fill="#ff6348" opacity="0.8"/>
+  <ellipse cx="350" cy="120" rx="28" ry="35" fill="#ffd93d" opacity="0.8"/>
+  <ellipse cx="550" cy="130" rx="32" ry="40" fill="#6c5ce7" opacity="0.8"/>
+  <ellipse cx="750" cy="110" rx="26" ry="33" fill="#00d2d3" opacity="0.8"/>
+  <ellipse cx="900" cy="145" rx="30" ry="38" fill="#ff9ff3" opacity="0.8"/>
+  <!-- Confetti dots -->
+  <circle cx="100" cy="200" r="4" fill="#ffd93d" opacity="0.6"/>
+  <circle cx="250" cy="180" r="3" fill="#ff6348" opacity="0.6"/>
+  <circle cx="400" cy="220" r="5" fill="#6c5ce7" opacity="0.6"/>
+  <circle cx="600" cy="190" r="4" fill="#00d2d3" opacity="0.6"/>
+  <circle cx="800" cy="210" r="3" fill="#ff9ff3" opacity="0.6"/>
+  <circle cx="180" cy="300" r="4" fill="#6c5ce7" opacity="0.5"/>
+  <circle cx="460" cy="280" r="3" fill="#ffd93d" opacity="0.5"/>
+  <circle cx="700" cy="310" r="5" fill="#ff6348" opacity="0.5"/>
+</svg>

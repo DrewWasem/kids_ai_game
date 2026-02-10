@@ -8,7 +8,7 @@ Root index for the project memory system.
 |---|---|---|
 | decisions/ | Architecture, tech choices, strategic decisions | 2026-02-10 |
 | patterns/ | Reusable solutions, code patterns, techniques | - |
-| bugs/ | Bugs encountered, root causes, fixes | - |
+| bugs/ | Bugs encountered, root causes, fixes | 2026-02-10 |
 | preferences/ | User style, conventions, tool preferences | - |
 | context/ | Project architecture, domain knowledge, business logic | 2026-02-10 |
 | sessions/ | Auto-generated session summaries | 2026-02-10 |

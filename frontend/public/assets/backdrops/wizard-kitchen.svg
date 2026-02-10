@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 1024 576">
+  <defs>
+    <linearGradient id="stone-wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a3f6b"/>
+      <stop offset="100%" stop-color="#352b50"/>
+    </linearGradient>
+    <linearGradient id="stone-floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d3557"/>
+      <stop offset="100%" stop-color="#2a2440"/>
+    </linearGradient>
+  </defs>
+  <!-- Stone wall -->
+  <rect width="1024" height="400" fill="url(#stone-wall)"/>
+  <!-- Stone floor -->
+  <rect y="400" width="1024" height="176" fill="url(#stone-floor)"/>
+  <!-- Floor line -->
+  <line x1="0" y1="400" x2="1024" y2="400" stroke="#251e38" stroke-width="3"/>
+  <!-- Shelves -->
+  <rect x="50" y="80" width="200" height="8" rx="2" fill="#6b5a3e"/>
+  <rect x="50" y="180" width="200" height="8" rx="2" fill="#6b5a3e"/>
+  <rect x="780" y="100" width="180" height="8" rx="2" fill="#6b5a3e"/>
+  <!-- Potion bottles on shelves -->
+  <rect x="80" y="55" width="16" height="25" rx="4" fill="#e056a0" opacity="0.8"/>
+  <rect x="120" y="60" width="14" height="20" rx="3" fill="#56e0a0" opacity="0.8"/>
+  <rect x="160" y="50" width="18" height="30" rx="5" fill="#5680e0" opacity="0.8"/>
+  <rect x="200" y="58" width="15" height="22" rx="4" fill="#e0a056" opacity="0.8"/>
+  <!-- Cauldron -->
+  <ellipse cx="512" cy="360" rx="70" ry="50" fill="#2d2d2d"/>
+  <ellipse cx="512" cy="335" rx="65" ry="20" fill="#3d3d3d"/>
+  <ellipse cx="512" cy="335" rx="55" ry="15" fill="#1a5c1a" opacity="0.7"/>
+  <!-- Steam/magic -->
+  <circle cx="490" cy="300" r="10" fill="#56e0a0" opacity="0.3"/>
+  <circle cx="520" cy="290" r="12" fill="#56e0a0" opacity="0.25"/>
+  <circle cx="505" cy="270" r="8" fill="#56e0a0" opacity="0.2"/>
+  <!-- Magic sparkles -->
+  <circle cx="300" cy="250" r="3" fill="#ffd93d" opacity="0.5"/>
+  <circle cx="700" cy="200" r="4" fill="#a56eff" opacity="0.5"/>
+  <circle cx="450" cy="150" r="3" fill="#ffd93d" opacity="0.4"/>
+  <!-- Window (arched) -->
+  <rect x="400" y="40" width="80" height="100" rx="40" fill="#1a1040"/>
+  <rect x="408" y="48" width="64" height="84" rx="32" fill="#2a2060" opacity="0.8"/>
+  <!-- Stars in window -->
+  <circle cx="425" cy="70" r="2" fill="#ffd93d"/>
+  <circle cx="445" cy="85" r="1.5" fill="#ffd93d"/>
+  <circle cx="455" cy="65" r="2" fill="#ffd93d"/>
+</svg>

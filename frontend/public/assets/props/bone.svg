@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <g opacity="0.15" fill="#000000" transform="translate(2, 2)">
+    <circle cx="32" cy="64" r="14"/>
+    <circle cx="96" cy="64" r="14"/>
+    <rect x="32" y="56" width="64" height="16" rx="8"/>
+  </g>
+  <!-- Bone left end -->
+  <circle cx="32" cy="64" r="14" fill="#F5F5F5"/>
+  <!-- Bone right end -->
+  <circle cx="96" cy="64" r="14" fill="#F5F5F5"/>
+  <!-- Bone middle -->
+  <rect x="32" y="56" width="64" height="16" rx="8" fill="#F5F5F5"/>
+  <!-- Highlights -->
+  <circle cx="28" cy="60" r="4" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="92" cy="60" r="4" fill="#FFFFFF" opacity="0.6"/>
+  <!-- Shadow detail -->
+  <ellipse cx="64" cy="68" rx="20" ry="3" fill="#E0E0E0"/>
+</svg>

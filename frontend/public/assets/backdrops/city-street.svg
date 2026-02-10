@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 1024 576">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#74b9ff"/>
+      <stop offset="100%" stop-color="#a29bfe"/>
+    </linearGradient>
+  </defs>
+  <!-- Sky -->
+  <rect width="1024" height="350" fill="url(#sky)"/>
+  <!-- Clouds -->
+  <ellipse cx="200" cy="80" rx="60" ry="25" fill="white" opacity="0.7"/>
+  <ellipse cx="240" cy="75" rx="40" ry="20" fill="white" opacity="0.7"/>
+  <ellipse cx="700" cy="100" rx="50" ry="22" fill="white" opacity="0.6"/>
+  <ellipse cx="730" cy="95" rx="35" ry="18" fill="white" opacity="0.6"/>
+  <!-- Buildings background -->
+  <rect x="0" y="150" width="120" height="200" fill="#636e72"/>
+  <rect x="140" y="100" width="100" height="250" fill="#b2bec3"/>
+  <rect x="260" y="130" width="130" height="220" fill="#74b9ff" opacity="0.4"/>
+  <rect x="410" y="80" width="110" height="270" fill="#a29bfe" opacity="0.5"/>
+  <rect x="540" y="120" width="140" height="230" fill="#636e72"/>
+  <rect x="700" y="90" width="100" height="260" fill="#b2bec3"/>
+  <rect x="820" y="140" width="120" height="210" fill="#74b9ff" opacity="0.4"/>
+  <rect x="950" y="110" width="74" height="240" fill="#a29bfe" opacity="0.5"/>
+  <!-- Windows -->
+  <rect x="20" y="170" width="20" height="25" rx="2" fill="#ffeaa7" opacity="0.6"/>
+  <rect x="60" y="170" width="20" height="25" rx="2" fill="#ffeaa7" opacity="0.5"/>
+  <rect x="20" y="220" width="20" height="25" rx="2" fill="#ffeaa7" opacity="0.4"/>
+  <rect x="60" y="220" width="20" height="25" rx="2" fill="#ffeaa7" opacity="0.6"/>
+  <rect x="160" y="120" width="18" height="22" rx="2" fill="#ffeaa7" opacity="0.5"/>
+  <rect x="200" y="120" width="18" height="22" rx="2" fill="#ffeaa7" opacity="0.6"/>
+  <rect x="160" y="170" width="18" height="22" rx="2" fill="#ffeaa7" opacity="0.4"/>
+  <rect x="200" y="170" width="18" height="22" rx="2" fill="#ffeaa7" opacity="0.5"/>
+  <rect x="560" y="140" width="22" height="26" rx="2" fill="#ffeaa7" opacity="0.5"/>
+  <rect x="610" y="140" width="22" height="26" rx="2" fill="#ffeaa7" opacity="0.6"/>
+  <rect x="560" y="195" width="22" height="26" rx="2" fill="#ffeaa7" opacity="0.4"/>
+  <rect x="610" y="195" width="22" height="26" rx="2" fill="#ffeaa7" opacity="0.5"/>
+  <!-- Road -->
+  <rect y="350" width="1024" height="226" fill="#636e72"/>
+  <!-- Sidewalk -->
+  <rect y="350" width="1024" height="40" fill="#b2bec3"/>
+  <!-- Road markings -->
+  <line x1="100" y1="470" x2="180" y2="470" stroke="#ffeaa7" stroke-width="4" stroke-dasharray="1"/>
+  <line x1="280" y1="470" x2="360" y2="470" stroke="#ffeaa7" stroke-width="4" stroke-dasharray="1"/>
+  <line x1="460" y1="470" x2="540" y2="470" stroke="#ffeaa7" stroke-width="4" stroke-dasharray="1"/>
+  <line x1="640" y1="470" x2="720" y2="470" stroke="#ffeaa7" stroke-width="4" stroke-dasharray="1"/>
+  <line x1="820" y1="470" x2="900" y2="470" stroke="#ffeaa7" stroke-width="4" stroke-dasharray="1"/>
+</svg>

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import EventBus from '../EventBus';
 import { SceneScriptPlayer } from '../SceneScriptPlayer';
+import { preloadGameAssets } from '../AssetLoader';
 import type { SceneScript } from '../../types/scene-script';
 
 export class RobotPizzaScene extends Phaser.Scene {
@@ -14,17 +15,17 @@ export class RobotPizzaScene extends Phaser.Scene {
   }
 
   preload() {
-    // Asset loading will happen here once images are sourced.
-    // The SceneScriptPlayer handles missing textures gracefully
-    // by creating colored placeholder rectangles.
+    preloadGameAssets(this);
   }
 
   create() {
-    // City skyline background — dark blue/gray gradient
-    this.cameras.main.setBackgroundColor('#0d1b2a');
-
-    // Draw simple city skyline silhouette
-    this.drawCitySkyline();
+    // City backdrop
+    if (this.textures.exists('city-street')) {
+      this.add.image(512, 288, 'city-street').setOrigin(0.5);
+    } else {
+      this.cameras.main.setBackgroundColor('#0d1b2a');
+      this.drawCitySkyline();
+    }
 
     // Title text
     this.add.text(
@@ -118,12 +119,13 @@ export class RobotPizzaScene extends Phaser.Scene {
   }
 
   private spawnRobot() {
-    // Create the robot as a persistent scene element
     const cx = this.cameras.main.centerX;
     const cy = this.cameras.main.centerY + 40;
 
     if (this.textures.exists('robot')) {
-      this.add.image(cx, cy, 'robot').setScale(1.2);
+      const img = this.add.image(cx, cy, 'robot');
+      const targetH = 120;
+      img.setScale(targetH / img.height);
     } else {
       // Placeholder robot
       const gfx = this.add.graphics();

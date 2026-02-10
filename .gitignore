@@ -168,6 +168,10 @@ dist
 # Gatsby files
 .cache/
 public
+!frontend/public/
+!frontend/public/assets/
+!frontend/public/assets/**
+frontend/public/assets/raw-packs/
 
 # vuepress
 .vuepress/dist

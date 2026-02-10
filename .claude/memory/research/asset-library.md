@@ -4,79 +4,83 @@
 **Last Updated:** 2026-02-10
 **Source:** session
 **Confidence:** high
-**Tags:** assets, kenney, sprites, cc0, asset-library
+**Tags:** assets, kenney, download, setup, day-1, game-juice, kids-ux
 
 ## Summary
+29 Kenney.nl CC0 packs downloaded (14,274 files, 221MB). Expanded from initial 13 to 29 packs covering characters, monsters, robots, food, particles, effects, audio, UI, backgrounds, and icons. Research also covers kids game UX patterns and Phaser juice techniques.
 
-Downloaded 13 Kenney.nl asset packs (CC0 license) to `frontend/public/assets/raw-packs/`. Total: 5,161 PNG files, 125MB. Strong coverage for robot, food, furniture, particles, UI. Still need custom SVGs for balloon, present, instruments, and itch.io sourcing for monster, trex, octopus, squirrel.
+## Downloaded Packs (29 total, all CC0)
 
-## Details
+### Wave 1 — Core (13 packs)
+Particle Pack, Toon Characters 1, Food Kit, Emotes Pack, Game Icons, Animal Pack Redux, Space Shooter Redux, Furniture Kit, Fish Pack, RPG Urban Pack, UI Pack, Platformer Enemies, Background Elements
 
-### Downloaded Packs (13 total)
+### Wave 2 — Expanded (16 additional packs)
+Monster Builder Pack, Robot Pack, Modular Characters, Shape Characters, Smoke Particles, Music Jingles, Interface Sounds, Impact Sounds, Digital Audio, Board Game Icons, Game Icons Expansion, Background Elements Redux, Alien UFO Pack, Pattern Pack, Input Prompts, Platformer Art Deluxe
 
-**HIGH Priority (5 packs):**
-1. `kenney_particle-pack` (15MB) — stars, hearts, sparkles, fire, smoke, magic particles
-2. `kenney_toon-characters-1` (6.9MB) — Robot + human characters, 45 poses each (idle, cheer, walk, talk, jump, etc.)
-3. `kenney_food-kit` (15MB) — cake, pizza, bowl-soup, plates, cupcake, various food (3D renders as 2D PNGs)
-4. `kenney_emotes-pack` (2.2MB) — hearts, question marks, exclamation, sleep, music, anger emotes
-5. `kenney_game-icons` (4.7MB) — arrows, buttons, checkmarks, crosses, stars
+## Key Asset Mappings
 
-**MEDIUM Priority (8 packs):**
-6. `kenney_animal-pack-redux` (5.2MB) — dog + 29 animals (round/square styles, with/without outlines)
-7. `kenney_space-shooter-redux` (2.4MB) — rockets/ships, space backgrounds, meteors, effects
-8. `kenney_furniture-kit` (20MB) — chair, desk, fridge, toaster, table, bed + many more (side view)
-9. `kenney_fish-pack` (1.8MB) — fish varieties, underwater backgrounds, seaweed, bubbles
-10. `kenney_rpg-urban-pack` (2.1MB) — city tiles 16x16 for city-street backdrop
-11. `kenney_ui-pack` (5.3MB) — buttons, panels, arrows (blue/green/grey/red/yellow themes)
-12. `kenney_platformer-enemies` (1.8MB) — slime, bat, bee, frog, mouse, snake, worm, ladybug sprites
-13. `kenney_background-elements` (1.6MB) — clouds, castles, grass, trees, fences, sample backgrounds
+### Monster (SOLVED via Monster Builder Pack)
+`kenney_monster-builder-pack/PNG/Default/` — modular parts: body, arms, legs, eyes (6 variants), mouths (A-J), horns, ears, antennae in 6 colors (blue, dark, green, red, white, yellow). Can compose custom monsters.
 
-**Pack locations:** `/Users/LuffyDMonkey/claude_projects/kids_ai_game/frontend/public/assets/raw-packs/`
+### Robot (multiple options)
+- `kenney_toon-characters-1/Robot/PNG/Poses HD/` — 45 poses (idle, cheer, walk, jump, think, talk, etc.)
+- `kenney_robot-pack/PNG/Side view/` — 4-color robots with body/drive/jump/hurt/damage states
 
-### Vocabulary Contract → Pack Mapping
+### Kid
+`kenney_toon-characters-1/Male person/PNG/Poses HD/` — 45 poses
 
-| Asset Key | Best Pack Match | Path |
-|-----------|----------------|------|
-| `robot` | toon-characters-1 | `Robot/PNG/Poses/character_robot_idle.png` |
-| `kid` | toon-characters-1 | `Male person/PNG/Poses/character_malePerson_idle.png` |
-| `dog` | animal-pack-redux | `PNG/Round/dog.png` |
-| `monster` | platformer-enemies | `Enemy sprites/slime*.png` or custom |
-| `cake` | food-kit | `Previews/cake-birthday.png` |
-| `pizza` | food-kit | `Previews/pizza.png` |
-| `plates` | food-kit | `Previews/plate.png` |
-| `soup-bowl` | food-kit | `Previews/bowl-soup.png` |
-| `toaster` | furniture-kit | `Side/toaster.png` |
-| `fridge` | furniture-kit | `Side/kitchenFridge.png` |
-| `desk` | furniture-kit | `Side/desk.png` |
-| `chair` | furniture-kit | `Side/chair.png` |
-| `fish` | fish-pack | `PNG/Default/fish_blue.png` |
-| `rocket` | space-shooter-redux | `PNG/playerShip*.png` |
-| Stars/hearts (effects) | particle-pack | `PNG (Transparent)/star_*.png`, etc. |
+### Dog
+`kenney_animal-pack-redux/PNG/Round/dog.png`
 
-### Coverage Gaps (Still Needed)
+### Food (cake, pizza, plates, bowls)
+`kenney_food-kit/Previews/` — cake-birthday.png, pizza.png, plate.png, bowl-soup.png
 
-**Not in Kenney packs:**
-- `monster`: No dedicated monster sprite (slime/bat are closest). Consider itch.io or custom.
-- `trex`: Not found. Need OpenGameArt or itch.io.
-- `octopus`: Not found. Need itch.io Elthen pack.
-- `squirrel`: Not found. Need OpenGameArt.
-- `wizard`: No wizard character. Could use Female/Male adventurer poses.
-- `balloon`, `present`, `bone`: Not found. Need custom SVGs.
-- `guitar`, `drums`, `keyboard`, `microphone`: Musical instruments not in any pack. Need custom.
-- **Backdrops:** No pre-made full backgrounds for party-room, wizard-kitchen, classroom, underwater-stage. Need to compose from tiles or source elsewhere.
+### Furniture (toaster, fridge, desk, chair)
+`kenney_furniture-kit/Side/` — toaster.png, kitchenFridge.png, desk.png, chair.png
 
-### Next Steps
+### Audio
+- `kenney_music-jingles/Audio/` — 5 categories: 8-bit, hit, pizzicato, sax, steel
+- `kenney_interface-sounds/Audio/` — click, back, bong, close, confirmation, error, scroll
+- `kenney_impact-sounds/Audio/` — impact/collision sounds
+- `kenney_digital-audio/Audio/` — space/laser sounds
 
-1. Select best asset from each pack per vocabulary contract key
-2. Rename and copy to organized `actors/`, `props/`, `backdrops/` directories
-3. Create custom SVGs for missing items (balloon, present, instruments)
-4. Source monster, trex, octopus, squirrel from itch.io/OpenGameArt
-5. Create/compose 6 backdrop images (1024x576)
+### Effects
+- `kenney_particle-pack/PNG (Transparent)/` — star, fire, flame, smoke, spark, magic
+- `kenney_smoke-particles/` — smoke and explosion particles
+- `kenney_emotes-pack/PNG/Pixel/` — heart, question, exclamation emotes
 
-**Statistics:** 5,161 PNG files, 125MB total (raw, before selection)
+## Coverage Gaps (Still Needed)
+- **trex**: Not in any downloaded pack. Source from OpenGameArt CC0 dino sprites.
+- **octopus**: Not in any downloaded pack. Elthen itch.io pack (free).
+- **squirrel**: Not in any downloaded pack. OpenGameArt pixel squirrel (CC0).
+- **wizard**: No dedicated wizard. Use Modular Characters or LuizMelo Wizard Pack (CC0).
+- **balloon, present, instruments**: Not in packs. Need custom SVGs or itch.io sourcing.
+- **Backdrops**: All 6 still need composition. Sources identified: ansimuz underwater, Lucky city parallax, NoranekoGames anime backgrounds.
+
+## Kids Game UX Research Findings
+
+### Key Design Rules (ages 8-10)
+- Minimum 14pt body text, 24pt headings
+- Tap targets minimum 75x75px
+- Ages 8-10 prefer **muted** palettes over bright primary (Pixar not Fisher-Price)
+- Every interaction needs visual + audio feedback
+- No hamburger menus — kids don't recognize them
+- Limit 3-5 choices per screen
+- Word suggestion chips reduce typing friction 40-60% for kids
+
+### Phaser Juice Techniques
+- **Spawn**: Scale 0→1 with Bounce.Out + pop SFX
+- **Move**: Cubic.Out easing + whoosh SFX
+- **Success**: camera.flash → camera.zoomTo(1.15) → confetti → narration
+- **Fail**: camera.shake → sad-trombone → confused anim → feedback
+- **Idle**: Sine.InOut yoyo for floating/bobbing
+
+### Priority Upgrades from Research
+- `speech-bubble`: MEDIUM → HIGH (critical for narration)
+- `arrow-hint`: LOW → HIGH (first-time guidance)
+- Sound effects (click, pop, whoosh): should be HIGH priority
 
 ## Related
-
-- `/Users/LuffyDMonkey/claude_projects/kids_ai_game/frontend/public/assets/ASSET-MANIFEST.md` (full manifest)
-- `/Users/LuffyDMonkey/claude_projects/kids_ai_game/.claude/memory/research/vocabulary-contract.md` (asset contract)
-- `/Users/LuffyDMonkey/claude_projects/kids_ai_game/docs/Prompt-Quest-Outrageous-Tasks-Asset-Library.html` (task design doc)
+- `frontend/public/assets/ASSET-MANIFEST.md` — full manifest with priorities
+- `.claude/memory/context/asset-pack-locations.md` — detailed file paths
+- `.claude/memory/decisions/asset-sourcing-strategy.md` — sourcing strategy

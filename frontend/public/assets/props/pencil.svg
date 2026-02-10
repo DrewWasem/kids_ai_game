@@ -1,0 +1,18 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <g transform="rotate(-45 64 64)">
+    <!-- Shadow -->
+    <rect x="48" y="18" width="32" height="92" fill="#000000" opacity="0.15" transform="translate(2, 2)"/>
+    <!-- Pencil body -->
+    <rect x="48" y="18" width="32" height="80" fill="#FCD34D" rx="2"/>
+    <!-- Wood tip -->
+    <path d="M 48 98 L 64 118 L 80 98 Z" fill="#F4A460"/>
+    <!-- Graphite -->
+    <path d="M 58 98 L 64 108 L 70 98 Z" fill="#333333"/>
+    <!-- Eraser holder -->
+    <rect x="48" y="14" width="32" height="6" fill="#C0C0C0"/>
+    <!-- Eraser -->
+    <rect x="48" y="8" width="32" height="8" fill="#FF6B9D" rx="1"/>
+    <!-- Highlight -->
+    <rect x="52" y="24" width="6" height="60" fill="#FFFFFF" opacity="0.3" rx="1"/>
+  </g>
+</svg>

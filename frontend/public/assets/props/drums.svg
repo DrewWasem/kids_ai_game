@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="64" cy="95" rx="32" ry="8" fill="#000000" opacity="0.2" transform="translate(2, 2)"/>
+  <!-- Bass drum body -->
+  <ellipse cx="64" cy="70" rx="32" ry="12" fill="#DC2626"/>
+  <rect x="32" y="70" width="64" height="24" fill="#DC2626"/>
+  <ellipse cx="64" cy="94" rx="32" ry="12" fill="#B91C1C"/>
+  <!-- Drum rim top -->
+  <ellipse cx="64" cy="70" rx="32" ry="12" fill="#EF4444"/>
+  <!-- Drum logo circle -->
+  <circle cx="64" cy="82" r="12" fill="#7C3AED" opacity="0.3"/>
+  <!-- Cymbal stand -->
+  <line x1="88" y1="50" x2="88" y2="78" stroke="#A0A0A0" stroke-width="3"/>
+  <!-- Cymbal -->
+  <ellipse cx="88" cy="45" rx="18" ry="6" fill="#FCD34D"/>
+  <ellipse cx="88" cy="45" rx="14" ry="4" fill="#F59E0B"/>
+  <!-- Stand base -->
+  <path d="M 82 78 L 94 78" stroke="#A0A0A0" stroke-width="4" stroke-linecap="round"/>
+</svg>

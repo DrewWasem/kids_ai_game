@@ -1,0 +1,27 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="64" cy="115" rx="28" ry="6" fill="#000000" opacity="0.2"/>
+  <!-- Body -->
+  <rect x="42" y="60" width="44" height="54" rx="8" fill="#E5E5E5"/>
+  <!-- Chest pack -->
+  <rect x="50" y="68" width="28" height="20" rx="3" fill="#3B82F6"/>
+  <rect x="52" y="71" width="10" height="4" rx="1" fill="#60A5FA"/>
+  <rect x="52" y="78" width="10" height="4" rx="1" fill="#60A5FA"/>
+  <circle cx="70" cy="78" r="5" fill="#22D3EE"/>
+  <!-- Arms -->
+  <rect x="26" y="64" width="18" height="36" rx="6" fill="#F5F5F5"/>
+  <rect x="84" y="64" width="18" height="36" rx="6" fill="#F5F5F5"/>
+  <!-- Gloves -->
+  <ellipse cx="35" cy="100" rx="10" ry="8" fill="#E5E5E5"/>
+  <ellipse cx="93" cy="100" rx="10" ry="8" fill="#E5E5E5"/>
+  <!-- Helmet -->
+  <circle cx="64" cy="38" r="24" fill="#E0F2FE"/>
+  <circle cx="64" cy="38" r="20" fill="#38BDF8" opacity="0.3"/>
+  <!-- Helmet rim -->
+  <ellipse cx="64" cy="56" rx="26" ry="8" fill="#D1D5DB"/>
+  <!-- Visor reflection -->
+  <ellipse cx="58" cy="32" rx="8" ry="12" fill="#FFFFFF" opacity="0.5"/>
+  <!-- Legs -->
+  <rect x="46" y="106" width="14" height="8" rx="2" fill="#E5E5E5"/>
+  <rect x="68" y="106" width="14" height="8" rx="2" fill="#E5E5E5"/>
+</svg>

@@ -22,12 +22,14 @@ interface GameState {
   lastSource: ResponseSource | null;
   error: string | null;
   history: HistoryEntry[];
+  isMuted: boolean;
 
   // Actions
   setInput: (input: string) => void;
   submitInput: () => Promise<void>;
   clearScript: () => void;
   clearError: () => void;
+  toggleMute: () => void;
 }
 
 const SYSTEM_PROMPTS: Record<string, string> = {
@@ -43,6 +45,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   lastSource: null,
   error: null,
   history: [],
+  isMuted: false,
 
   setInput: (input: string) => set({ userInput: input }),
 
@@ -87,4 +90,5 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   clearScript: () => set({ lastScript: null, lastSource: null }),
   clearError: () => set({ error: null }),
+  toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
 }));

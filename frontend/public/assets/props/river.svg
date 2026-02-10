@@ -1,0 +1,13 @@
+<svg width="256" height="128" viewBox="0 0 256 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- River base -->
+  <path d="M 0 50 Q 64 45, 128 50 Q 192 55, 256 50 L 256 78 Q 192 83, 128 78 Q 64 73, 0 78 Z" fill="#3B82F6"/>
+  <!-- Darker water layer -->
+  <path d="M 0 60 Q 64 57, 128 60 Q 192 63, 256 60 L 256 78 Q 192 83, 128 78 Q 64 73, 0 78 Z" fill="#2563EB" opacity="0.6"/>
+  <!-- Wave highlights -->
+  <path d="M 0 55 Q 32 53, 64 55 Q 96 57, 128 55 Q 160 53, 192 55 Q 224 57, 256 55" stroke="#60A5FA" stroke-width="3" fill="none" opacity="0.5"/>
+  <path d="M 0 65 Q 32 63, 64 65 Q 96 67, 128 65 Q 160 63, 192 65 Q 224 67, 256 65" stroke="#60A5FA" stroke-width="2" fill="none" opacity="0.3"/>
+  <!-- Water ripples -->
+  <ellipse cx="48" cy="62" rx="12" ry="4" fill="#93C5FD" opacity="0.4"/>
+  <ellipse cx="128" cy="68" rx="10" ry="3" fill="#93C5FD" opacity="0.4"/>
+  <ellipse cx="208" cy="64" rx="14" ry="5" fill="#93C5FD" opacity="0.4"/>
+</svg>

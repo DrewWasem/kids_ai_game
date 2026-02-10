@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="576" viewBox="0 0 1024 576">
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0077b6"/>
+      <stop offset="50%" stop-color="#005e93"/>
+      <stop offset="100%" stop-color="#003d5c"/>
+    </linearGradient>
+  </defs>
+  <!-- Water background -->
+  <rect width="1024" height="576" fill="url(#water)"/>
+  <!-- Sandy bottom -->
+  <path d="M0,520 Q100,500 200,515 Q350,530 500,510 Q650,500 800,520 Q900,530 1024,510 L1024,576 L0,576 Z" fill="#c2956a" opacity="0.6"/>
+  <!-- Seaweed -->
+  <path d="M100,576 Q90,510 110,460 Q120,420 100,380" fill="none" stroke="#228b22" stroke-width="8" opacity="0.6"/>
+  <path d="M130,576 Q120,520 140,480 Q150,440 130,400" fill="none" stroke="#2ecc40" stroke-width="6" opacity="0.5"/>
+  <path d="M850,576 Q840,500 860,440 Q870,400 850,360" fill="none" stroke="#228b22" stroke-width="8" opacity="0.6"/>
+  <path d="M880,576 Q870,510 890,460 Q900,420 880,380" fill="none" stroke="#2ecc40" stroke-width="6" opacity="0.5"/>
+  <!-- Bubbles -->
+  <circle cx="200" cy="100" r="8" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+  <circle cx="220" cy="150" r="5" fill="none" stroke="white" stroke-width="1" opacity="0.25"/>
+  <circle cx="500" cy="80" r="10" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+  <circle cx="480" cy="130" r="6" fill="none" stroke="white" stroke-width="1" opacity="0.2"/>
+  <circle cx="750" cy="120" r="7" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+  <circle cx="770" cy="170" r="4" fill="none" stroke="white" stroke-width="1" opacity="0.2"/>
+  <!-- Light rays -->
+  <polygon points="300,0 340,0 450,576 350,576" fill="white" opacity="0.04"/>
+  <polygon points="550,0 590,0 700,576 600,576" fill="white" opacity="0.04"/>
+  <polygon points="750,0 780,0 860,576 780,576" fill="white" opacity="0.03"/>
+  <!-- Coral/rocks -->
+  <ellipse cx="300" cy="530" rx="40" ry="25" fill="#e74c3c" opacity="0.5"/>
+  <ellipse cx="650" cy="540" rx="35" ry="20" fill="#f39c12" opacity="0.5"/>
+</svg>

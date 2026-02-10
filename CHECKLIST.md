@@ -20,9 +20,16 @@ Track progress against the 7-day roadmap. Updated as work completes.
   - [x] Extract all 13 packs to `public/assets/raw-packs/` (5,161 PNGs, 125MB)
   - [x] Create directory structure: `actors/`, `props/`, `backdrops/`, `reactions/`, `effects/`, `ui/`, `sfx/`
   - [x] Create comprehensive `ASSET-MANIFEST.md` (141 assets, 4 priority levels)
-- [ ] Select and rename best assets per vocabulary contract key
-- [ ] Source missing actors: monster, trex, octopus, squirrel (itch.io/OpenGameArt)
-- [ ] Create custom SVGs for missing props: balloon, present, instruments
+- [x] Select and rename best assets per vocabulary contract key
+  - [x] 9 actors: robot+kid (toon-characters), dog (animal-pack), fish (fish-pack), monster (monster-builder)
+  - [x] 18 props from Kenney packs (food-kit, furniture-kit, space-shooter, particle-pack, game-icons)
+- [x] Source missing actors: monster, trex, octopus, squirrel, wizard (OpenGameArt CC0)
+  - [x] Download 5 third-party packs (dinosaur, octopus, squirrel, wizard, cute-characters)
+- [x] Create custom SVGs for missing props: balloon, present, instruments, etc.
+  - [x] 10 SVGs: balloon, bone, drums, guitar, lunchbox, microphone, present, river, pillow-fort, fire-extinguisher
+- [x] Create backdrop SVGs (party-room, wizard-kitchen, classroom, underwater-stage, city-street)
+- [x] Organize 53/53 vocabulary contract assets into structured directories
+- [x] Copy UI icons (9) and SFX audio (19) from Kenney packs
 
 **Gate:** Phaser scene loads, Claude returns valid JSON for "throw a huge cake"
 
@@ -111,28 +118,22 @@ Track progress against the 7-day roadmap. Updated as work completes.
 
 ---
 
-## Asset Library Status
+## Asset Library Status — COMPLETE
 
-### Downloaded Packs (13 total, all CC0)
-| # | Pack | Size | Priority |
-|---|------|------|----------|
-| 1 | Kenney Particle Pack | 15MB | HIGH |
-| 2 | Kenney Toon Characters 1 | 6.9MB | HIGH |
-| 3 | Kenney Food Kit | 15MB | HIGH |
-| 4 | Kenney Emotes Pack | 2.2MB | HIGH |
-| 5 | Kenney Game Icons | 4.7MB | HIGH |
-| 6 | Kenney Animal Pack Redux | 5.2MB | MEDIUM |
-| 7 | Kenney Space Shooter Redux | 2.4MB | MEDIUM |
-| 8 | Kenney Furniture Kit | 20MB | MEDIUM |
-| 9 | Kenney Fish Pack | 1.8MB | MEDIUM |
-| 10 | Kenney RPG Urban Pack | 2.1MB | MEDIUM |
-| 11 | Kenney UI Pack | 5.3MB | MEDIUM |
-| 12 | Kenney Platformer Enemies | 1.8MB | MEDIUM |
-| 13 | Kenney Background Elements | 1.6MB | MEDIUM |
+### Vocabulary Contract: 53/53 assets organized
+| Category | Count | Format | Source |
+|----------|-------|--------|--------|
+| Actors | 9/9 | PNG | Kenney (5) + OpenGameArt CC0 (4) |
+| Props | 28/28 | PNG + SVG | Kenney (18) + custom SVG (10) |
+| Reactions | 10/10 | PNG | Kenney emotes + particles |
+| Backdrops | 6/6 | PNG + SVG | Kenney (1) + custom SVG (5) |
+| UI | 9 | PNG | Kenney Game Icons |
+| SFX | 19 | OGG | Kenney audio packs (4) |
 
-### Coverage Gaps
-- **Actors needed from other sources:** monster, trex, octopus, squirrel, wizard
-- **Props needing custom SVGs:** balloon, present, bone, guitar, drums, keyboard, microphone, lunchbox, river, pillow-fort, fire-extinguisher
-- **Backdrops:** All 6 need composition or sourcing (party-room, space, wizard-kitchen, classroom, underwater-stage, city-street)
+### Downloaded Packs (29 Kenney + 5 third-party, all CC0)
+Total: 14,274+ files, 221MB+ raw
+
+### No Coverage Gaps Remaining
+All vocabulary contract assets have files. Some props use SVG placeholders that can be upgraded to raster art later.
 
 Full manifest: `frontend/public/assets/ASSET-MANIFEST.md`
