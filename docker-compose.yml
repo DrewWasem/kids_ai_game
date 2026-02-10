@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: myapp
+      POSTGRES_PASSWORD: myapp_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/deploy.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      MYAPP_DB_HOST: db
+      MYAPP_DB_PORT: "5432"
+      MYAPP_DB_NAME: myapp
+      MYAPP_DB_USER: myapp
+      MYAPP_DB_PASSWORD: myapp_dev_password
+      MYAPP_SECRET_KEY: ${MYAPP_SECRET_KEY:-change-me-in-production-32chars!}
+      MYAPP_RATE_LIMIT_REDIS_URL: redis://redis:6379
+      MYAPP_CORS_ORIGINS: "http://localhost:5173,http://localhost:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

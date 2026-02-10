@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest — Complete Brand & Game Design Brief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    /* Primary Brand */
+    --purple-deep: #6C3FC5;
+    --purple-mid: #8B5CF6;
+    --purple-light: #A78BFA;
+    --purple-glow: rgba(139, 92, 246, 0.15);
+    --purple-surface: #2D1B69;
+
+    /* Accent — Warm Orange */
+    --orange: #FF8C42;
+    --orange-light: #FFB380;
+    --orange-glow: rgba(255, 140, 66, 0.15);
+
+    /* Success / Reward */
+    --green: #34D399;
+    --green-deep: #10B981;
+    --green-glow: rgba(52, 211, 153, 0.12);
+
+    /* Fun Fail / Warning */
+    --yellow: #FBBF24;
+    --yellow-light: #FDE68A;
+    --yellow-glow: rgba(251, 191, 36, 0.12);
+
+    /* Info / Explorer */
+    --blue: #60A5FA;
+    --blue-deep: #3B82F6;
+    --blue-glow: rgba(96, 165, 250, 0.12);
+
+    /* Celebration / Magic */
+    --pink: #F472B6;
+    --pink-light: #FBCFE8;
+    --pink-glow: rgba(244, 114, 182, 0.12);
+
+    /* Error — Soft, never scary */
+    --red-soft: #FCA5A5;
+    --red: #F87171;
+
+    /* Dark Foundation */
+    --bg-deep: #0F0A1A;
+    --bg: #1A0F2E;
+    --bg-card: #231546;
+    --bg-surface: #2D1B69;
+    --border: #3D2B7A;
+    --border-light: #4C3D8F;
+
+    /* Text */
+    --text-bright: #FFFFFF;
+    --text-primary: #E8E0F7;
+    --text-secondary: #B8A9D4;
+    --text-dim: #8B7AAE;
+    --text-muted: #6B5C8A;
+
+    /* Spacing */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+  }
+
+  body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'Space Grotesk', monospace; }
+
+  /* ─── Header ─── */
+  .header {
+    background: linear-gradient(140deg, #0A0515 0%, #1A0F2E 25%, #2D1B69 55%, #6C3FC5 85%, #FF8C42 100%);
+    padding: 72px 28px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -30px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,140,66,0.08);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; left: 80px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(139,92,246,0.1);
+  }
+  .header .stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1.5px 1.5px at 30% 60%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1.5px 1.5px at 95% 15%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.3), transparent);
+  }
+  .header-inner { position: relative; max-width: 760px; margin: 0 auto; }
+  .header .badge {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 20px;
+    background: rgba(255,140,66,0.2);
+    border: 1px solid rgba(255,140,66,0.35);
+    font-size: 11px; font-weight: 800;
+    color: var(--orange);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 52px; font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .header h1 .quest { color: var(--orange); }
+  .header h1 .dot { color: var(--green); }
+  .header p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 16px;
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* ─── Nav ─── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg-deep);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner {
+    display: flex; gap: 4px;
+    max-width: 760px; margin: 0 auto;
+    padding: 10px 16px;
+  }
+  .nav a {
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 700;
+    color: var(--text-dim);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .nav a:hover { background: var(--bg-card); color: var(--orange); }
+
+  /* ─── Main ─── */
+  .main { max-width: 760px; margin: 0 auto; padding: 40px 20px 100px; }
+
+  /* ─── Sections ─── */
+  .section { margin-bottom: 56px; scroll-margin-top: 70px; }
+  .section h2 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 28px; font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .section .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* ─── Cards ─── */
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .card.accent-purple { border-left: 4px solid var(--purple-mid); }
+  .card.accent-orange { border-left: 4px solid var(--orange); }
+  .card.accent-green { border-left: 4px solid var(--green); }
+  .card.accent-blue { border-left: 4px solid var(--blue); }
+  .card.accent-pink { border-left: 4px solid var(--pink); }
+  .card.accent-yellow { border-left: 4px solid var(--yellow); }
+
+  .label {
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .label.purple { color: var(--purple-light); }
+  .label.orange { color: var(--orange); }
+  .label.green { color: var(--green); }
+  .label.blue { color: var(--blue); }
+  .label.pink { color: var(--pink); }
+  .label.yellow { color: var(--yellow); }
+  .label.dim { color: var(--text-muted); }
+
+  /* ─── Grids ─── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+
+  @media (max-width: 640px) {
+    .grid-2, .grid-5, .grid-6 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 36px; }
+  }
+
+  /* ─── Swatches ─── */
+  .swatch { text-align: center; cursor: pointer; transition: transform 0.15s; }
+  .swatch:hover { transform: translateY(-3px); }
+  .swatch .dot {
+    width: 72px; height: 72px;
+    border-radius: var(--radius-md);
+    margin: 0 auto 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .swatch .dot.sm { width: 52px; height: 52px; border-radius: 12px; }
+  .swatch .name { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+  .swatch .hex { font-size: 10px; color: var(--text-muted); font-family: 'Space Grotesk', monospace; }
+  .swatch .role { font-size: 10px; color: var(--text-muted); margin-top: 2px; line-height: 1.3; }
+
+  /* ─── Bullet items ─── */
+  .bullet { font-size: 13px; padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; color: var(--text-secondary); }
+  .bullet .dot-green { color: var(--green); font-size: 14px; line-height: 20px; }
+  .bullet .dot-red { color: var(--red-soft); font-size: 14px; line-height: 20px; }
+  .bullet .dot-orange { color: var(--orange); font-size: 14px; line-height: 20px; }
+
+  /* ─── Feature rows ─── */
+  .feat {
+    display: flex; gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .feat:last-child { border-bottom: none; }
+  .feat .ico {
+    width: 48px; height: 48px;
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .feat .name { font-size: 15px; font-weight: 800; color: var(--text-bright); }
+  .feat .phrase { font-size: 13px; color: var(--orange); font-style: italic; margin-top: 2px; }
+  .feat .sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+
+  /* ─── Voice pairs ─── */
+  .vpair {
+    padding: 18px;
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .vpair .vlabel { font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+  .vpair .good-label { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .vpair .bad-label { font-size: 10px; font-weight: 700; color: var(--red-soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .vpair .example { font-size: 13px; line-height: 1.5; font-style: italic; }
+
+  /* ─── Tint boxes ─── */
+  .tint { padding: 16px; border-radius: var(--radius-md); }
+  .mb-0 { margin-bottom: 0; }
+  p { margin: 0; }
+  p + p { margin-top: 12px; }
+
+  /* ─── Timing table ─── */
+  .timing-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  .timing-table th {
+    text-align: left; padding: 10px 12px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+  }
+  .timing-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .timing-table td.val { color: var(--orange); font-weight: 700; font-family: 'Space Grotesk', monospace; }
+  .timing-table td.ease { color: var(--purple-light); font-family: 'Space Grotesk', monospace; font-size: 12px; }
+
+  /* ─── Sound table ─── */
+  .sound-row {
+    display: flex; gap: 12px; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sound-row:last-child { border-bottom: none; }
+  .sound-row .sound-icon { font-size: 20px; width: 36px; text-align: center; }
+  .sound-row .sound-name { font-size: 13px; font-weight: 700; color: var(--text-bright); min-width: 120px; }
+  .sound-row .sound-desc { font-size: 12px; color: var(--text-dim); }
+
+  /* ─── Phase bar ─── */
+  .phase-bar { display: flex; gap: 8px; }
+  .phase-item {
+    flex: 1; padding: 14px 10px;
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .phase-item .icon { font-size: 20px; margin-bottom: 4px; }
+  .phase-item .elabel { font-size: 11px; font-weight: 700; }
+
+  /* ─── Do / Don't boxes ─── */
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .do-box, .dont-box {
+    padding: 20px;
+    border-radius: var(--radius-md);
+  }
+  .do-box {
+    background: rgba(52, 211, 153, 0.06);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+  }
+  .dont-box {
+    background: rgba(248, 113, 113, 0.06);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+  }
+
+  /* ─── Emotion cards ─── */
+  .emotion-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .emotion-card .emoji { font-size: 32px; margin-bottom: 8px; }
+  .emotion-card .ename { font-size: 14px; font-weight: 800; color: var(--text-bright); margin-bottom: 6px; }
+  .emotion-card .edesc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* ─── Footer ─── */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<div class="header">
+  <div class="stars"></div>
+  <div class="header-inner">
+    <div class="badge">Complete Brand & Game Design Brief</div>
+    <h1>Prompt <span class="quest">Quest</span><span class="dot">.</span></h1>
+    <p>An AI-powered game teaching kids (ages 8-10) prompt engineering through play. Kids describe solutions, Claude brings them to life, and every mistake is funnier than getting it right.</p>
+  </div>
+</div>
+
+<!-- ═══════ NAV ═══════ -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#story">Brand Story</a>
+    <a href="#positioning">Positioning</a>
+    <a href="#palette">Color System</a>
+    <a href="#type">Typography</a>
+    <a href="#voice">Voice & Tone</a>
+    <a href="#visual">Visual Language</a>
+    <a href="#game-feel">Game Feel</a>
+    <a href="#sound">Sound Design</a>
+    <a href="#emotion">Emotional Design</a>
+    <a href="#ui">UI Components</a>
+    <a href="#scenes">Scene Design</a>
+    <a href="#a11y">Accessibility</a>
+  </div>
+</div>
+
+<!-- ═══════ MAIN ═══════ -->
+<div class="main">
+
+<!-- ─── BRAND STORY ─── -->
+<div class="section" id="story">
+  <h2>Brand Story</h2>
+  <div class="subtitle">The origin, the metaphor, the soul of the game</div>
+
+  <div class="card">
+    <div class="label orange">The Name</div>
+    <p style="font-size:16px;line-height:1.75;color:var(--text-bright)">
+      <strong>Prompt Quest</strong> — an adventure where your words are your superpower. Every quest begins with a blank text box and a wild scenario. What you type determines what happens. Say something specific and creative? Magic unfolds. Say something vague? Hilarious chaos. The "quest" isn't to find the right answer — it's to discover that <em>how you ask</em> changes everything. Kids don't know they're learning prompt engineering. They think they're playing the funniest game ever made.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-purple">
+      <div class="label purple">The Theater</div>
+      <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+        Imagine a magical theater where the audience writes the script. The stage has actors, props, and backdrops — all ready to go. But nothing happens until someone in the audience shouts out what should happen next. The more specific and creative the direction, the more amazing the show. Vague directions? The actors improvise — and it's hilarious. That's Prompt Quest. Claude is the director. Phaser is the stage. The kid is the playwright.
+      </p>
+    </div>
+    <div class="card accent-orange">
+      <div class="label orange">The Magic</div>
+      <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+        The real magic isn't the AI — it's the gap between what a kid imagines and what appears on screen. When a child types "launch the cat from a cannon into the birthday cake" and the game actually tries to show that, the gap between expectation and result is comedy gold. Success feels earned. Failure feels funny. And every attempt teaches the same lesson: <em>specific words create specific results</em>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label blue">The Audience</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Primary:</strong> Kids ages 8-10 (Piaget's Concrete Operational stage). They can think logically about concrete things, understand cause-and-effect, and are developing metacognition — but they still struggle with pure abstraction. They need to <em>see</em> the results of their words, not be told about "prompt engineering principles."
+    </p>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Secondary:</strong> Parents and educators who want their kids to develop AI literacy through play. The hackathon judges evaluating Opus 4.6 projects. Anyone who wants to see a kid type "give the monster a hat made of pizza" and watch the game actually do it.
+    </p>
+  </div>
+</div>
+
+<!-- ─── POSITIONING ─── -->
+<div class="section" id="positioning">
+  <h2>Positioning</h2>
+  <div class="subtitle">What Prompt Quest is — and what it absolutely isn't</div>
+
+  <div class="card accent-orange">
+    <div class="label orange">Positioning Statement</div>
+    <p style="font-size:18px;line-height:1.75;font-style:italic;color:var(--text-bright)" class="mono">
+      For kids who will grow up working alongside AI, Prompt Quest is the game that teaches them how — not through lessons or chatbots, but through play. Describe a solution, watch it come alive, learn that specificity is a superpower. AI is invisible. Fun is the interface.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="label green">Prompt Quest Is</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>A game first, educational tool second — kids never feel "taught"</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>AI as invisible engine — Claude powers it, kids never see a chatbot</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Funny fails that teach — mistakes are entertaining, not punishing</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Concrete feedback — "You forgot to describe the walls!" not "Be more specific"</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Visually immediate — type words, see animations, feel the result</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Outrageously silly — monsters, robots, dinosaurs, octopuses</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Instant and reliable — cached responses, fallback scripts, never breaks</div>
+    </div>
+    <div class="card">
+      <div class="label pink">Prompt Quest Is Not</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>ChatGPT with a cute skin — no chat interface, no conversational AI</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>A coding tutorial — no code, no syntax, no IDE</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>An AI assistant for kids — the AI never talks directly to the child</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Lecturing or preachy — no "good job!" walls of text</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Punishing for mistakes — failure is always funny, never frustrating</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Baby-ish — no baby colors, no patronizing tone, no "for little kids" aesthetic</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Complex or overwhelming — one task, one input, one magical result</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── COLOR SYSTEM ─── -->
+<div class="section" id="palette">
+  <h2>Color System</h2>
+  <div class="subtitle">The Prompt Quest palette — magical, bold, never baby-ish</div>
+
+  <div class="card">
+    <div class="label dim">Palette Philosophy</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      Prompt Quest's palette is built for <strong style="color:var(--text-bright)">dark, magical environments</strong> that feel like a game, not a classroom. The deep purple foundation creates a sense of nighttime adventure and mystery — like sneaking into a wizard's laboratory. Bright orange accents punch through the darkness as the action color — interactive, warm, inviting. Green signals success and rewards. Yellow signals "funny chaos." The palette avoids two traps: (1) bright primary colors that read as "for babies" to an 8-year-old, and (2) muted pastels that feel boring. Research from Lullabot and NN/Group shows kids ages 8-10 prefer rich, saturated palettes over both primary colors and muted tones. Think <em>Minecraft</em> meets <em>Gravity Falls</em> — colorful but with depth.
+    </p>
+  </div>
+
+  <!-- Primary Brand -->
+  <div class="card">
+    <div class="label purple">Primary Brand Colors</div>
+    <div class="grid-5" style="margin-top:12px">
+      <div class="swatch"><div class="dot" style="background:#6C3FC5"></div><div class="name">Deep Purple</div><div class="hex">#6C3FC5</div><div class="role">Brand, headings, key UI</div></div>
+      <div class="swatch"><div class="dot" style="background:#8B5CF6"></div><div class="name">Vivid Purple</div><div class="hex">#8B5CF6</div><div class="role">Buttons, active states</div></div>
+      <div class="swatch"><div class="dot" style="background:#FF8C42"></div><div class="name">Warm Orange</div><div class="hex">#FF8C42</div><div class="role">CTAs, highlights, action</div></div>
+      <div class="swatch"><div class="dot" style="background:#34D399"></div><div class="name">Reward Green</div><div class="hex">#34D399</div><div class="role">Success, celebrations</div></div>
+      <div class="swatch"><div class="dot" style="background:#FBBF24"></div><div class="name">Fun Yellow</div><div class="hex">#FBBF24</div><div class="role">Funny fails, stars</div></div>
+    </div>
+  </div>
+
+  <!-- Supporting Colors -->
+  <div class="card">
+    <div class="label blue">Supporting Colors</div>
+    <div class="grid-5" style="margin-top:12px">
+      <div class="swatch"><div class="dot" style="background:#60A5FA"></div><div class="name">Sky Blue</div><div class="hex">#60A5FA</div><div class="role">Info, tips, hints</div></div>
+      <div class="swatch"><div class="dot" style="background:#F472B6"></div><div class="name">Celebration Pink</div><div class="hex">#F472B6</div><div class="role">Magic, confetti, extra</div></div>
+      <div class="swatch"><div class="dot" style="background:#FCA5A5"></div><div class="name">Soft Red</div><div class="hex">#FCA5A5</div><div class="role">Gentle warnings only</div></div>
+      <div class="swatch"><div class="dot" style="background:#A78BFA"></div><div class="name">Light Purple</div><div class="hex">#A78BFA</div><div class="role">Secondary, borders</div></div>
+      <div class="swatch"><div class="dot" style="background:#FFB380"></div><div class="name">Light Orange</div><div class="hex">#FFB380</div><div class="role">Hover, warm glow</div></div>
+    </div>
+  </div>
+
+  <!-- Dark Foundation -->
+  <div class="card">
+    <div class="label dim">Dark Foundation</div>
+    <div class="grid-6" style="margin-top:12px">
+      <div class="swatch"><div class="dot sm" style="background:#0F0A1A"></div><div class="name">Void</div><div class="hex">#0F0A1A</div><div class="role">Deepest BG</div></div>
+      <div class="swatch"><div class="dot sm" style="background:#1A0F2E"></div><div class="name">Night</div><div class="hex">#1A0F2E</div><div class="role">Page BG</div></div>
+      <div class="swatch"><div class="dot sm" style="background:#231546"></div><div class="name">Card</div><div class="hex">#231546</div><div class="role">Card surfaces</div></div>
+      <div class="swatch"><div class="dot sm" style="background:#2D1B69"></div><div class="name">Surface</div><div class="hex">#2D1B69</div><div class="role">Elevated panels</div></div>
+      <div class="swatch"><div class="dot sm" style="background:#3D2B7A"></div><div class="name">Border</div><div class="hex">#3D2B7A</div><div class="role">Dividers, outlines</div></div>
+      <div class="swatch"><div class="dot sm" style="background:#4C3D8F"></div><div class="name">Border Light</div><div class="hex">#4C3D8F</div><div class="role">Active borders</div></div>
+    </div>
+  </div>
+
+  <!-- Semantic Game States -->
+  <div class="card">
+    <div class="label green">Semantic Game States</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">
+      Every game state has a distinct color. Kids intuitively learn what each color means through play.
+    </p>
+    <div class="phase-bar">
+      <div class="phase-item" style="background:rgba(96,165,250,0.1);border-left:4px solid #60A5FA"><div class="icon">&#128172;</div><div class="elabel" style="color:#60A5FA">Thinking</div></div>
+      <div class="phase-item" style="background:rgba(139,92,246,0.1);border-left:4px solid #8B5CF6"><div class="icon">&#9889;</div><div class="elabel" style="color:#8B5CF6">Animating</div></div>
+      <div class="phase-item" style="background:rgba(52,211,153,0.1);border-left:4px solid #34D399"><div class="icon">&#127881;</div><div class="elabel" style="color:#34D399">Full Success</div></div>
+      <div class="phase-item" style="background:rgba(251,191,36,0.1);border-left:4px solid #FBBF24"><div class="icon">&#128514;</div><div class="elabel" style="color:#FBBF24">Funny Fail</div></div>
+      <div class="phase-item" style="background:rgba(255,140,66,0.1);border-left:4px solid #FF8C42"><div class="icon">&#128161;</div><div class="elabel" style="color:#FF8C42">Try Again</div></div>
+    </div>
+  </div>
+
+  <!-- Color Rules -->
+  <div class="card">
+    <div class="label pink">Color Rules</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">WCAG AA on dark backgrounds</strong><br><span style="color:var(--text-dim);font-size:12px">All text colors must pass 4.5:1 contrast ratio against #1A0F2E. White text (#FFF) on purple backgrounds. Never use dim purple text on purple backgrounds.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Never use red for failure</strong><br><span style="color:var(--text-dim);font-size:12px">Red triggers anxiety in kids. Use yellow/orange for "funny fail" states. Reserve soft red only for system-level warnings (connection lost, etc.), never for game outcomes.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Glow effects, not flat fills</strong><br><span style="color:var(--text-dim);font-size:12px">Interactive elements should have subtle glow (box-shadow with 0.15 alpha of the element's accent color). This creates a magical, luminous feeling. Not neon — think fireflies.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">3 colors max per screen</strong><br><span style="color:var(--text-dim);font-size:12px">The dark background + one primary accent + one secondary accent per screen. Too many colors creates visual chaos. Let the game scene be the color explosion — the UI stays calm.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TYPOGRAPHY ─── -->
+<div class="section" id="type">
+  <h2>Typography</h2>
+  <div class="subtitle">Kid-readable, game-appropriate, never condescending</div>
+
+  <div class="grid-2">
+    <div class="card accent-orange">
+      <div class="label orange">Display / Headlines</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:34px;font-weight:900;color:var(--text-bright);letter-spacing:-0.5px;margin-bottom:12px;line-height:1.15">Monster Birthday Party!</div>
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.6">
+        <strong style="color:var(--text-primary)">Nunito Extra Bold / Black (700-900)</strong> — rounded sans-serif that's friendly without being childish. The rounded terminals feel approachable for kids while the clean geometry keeps it from looking "baby-ish." An 8-year-old sees this as "game font," not "little kid font."
+      </p>
+      <div style="margin-top:12px;padding:10px 14px;border-radius:8px;background:var(--bg);font-size:12px;color:var(--text-muted)">
+        <strong>Sizes:</strong> Task titles: 28-34px. Section headers: 22-26px. Button labels: 16-18px. All bold (700+).
+      </div>
+    </div>
+    <div class="card accent-purple">
+      <div class="label purple">Body / UI Text</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text-primary);line-height:1.75;margin-bottom:12px">
+        The monster catches the giant cake and does a happy dance! Everyone cheers as confetti fills the room. Next time, try describing what kind of music to play at the party!
+      </div>
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.6">
+        <strong style="color:var(--text-primary)">Nunito Regular / SemiBold (400-600)</strong> — same family for body text maintains visual cohesion. At 16px+, Nunito is highly readable for developing readers. The x-height is generous, letterforms are open and unambiguous.
+      </p>
+      <div style="margin-top:12px;padding:10px 14px;border-radius:8px;background:var(--bg);font-size:12px;color:var(--text-muted)">
+        <strong>Minimum body:</strong> 16px. Narration text: 18-20px. Feedback tips: 14-16px. Never below 14px for any kid-facing text.
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <div class="label blue">Typography Rules for Kids</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Minimum 16px body text</strong><br><span style="color:var(--text-dim);font-size:12px">Research shows 8-10 year olds need larger text than adults. 16px minimum for any readable content. 14px absolute floor for secondary labels.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Line height: 1.6-1.8</strong><br><span style="color:var(--text-dim);font-size:12px">Kids' eyes need more vertical space between lines. Tight line-height causes reading fatigue and line-skipping. 1.65 for body, 1.15 for headlines.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Short lines: 45-65 characters</strong><br><span style="color:var(--text-dim);font-size:12px">Kids lose their place on long lines. Keep narration text in a narrow column. Max-width: 540px for text blocks.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Weight over size for hierarchy</strong><br><span style="color:var(--text-dim);font-size:12px">Use 3-4 font sizes max. Vary weight (400, 600, 700, 900) and color to create hierarchy. Too many sizes = visual noise.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">No ALL CAPS for content</strong><br><span style="color:var(--text-dim);font-size:12px">Kids ages 8-10 are still building reading fluency. ALL CAPS slows reading speed by 10-15%. OK for tiny labels and badges, never for sentences.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Reading level: Grade 3-4</strong><br><span style="color:var(--text-dim);font-size:12px">All kid-facing text at Flesch-Kincaid grade 3-4. Short sentences. Common words. "The monster loved the cake!" not "The creature expressed satisfaction."</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label dim">Font Stack</div>
+    <div style="font-family:'Space Grotesk',monospace;font-size:13px;color:var(--text-dim);padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);line-height:1.8">
+      <span style="color:var(--orange)">Primary:</span> 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif<br>
+      <span style="color:var(--purple-light)">Monospace (code/data):</span> 'Space Grotesk', 'SF Mono', monospace<br>
+      <span style="color:var(--text-muted)">System fallback:</span> system-ui, sans-serif
+    </div>
+  </div>
+</div>
+
+<!-- ─── VOICE & TONE ─── -->
+<div class="section" id="voice">
+  <h2>Voice & Tone</h2>
+  <div class="subtitle">How Prompt Quest talks to kids, parents, and judges</div>
+
+  <div class="card accent-orange">
+    <div class="label orange">The Prompt Quest Voice Test</div>
+    <p class="mono" style="font-size:17px;line-height:1.75;font-style:italic;color:var(--text-bright)">
+      Would a funny, encouraging older sibling say this? If it sounds like a teacher, a textbook, or a children's TV host — rewrite it. If it sounds like the coolest babysitter who makes everything an adventure — ship it.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label dim">Four Voice Pillars</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--orange)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">Playfully Encouraging</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">Every attempt is celebrated, not judged. "Whoa, the monster just sneezed fire on the cake! Maybe next time tell it to blow out the candles gently?"</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--yellow)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">Genuinely Funny</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">Humor through absurd situations and surprising outcomes, never through mockery. The game laughs WITH the kid, never AT them. Funny fails > boring successes.</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--green)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">Concretely Helpful</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">Feedback is about the game, never abstract prompting theory. "You forgot to tell the robot how to cross the river!" — not "Try to cover all aspects of the problem."</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--purple-mid)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">Never Condescending</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">8-year-olds can smell when something is "for little kids." No baby talk, no over-simplified language, no "Great job, buddy!" Instead: "That was epic! What if you tried..."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voice Examples -->
+  <div class="vpair">
+    <div class="vlabel" style="color:var(--green)">Narrating a Success</div>
+    <div class="grid-2">
+      <div><div class="good-label">&#10003; Prompt Quest says</div><div class="example" style="color:var(--text-primary)">"The monster catches the giant cake and does a happy dance! Confetti everywhere!"</div></div>
+      <div><div class="bad-label">&#10007; Prompt Quest never says</div><div class="example" style="color:var(--text-muted)">"Wonderful work! You successfully completed the task by providing detailed instructions. You should feel proud of your achievement!"</div></div>
+    </div>
+  </div>
+  <div class="vpair">
+    <div class="vlabel" style="color:var(--yellow)">Narrating a Funny Fail</div>
+    <div class="grid-2">
+      <div><div class="good-label">&#10003; Prompt Quest says</div><div class="example" style="color:var(--text-primary)">"The robot walks straight into the river. Pizza's soggy. Robot starts doing the robot dance. Not ideal."</div></div>
+      <div><div class="bad-label">&#10007; Prompt Quest never says</div><div class="example" style="color:var(--text-muted)">"Oops! That didn't quite work out. Don't worry though, mistakes are how we learn! Would you like to try again?"</div></div>
+    </div>
+  </div>
+  <div class="vpair">
+    <div class="vlabel" style="color:var(--orange)">Giving Feedback / Tips</div>
+    <div class="grid-2">
+      <div><div class="good-label">&#10003; Prompt Quest says</div><div class="example" style="color:var(--text-primary)">"The robot didn't know how to cross the river! Next time, try telling it what to use — a bridge? A jetpack? A really long pizza?"</div></div>
+      <div><div class="bad-label">&#10007; Prompt Quest never says</div><div class="example" style="color:var(--text-muted)">"Remember, good prompts should address all parts of the problem. Try to think about potential obstacles and include solutions for them."</div></div>
+    </div>
+  </div>
+  <div class="vpair">
+    <div class="vlabel" style="color:var(--purple-light)">Task Introduction</div>
+    <div class="grid-2">
+      <div><div class="good-label">&#10003; Prompt Quest says</div><div class="example" style="color:var(--text-primary)">"A monster is having its first-ever birthday party. It's 30 feet tall, breathes fire, and has never seen a cake before. What could possibly go wrong?"</div></div>
+      <div><div class="bad-label">&#10007; Prompt Quest never says</div><div class="example" style="color:var(--text-muted)">"Welcome to the Monster Birthday Party challenge! In this exercise, you will practice writing detailed prompts by planning a party for a monster character."</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label dim">Writing Rules</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div class="bullet"><span class="dot-green">&#9679;</span>Narrations: max 20 words, present tense, one exclamation mark max</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Feedback tips: max 2 sentences, always game-specific ("the monster" not "your prompt")</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Use "you" rarely — describe what happens, not what the kid did</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>One idea per sentence, active voice, concrete nouns</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never say "Great job!" "Well done!" "Good try!" — these are empty calories</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never use the word "prompt" in kid-facing text — say "description" or "plan"</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never use educational jargon: "skills," "learning," "practice," "challenge"</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never use scary words: "wrong," "failed," "error," "mistake"</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── VISUAL LANGUAGE ─── -->
+<div class="section" id="visual">
+  <h2>Visual Language</h2>
+  <div class="subtitle">The look and feel of every pixel on screen</div>
+
+  <div class="card">
+    <div class="label purple">Design Philosophy</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      Prompt Quest's visual language sits in a specific sweet spot: <strong style="color:var(--text-bright)">more polished than indie pixel art, less corporate than educational software</strong>. Think of the aesthetic as "Cartoon Network show rendered as a game UI." Rounded corners but not bubbly. Colorful but with a dark, cozy foundation. Playful icons but clean layout. The game canvas is where the chaos lives — the surrounding UI is calm, dark, and simple so the game scene can explode with color and motion without competing with the interface.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label orange">Visual Hierarchy</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--orange)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">1. The Game Canvas (Hero)</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">70% of visual attention. The Phaser scene is the star — where animations play, where actors move, where the magic happens. 1024x576px, prominent, center stage.</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--purple-mid)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">2. The Input Area (Action)</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">20% of attention. The text box where kids type their plan. Big, inviting, with clear placeholder text. This is the "do something" zone.</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--green)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">3. Feedback Panel (Learn)</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">10% of attention. Narration text and concrete tips. Appears after the animation plays. Short, colorful, disappears when the kid starts typing again.</div>
+      </div>
+      <div class="tint" style="background:var(--bg);border-left:3px solid var(--text-muted)">
+        <div style="font-size:14px;font-weight:800;margin-bottom:6px;color:var(--text-bright)">4. Chrome (Invisible)</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5">Navigation, task selector, settings — should feel invisible until needed. Dark, minimal, no decoration. The less the kid notices the UI, the more immersed they are.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label blue">Component Style Guide</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Border radius: 14-20px</strong><br><span style="color:var(--text-dim);font-size:12px">Rounded enough to feel friendly, not so rounded that it looks like a toy. Buttons: 14px. Cards: 20px. Input fields: 14px. Avoid perfect circles on rectangular elements.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Elevation through glow, not shadow</strong><br><span style="color:var(--text-dim);font-size:12px">Drop shadows look corporate. Instead, use a subtle colored glow: box-shadow: 0 0 20px rgba(accent, 0.1). Creates a magical, luminous depth.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Touch targets: 48px minimum</strong><br><span style="color:var(--text-dim);font-size:12px">Kids' motor skills are still developing. Buttons: 48px height minimum, 56px preferred. Gaps between interactive elements: 12px minimum.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">One primary action per screen</strong><br><span style="color:var(--text-dim);font-size:12px">Kids get overwhelmed by choices. Each screen has ONE obvious thing to do: type, submit, select a task. Everything else is secondary and visually recessed.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label pink">Visual Anti-Patterns</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--red-soft)">No primary colors (red/blue/yellow) as fills</strong><br><span style="color:var(--text-muted);font-size:12px">Primary color palettes read as "ages 3-5" to an 8-year-old. They'll literally say "this is for babies." Use rich, saturated, slightly sophisticated colors.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--red-soft)">No clip-art or stock illustration style</strong><br><span style="color:var(--text-muted);font-size:12px">Flat vector "corporate illustration" is what they see on school websites. Game assets should look like game assets — pixel art, sprite art, or hand-drawn cartoon style.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--red-soft)">No loading spinners with "Please wait"</strong><br><span style="color:var(--text-muted);font-size:12px">Kids won't wait. Any loading state should be entertaining — a funny loading message, an animation, something that keeps their eyes on the screen.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--red-soft)">No walls of text</strong><br><span style="color:var(--text-muted);font-size:12px">If a kid sees a paragraph, they skip it. Max 2 sentences in any visible text block. Use visuals, icons, and animations to communicate instead.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── GAME FEEL ─── -->
+<div class="section" id="game-feel">
+  <h2>Game Feel</h2>
+  <div class="subtitle">Animation timing, easing, feedback loops — the invisible magic that makes it feel alive</div>
+
+  <div class="card">
+    <div class="label orange">The Juice Principle</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      "Juice" is game design shorthand for <strong style="color:var(--text-bright)">maximum response to minimum input</strong>. When a kid presses the submit button, the entire screen should react — the button squishes, the text flies away, the game canvas glows, a loading animation spins, and then the scene EXPLODES into action. Every interaction should feel like dropping a stone into a pond. Ripples everywhere. Silence is death in a kids game — if something feels unresponsive for even 300ms, the kid thinks it's broken.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label purple">Animation Timing (Phaser Scene)</div>
+    <table class="timing-table">
+      <thead>
+        <tr><th>Action</th><th>Duration</th><th>Easing</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Spawn (drop-in)</td><td class="val">500ms</td><td class="ease">Bounce.easeOut</td><td>Bouncy entrance grabs attention, feels playful</td></tr>
+        <tr><td>Spawn (fade-in)</td><td class="val">400ms</td><td class="ease">Power2.easeOut</td><td>Gentle appearance for ambient props</td></tr>
+        <tr><td>Move (linear)</td><td class="val">600ms</td><td class="ease">Linear</td><td>Predictable, mechanical — good for robots</td></tr>
+        <tr><td>Move (arc)</td><td class="val">800ms</td><td class="ease">Sine.easeInOut</td><td>Feels like throwing — arc motion with y offset</td></tr>
+        <tr><td>Move (bounce)</td><td class="val">700ms</td><td class="ease">Bounce.easeOut</td><td>Playful, cartoon physics</td></tr>
+        <tr><td>Move (float)</td><td class="val">1200ms</td><td class="ease">Sine.easeInOut</td><td>Dreamy, magical — good for space scenes</td></tr>
+        <tr><td>Character animation</td><td class="val">500-800ms</td><td class="ease">n/a (frame-based)</td><td>8-12 fps for sprite animations feels cartoon-smooth</td></tr>
+        <tr><td>Effect overlay (confetti, etc.)</td><td class="val">1500-2000ms</td><td class="ease">n/a</td><td>Celebrations need to last long enough to feel satisfying</td></tr>
+        <tr><td>Remove (fade-out)</td><td class="val">300ms</td><td class="ease">Power2.easeIn</td><td>Quick removal — don't linger, keep pace moving</td></tr>
+        <tr><td>Delay between actions</td><td class="val">200-400ms</td><td class="ease">n/a</td><td>Just enough gap for eyes to track, not so much it feels slow</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="label green">UI Animation Timing (React)</div>
+    <table class="timing-table">
+      <thead>
+        <tr><th>Element</th><th>Duration</th><th>Easing</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Button press (scale down)</td><td class="val">100ms</td><td class="ease">ease-out</td><td>Immediate tactile feedback — kid feels the press</td></tr>
+        <tr><td>Button release (scale up)</td><td class="val">200ms</td><td class="ease">back-out (1.5)</td><td>Slight overshoot feels bouncy and alive</td></tr>
+        <tr><td>Panel slide in (feedback)</td><td class="val">350ms</td><td class="ease">cubic-bezier(.22,1,.36,1)</td><td>Smooth entrance without feeling sluggish</td></tr>
+        <tr><td>Text appear (narration)</td><td class="val">40ms/char</td><td class="ease">linear</td><td>Typewriter effect — builds anticipation, aids reading</td></tr>
+        <tr><td>Hover glow</td><td class="val">150ms</td><td class="ease">ease-in-out</td><td>Subtle enough to not distract, clear enough to signal</td></tr>
+        <tr><td>Loading state pulse</td><td class="val">1200ms loop</td><td class="ease">ease-in-out</td><td>Gentle breathing effect shows "something is happening"</td></tr>
+        <tr><td>Success celebration</td><td class="val">2000-3000ms</td><td class="ease">spring</td><td>Big, joyful, screen-filling — this is the payoff moment</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="label yellow">The 200ms Rule</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Every input must produce visible feedback within 200ms.</strong> If the API call takes 3 seconds, the button must react in 100ms (squish + loading state). If the scene script takes 500ms to parse, the canvas must show a "thinking" animation immediately. Kids don't have the patience or trust to wait without feedback. Dead space = "it's broken" in their minds. Chain your feedback: button press (100ms) &rarr; loading animation (immediate) &rarr; thinking text (200ms) &rarr; scene plays (when ready).
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label blue">Interaction Feedback Chain</div>
+    <div class="phase-bar">
+      <div class="phase-item" style="background:rgba(255,140,66,0.1);border-left:4px solid var(--orange)"><div class="icon">&#128073;</div><div class="elabel" style="color:var(--orange)">Press<br><span style="font-size:9px;color:var(--text-muted)">100ms squish</span></div></div>
+      <div class="phase-item" style="background:rgba(139,92,246,0.1);border-left:4px solid var(--purple-mid)"><div class="icon">&#10024;</div><div class="elabel" style="color:var(--purple-mid)">Loading<br><span style="font-size:9px;color:var(--text-muted)">Pulse + text</span></div></div>
+      <div class="phase-item" style="background:rgba(96,165,250,0.1);border-left:4px solid var(--blue)"><div class="icon">&#127916;</div><div class="elabel" style="color:var(--blue)">Play Scene<br><span style="font-size:9px;color:var(--text-muted)">3-6 seconds</span></div></div>
+      <div class="phase-item" style="background:rgba(52,211,153,0.1);border-left:4px solid var(--green)"><div class="icon">&#127881;</div><div class="elabel" style="color:var(--green)">Result<br><span style="font-size:9px;color:var(--text-muted)">Celebrate/Fail</span></div></div>
+      <div class="phase-item" style="background:rgba(255,140,66,0.1);border-left:4px solid var(--orange)"><div class="icon">&#128161;</div><div class="elabel" style="color:var(--orange)">Feedback<br><span style="font-size:9px;color:var(--text-muted)">Tip + retry</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SOUND DESIGN ─── -->
+<div class="section" id="sound">
+  <h2>Sound Design</h2>
+  <div class="subtitle">Audio that enhances without overwhelming — the invisible 50% of game feel</div>
+
+  <div class="card">
+    <div class="label orange">Sound Philosophy</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      Sound in a kids game serves three purposes: <strong style="color:var(--text-bright)">feedback</strong> (confirming actions), <strong style="color:var(--text-bright)">emotion</strong> (building joy/surprise/anticipation), and <strong style="color:var(--text-bright)">atmosphere</strong> (creating a world). Every sound should feel like it belongs in a Pixar short — expressive, warm, slightly cartoony. Never shrill, never loud, never startling. Think "boing" not "BANG." Parents are in the room. The sound design should make them smile, not reach for the mute button.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-purple">
+      <div class="label purple">Background Music</div>
+      <p style="font-size:13px;line-height:1.7;color:var(--text-secondary)">
+        <strong style="color:var(--text-bright)">Style:</strong> Playful, looping, low-energy ambient. Think Animal Crossing meets lo-fi study beats. Ukulele, marimba, soft synth pads, pizzicato strings. 90-110 BPM — upbeat but not frantic.
+      </p>
+      <p style="font-size:13px;line-height:1.7;color:var(--text-secondary)">
+        <strong style="color:var(--text-bright)">Volume:</strong> Background music at 30-40% of max. Must never compete with SFX or narration. Auto-duck during scene playback (fade to 20%). Fade out completely during text input focus.
+      </p>
+      <p style="font-size:13px;line-height:1.7;color:var(--text-secondary)">
+        <strong style="color:var(--text-bright)">Variation:</strong> Different track per task theme. Monster Party = quirky circus. Robot Pizza = electronic funk. Dinosaur School = jaunty adventure.
+      </p>
+    </div>
+    <div class="card accent-green">
+      <div class="label green">Sound Effects Categories</div>
+      <div class="sound-row"><div class="sound-icon">&#128072;</div><div class="sound-name">UI Clicks</div><div class="sound-desc">Soft "pop" or "bloop" — never harsh clicks. Different pitch for different buttons.</div></div>
+      <div class="sound-row"><div class="sound-icon">&#9997;</div><div class="sound-name">Typing</div><div class="sound-desc">Optional soft keystroke sound (can be toggled off). Light, percussive, non-repetitive.</div></div>
+      <div class="sound-row"><div class="sound-icon">&#128640;</div><div class="sound-name">Submit</div><div class="sound-desc">Satisfying "whoosh" + sparkle on submit. This is the "launch" moment — should feel powerful.</div></div>
+      <div class="sound-row"><div class="sound-icon">&#127881;</div><div class="sound-name">Success</div><div class="sound-desc">Ascending chime + confetti burst. Triumphant but brief (1-2s). Think Mario coin x3.</div></div>
+      <div class="sound-row"><div class="sound-icon">&#128514;</div><div class="sound-name">Funny Fail</div><div class="sound-desc">Descending trombone "wah-wah" or cartoon "boing." Funny, not sad. Should make kid laugh.</div></div>
+      <div class="sound-row"><div class="sound-icon">&#128165;</div><div class="sound-name">Scene Events</div><div class="sound-desc">Splashes, boings, thuds, whooshes, pops — each scene action gets a cartoony SFX layer.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label yellow">Audio Rules</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div class="bullet"><span class="dot-green">&#9679;</span>Always provide a visible mute button — some kids play in shared spaces</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Default music volume: 35%. Default SFX volume: 70%. Separate sliders.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>No sudden loud sounds. Peak volume across all SFX should be normalized.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Sound must be optional — game must be fully playable with audio muted.</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>No voice acting for narration — typewriter text is more flexible and cheaper to iterate</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>No alarm/siren sounds — can trigger anxiety in neurodivergent kids</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>No looping SFX without timeout — stuck sounds are a top kid UX complaint</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>No audio autoplay on page load — wait for first user interaction (also a browser requirement)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label dim">Sound Sources (Free / CC0)</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Kenney.nl Audio Packs</strong><br><span style="color:var(--text-dim);font-size:12px">CC0 game SFX — UI sounds, impacts, pickups, fanfares. Consistent quality. "Interface Sounds" and "Impact Sounds" packs are perfect.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Freesound.org</strong><br><span style="color:var(--text-dim);font-size:12px">Crowd-sourced SFX library. Search "cartoon boing," "celebration chime," "whoosh." Check license per sound (CC0 preferred).</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">Pixabay Music</strong><br><span style="color:var(--text-dim);font-size:12px">Royalty-free background music. Search "playful game loop," "ukulele background," "children game music." Download as MP3, convert to OGG for Phaser.</span></div>
+      <div style="font-size:13px;line-height:1.5;color:var(--text-secondary)"><strong style="color:var(--text-bright)">JSFXR / ChipTone</strong><br><span style="color:var(--text-dim);font-size:12px">Browser-based SFX generators for retro-style sounds. Great for custom UI bleeps, pickups, and game events. Generate exactly what you need.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EMOTIONAL DESIGN ─── -->
+<div class="section" id="emotion">
+  <h2>Emotional Design</h2>
+  <div class="subtitle">How every moment should make a kid feel — the real product</div>
+
+  <div class="card accent-orange">
+    <div class="label orange">The Emotional North Star</div>
+    <p style="font-size:16px;line-height:1.75;font-style:italic;color:var(--text-bright)">
+      "I want to try something weird and see what happens."
+    </p>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-top:12px">
+      That sentence is the entire emotional design goal. If a kid feels safe enough to type something silly, curious enough to wonder what will happen, and delighted enough by the result to try again — you've won. Every design decision should be measured against this: <em>does this make them more or less likely to try something weird?</em>
+    </p>
+  </div>
+
+  <div class="grid-3">
+    <div class="emotion-card" style="border-top:3px solid var(--green)">
+      <div class="emoji">&#128640;</div>
+      <div class="ename">Before Submit</div>
+      <div class="edesc">Curious + Excited. "What will happen if I type THIS?" The input area should feel like a launchpad, not a test form.</div>
+    </div>
+    <div class="emotion-card" style="border-top:3px solid var(--purple-mid)">
+      <div class="emoji">&#10024;</div>
+      <div class="ename">During Animation</div>
+      <div class="edesc">Surprise + Anticipation. "Wait... is it actually going to...?" The scene should build slowly enough for anticipation to mount.</div>
+    </div>
+    <div class="emotion-card" style="border-top:3px solid var(--yellow)">
+      <div class="emoji">&#128514;</div>
+      <div class="ename">After Funny Fail</div>
+      <div class="edesc">Laughter + "I wanna try again!" The fail should be SO funny that the kid shows someone else. Comedy > correctness.</div>
+    </div>
+    <div class="emotion-card" style="border-top:3px solid var(--orange)">
+      <div class="emoji">&#127881;</div>
+      <div class="ename">After Full Success</div>
+      <div class="edesc">Pride + "Look what I did!" Confetti, cheering, the works. This is their creation — make them feel like a genius.</div>
+    </div>
+    <div class="emotion-card" style="border-top:3px solid var(--blue)">
+      <div class="emoji">&#128161;</div>
+      <div class="ename">Reading Feedback</div>
+      <div class="edesc">"Oh! I should have..." The tip should spark an idea, not shame. It's a clue in a mystery, not a grade on a test.</div>
+    </div>
+    <div class="emotion-card" style="border-top:3px solid var(--pink)">
+      <div class="emoji">&#128171;</div>
+      <div class="ename">Trying Again</div>
+      <div class="edesc">Confidence + Purpose. "This time I'll tell it about the bridge AND the jetpack." The retry should feel like a power-up, not a do-over.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label green">Failure as Comedy — The Core Design Pattern</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">The most important emotional design decision in Prompt Quest: failure must be funnier than success.</strong> This is counterintuitive — most educational games try to make success exciting and failure neutral. Prompt Quest inverts this. When a kid's vague description causes the robot to walk into a river and start doing the robot dance, that's PEAK entertainment. The laughter dissolves any frustration. The kid WANTS to see what other funny things can happen. And in trying to make something specific happen, they naturally learn to write better descriptions. The pedagogy is embedded in the comedy.
+    </p>
+  </div>
+
+  <div class="do-dont">
+    <div class="do-box">
+      <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:12px">&#10003; Emotional Do's</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Make funny fails genuinely hilarious — worth showing a friend</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Celebrate every attempt, not just successes</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Let kids replay the same task differently — repetition is how they learn</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Show progress: "2 out of 3 party problems solved!"</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Surprise them — unexpected results build curiosity</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span>Let parents watch — design for an audience of 2+</div>
+    </div>
+    <div class="dont-box">
+      <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--red-soft);margin-bottom:12px">&#10007; Emotional Don'ts</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never show a red "X" or failure icon — use yellow/orange with comedy</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never compare to other kids ("Your friends scored higher!")</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never show timers or countdown pressure</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never block progress — every outcome unlocks the next attempt</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never use the word "wrong" — there is no wrong, only hilarious</div>
+      <div class="bullet"><span class="dot-red">&#9679;</span>Never require reading to understand what happened — animations tell the story</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── UI COMPONENTS ─── -->
+<div class="section" id="ui">
+  <h2>UI Components</h2>
+  <div class="subtitle">Specifications for every interactive element a kid touches</div>
+
+  <div class="card">
+    <div class="label orange">Primary Button (Submit / "Go!")</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+          <strong style="color:var(--text-bright)">The single most important UI element.</strong> This is the "make it happen" button. It should look like the biggest, most inviting thing on the screen (after the game canvas).
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.8;font-family:'Space Grotesk',monospace">
+          height: 56px<br>
+          min-width: 160px<br>
+          font-size: 18px, weight: 800<br>
+          border-radius: 14px<br>
+          background: linear-gradient(135deg, #8B5CF6, #6C3FC5)<br>
+          color: #FFFFFF<br>
+          box-shadow: 0 0 24px rgba(139,92,246,0.25)<br>
+          :hover → box-shadow grows to 0.35 alpha<br>
+          :active → scale(0.96), shadow shrinks<br>
+          transition: all 150ms ease-out
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+          <strong style="color:var(--text-bright)">State variations:</strong>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text-dim);line-height:1.8">
+          <span style="color:var(--purple-light)">Default:</span> Purple gradient + glow. Label: "Go!" or "Try it!"<br>
+          <span style="color:var(--orange)">Loading:</span> Orange pulse animation. Label: "Thinking..." + spinner<br>
+          <span style="color:var(--text-muted)">Disabled:</span> 40% opacity, no glow. When input is empty.<br>
+          <span style="color:var(--green)">Success:</span> Brief green flash after animation completes.
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:var(--text-dim);line-height:1.6">
+          <strong style="color:var(--yellow)">Loading messages (rotate randomly):</strong><br>
+          "The monster is getting ready..." / "Setting up the scene..." / "This is gonna be good..." / "Hold on, something's happening..." / "Mixing up some magic..."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label purple">Text Input Area</div>
+    <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">The kid's creative canvas.</strong> Should feel inviting and spacious — not like a form field.
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.8;font-family:'Space Grotesk',monospace">
+      min-height: 100px (textarea, not input)<br>
+      font-size: 16px, font-family: Nunito<br>
+      border-radius: 14px<br>
+      background: var(--bg) (#1A0F2E)<br>
+      border: 2px solid var(--border) (#3D2B7A)<br>
+      :focus → border-color: var(--purple-mid), box-shadow: 0 0 16px rgba(139,92,246,0.2)<br>
+      placeholder: "Describe your plan..." (color: var(--text-muted))<br>
+      padding: 16px<br>
+      resize: none<br>
+      max-length: 500 characters (show counter when > 400)
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.6">
+      <strong style="color:var(--yellow)">Placeholder text examples (rotate per task):</strong><br>
+      Monster Party: "How should the monster celebrate? What kind of cake? What happens with the candles?"<br>
+      Robot Pizza: "How should the robot get past the river? What about the sleeping giant?"
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label green">Feedback Panel</div>
+    <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Appears after animation completes.</strong> Slides in from below or right side. Contains narration + concrete tip.
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.8;font-family:'Space Grotesk',monospace">
+      border-radius: 20px<br>
+      background: var(--bg-card) with border: 1px solid var(--border)<br>
+      padding: 20px 24px<br>
+      entrance: slide-up 350ms cubic-bezier(.22,1,.36,1)<br>
+      narration text: 18px, font-weight: 700, color: var(--text-bright)<br>
+      tip text: 14px, font-weight: 600, color: var(--orange)<br>
+      tip icon: lightbulb emoji (&#128161;) prefix
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label blue">Task Selector Cards</div>
+    <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Grid of available tasks.</strong> Each card shows the task emoji, title, and a one-line hook. Hover reveals a playful animation (emoji bounces, card glows).
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-dim);line-height:1.8;font-family:'Space Grotesk',monospace">
+      card size: ~200px x 160px<br>
+      border-radius: 20px<br>
+      background: var(--bg-card)<br>
+      border: 2px solid var(--border)<br>
+      emoji: 48px centered<br>
+      title: 16px, font-weight: 800<br>
+      hook: 12px, color: var(--text-dim), max 2 lines<br>
+      :hover → border-color: var(--orange), box-shadow: 0 0 20px rgba(255,140,66,0.15), emoji scale(1.15) with bounce<br>
+      :active → scale(0.97)
+    </div>
+  </div>
+</div>
+
+<!-- ─── SCENE DESIGN ─── -->
+<div class="section" id="scenes">
+  <h2>Scene Design</h2>
+  <div class="subtitle">How the Phaser game canvas looks and feels</div>
+
+  <div class="card">
+    <div class="label purple">Canvas Specifications</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+        <strong style="color:var(--text-bright)">Dimensions & Setup</strong><br>
+        <span style="font-family:'Space Grotesk',monospace;font-size:12px;color:var(--text-dim)">
+          Canvas: 1024 x 576px (16:9)<br>
+          Background: Task-specific backdrop image<br>
+          Default BG color: #1A0533 (deep purple)<br>
+          Scaling: Phaser.Scale.FIT (scales to container)<br>
+          Pixel art: false (smooth rendering)
+        </span>
+      </div>
+      <div style="font-size:13px;line-height:1.6;color:var(--text-secondary)">
+        <strong style="color:var(--text-bright)">Position Grid</strong><br>
+        <span style="font-family:'Space Grotesk',monospace;font-size:12px;color:var(--text-dim)">
+          left: x=200, y=400<br>
+          center: x=512, y=400<br>
+          right: x=824, y=400<br>
+          top: x=512, y=180<br>
+          bottom: x=512, y=520<br>
+          off-left: x=-100, y=400<br>
+          off-right: x=1124, y=400<br>
+          off-top: x=512, y=-100
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label orange">Backdrop Art Style</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Illustrated, not photorealistic. Consistent across all scenes.</strong> Backdrops should look like storybook illustrations — warm lighting, slightly exaggerated perspective, rich colors. Think "children's book painted by a concept artist." All backdrops from the same source/artist to maintain visual consistency. Kenney.nl packs or itch.io art packs work well when chosen from a single cohesive set.
+    </p>
+    <div class="grid-3" style="margin-top:16px">
+      <div class="tint" style="background:var(--bg);text-align:center;border:1px solid var(--border)">
+        <div style="font-size:24px;margin-bottom:4px">&#127874;</div>
+        <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px">Monster Party</div>
+        <div style="font-size:11px;color:var(--text-muted)">Colorful party room, oversized furniture, dangling lights, scattered confetti on floor</div>
+      </div>
+      <div class="tint" style="background:var(--bg);text-align:center;border:1px solid var(--border)">
+        <div style="font-size:24px;margin-bottom:4px">&#129302;</div>
+        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">Robot Pizza</div>
+        <div style="font-size:11px;color:var(--text-muted)">Colorful city street, winding path with obstacles, pizza shop on one end, house on other</div>
+      </div>
+      <div class="tint" style="background:var(--bg);text-align:center;border:1px solid var(--border)">
+        <div style="font-size:24px;margin-bottom:4px">&#128021;</div>
+        <div style="font-size:12px;font-weight:700;color:var(--purple-light);margin-bottom:4px">Dog Space</div>
+        <div style="font-size:11px;color:var(--text-muted)">Starfield with Earth in corner, moon ahead, asteroids floating, whimsical constellation outlines</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label green">Character Art Style</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Consistent scale, consistent style, consistent personality.</strong> All characters (actors) should come from the same art pack or be drawn in the same style. Mixing pixel art with vector art with hand-drawn looks like a ransom note. Characters should be:
+    </p>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Expressive:</strong> big eyes, exaggerated features, readable emotions at small sizes</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Scaled consistently:</strong> all actors roughly same height on the stage (except "giant" variants)</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Multiple animation states:</strong> idle, happy, sad, action — minimum 4 per character</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Silhouette-readable:</strong> identifiable even as a small thumbnail</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label yellow">Placeholder System</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      <strong style="color:var(--text-bright)">Missing textures never crash the game.</strong> When SceneScriptPlayer encounters an asset that isn't loaded, it creates a colored rectangle with a text label instead. This is a development-only system — all placeholders should be replaced before demo. Placeholder colors: actors = purple rectangles, props = orange rectangles, backdrops = gradient fill.
+    </p>
+  </div>
+</div>
+
+<!-- ─── ACCESSIBILITY ─── -->
+<div class="section" id="a11y">
+  <h2>Accessibility</h2>
+  <div class="subtitle">Every kid deserves to play — no exceptions</div>
+
+  <div class="card accent-green">
+    <div class="label green">Accessibility is Not Optional</div>
+    <p style="font-size:14px;line-height:1.7;color:var(--text-secondary)">
+      10-15% of kids have some form of disability — learning differences, color vision deficiency, motor challenges, or attention difficulties. If the game only works for neurotypical kids with perfect vision and fine motor skills, it's broken for 1 in 7 players. These aren't edge cases — they're kids in every classroom.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="label blue">Visual Accessibility</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Color contrast:</strong> WCAG AA (4.5:1) for all text. AAA (7:1) for body text on dark backgrounds.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Color is not the only signal:</strong> Success/failure also indicated by icons, animations, and text — not just green/yellow.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>No color-only meaning:</strong> 8% of boys have color vision deficiency. Use shapes + labels alongside color.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>No flashing:</strong> No elements flash more than 3x/second (photosensitive seizure risk).</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Reduce motion option:</strong> Respect prefers-reduced-motion. Simplify animations, keep game playable.</div>
+    </div>
+    <div class="card">
+      <div class="label orange">Motor & Input Accessibility</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Touch targets: 48px minimum</strong> with 12px gaps between interactive elements.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Keyboard navigation:</strong> Tab through all interactive elements. Enter to submit. Escape to close panels.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>No precision required:</strong> No drag-and-drop, no small click targets, no hover-only interactions.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>No time pressure:</strong> No timers, no countdown, no "type faster" mechanics.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Forgiving input:</strong> Spelling doesn't matter. Claude handles misspellings gracefully.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label purple">Cognitive Accessibility</div>
+    <div class="grid-2" style="margin-top:8px">
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>One task at a time:</strong> Never show multiple things to do simultaneously. Sequential, clear flow.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Reading level:</strong> Grade 3-4 (Flesch-Kincaid). Short sentences, common words, no jargon.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Consistent layout:</strong> Same UI structure on every screen. Input always in the same place.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Clear next action:</strong> One obvious button to press at any given moment.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>Unlimited attempts:</strong> No lives, no game over, no penalty for trying many times.</div>
+      <div class="bullet"><span class="dot-green">&#9679;</span><strong>No memory demands:</strong> Task requirements visible on screen, not just mentioned once.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label dim">Accessibility Checklist</div>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.8;margin-top:8px">
+      <span style="color:var(--green)">&#9745;</span> All interactive elements have visible focus indicators (2px purple outline)<br>
+      <span style="color:var(--green)">&#9745;</span> All images have alt text (or role="presentation" for decorative)<br>
+      <span style="color:var(--green)">&#9745;</span> Game narration displayed as text (not audio-only)<br>
+      <span style="color:var(--green)">&#9745;</span> Animations can be paused/reduced<br>
+      <span style="color:var(--green)">&#9745;</span> Color contrast passes WCAG AA minimum<br>
+      <span style="color:var(--green)">&#9745;</span> No keyboard traps (can always Tab away from any element)<br>
+      <span style="color:var(--green)">&#9745;</span> Audio controls visible and reachable<br>
+      <span style="color:var(--green)">&#9745;</span> Works without mouse (keyboard-only path through entire game)
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ FOOTER ═══════ -->
+<div class="footer">
+  <div style="font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--text-bright);letter-spacing:-0.5px">Prompt <span style="color:var(--orange)">Quest</span><span style="color:var(--green)">.</span></div>
+  <div style="font-size:13px;color:var(--text-muted);margin-top:6px">Your words are your superpower.</div>
+  <div style="font-size:11px;color:var(--text-dim);margin-top:12px">Brand & Game Design Brief v1.0 — February 2026</div>
+</div>
+
+</div>
+</body>
+</html>

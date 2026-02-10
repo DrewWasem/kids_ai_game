@@ -1,0 +1,52 @@
+replicaCount: 2
+
+image:
+  repository: myapp/api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8001
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+    - host: myapp.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilization: 70
+
+database:
+  host: postgresql
+  port: 5432
+  name: myapp
+  user: myapp
+
+redis:
+  url: redis://redis:6379
+
+worker:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi

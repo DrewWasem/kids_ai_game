@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-api
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-api
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: MYAPP_DB_HOST
+              value: {{ .Values.database.host | quote }}
+            - name: MYAPP_DB_PORT
+              value: {{ .Values.database.port | quote }}
+            - name: MYAPP_DB_NAME
+              value: {{ .Values.database.name | quote }}
+            - name: MYAPP_DB_USER
+              value: {{ .Values.database.user | quote }}
+            - name: MYAPP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: db-password
+            - name: MYAPP_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: secret-key
+            - name: MYAPP_RATE_LIMIT_REDIS_URL
+              value: {{ .Values.redis.url | quote }}
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

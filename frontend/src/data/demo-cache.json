@@ -1,0 +1,1478 @@
+{
+  "monster-party": {
+    "throw a giant birthday cake with balloons and music": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The monster catches a giant cake while balloons and music fill the room!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance",
+          "duration_ms": 800
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "hearts-float",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You included food, decorations, AND entertainment — that's a perfect party plan!"
+    },
+    "have a party with huge cake decorations and entertainment": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "A massive cake arrives as decorations sparkle and the monster dances!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy",
+          "duration_ms": 700
+        },
+        {
+          "type": "react",
+          "effect": "sparkle-magic",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "top"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "You nailed it! Cake, decorations, and fun — the monster is having the best day ever!"
+    },
+    "give monster a big party with cake balloons presents": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The monster opens presents while cake and balloons surround it — party perfection!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "move",
+          "target": "present",
+          "to": "center",
+          "style": "float"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy",
+          "duration_ms": 800
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Excellent! You described exactly what the party needs — food, decorations, and presents!"
+    },
+    "throw a cake": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "A cake flies through the air but the room feels pretty empty!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "eat",
+          "duration_ms": 500
+        },
+        {
+          "type": "react",
+          "effect": "stars-spin",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "Good start with the cake! Try adding decorations like balloons and some fun activities to make it a real party."
+    },
+    "have a party": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster shows up to an empty room and looks around confused!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused",
+          "duration_ms": 800
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "sad",
+          "duration_ms": 600
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "The monster wants to party but doesn't know how! Be specific — what food, decorations, and activities should the party have?"
+    },
+    "give monster cake": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The monster gobbles up a cake but wishes there was more to the party!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "cake",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "eat",
+          "duration_ms": 600
+        },
+        {
+          "type": "react",
+          "effect": "stars-spin",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "The monster loves cake! Now try adding decorations and something fun to do — that's what makes a party a PARTY."
+    },
+    "make monster happy": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster tries to smile but isn't sure what's happening!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused",
+          "duration_ms": 600
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "wave",
+          "duration_ms": 400
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "The monster WANTS to be happy — help it out! Describe a party with cake, balloons, presents, and fun activities!"
+    },
+    "do something fun": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster spins around excitedly but there's nothing to do!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance",
+          "duration_ms": 600
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused",
+          "duration_ms": 500
+        },
+        {
+          "type": "react",
+          "effect": "sad-cloud",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "Fun is great, but be more specific! What KIND of fun? Try describing a party with a giant cake, colorful balloons, and dancing!"
+    },
+    "party time": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster puts on a tiny party hat and waits for instructions!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "wave",
+          "duration_ms": 500
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused",
+          "duration_ms": 600
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "The monster is ready to party! But it needs your help — describe what food to serve, how to decorate, and what games to play!"
+    },
+    "throw the biggest most amazing cake ever with confetti": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "A HUGE cake rockets across the room while confetti explodes everywhere!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy",
+          "duration_ms": 700
+        },
+        {
+          "type": "react",
+          "effect": "sparkle-magic",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [
+        "entertainment or activities"
+      ],
+      "prompt_feedback": "So close to perfect! You've got an amazing cake and decorations — now add some entertainment like music or dancing to make it a FULL party!"
+    },
+    "birthday party with a giant chocolate cake and balloons and dancing": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "A giant chocolate cake arrives as balloons fill the sky and everyone dances!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance",
+          "duration_ms": 800
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "hearts-float",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Perfect party plan! Cake, balloons, AND dancing — the monster has never been happier!"
+    },
+    "cake and balloons": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "A cake appears with some balloons — not bad, but the monster wants MORE!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "cake",
+          "to": "center",
+          "style": "float"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy",
+          "duration_ms": 500
+        },
+        {
+          "type": "react",
+          "effect": "stars-spin",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "entertainment or activities"
+      ],
+      "prompt_feedback": "Great decorations and food! The monster is smiling — now add some entertainment like music, dancing, or games for a perfect party!"
+    },
+    "plan a huge birthday celebration with a massive cake presents balloons streamers and a dance floor with music": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The ultimate birthday bash erupts — cake, presents, balloons, and epic dancing!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance",
+          "duration_ms": 1000
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "WOW! That's the most detailed party plan ever! You thought of everything — the monster is SO happy!"
+    },
+    "give the monster a party": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster waits eagerly but the party room is completely empty!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "wave",
+          "duration_ms": 500
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused",
+          "duration_ms": 700
+        },
+        {
+          "type": "react",
+          "effect": "sad-cloud",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations",
+        "entertainment"
+      ],
+      "prompt_feedback": "The monster is excited for a party! But what kind of party? Tell the monster about the cake, decorations, and fun activities!"
+    },
+    "throw a giant cake with balloons": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "A giant cake soars through the air while balloons float up — almost there!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy",
+          "duration_ms": 600
+        },
+        {
+          "type": "react",
+          "effect": "sparkle-magic",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "entertainment or activities"
+      ],
+      "prompt_feedback": "Awesome cake and balloons! Now add something fun to DO at the party — like music, dancing, or games — for a perfect score!"
+    },
+    "make a party with a big cake lots of balloons and a dance contest": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The monster wins the dance contest, then faceplants into the giant cake — best party EVER!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "right"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "cheer"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing prompt! You included food (big cake), decorations (balloons), AND entertainment (dance contest) — that's everything a monster party needs! Try adding even more detail next time, like what flavor the cake is or what music plays during the dance contest."
+    },
+    "throw the most epic monster party with cake presents games and confetti": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Monster dances on a giant cake while confetti rains and presents fly everywhere — BEST PARTY EVER!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "left"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "cheer"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing prompt! You included cake (food), presents (decorations), AND games (entertainment) all in one clear sentence. You even added confetti for extra fun — that's how a prompt pro does it!"
+    },
+    "balloons and presents for the monster": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The monster hugs a giant balloon and rips open presents, but keeps asking, 'Where's the cake?'",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "move",
+          "target": "balloon",
+          "to": "center",
+          "style": "float"
+        },
+        {
+          "type": "move",
+          "target": "present",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "top"
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "entertainment or activity (like music, dancing, or games)"
+      ],
+      "prompt_feedback": "Great job adding decorations AND presents — that's a party starting to take shape! Try also telling the monster about a yummy cake and a fun activity like dancing or games to make the party complete!"
+    },
+    "play some music and dance": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The monster hears music and starts wiggling wildly—but where's the cake and decorations?",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "clap"
+        },
+        {
+          "type": "react",
+          "effect": "stars-spin",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy"
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations like balloons or presents"
+      ],
+      "prompt_feedback": "Great job adding entertainment—dancing is awesome for a party! Try also describing a yummy cake and some colorful decorations like balloons or presents to make it a complete birthday bash."
+    },
+    "hello": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster waves back shyly but looks around the empty room, wondering where the party is!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "wave"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "point"
+        }
+      ],
+      "missing_elements": [
+        "cake or food",
+        "decorations like balloons or presents",
+        "entertainment like music or games"
+      ],
+      "prompt_feedback": "Great start saying hello! Now try describing the party — tell the monster exactly what you want, like 'Let's have a big cake, colorful balloons, and dance to music!'"
+    },
+    "pizza": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The monster gobbles up a whole pizza in one bite and burps out confetti!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "plates",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "monster",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "eat"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "happy"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "laugh"
+        }
+      ],
+      "missing_elements": [
+        "decorations (balloons, streamers, or presents)",
+        "entertainment (music, dancing, or games)"
+      ],
+      "prompt_feedback": "Nice job picking food — every party needs snacks! Try adding more details like decorations and fun activities. For example: 'Let's have pizza with balloons and play a dancing game!'"
+    },
+    "throw a huge cake with balloons and have a dance party with music and presents and streamers and confetti": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The monster bursts into happy tears as the ultimate birthday bash explodes around him!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "spawn",
+          "target": "present",
+          "position": "right"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing prompt! You included food, decorations, AND entertainment all in one go. You were super specific with details like balloons, streamers, confetti, and dancing — that's exactly how great prompt engineers do it! Next time, try adding WHO is invited to make the party even more alive!"
+    },
+    "i want to give the monster the best birthday ever with everything": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The monster gets excited and spins around, but 'everything' is so vague nothing actually appears!",
+      "actions": [
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "confused"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "monster",
+          "position": "center"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "wave"
+        },
+        {
+          "type": "animate",
+          "target": "kid",
+          "anim": "point"
+        }
+      ],
+      "missing_elements": [
+        "cake/food",
+        "decorations",
+        "entertainment/activity"
+      ],
+      "prompt_feedback": "You're so kind wanting to give the monster the best party! But 'everything' doesn't tell the monster WHAT to prepare. Try listing specific things — like a chocolate cake, colorful balloons, and a dance party!"
+    },
+    "the monster should get cake and all the decorations and music": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "The monster gets a giant cake, balloons everywhere, and dances to the best party music ever!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "cake-giant",
+          "position": "off-left"
+        },
+        {
+          "type": "move",
+          "target": "cake-giant",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "spawn",
+          "target": "balloon",
+          "position": "top"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "eat"
+        },
+        {
+          "type": "animate",
+          "target": "monster",
+          "anim": "dance"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You included all three party essentials: food, decorations, AND entertainment. Great prompt! Next time, try being even more specific — like what flavor is the cake, or what kind of music does the monster like? Details make prompts even more powerful!"
+    }
+  },
+  "robot-pizza": {
+    "drive the robot to 123 main street going down oak avenue and watch out for the river": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Robot zooms down Oak Avenue, swerves around the river, and delivers a perfect pizza to 123 Main Street!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "river",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "arc"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You nailed all three parts: you told the robot WHERE to go (123 Main Street), HOW to get there (Oak Avenue), and WHAT to avoid (the river). Tip: you could make it even better by telling the robot how fast to drive or what to do when it arrives!"
+    },
+    "take the pizza to the school by going through the park and avoid the dog": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Robot zooms through the park, dodges the barking dog, and delivers a perfect pizza to school!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "dog",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "arc"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You nailed all three parts: WHERE (the school), HOW (through the park), and WHAT TO AVOID (the dog). Your instructions were super clear — the robot knew exactly what to do. Try adding even more detail next time, like how fast the robot should go!"
+    },
+    "deliver pizza to the kids house go straight then turn right dodge the puddles and the squirrel": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Robot zooms straight, swerves right, dodges puddles and a sneaky squirrel, and delivers hot pizza perfectly!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "spawn",
+          "target": "squirrel",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "bounce"
+        },
+        {
+          "type": "react",
+          "effect": "confetti-burst",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You nailed all three: destination (kid's house), route (straight then right), AND obstacles to dodge (puddles and squirrel). Your instructions were super clear — the robot knew exactly what to do! Next time, try adding extra details like speed or what to do if the path is blocked for bonus fun."
+    },
+    "robot go to elm street use the shortcut past the desk and avoid the river and the dog": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Robot zooms past the desk, dodges the river and dog, and delivers hot pizza to Elm Street!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "river",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "dog",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "arc"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "bounce"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You told the robot WHERE to go (Elm Street), HOW to get there (shortcut past the desk), AND what to avoid (river and dog). That's a perfect prompt — you're a prompt engineering pro!"
+    },
+    "deliver the pizza to the house": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The robot grabs the pizza and rolls toward the house, but bumps into a few things along the way!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "bounce"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "linear"
+        },
+        {
+          "type": "react",
+          "effect": "stars-spin",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [
+        "route/path",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "Nice job telling the robot WHERE to go — a house! Now try adding HOW to get there (like 'go down Main Street') and what to watch out for (like 'avoid the big puddle'). That way the robot won't bump into things!"
+    },
+    "take the pizza and go right": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The robot grabs the pizza and zooms right, but wait—where exactly is it going?",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "linear"
+        },
+        {
+          "type": "move",
+          "target": "pizza",
+          "to": "right",
+          "style": "linear"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "Nice job telling the robot to grab the pizza and move! Try adding a specific place to deliver it AND what obstacles to watch out for, like 'avoid the river' or 'watch out for the dog.'"
+    },
+    "watch out for the river and the dog": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The robot dodges the river and the dog, but has no idea where to deliver the pizza!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "river",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "dog",
+          "position": "right"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "route/path"
+      ],
+      "prompt_feedback": "Great job telling the robot what obstacles to avoid — that's super important! Now try adding WHERE the pizza should go (like a specific place) and HOW the robot should get there (like which direction to travel)."
+    },
+    "go to the school with the pizza": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "Robot zooms toward the school with pizza, but bonks into a fire hydrant it didn't see coming!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "move",
+          "target": "pizza",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "route/path (HOW to get there)",
+        "obstacle avoidance (what to watch out for)"
+      ],
+      "prompt_feedback": "Nice job telling the robot WHERE to go — the school! Now try adding HOW to get there (like which streets to take) and what obstacles to watch out for (like traffic or puddles)."
+    },
+    "drive fast to deliver pizza": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The robot zooms through the city at top speed, but wait—where is it even going?!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "bounce"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "right"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "Nice job telling the robot HOW to move—fast! But the robot doesn't know WHERE to go or WHAT to watch out for. Try adding a destination like '123 Oak Street' and obstacles to avoid like 'watch out for the river!'"
+    },
+    "deliver pizza": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The robot spins in circles holding the pizza, wondering where on Earth to go!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "spin-in"
+        },
+        {
+          "type": "react",
+          "effect": "laugh-tears",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "route/path",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "You told the robot its job — nice start! Now try adding WHERE to deliver (like '123 Oak Street'), HOW to get there (like 'go down Main Road'), and WHAT to watch out for (like 'avoid the big puddle')."
+    },
+    "go": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The robot hears 'go' and spins in circles, totally confused about where to deliver the pizza!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "spin-in"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "route/path",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "You gave a quick command — nice energy! But the robot needs more details. Try telling it WHERE to go, WHICH way to travel, and WHAT to watch out for along the way!"
+    },
+    "pizza time": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The robot hears 'pizza time,' spins in circles, and eats the pizza itself. Oops!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "spin-in"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "laugh-tears",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "route/path",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "You've got the pizza spirit! Now try telling the robot WHERE to deliver it, HOW to get there, and what obstacles to WATCH OUT for — like 'Robot, take the pizza to the house on the right, go straight down Main Street, and watch out for the river!'"
+    },
+    "hello robot": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The robot waves excitedly but has no idea where to take the pizza! It spins in circles.",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "spin-in"
+        }
+      ],
+      "missing_elements": [
+        "destination/address",
+        "route/path",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "Great job being friendly to the robot! Now try telling it WHERE to deliver the pizza, HOW to get there, and what obstacles to watch out for along the way."
+    },
+    "make the robot dance": {
+      "success_level": "FUNNY_FAIL",
+      "narration": "The robot starts breakdancing in the street and the pizza flies off its head like a frisbee!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "spin-in"
+        },
+        {
+          "type": "move",
+          "target": "pizza",
+          "to": "off-top",
+          "style": "arc"
+        },
+        {
+          "type": "react",
+          "effect": "laugh-tears",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "bottom"
+        }
+      ],
+      "missing_elements": [
+        "destination",
+        "route",
+        "obstacle avoidance"
+      ],
+      "prompt_feedback": "Ha, that was funny! But the robot forgot all about the delivery! Try telling the robot WHERE to bring the pizza, WHICH WAY to go, and WHAT to watch out for along the way."
+    },
+    "take the pizza to 42 rainbow road go through the park past the river dodge the dog and the squirrel then deliver it to the kid": {
+      "success_level": "FULL_SUCCESS",
+      "narration": "Robot zooms through the park, dodges critters, and delivers a perfect pizza to 42 Rainbow Road!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "bounce"
+        },
+        {
+          "type": "spawn",
+          "target": "dog",
+          "position": "center"
+        },
+        {
+          "type": "spawn",
+          "target": "squirrel",
+          "position": "center"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "right",
+          "style": "arc"
+        }
+      ],
+      "missing_elements": [],
+      "prompt_feedback": "Amazing job! You included the address, the route through the park and past the river, AND obstacles to dodge. That's a perfectly clear prompt — you're a prompt engineering pro! Next time, try adding what to do if something unexpected happens, like a backup plan."
+    },
+    "robot deliver pizza to school": {
+      "success_level": "PARTIAL_SUCCESS",
+      "narration": "The robot zooms toward school with pizza, but bonks into a fire hydrant it didn't see coming!",
+      "actions": [
+        {
+          "type": "spawn",
+          "target": "robot",
+          "position": "left"
+        },
+        {
+          "type": "spawn",
+          "target": "pizza",
+          "position": "left"
+        },
+        {
+          "type": "move",
+          "target": "robot",
+          "to": "center",
+          "style": "linear"
+        },
+        {
+          "type": "react",
+          "effect": "explosion-cartoon",
+          "position": "center"
+        },
+        {
+          "type": "react",
+          "effect": "question-marks",
+          "position": "center"
+        }
+      ],
+      "missing_elements": [
+        "route/path (HOW to get there)",
+        "obstacle avoidance (what to watch out for)"
+      ],
+      "prompt_feedback": "Nice job naming the destination — the robot knows WHERE to go! Try adding HOW it should get there (like 'go down Main Street') and what to avoid (like 'watch out for puddles and traffic')."
+    }
+  }
+}

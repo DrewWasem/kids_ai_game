@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Validate commit message prefix
+MSG_FILE=$1
+MSG=$(head -1 "$MSG_FILE")
+
+PATTERN="^(BUG|FIX|ENH|FEAT|PERF|REFACTOR|TEST|DOC|STYLE|CHORE|WIP): .+"
+
+if ! echo "$MSG" | grep -qE "$PATTERN"; then
+    echo "ERROR: Commit message must start with a valid prefix."
+    echo "Valid prefixes: BUG, FIX, ENH, FEAT, PERF, REFACTOR, TEST, DOC, STYLE, CHORE, WIP"
+    echo "Example: FEAT: Add user authentication"
+    echo ""
+    echo "Your message: $MSG"
+    exit 1
+fi

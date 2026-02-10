@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest – Flawless Execution Playbook</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-2: #232736;
+    --border: #2e3347;
+    --text: #e2e4ec;
+    --text-dim: #8b8fa6;
+    --accent: #7c5cfc;
+    --accent-glow: rgba(124,92,252,0.15);
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.08);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,0.08);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.08);
+    --orange: #fb923c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .subtitle { color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--accent);
+  }
+  p { margin-bottom: 0.75rem; color: var(--text); }
+  .dim { color: var(--text-dim); }
+
+  /* Hero risk matrix */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .risk-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    position: relative;
+  }
+  .risk-card.high { border-left: 4px solid var(--red); }
+  .risk-card.medium { border-left: 4px solid var(--yellow); }
+  .risk-card.low { border-left: 4px solid var(--green); }
+  .risk-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .risk-card.high .risk-label { color: var(--red); }
+  .risk-card.medium .risk-label { color: var(--yellow); }
+  .risk-card.low .risk-label { color: var(--green); }
+  .risk-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .risk-card p { font-size: 0.85rem; color: var(--text-dim); margin: 0; }
+
+  /* Principle cards */
+  .principle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .principle-number {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  .principle h4 {
+    display: inline;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .principle p { margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-dim); }
+
+  /* Code blocks */
+  pre {
+    background: #111318;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin: 0.75rem 0 1rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  }
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+    font-size: 0.82rem;
+  }
+  .inline-code {
+    background: var(--surface-2);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* Strategy blocks */
+  .strategy {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+  .strategy-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .strategy-header .icon {
+    font-size: 1.5rem;
+  }
+  .strategy-header h4 { font-size: 1rem; font-weight: 600; }
+  .strategy-header .tag {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+  }
+  .tag-drew { background: var(--blue-bg); color: var(--blue); }
+  .tag-danielle { background: rgba(236,72,153,0.12); color: #ec4899; }
+  .tag-both { background: var(--accent-glow); color: var(--accent); }
+  .strategy-body { padding: 1.25rem; }
+  .strategy-body p { font-size: 0.9rem; }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .callout-red { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .callout-green { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .callout-yellow { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .callout-blue { background: var(--blue-bg); border-left: 3px solid var(--blue); }
+  .callout strong { display: block; margin-bottom: 0.25rem; }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  /* Flow diagrams */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .flow-dot {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-dot.green { background: var(--green-bg); color: var(--green); border: 2px solid var(--green); }
+  .flow-dot.yellow { background: var(--yellow-bg); color: var(--yellow); border: 2px solid var(--yellow); }
+  .flow-dot.red { background: var(--red-bg); color: var(--red); border: 2px solid var(--red); }
+  .flow-dot.blue { background: var(--blue-bg); color: var(--blue); border: 2px solid var(--blue); }
+  .flow-content h5 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.15rem; }
+  .flow-content p { font-size: 0.82rem; color: var(--text-dim); margin: 0; }
+
+  /* Checklist */
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .check-item .box {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    margin-top: 2px;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.85rem;
+  }
+  th {
+    background: var(--surface-2);
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .risk-matrix { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>⚡ Flawless Execution Playbook</h1>
+<p class="subtitle">Prompt Quest – Turning 🟡 Technical Quality into 🟢 by eliminating every way the demo can break.</p>
+
+<!-- ============================================ -->
+<h2>🎯 The Core Principle</h2>
+
+<div class="callout callout-red">
+  <strong>Hackathon demos don't fail on complexity. They fail on integration seams.</strong>
+  You have three integration seams: Phaser ↔ React, your app ↔ Claude API, and Web Speech API ↔ your app. Each one is a point of failure during a live demo. The entire playbook below is organized around making each seam unbreakable.
+</div>
+
+<!-- ============================================ -->
+<h2>🔴 Risk Map: What Can Actually Break</h2>
+
+<div class="risk-matrix">
+  <div class="risk-card high">
+    <div class="risk-label">🔴 High Risk</div>
+    <h4>Claude API Latency</h4>
+    <p>Response takes 3-8 seconds. During a live demo, the audience sees a blank screen and you're dead. Rate limits or 529 overload errors during judging are catastrophic.</p>
+  </div>
+  <div class="risk-card high">
+    <div class="risk-label">🔴 High Risk</div>
+    <h4>Web Speech API Fails</h4>
+    <p>Only works in Chrome. Requires HTTPS. Can return empty transcripts. Mic permission denied. Safari/Firefox = completely broken. If judge uses iPad → voice input is dead.</p>
+  </div>
+  <div class="risk-card medium">
+    <div class="risk-label">🟡 Medium Risk</div>
+    <h4>Phaser ↔ React Desync</h4>
+    <p>EventBus events fire but React doesn't re-render, or React state changes but Phaser scene doesn't update. Two rendering systems fighting each other.</p>
+  </div>
+</div>
+
+<div class="risk-matrix">
+  <div class="risk-card medium">
+    <div class="risk-label">🟡 Medium Risk</div>
+    <h4>Claude Returns Bad JSON</h4>
+    <p>Prompt says "return JSON" but Claude wraps it in markdown, adds preamble, or returns a different schema. Your scene_script parser crashes. No animation plays.</p>
+  </div>
+  <div class="risk-card low">
+    <div class="risk-label">🟢 Low Risk</div>
+    <h4>Asset Loading</h4>
+    <p>Sprites fail to load on slow conference WiFi. Phaser shows black rectangles instead of characters.</p>
+  </div>
+  <div class="risk-card low">
+    <div class="risk-label">🟢 Low Risk</div>
+    <h4>Vercel Deploy</h4>
+    <p>Build passes locally but fails in CI. Environment variables not set. Edge function cold start.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 1: The Golden Response Cache</h2>
+<p class="dim">This is the single most important thing Drew builds. It eliminates your highest risk entirely.</p>
+
+<div class="callout callout-green">
+  <strong>Concept: Pre-compute every "wow moment" response before the hackathon.</strong>
+  For each of your 6 tasks × key creative inputs, call Claude in advance and cache the scene_script JSON. During the live demo, you serve cached responses instantly. Claude API becomes a nice-to-have, not a dependency.
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🏗️</span>
+    <h4>Architecture: Three-Tier Response System</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+<pre>// response-resolver.ts — The heart of demo reliability
+
+type ResponseTier = 'cached' | 'live' | 'fallback';
+
+interface SceneScript {
+  success_level: 'FULL_SUCCESS' | 'PARTIAL_SUCCESS' | 'FUNNY_FAIL';
+  narration: string;
+  actions: SceneAction[];
+}
+
+async function resolveResponse(
+  taskId: string,
+  userInput: string
+): Promise<{ script: SceneScript; tier: ResponseTier }> {
+
+  // TIER 1: Exact or fuzzy cache match (instant, 0ms)
+  const cached = getCachedResponse(taskId, userInput);
+  if (cached) return { script: cached, tier: 'cached' };
+
+  // TIER 2: Live Claude API call (1-8 seconds)
+  try {
+    const script = await callClaudeWithTimeout(taskId, userInput, {
+      timeoutMs: 6000,  // Hard cap. Don't wait longer.
+      model: 'claude-sonnet-4-20250514' // Sonnet, NOT Opus. Faster.
+    });
+    // Cache this response for future identical inputs
+    saveToCache(taskId, userInput, script);
+    return { script, tier: 'live' };
+  } catch (error) {
+    console.warn('Claude API failed, using fallback', error);
+  }
+
+  // TIER 3: Pre-written generic fallback (instant, 0ms)
+  const fallback = getGenericFallback(taskId, userInput);
+  return { script: fallback, tier: 'fallback' };
+}</pre>
+
+    <p>During the <strong>demo</strong>, Tier 1 handles everything. During <strong>judge Q&A free-play</strong>, Tier 2 kicks in for novel inputs. Tier 3 is your safety net — the demo never shows an error screen.</p>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">📦</span>
+    <h4>Pre-Compute Cache: What to Generate Before Demo Day</h4>
+    <span class="tag tag-both">Both of you</span>
+  </div>
+  <div class="strategy-body">
+    <table>
+      <thead>
+        <tr><th>Task</th><th>Cache These Inputs</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🐔 Feed Chickens (Magic)</td>
+          <td>"throw seeds everywhere" · "put corn in bowl" · "shake bucket so chicken hears" · garbled speech input</td>
+          <td>Demo opener. Must be instant + delightful.</td>
+        </tr>
+        <tr>
+          <td>🏠 Build Shelter (Explorer)</td>
+          <td>"build a house" (partial — no materials) · "build a log cabin with stone walls and a chimney" (full) · "make a fort" (funny fail — too vague)</td>
+          <td>Shows prompt feedback system working.</td>
+        </tr>
+        <tr>
+          <td>🏰 Dungeon (Explorer)</td>
+          <td>3-4 varied inputs per task</td>
+          <td>Backup tasks if judges want to explore.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Total: ~20-30 cached responses.</strong> Run these through Claude the night before. Store as JSON files bundled with the app. Zero network dependency.</p>
+
+<pre>// cache-builder.ts — Run this script the night before demo day
+// Generates cached responses for all demo scenarios
+
+const DEMO_SCENARIOS = {
+  'feed-chickens': [
+    'throw seeds everywhere',
+    'put corn in a bowl',
+    'shake the bucket so the chicken hears',
+    'give chicken food',
+    'call the chickens and feed them grain',
+  ],
+  'build-shelter': [
+    'build a house',                                    // partial
+    'build a log cabin with walls roof and door',       // full
+    'make a fort',                                      // funny fail
+    'build a wooden shelter with stone foundation and thatched roof near the river', // full
+  ],
+  // ... more tasks
+};
+
+async function buildCache() {
+  const cache: Record&lt;string, Record&lt;string, SceneScript&gt;&gt; = {};
+  for (const [taskId, inputs] of Object.entries(DEMO_SCENARIOS)) {
+    cache[taskId] = {};
+    for (const input of inputs) {
+      console.log(`Generating: ${taskId} → "${input}"`);
+      const script = await callClaude(taskId, input);
+      cache[taskId][input] = script;
+      await sleep(1000); // Rate limit courtesy
+    }
+  }
+  fs.writeFileSync('src/data/response-cache.json', JSON.stringify(cache, null, 2));
+  console.log(`✅ Cached ${Object.values(cache).flatMap(Object.keys).length} responses`);
+}
+
+buildCache();</pre>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🔍</span>
+    <h4>Fuzzy Cache Matching — Handle Unexpected Inputs Gracefully</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+    <p>Judges won't say exactly what you cached. Use simple keyword matching to find the closest cached response.</p>
+
+<pre>// fuzzy-match.ts — No npm dependency needed, keep it simple
+
+function getCachedResponse(taskId: string, input: string): SceneScript | null {
+  const taskCache = RESPONSE_CACHE[taskId];
+  if (!taskCache) return null;
+
+  const normalizedInput = input.toLowerCase().trim();
+
+  // 1. Exact match
+  if (taskCache[normalizedInput]) return taskCache[normalizedInput];
+
+  // 2. Keyword overlap scoring
+  const inputWords = new Set(normalizedInput.split(/\s+/).filter(w => w.length > 2));
+  let bestMatch: { key: string; score: number } | null = null;
+
+  for (const cachedKey of Object.keys(taskCache)) {
+    const cachedWords = new Set(cachedKey.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+    const overlap = [...inputWords].filter(w => cachedWords.has(w)).length;
+    const score = overlap / Math.max(inputWords.size, cachedWords.size);
+
+    if (score > 0.4 && (!bestMatch || score > bestMatch.score)) {
+      bestMatch = { key: cachedKey, score };
+    }
+  }
+
+  if (bestMatch) {
+    console.log(`Cache fuzzy match: "${input}" → "${bestMatch.key}" (${bestMatch.score.toFixed(2)})`);
+    return taskCache[bestMatch.key];
+  }
+
+  return null; // Falls through to live API call
+}</pre>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 2: Claude API Bulletproofing</h2>
+<p class="dim">For when judges go off-script and you need live responses.</p>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">⚡</span>
+    <h4>Use Sonnet, Not Opus — And Use Streaming</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+    <div class="two-col">
+      <div class="callout callout-red">
+        <strong>❌ Don't do this</strong>
+        Opus 4.5 — higher quality but 3-8s latency.<br>
+        Non-streaming — user stares at loading spinner for full duration.
+      </div>
+      <div class="callout callout-green">
+        <strong>✅ Do this instead</strong>
+        Sonnet 4.5 — nearly as good, 1-3s latency.<br>
+        Streaming — show "thinking" animation, parse JSON on completion.
+      </div>
+    </div>
+
+<pre>// claude-client.ts — Optimized for hackathon demo speed
+
+import Anthropic from '@anthropic-ai/sdk';
+
+const client = new Anthropic();
+
+async function callClaudeWithTimeout(
+  taskId: string,
+  userInput: string,
+  opts: { timeoutMs: number }
+): Promise&lt;SceneScript&gt; {
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), opts.timeoutMs);
+
+  try {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 400,    // Scene scripts are small. Cap output = faster.
+      temperature: 0.7,   // Some creativity for fun responses
+      system: TASK_SYSTEM_PROMPTS[taskId],  // Pre-written, tested prompt
+      messages: [{ role: 'user', content: userInput }],
+    }, { signal: controller.signal });
+
+    const text = response.content[0].type === 'text'
+      ? response.content[0].text : '';
+
+    return parseSceneScript(text);  // Validated JSON parsing
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function parseSceneScript(raw: string): SceneScript {
+  // Handle Claude wrapping JSON in markdown code fences
+  let cleaned = raw.trim();
+  if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+  }
+
+  try {
+    const parsed = JSON.parse(cleaned);
+    // Validate required fields exist
+    if (!parsed.success_level || !parsed.actions || !Array.isArray(parsed.actions)) {
+      throw new Error('Invalid scene script schema');
+    }
+    return parsed as SceneScript;
+  } catch (e) {
+    console.error('Failed to parse Claude response:', raw);
+    throw e; // Caller falls through to Tier 3 fallback
+  }
+}</pre>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">📝</span>
+    <h4>Prompt Engineering: Force Clean JSON Output</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+    <p>The #1 cause of Claude response failures is bad JSON. Here's the battle-tested prompt pattern:</p>
+
+<pre>// system-prompts.ts — Task-specific prompts that force valid JSON
+
+const FEED_CHICKENS_SYSTEM = `You are the game engine for a children's educational game.
+
+A child (age 5-7) is trying to feed chickens on a farm.
+They will describe their approach in their own words.
+
+Evaluate their input and return ONLY a JSON object (no markdown, no explanation, no preamble):
+
+{
+  "success_level": "FULL_SUCCESS" | "PARTIAL_SUCCESS" | "FUNNY_FAIL",
+  "narration": "A short, fun sentence describing what happens (read aloud to the child)",
+  "actions": [
+    {
+      "type": "move" | "animate" | "spawn" | "emote" | "sfx",
+      "target": "chicken" | "player" | "seeds" | "bowl",
+      "action": "walk_to_bowl" | "eat" | "scatter" | "celebrate" | "confused" | "run_away",
+      "delay_ms": 0
+    }
+  ],
+  "missing_elements": [],
+  "prompt_feedback": "What the child did well and what they could add next time"
+}
+
+RULES:
+- If the child mentions FOOD + LOCATION/METHOD → FULL_SUCCESS
+- If the child mentions FOOD only → PARTIAL_SUCCESS
+- If the input is vague or unrelated → FUNNY_FAIL (make it silly and fun, never mean)
+- Maximum 6 actions in the actions array
+- narration must be under 20 words
+- RESPOND WITH ONLY THE JSON OBJECT. NO OTHER TEXT.`;
+</pre>
+
+    <div class="callout callout-yellow">
+      <strong>🧪 Test prompt before Day 1 of build week.</strong>
+      Run 20+ varied inputs through each system prompt and verify you get clean JSON every time. Fix the prompt until you hit 100% parse rate on test inputs. This is a 2-hour investment that saves you days of debugging.
+    </div>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">✨</span>
+    <h4>"Thinking" Animation — Hide Latency With Delight</h4>
+    <span class="tag tag-danielle">Danielle designs this</span>
+  </div>
+  <div class="strategy-body">
+    <p>Even with Sonnet + caching, sometimes there's a 1-3 second wait. The difference between "broken" and "charming" is what happens during that wait.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot green">1</div>
+        <div class="flow-content">
+          <h5>Child submits input</h5>
+          <p>Immediately: Pixel (guide character) does a "thinking" Lottie animation. Thought bubbles appear.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot yellow">2</div>
+        <div class="flow-content">
+          <h5>1-2 seconds pass</h5>
+          <p>Pixel speaks via TTS: "Hmm, let me think about that…" or "Ooh, interesting idea!" Audience hears activity, not silence.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot blue">3</div>
+        <div class="flow-content">
+          <h5>Response arrives</h5>
+          <p>Pixel animation transitions to "excited" → scene plays. If cached, steps 1-2 take ~300ms and feel snappy.</p>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>Lottie assets needed:</strong> Character thinking (looping), character excited (one-shot), thought bubble pop-in, sparkle transition.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 3: Voice Input — The Browser Minefield</h2>
+
+<div class="callout callout-red">
+  <strong>Web Speech API SpeechRecognition is Chrome-only in practice.</strong>
+  Firefox: not supported. Safari: partial, buggy on iOS, broken as PWA. Edge: implements the interface but returns zero results (confirmed no-op). Brave: refuses entirely. <em>You must assume voice will fail for some judges.</em>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎤</span>
+    <h4>Voice Architecture: Graceful Degradation</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+<pre>// voice-input.ts — Works in Chrome, degrades gracefully everywhere else
+
+type VoiceCapability = 'native' | 'none';
+
+function detectVoiceCapability(): VoiceCapability {
+  // Chrome (desktop + Android) is the only reliable implementation
+  const hasSpeechAPI = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+
+  if (hasSpeechAPI) {
+    // Extra check: Edge implements the interface but it's a no-op
+    const isEdge = /Edg\//.test(navigator.userAgent);
+    const isBrave = (navigator as any).brave !== undefined;
+    if (isEdge || isBrave) return 'none';
+    return 'native';
+  }
+
+  return 'none';
+}
+
+// In your Voice Button component:
+function VoiceButton({ onTranscript, onFallbackToText }) {
+  const capability = detectVoiceCapability();
+
+  if (capability === 'none') {
+    // Don't show a broken mic button. Show text input instead.
+    onFallbackToText();
+    return null;
+  }
+
+  // ... render mic button with native SpeechRecognition
+}</pre>
+
+    <div class="two-col">
+      <div>
+        <h3>Magic Mode (Ages 5-7)</h3>
+        <p><strong>Primary:</strong> Mic button → SpeechRecognition (Chrome)</p>
+        <p><strong>Fallback:</strong> Illustrated object chips only (no text input — kids can't type at this age). Parent/presenter taps chips on their behalf.</p>
+        <p><strong>Demo strategy:</strong> YOU demo Magic Mode on YOUR laptop (Chrome). Control the browser. Never hand your laptop to a judge for this tier.</p>
+      </div>
+      <div>
+        <h3>Explorer Mode (Ages 8-10)</h3>
+        <p><strong>Primary:</strong> Text input box (always works everywhere)</p>
+        <p><strong>Enhancement:</strong> Mic button appears only in Chrome</p>
+        <p><strong>Demo strategy:</strong> This tier is safe for judge free-play — text input works on any browser. This is the tier you let judges touch.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🔊</span>
+    <h4>TTS (Text-to-Speech) — More Reliable, Fewer Gotchas</h4>
+    <span class="tag tag-drew">Drew builds this</span>
+  </div>
+  <div class="strategy-body">
+    <p>Good news: <code class="inline-code">speechSynthesis</code> (TTS) works across all modern browsers including Firefox and Safari. It runs locally, no network needed. Use it for all narration in Magic Mode.</p>
+
+<pre>// tts.ts — Simple, reliable narration
+
+function speak(text: string, rate: number = 0.9): Promise&lt;void&gt; {
+  return new Promise((resolve, reject) => {
+    if (!('speechSynthesis' in window)) {
+      console.warn('TTS not supported');
+      resolve(); // Silent fallback — don't crash
+      return;
+    }
+
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = rate;  // Slightly slower for kids
+    utterance.pitch = 1.1;  // Slightly higher = friendlier
+
+    // Pick a good voice (prefer non-robotic ones)
+    const voices = speechSynthesis.getVoices();
+    const preferred = voices.find(v =>
+      v.name.includes('Samantha') || // macOS
+      v.name.includes('Google US English') || // Chrome
+      v.lang.startsWith('en')
+    );
+    if (preferred) utterance.voice = preferred;
+
+    utterance.onend = () => resolve();
+    utterance.onerror = () => resolve(); // Never crash on TTS failure
+    speechSynthesis.speak(utterance);
+  });
+}
+
+// GOTCHA: Chrome requires user gesture before first TTS call.
+// Solution: First speak() call happens AFTER child taps "Start Task" button.</pre>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 4: Phaser ↔ React — Keep Them Separated</h2>
+
+<div class="callout callout-blue">
+  <strong>Key insight from research: Treat Phaser as an "embed" that React controls, not a co-equal rendering partner.</strong>
+  React owns all UI (menus, feedback panels, badges, transitions). Phaser owns only the game canvas (sprites, animations, scenes). They communicate through a thin EventBus — nothing else.
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🌉</span>
+    <h4>The EventBus Contract — Define It Once, Never Change It</h4>
+    <span class="tag tag-both">Both agree on this Day 1</span>
+  </div>
+  <div class="strategy-body">
+    <p>Every single event that crosses the React↔Phaser boundary must be defined in this file. No ad-hoc events.</p>
+
+<pre>// event-bus.ts — The ONLY bridge between React and Phaser
+// If it's not in this file, it doesn't exist.
+
+import { Events } from 'phaser';
+
+export const EventBus = new Events.EventEmitter();
+
+// =============================
+// React → Phaser (commands)
+// =============================
+export type GameCommand =
+  | { type: 'LOAD_SCENE'; taskId: string }
+  | { type: 'PLAY_SCRIPT'; script: SceneScript }
+  | { type: 'RESET_SCENE' };
+
+// React calls this:
+export function sendToGame(command: GameCommand) {
+  EventBus.emit('game-command', command);
+}
+
+// =============================
+// Phaser → React (status updates)
+// =============================
+export type GameEvent =
+  | { type: 'SCENE_READY'; taskId: string }
+  | { type: 'SCRIPT_COMPLETE'; successLevel: string }
+  | { type: 'ANIMATION_STEP'; step: number; total: number };
+
+// Phaser calls this:
+export function sendToUI(event: GameEvent) {
+  EventBus.emit('game-event', event);
+}
+
+// =============================
+// React listens:
+// EventBus.on('game-event', handler);
+// Phaser listens:
+// EventBus.on('game-command', handler);
+// =============================</pre>
+
+    <div class="callout callout-yellow">
+      <strong>🚨 Critical: Clean up listeners.</strong>
+      Phaser scenes persist in memory. If you add listeners in <code class="inline-code">create()</code>, remove them in <code class="inline-code">shutdown()</code>. Leaked listeners cause double-fires and ghost animations. The official Phaser-React template handles this — use their pattern.
+    </div>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">📐</span>
+    <h4>State Ownership — No Shared State, Ever</h4>
+    <span class="tag tag-both">Architecture rule</span>
+  </div>
+  <div class="strategy-body">
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Owned By</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Current task, user input, earned badges, prompt feedback</td><td><strong>Zustand (React)</strong></td><td>UI state. React renders it.</td></tr>
+        <tr><td>Sprite positions, animation state, scene objects</td><td><strong>Phaser Scene</strong></td><td>Game state. Phaser renders it.</td></tr>
+        <tr><td>Scene scripts (the Claude response)</td><td><strong>Zustand → EventBus → Phaser</strong></td><td>Created in React world, played in Phaser world. One-way data flow.</td></tr>
+      </tbody>
+    </table>
+
+    <p>Never read Phaser state from React. Never read Zustand from Phaser. Data flows one direction through the EventBus. This makes bugs obvious and debugging fast.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 5: The Scene Script Player — Your Hardest Code</h2>
+<p class="dim">This is the engine that turns Claude's JSON response into animated Phaser gameplay. Get this right and everything else is easy.</p>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎬</span>
+    <h4>Scene Script Format & Player</h4>
+    <span class="tag tag-drew">Drew builds this — Day 2-3 priority</span>
+  </div>
+  <div class="strategy-body">
+<pre>// scene-script-player.ts — Plays a sequence of actions in Phaser
+
+interface SceneAction {
+  type: 'move' | 'animate' | 'spawn' | 'emote' | 'sfx' | 'wait';
+  target: string;       // sprite key: 'chicken', 'player', 'seeds'
+  action: string;       // 'walk_to_bowl', 'eat', 'scatter', 'celebrate'
+  delay_ms?: number;    // wait before this action (default 0)
+  duration_ms?: number; // how long the action takes (default 500)
+}
+
+class SceneScriptPlayer {
+  private scene: Phaser.Scene;
+  private sprites: Map&lt;string, Phaser.GameObjects.Sprite&gt;;
+
+  async playScript(script: SceneScript) {
+    // Send narration to TTS immediately
+    speak(script.narration);
+
+    // Play actions sequentially
+    for (let i = 0; i &lt; script.actions.length; i++) {
+      const action = script.actions[i];
+
+      if (action.delay_ms) {
+        await this.wait(action.delay_ms);
+      }
+
+      await this.executeAction(action);
+
+      // Notify React of progress
+      sendToUI({
+        type: 'ANIMATION_STEP',
+        step: i + 1,
+        total: script.actions.length
+      });
+    }
+
+    // Done — notify React
+    sendToUI({
+      type: 'SCRIPT_COMPLETE',
+      successLevel: script.success_level
+    });
+  }
+
+  private async executeAction(action: SceneAction): Promise&lt;void&gt; {
+    const sprite = this.sprites.get(action.target);
+    if (!sprite) {
+      console.warn(`Sprite "${action.target}" not found — skipping`);
+      return; // NEVER crash. Skip unknown sprites gracefully.
+    }
+
+    switch (action.type) {
+      case 'move':
+        return this.tweenTo(sprite, action);
+      case 'animate':
+        return this.playAnim(sprite, action);
+      case 'spawn':
+        return this.spawnSprite(action);
+      case 'emote':
+        return this.showEmote(sprite, action);
+      case 'sfx':
+        return this.playSFX(action);
+      case 'wait':
+        return this.wait(action.duration_ms ?? 500);
+    }
+  }
+
+  // Each method returns a Promise that resolves when complete
+  // This keeps animations sequential and predictable
+}</pre>
+
+    <div class="callout callout-green">
+      <strong>Keep the action vocabulary small.</strong>
+      You only need ~8 action types to demo beautifully: move, animate (play sprite animation), spawn (add new sprite), emote (show emoji/bubble above sprite), sfx (play sound), wait, celebrate (confetti + dance), and fail (funny stumble). Resist adding more. Each new action type is a new thing that can break.
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🛡️ Strategy 6: Demo Day Failsafes</h2>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎥</span>
+    <h4>Record a Backup Demo Video</h4>
+    <span class="tag tag-danielle">Danielle — Day 6</span>
+  </div>
+  <div class="strategy-body">
+    <p>Screen-record yourself running through the full demo flow: Magic Mode voice input → celebration → Explorer Mode text input → partial success → retry → full success → Trophy Room. If <em>everything</em> breaks on stage (WiFi down, laptop crashes), you can narrate over the video. This is standard hackathon practice. Judges won't penalize you — they'll appreciate the preparation.</p>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">📋</span>
+    <h4>Pre-Demo Checklist</h4>
+    <span class="tag tag-both">Both — 30 minutes before judging</span>
+  </div>
+  <div class="strategy-body">
+    <div class="checklist">
+      <div class="check-item"><div class="box"></div><span>Open Chrome. Verify it's Chrome (not Edge, not Brave).</span></div>
+      <div class="check-item"><div class="box"></div><span>Navigate to deployed Vercel URL. Verify it loads.</span></div>
+      <div class="check-item"><div class="box"></div><span>Grant microphone permission. Test "hello" → see transcript appear.</span></div>
+      <div class="check-item"><div class="box"></div><span>Run through Farm → "throw seeds" → verify animation + celebration.</span></div>
+      <div class="check-item"><div class="box"></div><span>Run through Explorer → "build a house" → verify partial feedback.</span></div>
+      <div class="check-item"><div class="box"></div><span>Check Trophy Room shows at least 1 badge.</span></div>
+      <div class="check-item"><div class="box"></div><span>Turn OFF do-not-disturb / notification popups on laptop.</span></div>
+      <div class="check-item"><div class="box"></div><span>Close all other tabs and apps. Maximize browser.</span></div>
+      <div class="check-item"><div class="box"></div><span>Backup: Ensure demo video is loaded and ready to play.</span></div>
+      <div class="check-item"><div class="box"></div><span>Backup: Have local dev server ready (<code class="inline-code">npm run dev</code>) in case Vercel is slow.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎭</span>
+    <h4>The "Judge Wants to Try It" Protocol</h4>
+    <span class="tag tag-both">Rehearse this</span>
+  </div>
+  <div class="strategy-body">
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot green">1</div>
+        <div class="flow-content">
+          <h5>Judge asks: "Can I try it?"</h5>
+          <p>ALWAYS say yes. Steer them to <strong>Explorer Mode</strong> (text input works everywhere). Say: "Try the beach shelter task — type what kind of shelter you'd build!"</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot yellow">2</div>
+        <div class="flow-content">
+          <h5>Judge types something unexpected</h5>
+          <p>Fuzzy cache handles common variations. If cache misses → live API call → "thinking" animation buys 2-3 seconds. If API fails → generic fallback plays a funny fail animation. <em>No error screen ever appears.</em></p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot blue">3</div>
+        <div class="flow-content">
+          <h5>Frame the result</h5>
+          <p>If full success: "See how specific prompts get better results?" If funny fail: "That's the magic — the game shows kids WHY being specific matters, through play, not lectures." <em>Every outcome is a win in your narrative.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>📅 Revised Build Week — Who Does What</h2>
+<p class="dim">Mapped to these strategies. Bold = critical path items. Italics = nice to have.</p>
+
+<table>
+  <thead>
+    <tr><th>Day</th><th>Drew (Backend / Game Engine)</th><th>Danielle (UI / Design / Brand)</th><th>End-of-Day Gate</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1</strong></td>
+      <td><strong>Clone Phaser-React-TS template.</strong> Set up EventBus contract file. Farm scene: load tilemap + chicken sprite. Claude API client with timeout + JSON parser.</td>
+      <td><strong>App shell:</strong> React Router, Zustand store, tier selector. Source Lottie animations (thinking, celebration, badge). Design Magic Mode UI mockup (object chips, mic button).</td>
+      <td>✅ Phaser canvas renders inside React. Claude returns valid JSON for 1 test prompt.</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><strong>Scene Script Player (core engine).</strong> Play 6 action types sequentially. Web Speech API integration + Edge/Brave detection. Test chicken task end-to-end.</td>
+      <td><strong>Magic Mode UI:</strong> Illustrated object chips (tap-only, zero text). Mic button with recording state. Pixel guide character + thinking animation. TTS integration for narration.</td>
+      <td>✅ "Throw seeds" → Claude → scene script → chickens animate → celebration. <em>THE DEMO MOMENT WORKS.</em></td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td>Beach shelter + dungeon scenes. All 6 task system prompts written and tested (100% JSON parse rate). <strong>Response cache system (Tier 1 + Tier 3).</strong></td>
+      <td><strong>Explorer Mode UI:</strong> Text input + optional mic. Prompt Feedback panel (Framer Motion slide-in). Concrete tip cards. Distinct visual identity from Magic Mode.</td>
+      <td>✅ Both tiers functional. Cache returns instant responses for demo scenarios.</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td>End-to-end wiring: all 6 tasks × 2 tiers. Fuzzy cache matching. Error boundaries (no error screen ever). <strong>Run cache-builder script for 20-30 demo inputs.</strong></td>
+      <td><strong>Badge system:</strong> Zustand state, Trophy Room layout, Lottie unlock animations, Confetti on success, Open Badges JSON-LD schema. Framer Motion page transitions.</td>
+      <td>✅ Full happy path works for all tasks. Badges earn and display. No crashes on bad input.</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><strong>Deploy to Vercel.</strong> Test deployed version on Chrome, Safari, Firefox. Stress test with weird inputs. Cache fallbacks verified. <em>Local dev server as backup.</em></td>
+      <td><strong>Polish:</strong> Responsive layout. Tier-appropriate visual identities (bright/round for Magic, structured for Explorer). Loading states. <em>Level select screen.</em></td>
+      <td>✅ Deployed URL works. No broken states discoverable in 30 min of free-play testing.</td>
+    </tr>
+    <tr>
+      <td><strong>6-7</strong></td>
+      <td>Final bug fixes on deployed version. <strong>Re-run cache builder with final prompts.</strong> Test on conference WiFi if possible.</td>
+      <td><strong>Record backup demo video.</strong> Pitch deck (3-5 slides). Practice 3-minute script. Pre-demo checklist dry run. <em>GitHub README with screenshots.</em></td>
+      <td>✅ Demo rehearsed 3x end-to-end. Video backup ready. Pitch timed under 3 minutes.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>⚠️ The 5 Things That Will Tempt You — Resist All Of Them</h2>
+
+<div class="principle">
+  <span class="principle-number">1</span>
+  <h4>"Let's add one more task"</h4>
+  <p>6 tasks is already generous. Each new task = 4-6 more cached responses, a new scene to build, a new system prompt to test. The ROI drops to zero after your first 4 tasks are polished.</p>
+</div>
+
+<div class="principle">
+  <span class="principle-number">2</span>
+  <h4>"Let's add Builder Mode"</h4>
+  <p>You already cut this. Don't un-cut it. A code editor, live execution, split-screen — that's 2-3 days. Pitch it as v2 roadmap. Judges value scope discipline.</p>
+</div>
+
+<div class="principle">
+  <span class="principle-number">3</span>
+  <h4>"The animation isn't good enough"</h4>
+  <p>A chicken walking to a bowl and pecking is enough. You don't need particle effects, parallax scrolling, or custom shaders. The <em>kid's creative input</em> is the magic — not the pixel art quality.</p>
+</div>
+
+<div class="principle">
+  <span class="principle-number">4</span>
+  <h4>"Let me try Opus for better responses"</h4>
+  <p>Sonnet is 3-5x faster. The quality difference is invisible for generating 6-action scene scripts. Latency is visible. Use Sonnet.</p>
+</div>
+
+<div class="principle">
+  <span class="principle-number">5</span>
+  <h4>"Let me add user accounts / persistence"</h4>
+  <p>Zustand in-memory state is fine. Badges persist for the duration of the demo session. Nobody is logging in during a hackathon demo. localStorage at most — and even that isn't necessary.</p>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>✅ Execution Confidence: 🟡 → 🟢</h2>
+
+<div class="callout callout-green">
+  <strong>With these strategies, your technical risk profile changes:</strong>
+  <br><br>
+  <strong style="color: var(--text);">Claude API Latency:</strong> 🔴→🟢 — Golden Response Cache makes the API optional during demo.<br>
+  <strong style="color: var(--text);">Web Speech API:</strong> 🔴→🟢 — Chrome for Magic Mode demo, text input fallback for Explorer Mode free-play.<br>
+  <strong style="color: var(--text);">Phaser ↔ React:</strong> 🟡→🟢 — Strict EventBus contract, no shared state, clean separation.<br>
+  <strong style="color: var(--text);">Claude Bad JSON:</strong> 🟡→🟢 — Tested prompts + markdown stripping + schema validation + Tier 3 fallback.<br>
+  <strong style="color: var(--text);">Asset Loading:</strong> 🟢 — Bundle sprites with app, no CDN dependency.<br>
+  <strong style="color: var(--text);">Deploy Issues:</strong> 🟢 — Vercel + local dev server backup.<br>
+  <br>
+  <strong style="color: var(--green);">The demo cannot show an error screen.</strong> Every failure mode has a fallback that still produces a working, delightful experience.
+</div>
+
+<p style="text-align: center; margin-top: 2rem; color: var(--text-dim); font-size: 0.85rem;">
+  Prompt Quest Execution Playbook · Danielle & Drew · February 2026
+</p>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  /* Game-themed button */
+  .btn-game {
+    @apply px-6 py-3 font-heading font-bold rounded-2xl
+           transition-all duration-200 transform
+           hover:scale-105 active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+
+  /* Glowing input field */
+  .input-magic {
+    @apply w-full px-5 py-4 bg-quest-card/80 text-white rounded-2xl
+           border-2 border-quest-border font-body text-base
+           placeholder-purple-300/40 resize-none
+           focus:outline-none focus:border-quest-accent focus:shadow-glow-purple
+           disabled:opacity-50 transition-all duration-300;
+  }
+
+  /* Result speech bubble */
+  .bubble-result {
+    @apply p-4 rounded-2xl font-body text-sm border-2 backdrop-blur-sm;
+  }
+}
+
+/* Stars background decoration */
+.stars-bg {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(168, 85, 247, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(251, 191, 36, 0.2), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(34, 211, 238, 0.3), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(244, 114, 182, 0.2), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(168, 85, 247, 0.2), transparent);
+  background-size: 200px 100px;
+}
+
+/* Shimmer loading animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(168, 85, 247, 0.15) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Pulsing record button */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

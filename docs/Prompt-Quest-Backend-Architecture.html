@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest – Claude Code Backend Architecture Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #0c0e14;
+    --surface: #151820;
+    --surface-2: #1c2030;
+    --surface-3: #242938;
+    --border: #2a3048;
+    --text: #e0e3f0;
+    --text-dim: #7a80a0;
+    --accent: #8b6cff;
+    --accent-dim: rgba(139,108,255,0.12);
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.08);
+    --green-border: rgba(52,211,153,0.25);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,0.08);
+    --yellow-border: rgba(251,191,36,0.25);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --red-border: rgba(248,113,113,0.25);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.08);
+    --blue-border: rgba(96,165,250,0.25);
+    --pink: #f472b6;
+    --pink-bg: rgba(244,114,182,0.08);
+    --pink-border: rgba(244,114,182,0.25);
+    --orange: #fb923c;
+    --orange-bg: rgba(251,146,60,0.08);
+    --orange-border: rgba(251,146,60,0.25);
+    --cyan: #22d3ee;
+    --cyan-bg: rgba(34,211,238,0.08);
+    --cyan-border: rgba(34,211,238,0.25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding: 2.5rem;
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 1.85rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+  .subtitle { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2.5rem; }
+  h2 {
+    font-size: 1.25rem; font-weight: 700; margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+  h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.75rem; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+
+  pre {
+    background: #0a0c10; border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.25rem; overflow-x: auto; font-size: 0.78rem; line-height: 1.7;
+    margin: 0.75rem 0 1rem; font-family: 'JetBrains Mono', monospace;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+  .ic { background: var(--surface-2); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.82em; }
+
+  .callout {
+    border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.88rem;
+  }
+  .callout-red { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .callout-green { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .callout-yellow { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .callout-blue { background: var(--blue-bg); border-left: 3px solid var(--blue); }
+  .callout-pink { background: var(--pink-bg); border-left: 3px solid var(--pink); }
+  .callout-orange { background: var(--orange-bg); border-left: 3px solid var(--orange); }
+  .callout-cyan { background: var(--cyan-bg); border-left: 3px solid var(--cyan); }
+  .callout strong { display: block; margin-bottom: 0.25rem; }
+
+  .divider {
+    height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  /* Mapping cards */
+  .map-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin: 1rem 0; overflow: hidden;
+  }
+  .map-header {
+    padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .map-header .file-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 600;
+  }
+  .map-header .arrow { color: var(--text-dim); font-size: 1.1rem; }
+  .map-header .cc-type {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 0.2em 0.6em; border-radius: 4px;
+  }
+  .type-claude { background: var(--accent-dim); color: var(--accent); }
+  .type-memory { background: var(--green-bg); color: var(--green); }
+  .type-agent { background: var(--orange-bg); color: var(--orange); }
+  .type-skill { background: var(--blue-bg); color: var(--blue); }
+  .type-command { background: var(--pink-bg); color: var(--pink); }
+  .type-mcp { background: var(--cyan-bg); color: var(--cyan); }
+  .type-reference { background: var(--yellow-bg); color: var(--yellow); }
+  .type-kill { background: var(--red-bg); color: var(--red); }
+  .map-body { padding: 1.25rem; }
+  .map-body p { font-size: 0.88rem; }
+
+  .verdict { font-weight: 600; margin-top: 0.5rem; }
+  .verdict-keep { color: var(--green); }
+  .verdict-merge { color: var(--yellow); }
+  .verdict-kill { color: var(--red); }
+  .verdict-add { color: var(--cyan); }
+
+  /* Architecture diagram */
+  .arch-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin: 1rem 0;
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+
+  .mini-card {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem;
+  }
+  .mini-card h5 {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin-bottom: 0.3rem;
+  }
+  .mini-card p { font-size: 0.82rem; margin: 0; }
+  .mini-card code { font-size: 0.75rem; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.82rem;
+  }
+  th {
+    background: var(--surface-2); text-align: left; padding: 0.6rem 0.75rem;
+    font-weight: 600; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--text-dim); border-bottom: 2px solid var(--border);
+  }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+  @media (max-width: 700px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🧠 Prompt Quest: Claude Code Backend Architecture</h1>
+<p class="subtitle">How your 14 .md files map to Claude Code primitives — and what's missing.</p>
+
+<!-- ============================================ -->
+<div class="callout callout-orange">
+  <strong>The big picture you need to understand first.</strong>
+  Claude Code has 6 distinct primitives for organizing AI-assisted development. Your 14 files need to slot into these primitives — they're not all the same type. Some are <strong>always-loaded context</strong> (CLAUDE.md), some are <strong>persistent memory</strong> (MEMORY.md), some are <strong>specialized subagents</strong>, some are <strong>reusable skills</strong>, some are <strong>slash commands</strong>, and some are just <strong>reference docs</strong> that get read on demand. Putting the wrong content in the wrong primitive either wastes tokens or fails silently.
+</div>
+
+<h2>📐 Claude Code's 6 Primitives</h2>
+
+<div class="three-col">
+  <div class="mini-card" style="border-left: 3px solid var(--accent);">
+    <h5>CLAUDE.md</h5>
+    <p>Loaded into EVERY session automatically. Project rules, conventions, architecture overview. <strong>Keep lean</strong> — every line costs tokens on every conversation.</p>
+    <p><code>prompt-quest/CLAUDE.md</code></p>
+  </div>
+  <div class="mini-card" style="border-left: 3px solid var(--green);">
+    <h5>MEMORY.md</h5>
+    <p>Auto-memory. Claude reads/writes learnings as it works. First 200 lines loaded at session start. Captures patterns, decisions, bugs found. <strong>Claude maintains this.</strong></p>
+    <p><code>~/.claude/memory/MEMORY.md</code></p>
+  </div>
+  <div class="mini-card" style="border-left: 3px solid var(--orange);">
+    <h5>Subagents</h5>
+    <p>Specialized AI with own context window, tools, and system prompt. Defined in markdown + YAML frontmatter. <strong>Delegated tasks run in isolation.</strong></p>
+    <p><code>.claude/agents/*.md</code></p>
+  </div>
+  <div class="mini-card" style="border-left: 3px solid var(--blue);">
+    <h5>Skills</h5>
+    <p>Reusable procedural knowledge. SKILL.md with frontmatter. Loaded on-demand when description matches task. <strong>Portable across projects.</strong></p>
+    <p><code>.claude/skills/*/SKILL.md</code></p>
+  </div>
+  <div class="mini-card" style="border-left: 3px solid var(--pink);">
+    <h5>Slash Commands</h5>
+    <p>Named prompts triggered by <code>/command</code>. Quick workflows — research, build, test. Markdown files with instructions.</p>
+    <p><code>.claude/commands/*.md</code></p>
+  </div>
+  <div class="mini-card" style="border-left: 3px solid var(--cyan);">
+    <h5>MCP Servers</h5>
+    <p>External tool integrations. Connect Claude Code to APIs, databases, services. <strong>Don't carry "how to use" — that's a Skill.</strong></p>
+    <p><code>claude mcp add ...</code></p>
+  </div>
+</div>
+
+<div class="callout callout-red">
+  <strong>The #1 anti-pattern: Putting everything in CLAUDE.md.</strong>
+  Your CLAUDE.md loads on every single session. If you dump all 14 files' worth of content in there, you'll burn 50K+ tokens before you even start coding. Claude Code best practices say: keep CLAUDE.md to project rules and architecture overview. Point to reference docs. Let skills and agents carry the procedural knowledge.
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================ -->
+<h2>🗺️ Your 14 Files → Claude Code Primitives</h2>
+
+<!-- Memory.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Memory.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-memory">Auto Memory</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Persistent memory across sessions — what Claude has learned about the project.</p>
+    <p><strong>Claude Code reality:</strong> This already exists as a first-class feature. Claude Code has auto-memory at <code class="ic">~/.claude/memory/MEMORY.md</code> (user-level) or <code class="ic">.claude/memory/MEMORY.md</code> (project-level). Claude reads and writes it automatically. First 200 lines loaded at startup. You can say "remember that we use pnpm, not npm" and it persists.</p>
+    <p class="verdict verdict-merge">→ DON'T create a custom Memory.md. Use Claude Code's built-in auto-memory. Seed it with key decisions on Day 1.</p>
+  </div>
+</div>
+
+<!-- Remember.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Remember.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-kill">Redundant — merge into Memory.md</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Things Claude should remember between sessions — project decisions, user preferences, context.</p>
+    <p><strong>Claude Code reality:</strong> This is the same thing as Memory.md. Claude Code's auto-memory handles this. You don't need two separate "remember" files — that's token waste. If you have specific things that should ALWAYS be remembered (not just learned), those go in CLAUDE.md as rules.</p>
+    <p class="verdict verdict-kill">→ KILL this file. Split content: persistent rules → CLAUDE.md, session learnings → auto-memory.</p>
+  </div>
+</div>
+
+<!-- recallskill.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">recallskill.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-skill">Skill</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> A skill for recalling relevant context from the knowledge base when needed.</p>
+    <p><strong>Claude Code reality:</strong> This maps to a real Claude Code Skill. But think about what it actually needs to do for Prompt Quest: recall the vocabulary contract, recall the scene script schema, recall a character's animation list. The "knowledge base" it's recalling from is your reference docs (Characters.md, Scenes.md, etc.).</p>
+    <p>In Claude Code terms, you're building a Skill that reads from reference files on demand rather than loading everything into context.</p>
+<pre>---
+name: recall-context
+description: Use this when you need to look up Prompt Quest game assets,
+  character definitions, scene configurations, or the vocabulary contract.
+  Read reference docs instead of guessing.
+---
+# Recall Context Skill
+Before generating any scene script, API prompt, or game configuration:
+1. Read `docs/vocabulary-contract.md` for available actors, props, and reactions
+2. Read `docs/characters/{character-name}.md` for animation states
+3. Read `docs/scenes/{scene-name}.md` for backdrop and prop setup
+4. NEVER reference an asset that isn't in the vocabulary contract</pre>
+    <p class="verdict verdict-keep">→ KEEP as a Claude Code Skill. It's the gatekeeper that prevents Claude from hallucinating asset names.</p>
+  </div>
+</div>
+
+<!-- Skills.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Skills.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-claude">CLAUDE.md (pointer)</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> A registry of all available skills.</p>
+    <p><strong>Claude Code reality:</strong> Claude Code auto-discovers skills from <code class="ic">.claude/skills/*/SKILL.md</code>. You don't need a separate registry — that's what the directory structure is for. But you DO want a brief pointer in CLAUDE.md so Claude knows skills exist and where to look.</p>
+<pre># In CLAUDE.md — Skills section (3 lines, not the full docs)
+## Skills
+Custom skills are in `.claude/skills/`. Use them when the task matches.
+Key skills: recall-context, scene-builder, cache-builder, prompt-tester.</pre>
+    <p class="verdict verdict-merge">→ MERGE into a 3-line pointer in CLAUDE.md. The skill files themselves carry the details.</p>
+  </div>
+</div>
+
+<!-- Agents.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Agents.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-agent">Subagent definitions</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Define the AI agents that help build and run Prompt Quest.</p>
+    <p><strong>Claude Code reality:</strong> This is WHERE you define your subagents. But it's not one file — it's multiple files in <code class="ic">.claude/agents/</code>. For a 2-person hackathon team, you want a small, focused set. More than 3-4 subagents is an anti-pattern (coordination overhead kills you).</p>
+    <p><strong>Recommended subagents for Prompt Quest:</strong></p>
+    <div class="three-col">
+      <div class="mini-card" style="border-left: 2px solid var(--orange);">
+        <h5>scene-writer</h5>
+        <p>Generates + tests Claude API prompts for scene scripts. Validates output against vocabulary contract. Runs the cache builder.</p>
+      </div>
+      <div class="mini-card" style="border-left: 2px solid var(--orange);">
+        <h5>game-engine</h5>
+        <p>Implements Phaser scenes, script player, animations. Owns all game rendering code. Tests in browser.</p>
+      </div>
+      <div class="mini-card" style="border-left: 2px solid var(--orange);">
+        <h5>ui-builder</h5>
+        <p>React components, Zustand state, Lottie overlays, Magic/Explorer mode UIs. Owns the React side of the EventBus.</p>
+      </div>
+    </div>
+<pre># .claude/agents/scene-writer.md
+---
+name: scene-writer
+description: Use when writing or testing Claude API system prompts for
+  Prompt Quest scene scripts. Validates all outputs against the vocabulary contract.
+model: opus
+tools: [read, write, bash]
+---
+You are the Scene Script Writer for Prompt Quest.
+
+BEFORE generating any prompt:
+1. Read docs/vocabulary-contract.md
+2. Read docs/scenes/{task-name}.md for the relevant scene
+
+Your job:
+- Write system prompts that produce valid scene script JSON
+- Test each prompt with 20+ varied inputs
+- Ensure 100% JSON parse rate
+- Cache golden responses to src/cache/
+
+RULES:
+- Scene scripts max 8 actions
+- Only reference actors/props/animations from vocabulary contract
+- narration under 25 words, must be funny
+- Every FUNNY_FAIL must be silly, never mean or scary</pre>
+    <p class="verdict verdict-keep">→ KEEP but SPLIT into individual subagent .md files in <code class="ic">.claude/agents/</code>. Not one monolithic file.</p>
+  </div>
+</div>
+
+<!-- MCP Builder -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">MCP Builder</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-mcp">MCP Server Config</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Custom MCP server for Prompt Quest's tool integrations.</p>
+    <p><strong>Claude Code reality:</strong> For a 7-day hackathon, building a custom MCP server is likely overkill. The real question is: <em>what external tools does your dev workflow need?</em></p>
+    <p><strong>MCP servers worth connecting for the hackathon:</strong></p>
+    <div class="two-col">
+      <div class="mini-card">
+        <h5>GitHub MCP</h5>
+        <p>PRs, issues, code review between Drew & Danielle. Already available as official MCP.</p>
+      </div>
+      <div class="mini-card">
+        <h5>File System MCP</h5>
+        <p>Advanced file ops for organizing the asset library. Built into Claude Code already.</p>
+      </div>
+    </div>
+    <p>However, if you want to "wow the judges" with a custom MCP server, there's ONE that could be genuinely impressive:</p>
+    <div class="callout callout-cyan">
+      <strong>💡 Stretch goal: Prompt Quest MCP Server</strong>
+      An MCP server that lets Claude Code directly interact with the running Prompt Quest game — sending test scene scripts, previewing animations, checking cache hit rates. This would mean Drew can say "test the monster birthday party with input 'throw a giant cake'" and Claude Code sends it to the running dev server and reports what happened. That's an Opus 4.6 + MCP showcase.
+    </div>
+    <p class="verdict verdict-merge">→ For core build: Skip custom MCP, use GitHub MCP. For stretch goal: build a Prompt Quest test server MCP.</p>
+  </div>
+</div>
+
+<!-- discovery.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">discovery.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-command">Slash Command</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> A process for discovering requirements, user needs, competitive landscape.</p>
+    <p><strong>Claude Code reality:</strong> This is a slash command — a workflow you run at the beginning of the project (or when exploring a new feature). You've already DONE this discovery (Piaget research, hackathon pattern analysis). For the hackathon, this is pre-game. Not needed during build week.</p>
+    <p class="verdict verdict-kill">→ SKIP for hackathon. You already have the research. If you want it for future projects, make it <code class="ic">/discovery</code> command.</p>
+  </div>
+</div>
+
+<!-- research.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">research.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-command">Slash Command</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> A process for deep research on specific topics (assets, APIs, compatibility).</p>
+    <p><strong>Claude Code reality:</strong> Same as discovery — a slash command for when you need to dig into something. You've already done the heavy research (Phaser-React integration, Web Speech API compat, Claude API reliability). Could be useful during build week for quick questions.</p>
+<pre># .claude/commands/research.md
+Research $ARGUMENTS using web search and codebase exploration.
+1. Search for current best practices and known issues
+2. Check if our codebase already handles this
+3. Summarize findings in docs/research/{topic}.md
+4. Recommend specific implementation approach</pre>
+    <p class="verdict verdict-merge">→ LIGHTWEIGHT slash command. Useful for quick questions during build week, not a core file.</p>
+  </div>
+</div>
+
+<!-- plan.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">plan.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-reference">Reference Doc + Tasks</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> The build plan, phases, timeline.</p>
+    <p><strong>Claude Code reality:</strong> This is two things: (1) a reference doc with the architecture and plan, and (2) the Claude Code Tasks system for tracking actual work items. Claude Code has a built-in <strong>Tasks</strong> feature that supports dependency graphs, parallel execution, and coordination between subagents.</p>
+    <p><strong>Split it:</strong></p>
+    <div class="two-col">
+      <div class="mini-card" style="border-left: 2px solid var(--yellow);">
+        <h5>docs/architecture.md</h5>
+        <p>Static reference. Asset library structure, EventBus contract, API patterns, deployment config. Pointed to from CLAUDE.md.</p>
+      </div>
+      <div class="mini-card" style="border-left: 2px solid var(--blue);">
+        <h5>Claude Code Tasks</h5>
+        <p>Dynamic. Created per-day. "Implement SceneScriptPlayer" → subagent picks it up → marks complete. Supports dependency DAGs.</p>
+      </div>
+    </div>
+    <p class="verdict verdict-merge">→ SPLIT: static architecture → reference doc; dynamic tasks → Claude Code Tasks system.</p>
+  </div>
+</div>
+
+<!-- progress.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">progress.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-memory">Auto Memory + Tasks</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Track what's done, what's in progress, what's blocked.</p>
+    <p><strong>Claude Code reality:</strong> This is handled by TWO built-in systems: (1) Claude Code Tasks (tracks task status, blocking dependencies, completion) and (2) auto-memory (Claude writes "completed SceneScriptPlayer, discovered Phaser animation bug with..." to memory automatically). You don't need a separate file.</p>
+    <p class="verdict verdict-kill">→ KILL as standalone file. Use Claude Code Tasks for status tracking + auto-memory for learnings.</p>
+  </div>
+</div>
+
+<!-- Stories.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Stories.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-reference">Reference Doc</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> The 6 task stories — Monster Birthday Party, Dog Space Mission, etc.</p>
+    <p><strong>Claude Code reality:</strong> This is a reference doc that gets read on-demand by the <code class="ic">recall-context</code> skill and the <code class="ic">scene-writer</code> subagent. It should contain: task name, description, Magic vs. Explorer tier, success/partial/fail scenarios, available actors and props for each scene, and sample inputs.</p>
+    <p><strong>Structure it as individual files for progressive disclosure:</strong></p>
+<pre>docs/stories/
+├── monster-birthday.md      # Full story spec
+├── dog-space-mission.md
+├── wizard-kitchen.md
+├── dinosaur-school.md
+├── octopus-rock-band.md
+└── robot-pizza-delivery.md</pre>
+    <p class="verdict verdict-keep">→ KEEP as reference docs in <code class="ic">docs/stories/</code>. Individual files, not one monolith. Read on demand.</p>
+  </div>
+</div>
+
+<!-- Characters.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Characters.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-reference">Reference Doc</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Character definitions — the monster, dog, T-Rex, octopus, robot, wizard, plus generic NPCs.</p>
+    <p><strong>Claude Code reality:</strong> This is the actor registry. For each character: sprite atlas key, available animations, personality notes (for Claude API prompts), scale, and which stories they appear in. This is critical reference that the <code class="ic">scene-writer</code> agent and <code class="ic">recall-context</code> skill both need.</p>
+<pre># docs/characters/monster.md
+## Monster
+- **Sprite key:** `monster`
+- **Atlas:** `assets/actors/monster.json` + `monster.png`
+- **Animations:** idle, happy, sad, eat, dance, cry, sneeze-fire, confused, wave
+- **Personality (for Claude prompts):** Big, lovable, clumsy. Never scary. Think Sully from Monsters Inc.
+- **Scale:** 1.5x (bigger than other actors)
+- **Stories:** Monster Birthday Party (main), cameo in Wizard Kitchen
+- **Funny quirks for AI:** Afraid of balloons. Sneezes fire when surprised. Cries a single oversized tear.</pre>
+    <p class="verdict verdict-keep">→ KEEP as reference docs in <code class="ic">docs/characters/</code>. Individual files per character.</p>
+  </div>
+</div>
+
+<!-- Scenes.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">Scenes.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-reference">Reference Doc</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Scene configurations — backdrop, starting actors, available props, positions.</p>
+    <p><strong>Claude Code reality:</strong> This is the stage setup for each task. The <code class="ic">scene-writer</code> agent reads this before writing prompts, and the <code class="ic">game-engine</code> agent reads it when building Phaser scenes.</p>
+<pre># docs/scenes/monster-birthday.md
+## Monster Birthday Party Scene
+- **Backdrop:** `bg-party` (party-room.png)
+- **Starting actors:** monster (center), kid (left)
+- **Available props:** cake, cake-giant, cake-tiny, balloon, present, fire-extinguisher
+- **Available reactions:** confetti-burst, explosion-cartoon, fire-sneeze, hearts-float, sad-cloud
+- **Positions used:** left, center, right, off-left, off-right
+- **Audio:** celebrate, explosion, sad-trombone, whoosh
+- **Initial state:** Monster standing in empty room looking expectant</pre>
+    <p class="verdict verdict-keep">→ KEEP as reference docs in <code class="ic">docs/scenes/</code>. Individual files per scene.</p>
+  </div>
+</div>
+
+<!-- KnowledgeBase.md -->
+<div class="map-card">
+  <div class="map-header">
+    <span class="file-name">KnowledgeBase.md</span>
+    <span class="arrow">→</span>
+    <span class="cc-type type-reference">Reference Doc (the vocabulary contract)</span>
+  </div>
+  <div class="map-body">
+    <p><strong>What you intended:</strong> Comprehensive knowledge base for the project.</p>
+    <p><strong>Claude Code reality:</strong> For Prompt Quest, the "knowledge base" is the <strong>vocabulary contract</strong> — the single source of truth for every actor, animation, prop, position, move style, and reaction that exists in the game. This is THE most important reference doc. It's what goes into Claude API system prompts AND what the <code class="ic">recall-context</code> skill checks before any code generation.</p>
+    <p>But don't make it a kitchen-sink dump. Structure it as the contract that the scene-writer agent and game-engine agent both reference.</p>
+    <p class="verdict verdict-keep">→ KEEP as <code class="ic">docs/vocabulary-contract.md</code>. THE source of truth. Everything else references this.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================ -->
+<h2>❌ What's Missing from Your List</h2>
+
+<div class="map-card" style="border-left: 3px solid var(--cyan);">
+  <div class="map-header">
+    <span class="file-name" style="color: var(--cyan);">CLAUDE.md</span>
+    <span class="cc-type type-claude">THE MOST IMPORTANT FILE — NOT ON YOUR LIST</span>
+  </div>
+  <div class="map-body">
+    <p>This is the root orchestrator. Loaded on every session. It tells Claude Code what this project IS, how it's structured, where to find things, and what rules to follow. Without this, every session starts from zero.</p>
+<pre># CLAUDE.md
+
+## Project
+Prompt Quest: AI-powered game teaching kids prompt engineering through play.
+Built with Opus 4.6 for the Claude Code Hackathon (Feb 10-16, 2026).
+Team: Danielle (UI, brand, content) + Drew (engine, API, infra).
+
+## Tech Stack
+- React + TypeScript + Vite (UI layer)
+- Phaser 3 (game engine, embedded in React via EventBus)
+- Zustand (state management)
+- Claude API via Opus 4.6 (scene script generation)
+- Lottie (reaction animations overlaid on Phaser)
+- Vercel (deployment)
+
+## Architecture
+React owns UI state (Zustand). Phaser owns game state. EventBus for one-way commands.
+Claude API returns scene scripts that reference ONLY assets in docs/vocabulary-contract.md.
+Pre-built asset library — Phaser assembles, never generates.
+Golden Response Cache: pre-computed Opus responses served instantly during demo.
+
+## Key Reference Docs (read on demand, not always in context)
+- `docs/vocabulary-contract.md` — THE source of truth for all game assets
+- `docs/stories/` — Individual task story specs
+- `docs/characters/` — Actor definitions with animations
+- `docs/scenes/` — Scene configurations
+- `docs/architecture.md` — System design, EventBus contract, API patterns
+
+## Skills
+Custom skills in `.claude/skills/`. Key: recall-context, scene-builder, cache-builder.
+
+## Subagents
+In `.claude/agents/`. Key: scene-writer, game-engine, ui-builder.
+
+## Rules
+- NEVER reference an asset not in vocabulary-contract.md
+- Scene scripts max 8 actions
+- All Claude API calls use model: claude-opus-4-6
+- Phaser sprite atlases are the ONLY image format for animated actors
+- Test every API prompt with 20+ inputs before shipping
+- Use pnpm, not npm
+- 2-space indentation, TypeScript strict mode</pre>
+  </div>
+</div>
+
+<div class="map-card" style="border-left: 3px solid var(--cyan);">
+  <div class="map-header">
+    <span class="file-name" style="color: var(--cyan);">cache-builder skill</span>
+    <span class="cc-type type-skill">Missing Skill</span>
+  </div>
+  <div class="map-body">
+    <p>The Golden Response Cache is your #1 risk mitigation strategy — but you have no skill for building it. This skill should run the cache builder: iterate through all 6 tasks × 30+ input variations, call Opus 4.6, validate JSON, save to cache directory.</p>
+<pre>---
+name: cache-builder
+description: Use this to pre-generate and validate Claude API responses
+  for the Golden Response Cache. Run before demos and deployments.
+---
+# Cache Builder Skill
+1. Read docs/stories/ for all 6 tasks
+2. For each task, read the corresponding system prompt from src/prompts/
+3. Generate 20-30 varied user inputs per task
+4. Call Claude API (Opus 4.6) for each input
+5. Validate JSON output against scene script schema
+6. Test that all referenced actors/props exist in vocabulary contract
+7. Save valid responses to src/cache/{task-name}/
+8. Report: total generated, parse success rate, vocabulary violations</pre>
+    <p class="verdict verdict-add">→ ADD this skill. It's what turns your riskiest dependency (live Claude API) into a pre-built asset.</p>
+  </div>
+</div>
+
+<div class="map-card" style="border-left: 3px solid var(--cyan);">
+  <div class="map-header">
+    <span class="file-name" style="color: var(--cyan);">prompt-tester skill</span>
+    <span class="cc-type type-skill">Missing Skill</span>
+  </div>
+  <div class="map-body">
+    <p>You need a skill that stress-tests a system prompt with adversarial and edge-case inputs, then reports pass/fail rates. This is what ensures the "100% JSON parse rate" requirement from your execution playbook.</p>
+    <p class="verdict verdict-add">→ ADD. Run against each system prompt. Must achieve 100% parse rate before promoting to production.</p>
+  </div>
+</div>
+
+<div class="map-card" style="border-left: 3px solid var(--cyan);">
+  <div class="map-header">
+    <span class="file-name" style="color: var(--cyan);">demo-checklist command</span>
+    <span class="cc-type type-command">Missing Command</span>
+  </div>
+  <div class="map-body">
+    <p>A <code class="ic">/pre-demo</code> slash command that runs through your entire pre-demo checklist: verify deployment, test cached responses, check all 6 scenes load, verify audio, test voice input in Chrome.</p>
+    <p class="verdict verdict-add">→ ADD. Run this 30 minutes before every demo. Catches the thing that would have killed you.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================ -->
+<h2>📁 Final File Structure</h2>
+
+<div class="arch-box">
+<pre style="margin: 0; border: none; background: transparent;">prompt-quest/
+│
+├── CLAUDE.md                          ← 🧠 Root orchestrator (loaded every session)
+│
+├── .claude/
+│   ├── memory/
+│   │   └── MEMORY.md                  ← 🟢 Auto-memory (Claude maintains)
+│   │
+│   ├── agents/
+│   │   ├── scene-writer.md            ← 🟠 Writes + tests Claude API prompts
+│   │   ├── game-engine.md             ← 🟠 Phaser scenes, script player
+│   │   └── ui-builder.md              ← 🟠 React UI, Magic/Explorer modes
+│   │
+│   ├── skills/
+│   │   ├── recall-context/
+│   │   │   └── SKILL.md               ← 🔵 Reads vocabulary contract + reference docs
+│   │   ├── cache-builder/
+│   │   │   └── SKILL.md               ← 🔵 Pre-generates Golden Response Cache
+│   │   ├── prompt-tester/
+│   │   │   └── SKILL.md               ← 🔵 Stress-tests system prompts
+│   │   └── scene-builder/
+│   │       └── SKILL.md               ← 🔵 Generates scene configs from story specs
+│   │
+│   └── commands/
+│       ├── research.md                ← 🩷 /research {topic}
+│       └── pre-demo.md                ← 🩷 /pre-demo checklist
+│
+├── docs/                              ← 📄 Reference docs (read on demand)
+│   ├── vocabulary-contract.md         ← THE source of truth (was KnowledgeBase)
+│   ├── architecture.md                ← System design (was plan.md static parts)
+│   ├── stories/
+│   │   ├── monster-birthday.md        ← (was Stories.md, split per task)
+│   │   ├── dog-space-mission.md
+│   │   ├── wizard-kitchen.md
+│   │   ├── dinosaur-school.md
+│   │   ├── octopus-rock-band.md
+│   │   └── robot-pizza-delivery.md
+│   ├── characters/
+│   │   ├── monster.md                 ← (was Characters.md, split per actor)
+│   │   ├── dog.md
+│   │   ├── trex.md
+│   │   ├── octopus.md
+│   │   ├── robot.md
+│   │   ├── wizard.md
+│   │   └── generic-npcs.md
+│   └── scenes/
+│       ├── monster-birthday.md        ← (was Scenes.md, split per scene)
+│       ├── dog-space-mission.md
+│       ├── wizard-kitchen.md
+│       ├── dinosaur-school.md
+│       ├── octopus-rock-band.md
+│       └── robot-pizza-delivery.md
+│
+├── src/                               ← 🛠️ Application code
+│   ├── prompts/                       ← Claude API system prompts (6 files)
+│   ├── cache/                         ← Golden Response Cache (generated)
+│   ├── game/                          ← Phaser scenes + script player
+│   ├── ui/                            ← React components
+│   └── ...
+│
+└── assets/                            ← 🎨 Pre-built asset library
+    ├── actors/                        ← Sprite atlases
+    ├── backdrops/                     ← Scene backgrounds
+    ├── props/                         ← Individual objects
+    ├── reactions/                     ← Lottie JSONs
+    └── sfx/                           ← Sound effects</pre>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================ -->
+<h2>📊 Scorecard: Your 14 Files</h2>
+
+<table>
+  <thead>
+    <tr><th>Your File</th><th>Verdict</th><th>Maps To</th><th>Location</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>MCP Builder</code></td><td style="color: var(--yellow);">⏳ Stretch</td><td>MCP Server</td><td>Stretch goal: Prompt Quest test MCP</td></tr>
+    <tr><td><code>Memory.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Auto Memory</td><td><code>.claude/memory/MEMORY.md</code></td></tr>
+    <tr><td><code>Remember.md</code></td><td style="color: var(--red);">❌ Kill</td><td>Redundant with Memory.md</td><td>Merge into CLAUDE.md rules + auto-memory</td></tr>
+    <tr><td><code>recallskill.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Skill</td><td><code>.claude/skills/recall-context/SKILL.md</code></td></tr>
+    <tr><td><code>Skills.md</code></td><td style="color: var(--yellow);">🔀 Merge</td><td>CLAUDE.md pointer</td><td>3-line reference in CLAUDE.md</td></tr>
+    <tr><td><code>Agents.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Subagent files</td><td><code>.claude/agents/*.md</code> (3 files)</td></tr>
+    <tr><td><code>discovery.md</code></td><td style="color: var(--red);">❌ Skip</td><td>Already done</td><td>Not needed for build week</td></tr>
+    <tr><td><code>research.md</code></td><td style="color: var(--yellow);">🔀 Lightweight</td><td>Slash Command</td><td><code>.claude/commands/research.md</code></td></tr>
+    <tr><td><code>plan.md</code></td><td style="color: var(--yellow);">🔀 Split</td><td>Reference doc + Tasks</td><td><code>docs/architecture.md</code> + Tasks system</td></tr>
+    <tr><td><code>progress.md</code></td><td style="color: var(--red);">❌ Kill</td><td>Handled by Tasks + Memory</td><td>Use built-in Task tracking</td></tr>
+    <tr><td><code>Stories.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Reference docs</td><td><code>docs/stories/*.md</code> (6 files)</td></tr>
+    <tr><td><code>Characters.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Reference docs</td><td><code>docs/characters/*.md</code> (7 files)</td></tr>
+    <tr><td><code>Scenes.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Reference docs</td><td><code>docs/scenes/*.md</code> (6 files)</td></tr>
+    <tr><td><code>KnowledgeBase.md</code></td><td style="color: var(--green);">✅ Keep</td><td>Vocabulary Contract</td><td><code>docs/vocabulary-contract.md</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Missing (must add):</h3>
+<table>
+  <thead>
+    <tr><th>File</th><th>Type</th><th>Why It's Critical</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>CLAUDE.md</code></td><td style="color: var(--accent);">Root Config</td><td>Without this, every Claude Code session starts blind. This is your #1 missing file.</td></tr>
+    <tr><td><code>cache-builder</code> skill</td><td style="color: var(--blue);">Skill</td><td>Pre-generates the Golden Response Cache that makes your demo bulletproof.</td></tr>
+    <tr><td><code>prompt-tester</code> skill</td><td style="color: var(--blue);">Skill</td><td>Validates 100% JSON parse rate on system prompts before production.</td></tr>
+    <tr><td><code>/pre-demo</code> command</td><td style="color: var(--pink);">Command</td><td>Automated checklist that catches failures before they happen on stage.</td></tr>
+    <tr><td><code>vocabulary-contract.md</code></td><td style="color: var(--yellow);">Reference</td><td>Separate from KnowledgeBase. THE single source of truth for every asset in the game.</td></tr>
+  </tbody>
+</table>
+
+<div class="divider"></div>
+
+<div class="callout callout-green">
+  <strong>TL;DR — How This All Flows Together</strong>
+  <br><br>
+  <strong style="color: var(--text);">Session starts →</strong> Claude Code loads CLAUDE.md (project rules + pointers) + first 200 lines of MEMORY.md (learnings from yesterday).<br><br>
+  <strong style="color: var(--text);">Drew says "build the monster birthday scene" →</strong> Claude Code delegates to <code class="ic">game-engine</code> subagent. Subagent uses <code class="ic">recall-context</code> skill, which reads <code class="ic">docs/scenes/monster-birthday.md</code> and <code class="ic">docs/vocabulary-contract.md</code>. Builds the Phaser scene using only pre-built assets.<br><br>
+  <strong style="color: var(--text);">Danielle says "write the API prompt for wizard kitchen" →</strong> Claude Code delegates to <code class="ic">scene-writer</code> subagent. Reads <code class="ic">docs/stories/wizard-kitchen.md</code> + <code class="ic">docs/characters/wizard.md</code>. Writes system prompt. Uses <code class="ic">prompt-tester</code> skill to validate 100% parse rate.<br><br>
+  <strong style="color: var(--text);">Night before demo →</strong> Run <code class="ic">cache-builder</code> skill. Generates 30+ Opus responses per task. Saves to <code class="ic">src/cache/</code>.<br><br>
+  <strong style="color: var(--text);">Demo day →</strong> Run <code class="ic">/pre-demo</code>. Verifies deployment, cache, audio, voice input. Green across the board. Ship it. 🚀
+</div>
+
+<p style="text-align: center; margin-top: 2rem; color: var(--text-dim); font-size: 0.82rem;">
+  Prompt Quest · Claude Code Backend Architecture · Built with Opus 4.6 · Feb 2026
+</p>
+
+</body>
+</html>

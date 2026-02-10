@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest — Research Analysis & Recommendations</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand: #6C3FC5;
+  --brand-light: #E8DCFF;
+  --accent: #FF8C42;
+  --accent-light: #FFF3E8;
+  --magic: #E8A0FF;
+  --explorer: #42B4FF;
+  --builder: #42FF8C;
+  --danger: #FF4757;
+  --danger-light: #FFF0F1;
+  --success: #2ED573;
+  --success-light: #EDFFF4;
+  --dark: #1A1A2E;
+  --medium: #444466;
+  --light: #8888AA;
+  --subtle: #F5F3FF;
+  --bg: #FAFAFE;
+  --card: #FFFFFF;
+  --border: #E8E4F0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* Header */
+.hero { text-align: center; padding: 3rem 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, var(--brand) 0%, #8B5CF6 50%, var(--accent) 100%); border-radius: 20px; color: white; }
+.hero h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.3rem; letter-spacing: -0.02em; }
+.hero .subtitle { font-size: 1.1rem; opacity: 0.9; font-weight: 600; }
+.hero .date { font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem; }
+
+/* Section */
+.section { margin-bottom: 2.5rem; }
+.section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 3px solid var(--brand-light); }
+.section-num { background: var(--brand); color: white; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+.section-header h2 { font-size: 1.5rem; font-weight: 800; color: var(--brand); }
+
+/* Cards */
+.card { background: var(--card); border-radius: 14px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(108,63,197,0.04); }
+.card h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--dark); }
+.card p { color: var(--medium); font-size: 0.95rem; }
+
+/* Alert boxes */
+.alert { border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+.alert-change { background: var(--danger-light); border-left: 4px solid var(--danger); }
+.alert-keep { background: var(--success-light); border-left: 4px solid var(--success); }
+.alert-tip { background: var(--accent-light); border-left: 4px solid var(--accent); }
+.alert-label { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.alert-change .alert-label { color: var(--danger); }
+.alert-keep .alert-label { color: var(--success); }
+.alert-tip .alert-label { color: var(--accent); }
+.alert p { font-size: 0.93rem; color: var(--medium); }
+
+/* Tier cards */
+.tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.tier-card { border-radius: 14px; padding: 1.25rem; border: 2px solid; }
+.tier-magic { border-color: var(--magic); background: #FCF2FF; }
+.tier-explorer { border-color: var(--explorer); background: #F0F8FF; }
+.tier-builder { border-color: var(--builder); background: #F0FFF5; }
+.tier-card .tier-label { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
+.tier-magic .tier-label { color: #9B4DCA; }
+.tier-explorer .tier-label { color: #0088CC; }
+.tier-builder .tier-label { color: #00AA55; }
+.tier-card h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+.tier-card p, .tier-card li { font-size: 0.85rem; color: var(--medium); }
+.tier-card ul { padding-left: 1.1rem; }
+.tier-card li { margin-bottom: 0.25rem; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; border-radius: 12px; overflow: hidden; }
+th { background: var(--brand); color: white; font-weight: 700; text-align: left; padding: 0.7rem 0.9rem; }
+td { padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); color: var(--medium); }
+tr:nth-child(even) td { background: var(--subtle); }
+td code { background: #F0ECF8; padding: 0.1rem 0.4rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--brand); }
+
+/* Repo cards */
+.repo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
+.repo { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+.repo .repo-name { font-weight: 800; font-size: 0.95rem; color: var(--brand); margin-bottom: 0.2rem; }
+.repo .repo-name a { color: var(--brand); text-decoration: none; }
+.repo .repo-name a:hover { text-decoration: underline; }
+.repo .repo-desc { font-size: 0.82rem; color: var(--light); margin-bottom: 0.4rem; }
+.repo .repo-tag { display: inline-block; background: var(--brand-light); color: var(--brand); font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 6px; margin-right: 0.3rem; }
+
+/* Verdict box */
+.verdict { background: linear-gradient(135deg, #6C3FC5 0%, #8B5CF6 100%); border-radius: 16px; padding: 2rem; color: white; margin: 2rem 0; }
+.verdict h3 { font-size: 1.3rem; font-weight: 900; margin-bottom: 0.75rem; }
+.verdict p { opacity: 0.92; font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+/* Checklist */
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 0.4rem 0 0.4rem 1.8rem; position: relative; font-size: 0.93rem; color: var(--medium); }
+.checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--success); font-weight: 900; font-size: 1.1rem; }
+
+/* Footer */
+.footer { text-align: center; padding: 2rem; color: var(--light); font-size: 0.85rem; }
+
+@media (max-width: 768px) {
+  .tier-grid, .repo-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>Prompt Quest — Research Analysis</h1>
+  <p class="subtitle">Child Development Review · Hackathon Strategy · GitHub Repos</p>
+  <p class="date">Prepared for Danielle & Drew — February 2026</p>
+</div>
+
+<!-- SECTION 1: CHILD DEVELOPMENT -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Child Development Review: What Needs to Change</h2>
+  </div>
+  
+  <div class="card">
+    <h3>The Piaget Framework vs. Your Tiers</h3>
+    <p>Your three tiers (5–7, 8–10, 11–13) map almost perfectly to Piaget's developmental stages. Ages 5–7 straddle the Preoperational → Concrete Operational transition. Ages 7–11 are firmly Concrete Operational (logical thinking about concrete objects, but struggling with abstraction). Ages 11+ enter Formal Operational (abstract reasoning, hypothetical thinking). Your instincts were right on the core concept — but the research surfaces several UX specifics that need adjustment.</p>
+  </div>
+
+  <div class="tier-grid">
+    <div class="tier-card tier-magic">
+      <div class="tier-label">Magic Mode (5–7)</div>
+      <h4>What the Research Says</h4>
+      <ul>
+        <li><strong>Most 5-year-olds can't read beyond basic words.</strong> NN/Group: You must design for pre-readers and beginning readers.</li>
+        <li><strong>Fine motor skills are still emerging.</strong> Touch targets must be 48×48dp minimum with 64px gaps.</li>
+        <li><strong>Attention spans are 8–10 minutes.</strong> Each task interaction needs to complete within this window.</li>
+        <li><strong>They think in symbols, not text.</strong> Piaget: Preoperational kids rely on images and icons.</li>
+        <li><strong>They prefer touch devices.</strong> Kids under 6 struggle with mouse + keyboard.</li>
+      </ul>
+    </div>
+    <div class="tier-card tier-explorer">
+      <div class="tier-label">Explorer Mode (8–10)</div>
+      <h4>What the Research Says</h4>
+      <ul>
+        <li><strong>Can think logically about concrete things.</strong> But NOT abstract concepts. "Prompt engineering" is abstract — must stay concrete.</li>
+        <li><strong>Can conserve, reverse, and decenter.</strong> They understand cause → effect and can consider multiple perspectives.</li>
+        <li><strong>Developing metacognition.</strong> They can start to reflect on their own thinking — this is where prompt reflection works.</li>
+        <li><strong>Still react negatively to content one grade below them.</strong> A 9-year-old will reject anything that "looks like it's for little kids."</li>
+        <li><strong>Can handle trackpads and keyboards.</strong> Text input is reasonable here.</li>
+      </ul>
+    </div>
+    <div class="tier-card tier-builder">
+      <div class="tier-label">Builder Mode (11–13)</div>
+      <h4>What the Research Says</h4>
+      <ul>
+        <li><strong>Entering Formal Operational stage.</strong> Can reason about hypotheticals and think abstractly.</li>
+        <li><strong>Can understand code concepts.</strong> If/then, variables, loops — but need concrete examples first.</li>
+        <li><strong>Prefer more "mature" aesthetics.</strong> Lullabot found 9–11 year-olds preferred muted palettes over bright primary colors.</li>
+        <li><strong>Can handle split-screen interfaces.</strong> Their cognitive load capacity is much higher.</li>
+        <li><strong>Ego-aware.</strong> Don't want to feel talked down to. The guide character should be peer-like, not parental.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-change">
+    <div class="alert-label">⚠️ Must Change: Magic Mode Input</div>
+    <p><strong>Your spec has voice + object chips for 5–7 year-olds. This is correct, but needs refinement.</strong> Eliminate ALL reliance on reading. The task prompt must be spoken aloud entirely via audio (Text-to-Speech or pre-recorded). Any on-screen text should be max 3–5 words alongside icons. Object chips should be illustrated images only — no text labels for the youngest kids. Consider adding a "show me" mode where tapping an object just shows what it does rather than requiring the child to compose a solution.</p>
+  </div>
+
+  <div class="alert alert-change">
+    <div class="alert-label">⚠️ Must Change: Explorer Mode Prompt Feedback</div>
+    <p><strong>Your "Prompt Power" feedback panel is a great idea but it's too abstract for 8-year-olds.</strong> At 8, kids are still in Concrete Operational — they can understand "your shelter didn't have walls" (concrete) but NOT "good prompts cover the whole problem" (abstract meta-cognition about prompting). Reframe all prompt tips as concrete game advice: "Next time, try describing ALL the parts of your shelter — the roof AND the walls!" The underlying skill is the same, but the framing stays concrete until ages 10+.</p>
+  </div>
+
+  <div class="alert alert-change">
+    <div class="alert-label">⚠️ Must Change: Age-Appropriate Visual Design</div>
+    <p><strong>Research from Lullabot and NN/Group shows kids are VERY sensitive to age-appropriateness.</strong> A 6-year-old said "this website is for babies" about content for 4–5 year-olds. You need distinct visual identities per tier — not just different features. Magic Mode can be bright/illustrated/round. Explorer Mode should feel more like a game (think Minecraft aesthetic — structured but not baby-ish). Builder Mode should feel like a real tool (think VS Code for kids — dark mode option, monospace fonts).</p>
+  </div>
+
+  <div class="alert alert-keep">
+    <div class="alert-label">✅ Keep: Your Core Game Loop</div>
+    <p><strong>The "no single right answer" puzzle-solving approach is developmentally perfect.</strong> Piaget's research shows kids 7–11 are building problem-solving skills through systematic trial and error. Your game rewards exactly this: try something → see what happens → refine. The "funny fail" mechanic is brilliant — it eliminates punishment anxiety and encourages experimentation, which aligns perfectly with how concrete operational kids learn.</p>
+  </div>
+
+  <div class="alert alert-keep">
+    <div class="alert-label">✅ Keep: Progressive Requirements</div>
+    <p><strong>Increasing requirements per level maps directly to cognitive development.</strong> 5–7 year-olds center on one dimension (Piaget's "centration"). By 8–10, they can "decenter" and handle 2+ dimensions. By 11+, they can handle abstract constraints. Your 1-requirement → 2-requirement → 3-requirement + constraints progression is textbook Piaget translated into game design.</p>
+  </div>
+
+  <div class="alert alert-tip">
+    <div class="alert-label">💡 Add: Repetition for Youngest Tier</div>
+    <p><strong>Children ages 5–7 learn through muscle memory and repetition.</strong> Unlike adults who get bored, young kids WANT to repeat actions. Add a "play again" loop that's effortless — Lottie celebration → "Wanna try a different way?" → same task with the same scene. Adults would find this tedious; kids find it delightful. This also means your 6 MVP tasks are enough — younger kids will happily replay the same task 5+ times.</p>
+  </div>
+</div>
+
+<!-- SECTION 2: HACKATHON ANALYSIS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>Is This a Winning Hackathon Concept?</h2>
+  </div>
+
+  <div class="verdict">
+    <h3>Verdict: Yes — with the right framing</h3>
+    <p>After analyzing winning projects from Anthropic Builder Day, Pear × Anthropic, MIT RAISE Global AI Hackathon, Microsoft AI Classroom Hackathon, and FutureHacks, your concept checks every winning criteria box. But the story you tell matters as much as the build.</p>
+  </div>
+
+  <div class="card">
+    <h3>What Winning Hackathon Projects Have in Common</h3>
+    <p>Across all the hackathons I researched, the winners consistently demonstrated these six qualities:</p>
+  </div>
+
+  <table>
+    <tr><th>Criteria</th><th>What Judges Look For</th><th>Prompt Quest Score</th></tr>
+    <tr><td><strong>Real Problem</strong></td><td>Does it solve something people actually need?</td><td>🟢 <strong>Strong.</strong> "Kids need AI literacy but current tools are just chatbots with cute skins" is a compelling problem statement.</td></tr>
+    <tr><td><strong>Innovation</strong></td><td>Fresh approach, not a copycat</td><td>🟢 <strong>Very strong.</strong> "AI as invisible game engine, not the interface" is novel. No other kid AI product does this.</td></tr>
+    <tr><td><strong>Demo-ability</strong></td><td>Can you show it working in 3 minutes?</td><td>🟢 <strong>Excellent.</strong> Kid speaks → animation plays → funny fail or celebration. Visually immediate.</td></tr>
+    <tr><td><strong>Story</strong></td><td>Does the team have a personal connection?</td><td>🟢 <strong>Perfect.</strong> "We're a married couple building this for our daughter" is the kind of story that makes judges lean in.</td></tr>
+    <tr><td><strong>Technical Quality</strong></td><td>Clean execution, not just an idea</td><td>🟡 <strong>Depends on execution.</strong> Phaser + React + Claude API is ambitious for a week. Must nail the happy path.</td></tr>
+    <tr><td><strong>Wow Factor</strong></td><td>The "goosebump moment"</td><td>🟢 <strong>Built in.</strong> Watching a kid say something creative and seeing it animated in real-time IS the wow factor.</td></tr>
+  </table>
+
+  <div class="card">
+    <h3>What Separates Winners from Runner-Ups</h3>
+    <p>From the hackathon winner analyses — the #1 thing that differentiates first place from "cool but didn't win" is: <strong>a polished demo with a clear narrative, not the most features.</strong> The Anthropic hackathon winner (robotic arm controlled by Claude) won because the demo was jaw-dropping in its simplicity. The Microsoft AI Classroom winner (ChatEDU) won because it was polished and usable, not because it had the most features. Gary-Yau Chan (won 20 out of 40 hackathons) says: "Utilize front-end and JavaScript. In a hackathon, you don't have time for backend. Our losing hack prioritized backend infrastructure."</p>
+  </div>
+
+  <div class="alert alert-tip">
+    <div class="alert-label">💡 Your Winning Demo Script (3 minutes)</div>
+    <p><strong>Minute 1:</strong> "We're Danielle and Drew. We have a daughter, and we realized: how do we teach our kid to work with AI? Every tool is just ChatGPT with a cute skin. So we built Prompt Quest — a game where kids solve puzzles by describing solutions, and Claude brings them to life."</p>
+    <p><strong>Minute 2:</strong> Live demo. Magic Mode: daughter (or simulated) says "Put seeds in the bucket and shake it!" → Phaser animation plays chicken walking back → confetti → Lottie celebration. Then Explorer Mode: type a solution that only partially works → funny fail animation → Prompt Power panel shows what was missing.</p>
+    <p><strong>Minute 3:</strong> "What we're really teaching is prompt literacy. Kids learn that being specific gets better results. That covering all the parts of a problem matters. These are exactly the skills they need to work with AI — and they learn it through play, not lectures." → Show the Badge / Trophy Room.</p>
+  </div>
+
+  <div class="alert alert-change">
+    <div class="alert-label">⚠️ Critical Hackathon Scope Decision</div>
+    <p><strong>For the 1-week build, focus on Magic + Explorer mode only. Cut Builder Mode.</strong> Here's why: (1) Magic Mode gives you the emotional "wow" demo (kid speaks, game responds). (2) Explorer Mode shows the educational depth (prompt feedback, programming concepts). (3) Builder Mode requires a code editor, live code execution, and split-screen UI — that's 2–3 days of work alone. A polished 2-tier demo beats a buggy 3-tier demo every time. You can say "Builder Mode is our v2 roadmap" during the pitch — judges love hearing you've scoped intelligently.</p>
+  </div>
+</div>
+
+<!-- SECTION 3: GITHUB REPOS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>GitHub Repos & Libraries to Use</h2>
+  </div>
+
+  <div class="card">
+    <h3>Your Stack (Confirmed & Refined)</h3>
+    <p>Here's exactly what to install and why. I've validated each repo is actively maintained, well-documented, and compatible with each other.</p>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🏗️ Core Framework</h3>
+  <div class="repo-grid">
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/phaserjs/template-react-ts">phaserjs/template-react-ts</a></div>
+      <div class="repo-desc">Official Phaser 3 + React + TypeScript + Vite template with built-in EventBus bridge. <strong>START HERE.</strong> Clone this and you have the React↔Phaser communication pattern ready to go.</div>
+      <span class="repo-tag">STARTER</span><span class="repo-tag">Official</span><span class="repo-tag">Vite</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/phaserjs/phaser">phaserjs/phaser</a></div>
+      <div class="repo-desc">Phaser 3.88 — the game engine. 37K+ stars. Handles all scene rendering, sprite animations, tweens, and input. Bundled with the template above.</div>
+      <span class="repo-tag">Game Engine</span><span class="repo-tag">37K+ ⭐</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🎬 Animation & UI</h3>
+  <div class="repo-grid">
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/Gamote/lottie-react">Gamote/lottie-react</a></div>
+      <div class="repo-desc">Lightweight React wrapper for Lottie. Simple API: <code>&lt;Lottie animationData={json} loop /&gt;</code>. Use for Pixel (guide character), celebrations, badge unlocks.</div>
+      <span class="repo-tag">Lottie</span><span class="repo-tag">React</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/LottieFiles/lottie-interactivity">LottieFiles/lottie-interactivity</a></div>
+      <div class="repo-desc">Add scroll & cursor interactivity to Lottie animations. Use for the Trophy Room where badges animate on hover/scroll into view.</div>
+      <span class="repo-tag">Interactivity</span><span class="repo-tag">Optional</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/framer/motion">framer/motion</a></div>
+      <div class="repo-desc">Production-ready React animation library. Use for page transitions, panel slide-ins (Prompt Power feedback), badge reveals, and micro-interactions throughout the UI shell.</div>
+      <span class="repo-tag">Animation</span><span class="repo-tag">React</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/alampros/react-confetti">alampros/react-confetti</a></div>
+      <div class="repo-desc">Confetti celebration overlay. Fires on FULL_SUCCESS. Lightweight, customizable. Kids LOVE this.</div>
+      <span class="repo-tag">Celebration</span><span class="repo-tag">Lightweight</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🧠 State & Infrastructure</h3>
+  <div class="repo-grid">
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/pmndrs/zustand">pmndrs/zustand</a></div>
+      <div class="repo-desc">Tiny, fast state management for React. Perfect for game state, badge tracking, progress, and tier selection. Much simpler than Redux for a hackathon.</div>
+      <span class="repo-tag">State</span><span class="repo-tag">47K+ ⭐</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/anthropics/anthropic-sdk-typescript">anthropic SDK (TypeScript)</a></div>
+      <div class="repo-desc">Official Anthropic TypeScript SDK. Use for Claude API calls (solution evaluation, scene script generation, narration). Handles streaming if needed.</div>
+      <span class="repo-tag">Claude API</span><span class="repo-tag">Official</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🎨 Free Game Assets</h3>
+  <div class="repo-grid">
+    <div class="repo">
+      <div class="repo-name"><a href="https://itch.io/game-assets/free/tag-2d">itch.io/game-assets/free/tag-2d</a></div>
+      <div class="repo-desc">Massive collection of free 2D sprites. Search "farm", "beach", "dungeon" for setting-specific assets. Look for "Tiny Farm RPG Asset Pack" and "Tiny Swords" for cute kid-friendly sprites.</div>
+      <span class="repo-tag">Sprites</span><span class="repo-tag">Free</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://craftpix.net/freebies/">CraftPix.net/freebies</a></div>
+      <div class="repo-desc">Free 2D game art: characters, tilesets, backgrounds, GUI. Has specific farm, beach, and dungeon packs. Commercial use allowed.</div>
+      <span class="repo-tag">Sprites</span><span class="repo-tag">Free</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://lottiefiles.com/">LottieFiles.com</a></div>
+      <div class="repo-desc">Free Lottie animations. Search: "confetti celebration", "thinking character", "star animation", "badge unlock", "treasure chest". Free tier gives you enough for the hackathon.</div>
+      <span class="repo-tag">Lottie</span><span class="repo-tag">Free</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name"><a href="https://github.com/ahnerd/creative-commons-game-assets-collection">ahnerd/creative-commons-game-assets-collection</a></div>
+      <div class="repo-desc">Curated list of 100+ sources for CC-licensed game assets. Covers 2D art, sprites, sounds, tilesets, backgrounds. Great master reference.</div>
+      <span class="repo-tag">Asset Index</span><span class="repo-tag">CC License</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🏆 Badges (Open Badges Implementation)</h3>
+  <div class="card">
+    <h3>Open Badges: Build Your Own (Simpler Than a Library)</h3>
+    <p>After researching, there's no great React library for Open Badges 3.0 — the existing npm packages are either for GitHub README badges or notification dots. <strong>For the hackathon, build badges as a custom Zustand store + Lottie animations.</strong> Structure badge data as Open Badges 3.0 JSON (for future portability), but the display is just a Zustand array of earned badges rendered as Lottie-animated cards in a Trophy Room component. This is faster to build and more impressive to demo than integrating a half-maintained library.</p>
+    <p style="margin-top: 0.5rem;"><strong>The approach:</strong> Badge data model follows the Open Badges 3.0 JSON-LD spec (so you can export/verify later). Display is pure React + Framer Motion + Lottie. Zustand tracks <code>earnedBadges[]</code>, <code>firstTrySuccesses</code>, <code>funnyFails</code>, etc. When a badge criteria is met, fire a Lottie animation + React Confetti + Framer Motion badge card reveal.</p>
+  </div>
+
+  <h3 style="margin: 1.5rem 0 0.75rem; color: var(--brand); font-weight: 800;">🎙️ Voice Input</h3>
+  <div class="repo-grid">
+    <div class="repo">
+      <div class="repo-name">Web Speech API (Built-in)</div>
+      <div class="repo-desc">No library needed. Use <code>window.SpeechRecognition</code> or <code>webkitSpeechRecognition</code> natively in Chrome. Free, real-time transcription. Works for Magic Mode voice input.</div>
+      <span class="repo-tag">Built-in</span><span class="repo-tag">No Install</span>
+    </div>
+    <div class="repo">
+      <div class="repo-name">Web Speech Synthesis API (Built-in)</div>
+      <div class="repo-desc">Also built into Chrome. Use <code>speechSynthesis.speak()</code> for Pixel's narration in Magic Mode. No external TTS service needed for the demo.</div>
+      <span class="repo-tag">TTS</span><span class="repo-tag">No Install</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: REVISED SCOPE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Revised 1-Week Scope (Research-Informed)</h2>
+  </div>
+
+  <div class="alert alert-change">
+    <div class="alert-label">Scope Changes Based on Research</div>
+    <p><strong>Cut Builder Mode</strong> — 2 tiers polished > 3 tiers rough. <strong>Cut typing for Magic Mode entirely</strong> — voice + taps only, zero reading required. <strong>Reframe Explorer prompt tips as concrete game advice</strong> — not abstract "prompting skills." <strong>Add TTS for all narration in Magic Mode</strong> — kids 5–7 can't read the feedback. <strong>Design distinct visual identity per tier</strong> — bright/round for Magic, structured/game-like for Explorer.</p>
+  </div>
+
+  <table>
+    <tr><th>Day</th><th>Danielle</th><th>Drew</th></tr>
+    <tr><td><strong>1</strong></td><td>Clone phaserjs/template-react-ts. Set up app shell, routing, Zustand store. Source Lottie animations from LottieFiles. Design Magic Mode UI (big buttons, no text).</td><td>Create Farm scene in Phaser with background + 3-4 sprites. Build EventBus bridge. Set up Claude API evaluation pipeline.</td></tr>
+    <tr><td><strong>2</strong></td><td>Build Magic Mode: illustrated object chips, mic button, Lottie Pixel character. TTS narration. All visual, no reading required.</td><td>Build scene_script player (Claude's animation steps → Phaser tweens). Implement Web Speech API for voice. Test 10+ inputs for chicken task.</td></tr>
+    <tr><td><strong>3</strong></td><td>Build Explorer Mode: text input + mic + collapsible palette. Prompt Feedback panel with Framer Motion slide-in. Design concrete tips (not abstract).</td><td>Build Beach + Dungeon Phaser scenes. Implement full task data model for 6 MVP tasks. Response caching for demo reliability.</td></tr>
+    <tr><td><strong>4</strong></td><td>Badge system: Zustand store, Trophy Room component, Lottie unlock animations, React Confetti on level complete. Open Badges JSON structure.</td><td>Wire end-to-end: both tiers working with same backend. Error handling, fallback responses. Programming concept cards for Explorer.</td></tr>
+    <tr><td><strong>5</strong></td><td>Polish: Framer Motion page transitions, tier selector, level select screen with previews. Distinct visual identity per tier. Responsive layout.</td><td>Test all 6 tasks across both tiers. Fix edge cases. Cache fallback responses for all tasks. Deploy to Vercel.</td></tr>
+    <tr><td><strong>6–7</strong></td><td>Final polish. Record backup demo video. Prepare pitch deck. Practice the 3-minute demo script.</td><td>Final testing on deployed version. Stress test. Bug fixes. Prepare technical slides.</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 5: FINAL VERDICT -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Final Recommendations</h2>
+  </div>
+
+  <div class="card">
+    <h3>What Makes Prompt Quest Win</h3>
+    <ul class="checklist">
+      <li><strong>The story:</strong> Married couple building AI literacy for their daughter. Personal, relatable, emotional.</li>
+      <li><strong>The insight:</strong> Teaching prompting through play, not lectures. Kids don't know they're learning prompt engineering.</li>
+      <li><strong>The demo moment:</strong> A child speaks → Claude interprets → Phaser animates → funny fail or celebration. Visually immediate, emotionally engaging.</li>
+      <li><strong>The differentiation:</strong> AI is invisible. It's the game engine, not a chat interface. No other kid AI product does this.</li>
+      <li><strong>The educational depth:</strong> Progressive requirements map to Piaget's developmental stages. You can articulate WHY the game design works pedagogically.</li>
+      <li><strong>Scope discipline:</strong> 2 polished tiers, 6 tasks, one clear story. Don't try to show everything. Show the magic.</li>
+    </ul>
+  </div>
+
+  <div class="alert alert-tip">
+    <div class="alert-label">💡 The One Thing to Nail</div>
+    <p><strong>The single most important thing for your demo: the moment a kid's weird, creative solution gets animated and works.</strong> When a child says "put the seeds in the bucket and shake it so the chicken hears" and Claude generates a scene where that actually happens — THAT is the moment that wins a hackathon. Everything else supports this moment. Build backwards from it. Make sure that moment is flawless, fast, and delightful. If nothing else works, that one interaction is your entire pitch.</p>
+  </div>
+</div>
+
+<div class="footer">
+  Prompt Quest Research Analysis — Prepared by Claude for Danielle & Drew — February 2026
+</div>
+
+</div>
+</body>
+</html>

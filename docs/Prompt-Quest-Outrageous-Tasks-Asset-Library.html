@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest – Outrageous Tasks & Pre-Built Asset Library</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-2: #232736;
+    --border: #2e3347;
+    --text: #e2e4ec;
+    --text-dim: #8b8fa6;
+    --accent: #7c5cfc;
+    --accent-glow: rgba(124,92,252,0.15);
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.08);
+    --yellow: #fbbf24;
+    --yellow-bg: rgba(251,191,36,0.08);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.08);
+    --pink: #f472b6;
+    --pink-bg: rgba(244,114,182,0.08);
+    --orange: #fb923c;
+    --orange-bg: rgba(251,146,60,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .subtitle { color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; }
+  h2 {
+    font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);
+  }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+  p { margin-bottom: 0.75rem; }
+  .dim { color: var(--text-dim); }
+
+  pre {
+    background: #111318; border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.25rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.6;
+    margin: 0.75rem 0 1rem; font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.82rem; }
+  .ic { background: var(--surface-2); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.85em; }
+
+  .callout {
+    border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.9rem;
+  }
+  .callout-red { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .callout-green { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .callout-yellow { background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .callout-blue { background: var(--blue-bg); border-left: 3px solid var(--blue); }
+  .callout-pink { background: var(--pink-bg); border-left: 3px solid var(--pink); }
+  .callout-orange { background: var(--orange-bg); border-left: 3px solid var(--orange); }
+  .callout strong { display: block; margin-bottom: 0.25rem; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem; position: relative;
+  }
+  .card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .card p { font-size: 0.85rem; color: var(--text-dim); margin: 0 0 0.4rem; }
+  .card .emoji { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+
+  .task-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin: 1rem 0; overflow: hidden;
+  }
+  .task-card .task-header {
+    display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+  }
+  .task-card .task-emoji { font-size: 2.5rem; }
+  .task-card .task-title { font-size: 1.15rem; font-weight: 700; }
+  .task-card .task-sub { font-size: 0.85rem; color: var(--text-dim); }
+  .task-card .task-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;
+  }
+  .task-card .task-section h5 {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-dim); margin-bottom: 0.4rem;
+  }
+  .task-card .task-section p { font-size: 0.85rem; margin: 0; color: var(--text); }
+
+  .tag {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 0.15em 0.5em; border-radius: 4px; margin-left: 0.5rem;
+  }
+  .tag-magic { background: var(--orange-bg); color: var(--orange); }
+  .tag-explorer { background: var(--blue-bg); color: var(--blue); }
+
+  /* Asset library table */
+  table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem;
+  }
+  th {
+    background: var(--surface-2); text-align: left; padding: 0.6rem 0.75rem;
+    font-weight: 600; font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--text-dim); border-bottom: 2px solid var(--border);
+  }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+  .section-divider {
+    height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  .strategy {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin: 1rem 0; overflow: hidden;
+  }
+  .strategy-header {
+    padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .strategy-header .icon { font-size: 1.5rem; }
+  .strategy-header h4 { font-size: 1rem; font-weight: 600; }
+  .strategy-body { padding: 1.25rem; }
+  .strategy-body p { font-size: 0.9rem; }
+
+  @media (max-width: 700px) {
+    .two-col, .three-col, .task-card .task-grid { grid-template-columns: 1fr; }
+    body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🎪 Prompt Quest: Outrageous Tasks & Asset Library</h1>
+<p class="subtitle">Kill the chickens. Make it ridiculous, fun, and technically pre-built so Phaser is just assembling Legos.</p>
+
+<!-- ============================================ -->
+<h2>🎯 Hackathon Context: Built with Opus 4.6</h2>
+
+<div class="callout callout-orange">
+  <strong>This is specifically the "Built with Opus 4.6" Claude Code hackathon (Feb 10-16, 2026).</strong>
+  500 participants. $500 in API credits each. Max team size: 2. Judges are from the Anthropic/Claude team. $100K in API credits for winners. Winners present at Claude Code's birthday party in SF on Feb 21. They want to see Opus 4.6 pushed — particularly the 1M token context window and 128K output capability.
+</div>
+
+<div class="callout callout-blue">
+  <strong>What this means for your API strategy:</strong>
+  You MUST use Opus 4.6 (<code class="ic">claude-opus-4-6</code>) — judges will check. But you can be smart about it. Use Opus 4.6 for the <em>creative generation</em> (the scene scripts where quality matters) and pre-cache responses so latency doesn't kill your demo. Opus 4.6 is slower and 5× pricier than Sonnet — the Golden Response Cache from your execution playbook is now even more critical. Pre-generate with Opus the night before, serve cached results instantly during demo.
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🎪 New Task Themes: Outrageous, Hilarious, Kid-Magnetic</h2>
+
+<p>The principle: every task should make a kid (or a hackathon judge) laugh out loud, lean forward, and immediately want to try weird inputs. The scenarios should be so absurd that the <em>funny fail</em> is almost better than the success.</p>
+
+<div class="callout callout-pink">
+  <strong>Design principle: The weirder the kid's solution, the more fun the game gets.</strong>
+  A farm game rewards "correct" answers. An outrageous game rewards creative chaos. When a kid says "launch the cat from a cannon into the birthday cake" and the game actually tries to show that — THAT is the demo moment. The gap between what they said and what happens is comedy gold.
+</div>
+
+<!-- Task 1 -->
+<div class="task-card" style="border-left: 4px solid var(--orange);">
+  <div class="task-header">
+    <div class="task-emoji">🎂💥</div>
+    <div>
+      <div class="task-title">Monster Birthday Party</div>
+      <div class="task-sub">Plan a birthday party… for a monster who's never had one before.</div>
+    </div>
+    <span class="tag tag-magic">Magic Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>The party setup: decorations, cake flavor, entertainment, and how to handle the monster's "special needs" (breathes fire, is 30 feet tall, afraid of balloons, etc.)</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Throw a party" → Monster shows up to empty room, looks sad, eats the table. "Give cake" → Cake is tiny, monster accidentally inhales it like a vacuum. "Balloons" → Monster pops them all by sneezing fire.</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Kid specifies decorations + monster-sized cake + fire-safe activities → Monster does happy dance, party guests cheer, confetti everywhere. Monster cries a single happy tear.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Task 2 -->
+<div class="task-card" style="border-left: 4px solid var(--orange);">
+  <div class="task-header">
+    <div class="task-emoji">🚀🐕</div>
+    <div>
+      <div class="task-title">Dog Space Mission</div>
+      <div class="task-sub">Launch a dog into space. What does the dog need? What could go wrong?</div>
+    </div>
+    <span class="tag tag-magic">Magic Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>How to get the dog safely to the moon and back: the rocket, the spacesuit, the snacks, what to do about the dog wanting to stick its head out the window in space.</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Put dog in rocket" → No spacesuit, dog floats around barking in zero-G, tries to fetch a passing asteroid. "Give dog a bone" → Dog buries bone on moon, claims moon for dogs.</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Spacesuit + rocket + treats + return plan → Dog plants flag on moon, does zero-G backflip, gets dog treat, triumphant return with tiny space helmet.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Task 3 -->
+<div class="task-card" style="border-left: 4px solid var(--blue);">
+  <div class="task-header">
+    <div class="task-emoji">🧙‍♂️🍳</div>
+    <div>
+      <div class="task-title">Wizard's Kitchen Disaster</div>
+      <div class="task-sub">A wizard's spell went wrong and the kitchen is alive. Fix it before dinner!</div>
+    </div>
+    <span class="tag tag-explorer">Explorer Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>The flying plates, the soup that's turned into a lake, the angry toaster, the fridge that won't stop singing. Kid must describe a plan to calm EACH chaos element — specificity matters.</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Fix the kitchen" → Kid waves wand, everything gets MORE chaotic. Fridge starts rapping. "Stop the soup" → Soup becomes sentient, demands to be called "Sir Bisque."</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Address each element specifically → Plates land gently, soup returns to bowl (but asks politely first), toaster apologizes, fridge takes a bow after one last song.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Task 4 -->
+<div class="task-card" style="border-left: 4px solid var(--blue);">
+  <div class="task-header">
+    <div class="task-emoji">🦖🏫</div>
+    <div>
+      <div class="task-title">Dinosaur's First Day of School</div>
+      <div class="task-sub">A T-Rex is starting kindergarten. Help it survive the day.</div>
+    </div>
+    <span class="tag tag-explorer">Explorer Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>How does a T-Rex fit through the door? Hold a pencil? Eat lunch without scaring everyone? Sit in a tiny chair? The kid must solve each problem with specific creative solutions.</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Go to school" → T-Rex can't fit through the door, gets stuck, kids climb on its tail. "Sit down" → Chair breaks instantly, everyone laughs, T-Rex blushes.</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Door solution + pencil solution + lunch solution → T-Rex makes friends, gives the best show-and-tell (actual fossils), everyone wants to sit next to it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Task 5 -->
+<div class="task-card" style="border-left: 4px solid var(--orange);">
+  <div class="task-header">
+    <div class="task-emoji">🐙🎸</div>
+    <div>
+      <div class="task-title">Octopus Rock Band</div>
+      <div class="task-sub">An octopus wants to start a band. It has 8 arms. What instruments? What's the band name?</div>
+    </div>
+    <span class="tag tag-magic">Magic Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>Which instruments for which arms? What's the stage look like? What song do they play? What do the fish in the audience do?</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Play music" → Octopus tries drums with all 8 arms, creates chaos, fish cover their ears. "Guitar" → Octopus tangles itself in guitar strings, becomes a living musical instrument.</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Multiple instruments + stage + audience → Underwater rock concert with cheering fish, octopus shreds guitar solo, crowd-surfing starfish.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Task 6 -->
+<div class="task-card" style="border-left: 4px solid var(--blue);">
+  <div class="task-header">
+    <div class="task-emoji">🤖🍕</div>
+    <div>
+      <div class="task-title">Robot Pizza Delivery</div>
+      <div class="task-sub">Program a robot to deliver pizza through an obstacle-filled city. What could go wrong?</div>
+    </div>
+    <span class="tag tag-explorer">Explorer Mode</span>
+  </div>
+  <div class="task-grid">
+    <div class="task-section">
+      <h5>🎯 What Kid Describes</h5>
+      <p>The route, how to cross the river, get past the sleeping giant, navigate the pillow fort, deal with the pizza-stealing squirrels. Each obstacle needs a specific solution.</p>
+    </div>
+    <div class="task-section">
+      <h5>😂 Funny Fails</h5>
+      <p>"Deliver pizza" → Robot walks into river, pizza is soggy, robot short-circuits and starts doing the robot dance. "Go fast" → Robot trips, pizza flies into sky, pigeons celebrate.</p>
+    </div>
+    <div class="task-section">
+      <h5>🏆 Full Success</h5>
+      <p>Route + obstacle solutions → Robot parkours through city, launches over river, sneaks past giant, delivers perfect pizza, customer tips in batteries.</p>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-green">
+  <strong>Why these tasks are 10× better than a farm:</strong>
+  Every scenario has a built-in "gap" between what's expected and what's possible. A monster at a birthday party. A T-Rex in kindergarten. These gaps are inherently funny — the comedy writes itself. And every "fail" state is entertaining, which means there's no bad demo moment. Judges will laugh whether the kid succeeds or not.
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🧱 The Pre-Built Asset Library: Phaser as an Assembly Line</h2>
+
+<p>This is the key architectural insight you're asking about. Instead of generating anything at runtime, you pre-build a library of <strong>Actors</strong>, <strong>Animations</strong>, <strong>Backdrops</strong>, and <strong>Reactions</strong>. Claude's scene script just says <em>which pieces to assemble</em>. Phaser snaps them together like Legos.</p>
+
+<div class="callout callout-green">
+  <strong>Think of it like a theater company, not a movie studio.</strong>
+  A movie studio creates every frame from scratch. A theater company has a cast, props, backdrops, and blocking directions. The "script" tells existing actors what to do on existing sets. Your Phaser game is the theater. Claude writes the script. Everything on stage was already built.
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🏗️</span>
+    <h4>Architecture: The 4-Layer Asset Library</h4>
+  </div>
+  <div class="strategy-body">
+<pre>src/
+├── assets/
+│   ├── actors/          ← Sprite atlases with named animations
+│   │   ├── monster.json + monster.png     (idle, happy, sad, eat, dance, cry, sneeze-fire)
+│   │   ├── dog.json + dog.png             (idle, bark, float, fetch, wag, helmet-on)
+│   │   ├── trex.json + trex.png           (idle, walk, stuck, blush, roar, sit-break)
+│   │   ├── octopus.json + octopus.png     (idle, play-drums, play-guitar, tangle, rock)
+│   │   ├── robot.json + robot.png         (idle, walk, trip, dance, deliver, short-circuit)
+│   │   ├── wizard.json + wizard.png       (idle, cast, surprised, facepalm)
+│   │   └── generic/
+│   │       ├── kid.json + kid.png         (idle, cheer, laugh, point, clap)
+│   │       ├── fish.json + fish.png       (idle, swim, cheer, cover-ears, crowd-surf)
+│   │       └── squirrel.json + squirrel.png (idle, steal, run, celebrate)
+│   │
+│   ├── backdrops/       ← Full-scene backgrounds (static images)
+│   │   ├── party-room.png
+│   │   ├── space.png
+│   │   ├── wizard-kitchen.png
+│   │   ├── classroom.png
+│   │   ├── underwater-stage.png
+│   │   └── city-street.png
+│   │
+│   ├── props/           ← Individual objects that can be placed/animated
+│   │   ├── cake.png, cake-giant.png, cake-tiny.png
+│   │   ├── rocket.png, spacesuit.png, moon.png, flag.png
+│   │   ├── plates.png, soup-bowl.png, toaster.png, fridge.png
+│   │   ├── desk.png, pencil.png, chair.png, lunchbox.png
+│   │   ├── guitar.png, drums.png, keyboard.png, microphone.png
+│   │   └── pizza.png, pizza-soggy.png, river.png, pillow-fort.png
+│   │
+│   └── reactions/       ← Lottie animations overlaid on scenes
+│       ├── confetti-burst.json
+│       ├── explosion-cartoon.json
+│       ├── hearts-float.json
+│       ├── stars-spin.json
+│       ├── question-marks.json
+│       ├── laugh-tears.json
+│       ├── fire-sneeze.json
+│       ├── splash.json
+│       ├── sparkle-magic.json
+│       └── sad-cloud.json</pre>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎬</span>
+    <h4>How Claude's Scene Script Maps to Pre-Built Assets</h4>
+  </div>
+  <div class="strategy-body">
+    <p>Claude doesn't describe pixels or coordinates. It picks from your vocabulary of <strong>actors</strong>, <strong>animations</strong>, <strong>positions</strong>, and <strong>reactions</strong>. Everything it can reference already exists in the asset library.</p>
+
+<pre>// Claude returns this scene script for "throw a huge cake at the monster":
+{
+  "success_level": "FULL_SUCCESS",
+  "narration": "The monster catches the giant cake and does a happy dance!",
+  "actions": [
+    { "type": "spawn",   "actor": "cake-giant",  "position": "left" },
+    { "type": "move",    "actor": "cake-giant",  "to": "center",    "style": "arc" },
+    { "type": "animate", "actor": "monster",     "anim": "eat",     "delay_ms": 500 },
+    { "type": "animate", "actor": "monster",     "anim": "happy",   "delay_ms": 300 },
+    { "type": "react",   "effect": "confetti-burst", "position": "center" },
+    { "type": "animate", "actor": "monster",     "anim": "dance" }
+  ],
+  "prompt_feedback": "You described WHAT to throw and HOW BIG — great specifics!"
+}
+
+// Phaser just:
+// 1. Looks up "cake-giant" in props/ → already loaded
+// 2. Tweens it from left to center in an arc
+// 3. Plays "eat" animation on monster sprite → already in atlas
+// 4. Plays "happy" animation → already in atlas
+// 5. Overlays "confetti-burst" Lottie → already loaded
+// 6. Plays "dance" animation → already in atlas
+// ZERO runtime generation. Pure assembly.</pre>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">📋</span>
+    <h4>The Vocabulary Contract: What Claude Can Reference</h4>
+  </div>
+  <div class="strategy-body">
+    <p>This goes in Claude's system prompt. It's the exhaustive list of everything that exists in your theater.</p>
+
+<pre>// This is embedded in every system prompt so Claude ONLY references real assets
+
+AVAILABLE ACTORS (sprite keys with their animations):
+- monster: idle, happy, sad, eat, dance, cry, sneeze-fire, confused, wave
+- dog: idle, bark, float, fetch, wag, helmet-on, spin, sleep
+- trex: idle, walk, stuck, blush, roar, sit-break, wave, pencil-try
+- octopus: idle, play-drums, play-guitar, tangle, rock, wave, bow
+- robot: idle, walk, trip, dance, deliver, short-circuit, fly, celebrate
+- wizard: idle, cast, surprised, facepalm
+- kid: idle, cheer, laugh, point, clap
+- fish: idle, swim, cheer, cover-ears, crowd-surf (group of 3-5)
+- squirrel: idle, steal, run, celebrate
+
+AVAILABLE PROPS (static objects that can be spawned/moved):
+cake, cake-giant, cake-tiny, rocket, spacesuit, moon, flag,
+plates, soup-bowl, toaster, fridge, desk, pencil, chair, lunchbox,
+guitar, drums, keyboard, microphone, pizza, pizza-soggy,
+river, pillow-fort, bone, balloon, present, stars, fire-extinguisher
+
+AVAILABLE POSITIONS:
+left, center, right, top, bottom, off-left, off-right, off-top
+
+AVAILABLE MOVE STYLES:
+linear, arc, bounce, float, shake, spin-in, drop-in
+
+AVAILABLE REACTIONS (Lottie overlays):
+confetti-burst, explosion-cartoon, hearts-float, stars-spin,
+question-marks, laugh-tears, fire-sneeze, splash, sparkle-magic, sad-cloud
+
+ACTION TYPES:
+- spawn: Add an actor or prop to the scene
+- move: Tween actor/prop from current position to target
+- animate: Play a named animation on an actor
+- react: Overlay a Lottie reaction effect
+- emote: Show emoji/text bubble above an actor
+- sfx: Play a sound effect
+- wait: Pause for specified milliseconds
+- remove: Remove a prop/actor from scene
+
+RULES:
+- Maximum 8 actions per script
+- You MUST only reference actors, props, animations, and reactions from the lists above
+- NEVER invent new asset names — if it's not in the list, don't use it
+- narration must be under 25 words and funny
+- For FUNNY_FAIL: make the result silly and surprising, never mean or scary</pre>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🎨 Where to Source Every Asset</h2>
+
+<table>
+  <thead>
+    <tr><th>Asset Type</th><th>Source</th><th>Why This One</th><th>Cost</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Actors (sprite atlases)</strong></td>
+      <td><a href="https://kenney.nl/assets" style="color: var(--blue);">Kenney.nl</a> — Animal Pack, Character Pack</td>
+      <td>CC0 license. Consistent clean style across ALL packs — mix & match without visual clash. 60K+ assets. Includes multiple animation frames per character.</td>
+      <td>Free (CC0)</td>
+    </tr>
+    <tr>
+      <td><strong>Monster, T-Rex, Octopus</strong></td>
+      <td><a href="https://itch.io/game-assets/free/tag-2d/tag-characters" style="color: var(--blue);">itch.io</a> — search "monster sprite", "dinosaur sprite"</td>
+      <td>Huge variety of free character packs with idle/walk/attack animations. Look for packs with 6+ animation states.</td>
+      <td>Free (check license per pack)</td>
+    </tr>
+    <tr>
+      <td><strong>Backdrops</strong></td>
+      <td><a href="https://itch.io/game-assets/free/tag-backgrounds" style="color: var(--blue);">itch.io backgrounds</a> + <a href="https://kenney.nl/assets" style="color: var(--blue);">Kenney backgrounds</a></td>
+      <td>Static PNGs. One per task. Can use simple parallax layers for depth if time allows. Kitchen, classroom, space, underwater, city are all common free pack themes.</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><strong>Props</strong></td>
+      <td>Kenney "Furniture Pack", "Food Pack", "Space Pack" + itch.io item packs</td>
+      <td>Individual item PNGs. No animation needed — Phaser tweens handle all movement. Just need static images at consistent scale.</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><strong>Reactions (Lottie)</strong></td>
+      <td><a href="https://lottiefiles.com/free-animations" style="color: var(--blue);">LottieFiles.com</a></td>
+      <td>Search: "confetti", "explosion cartoon", "hearts", "stars", "question mark", "splash", "sparkle". Thousands of free options. Small file size. Renders on top of Phaser canvas via React overlay.</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><strong>Sound Effects</strong></td>
+      <td><a href="https://kenney.nl/assets" style="color: var(--blue);">Kenney Audio</a> + <a href="https://itch.io/game-assets/tag-sound-effects" style="color: var(--blue);">FilmCow SFX Library</a></td>
+      <td>4,000+ royalty-free SFX from FilmCow alone. Kenney has consistent game SFX. Whooshes, boings, splashes, celebrations, sad trombones — all the cartoon staples.</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><strong>Custom animations if gaps</strong></td>
+      <td>Generate with Claude + Opus 4.6 → SVG → sprite frames</td>
+      <td>For any actor animations you can't find pre-made, use Opus to generate SVG frame sequences. Convert to spritesheet. This is a "wow the judges" moment — AI generating its own game assets.</td>
+      <td>API credits</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-yellow">
+  <strong>🎯 Danielle's Day 1 task: Source and organize ALL assets into the folder structure above.</strong>
+  This is art direction, not coding. Browse Kenney + itch.io + LottieFiles. Download. Rename to match the vocabulary contract. Verify consistent visual style. If a monster pack uses 32×32 pixel art, ALL actors must be 32×32 pixel art. If you mix styles, it looks like a ransom note.
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>⚙️ The Scene Script Player: Zero Runtime Rendering</h2>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">🎭</span>
+    <h4>How Phaser Plays a Scene Script (All Pre-Built)</h4>
+  </div>
+  <div class="strategy-body">
+<pre>// scene-script-player.ts — The director that assembles pre-built pieces
+
+class SceneScriptPlayer {
+  // Everything is pre-loaded in Phaser's preload()
+  private actors: Map&lt;string, Phaser.GameObjects.Sprite&gt; = new Map();
+  private props: Map&lt;string, Phaser.GameObjects.Image&gt; = new Map();
+
+  // Position map — predefined screen coordinates
+  private positions = {
+    'left':      { x: 150, y: 400 },
+    'center':    { x: 500, y: 400 },
+    'right':     { x: 850, y: 400 },
+    'top':       { x: 500, y: 150 },
+    'bottom':    { x: 500, y: 550 },
+    'off-left':  { x: -100, y: 400 },
+    'off-right': { x: 1100, y: 400 },
+    'off-top':   { x: 500, y: -100 },
+  };
+
+  // Move styles — predefined tween configs
+  private moveStyles = {
+    'linear':   { ease: 'Linear', duration: 600 },
+    'arc':      { ease: 'Sine.easeInOut', duration: 800 },  // + y offset for arc
+    'bounce':   { ease: 'Bounce.easeOut', duration: 700 },
+    'float':    { ease: 'Sine.easeInOut', duration: 1200 },
+    'shake':    { ease: 'Linear', duration: 300 },  // uses shake plugin
+    'spin-in':  { ease: 'Back.easeOut', duration: 600 },
+    'drop-in':  { ease: 'Bounce.easeOut', duration: 500 },
+  };
+
+  async executeAction(action: SceneAction): Promise&lt;void&gt; {
+    switch (action.type) {
+      case 'spawn': {
+        // Look up pre-loaded texture. Place at named position.
+        const pos = this.positions[action.position || 'center'];
+        if (ACTOR_KEYS.includes(action.actor)) {
+          const sprite = this.scene.add.sprite(pos.x, pos.y, action.actor);
+          sprite.play(`${action.actor}-idle`); // Default to idle animation
+          this.actors.set(action.actor, sprite);
+        } else {
+          // It's a prop (static image)
+          const img = this.scene.add.image(pos.x, pos.y, action.actor);
+          this.props.set(action.actor, img);
+        }
+        break;
+      }
+
+      case 'move': {
+        const target = this.actors.get(action.actor) || this.props.get(action.actor);
+        if (!target) return; // Graceful skip
+        const dest = this.positions[action.to || 'center'];
+        const style = this.moveStyles[action.style || 'linear'];
+        return new Promise(resolve =&gt; {
+          this.scene.tweens.add({
+            targets: target,
+            x: dest.x,
+            y: dest.y,
+            ...style,
+            onComplete: () =&gt; resolve()
+          });
+        });
+      }
+
+      case 'animate': {
+        const sprite = this.actors.get(action.actor);
+        if (!sprite) return;
+        const animKey = `${action.actor}-${action.anim}`;
+        // Animation was registered in create() from the atlas
+        return new Promise(resolve =&gt; {
+          sprite.play(animKey);
+          sprite.once('animationcomplete', () =&gt; resolve());
+        });
+      }
+
+      case 'react': {
+        // Fire Lottie overlay via EventBus → React renders it
+        sendToUI({
+          type: 'PLAY_REACTION',
+          effect: action.effect,
+          position: action.position || 'center'
+        });
+        return this.wait(1200); // Let Lottie play
+      }
+
+      case 'remove': {
+        const obj = this.actors.get(action.actor) || this.props.get(action.actor);
+        if (obj) {
+          this.scene.tweens.add({
+            targets: obj, alpha: 0, duration: 300,
+            onComplete: () =&gt; obj.destroy()
+          });
+        }
+        return this.wait(300);
+      }
+
+      // ... emote, sfx, wait follow same pattern
+    }
+  }
+}</pre>
+
+    <p><strong>Notice: Zero image generation. Zero dynamic rendering. Zero network calls.</strong> Every visual element was loaded in Phaser's <code class="ic">preload()</code>. The player just reads the script and places, moves, and animates pre-existing pieces. It's a puppet show, not a render pipeline.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>📦 Pre-Loading Strategy: Everything Upfront</h2>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">⬇️</span>
+    <h4>Phaser Preload: Load the Entire Library at Boot</h4>
+  </div>
+  <div class="strategy-body">
+<pre>// BootScene.ts — Loads everything once, shows progress bar
+
+class BootScene extends Phaser.Scene {
+  constructor() { super('BootScene'); }
+
+  preload() {
+    // Show loading bar
+    const bar = this.add.rectangle(500, 400, 0, 30, 0x7c5cfc);
+    this.load.on('progress', (p: number) =&gt; { bar.width = 800 * p; });
+
+    // ===== ACTORS (sprite atlases with animations) =====
+    this.load.atlas('monster', 'assets/actors/monster.png', 'assets/actors/monster.json');
+    this.load.atlas('dog', 'assets/actors/dog.png', 'assets/actors/dog.json');
+    this.load.atlas('trex', 'assets/actors/trex.png', 'assets/actors/trex.json');
+    this.load.atlas('octopus', 'assets/actors/octopus.png', 'assets/actors/octopus.json');
+    this.load.atlas('robot', 'assets/actors/robot.png', 'assets/actors/robot.json');
+    this.load.atlas('wizard', 'assets/actors/wizard.png', 'assets/actors/wizard.json');
+    this.load.atlas('kid', 'assets/actors/generic/kid.png', 'assets/actors/generic/kid.json');
+    this.load.atlas('fish', 'assets/actors/generic/fish.png', 'assets/actors/generic/fish.json');
+
+    // ===== BACKDROPS (one per task) =====
+    this.load.image('bg-party', 'assets/backdrops/party-room.png');
+    this.load.image('bg-space', 'assets/backdrops/space.png');
+    this.load.image('bg-kitchen', 'assets/backdrops/wizard-kitchen.png');
+    this.load.image('bg-classroom', 'assets/backdrops/classroom.png');
+    this.load.image('bg-underwater', 'assets/backdrops/underwater-stage.png');
+    this.load.image('bg-city', 'assets/backdrops/city-street.png');
+
+    // ===== PROPS (static images) =====
+    const props = [
+      'cake', 'cake-giant', 'cake-tiny', 'rocket', 'spacesuit', 'moon',
+      'flag', 'plates', 'soup-bowl', 'toaster', 'fridge', 'desk', 'pencil',
+      'chair', 'lunchbox', 'guitar', 'drums', 'keyboard', 'microphone',
+      'pizza', 'pizza-soggy', 'river', 'pillow-fort', 'bone', 'balloon',
+      'present', 'fire-extinguisher'
+    ];
+    props.forEach(p =&gt; this.load.image(p, `assets/props/${p}.png`));
+
+    // ===== AUDIO =====
+    this.load.audio('whoosh', 'assets/sfx/whoosh.mp3');
+    this.load.audio('boing', 'assets/sfx/boing.mp3');
+    this.load.audio('splash', 'assets/sfx/splash.mp3');
+    this.load.audio('celebrate', 'assets/sfx/celebrate.mp3');
+    this.load.audio('sad-trombone', 'assets/sfx/sad-trombone.mp3');
+    this.load.audio('explosion', 'assets/sfx/explosion.mp3');
+  }
+
+  create() {
+    // Register all animations from atlases
+    registerAnimations(this);
+    // Done — go to menu
+    this.scene.start('MenuScene');
+  }
+}
+
+function registerAnimations(scene: Phaser.Scene) {
+  // Each actor atlas has tagged animations
+  // These are created ONCE and available globally
+  const actors = {
+    'monster': ['idle', 'happy', 'sad', 'eat', 'dance', 'cry', 'sneeze-fire', 'confused', 'wave'],
+    'dog': ['idle', 'bark', 'float', 'fetch', 'wag', 'helmet-on', 'spin', 'sleep'],
+    'trex': ['idle', 'walk', 'stuck', 'blush', 'roar', 'sit-break', 'wave', 'pencil-try'],
+    // ... etc
+  };
+
+  for (const [actor, anims] of Object.entries(actors)) {
+    for (const anim of anims) {
+      scene.anims.create({
+        key: `${actor}-${anim}`,
+        frames: scene.anims.generateFrameNames(actor, {
+          prefix: `${anim}-`, start: 0, end: 5, zeroPad: 2
+        }),
+        frameRate: 8,
+        repeat: anim === 'idle' ? -1 : 0  // idle loops, others play once
+      });
+    }
+  }
+}</pre>
+
+    <div class="callout callout-green">
+      <strong>Total load time: 2-5 seconds on first visit.</strong>
+      All textures are small pixel-art PNGs (usually &lt;50KB each). Sprite atlases pack dozens of frames into one image. Lottie JSONs are tiny. After first load, browser cache handles the rest. For the demo, you'll have visited the URL already — instant load.
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🧠 Opus 4.6 Strategy: Use the 1M Context Window</h2>
+
+<p>The judges specifically want to see Opus 4.6's unique capabilities pushed. Here's how to leverage them without sacrificing speed:</p>
+
+<div class="two-col">
+  <div class="card">
+    <span class="emoji">🎯</span>
+    <h4>Use Opus 4.6 for Generation</h4>
+    <p>Scene scripts, narration, prompt feedback — all generated by Opus. Quality of humor, creativity of responses, intelligence of partial-success detection are all areas where Opus shines over Sonnet.</p>
+    <p><strong>Pre-cache these with Opus the night before.</strong> Quality matters here. Speed doesn't (at cache time).</p>
+  </div>
+  <div class="card">
+    <span class="emoji">📚</span>
+    <h4>Use the 1M Context Window</h4>
+    <p>Stuff the system prompt with your ENTIRE asset vocabulary, ALL task descriptions, educational framework, Piaget stage rationale, sample inputs + outputs for each task, and all 6 system prompts in one mega-prompt. Opus can hold it all.</p>
+    <p><strong>This means one API client, one system prompt, and Claude routes to the right task based on context.</strong></p>
+  </div>
+</div>
+
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="icon">💡</span>
+    <h4>The "Wow the Judges" Opus 4.6 Feature: Asset Generation Pipeline</h4>
+  </div>
+  <div class="strategy-body">
+    <p>Here's a stretch goal that could be your differentiator if you have time on Day 5-6:</p>
+
+    <div class="callout callout-pink">
+      <strong>When a kid requests something that isn't in the asset library, use Opus 4.6 to generate it.</strong>
+      Kid says "give the monster a top hat." Top hat isn't in your props. Opus generates an SVG top hat on the fly. You render it as a Phaser image. The hat appears on the monster. Judges see: <em>the AI isn't just scripting — it's creating new game content in real time.</em>
+    </div>
+
+    <p><strong>This is a stretch goal, NOT core scope.</strong> The pre-built library handles 95% of cases. But if you have time, this is the "1M token context + Opus intelligence" showcase that wins the hackathon.</p>
+
+<pre>// stretch-goal: dynamic asset generation (Day 5-6 only)
+
+async function generateMissingProp(description: string): Promise&lt;string&gt; {
+  const response = await client.messages.create({
+    model: 'claude-opus-4-6',
+    max_tokens: 2000,
+    messages: [{
+      role: 'user',
+      content: `Generate a simple SVG icon of: "${description}"
+        Style: pixel-art inspired, flat colors, 64x64px viewport
+        Return ONLY the SVG code, no explanation.`
+    }]
+  });
+
+  const svg = response.content[0].text;
+  // Convert SVG to image data URL
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  // Add to Phaser's texture manager dynamically
+  return url; // Load as texture on the fly
+}</pre>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>📅 Revised Build Week (With Asset Library Architecture)</h2>
+
+<table>
+  <thead>
+    <tr><th>Day</th><th>Drew</th><th>Danielle</th><th>Gate</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1</strong></td>
+      <td>Clone Phaser-React-TS template. EventBus contract. BootScene with preload skeleton. Claude API client (Opus 4.6) with timeout + JSON parser.</td>
+      <td><strong>🎨 ART DIRECTION DAY.</strong> Source ALL actors, backdrops, props from Kenney + itch.io + LottieFiles. Organize into folder structure. Verify visual consistency. Name everything per vocabulary contract.</td>
+      <td>✅ Phaser loads all assets + shows progress bar. Claude returns valid JSON for 1 test prompt.</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><strong>Scene Script Player.</strong> Execute spawn, move, animate, react, remove actions. Register all animations from atlases. Test Monster Birthday Party end-to-end.</td>
+      <td><strong>Magic Mode UI.</strong> Object chips (illustrated, no text). Mic button. Pixel guide + thinking Lottie. TTS narration. Reaction Lottie overlay layer (renders on top of Phaser canvas).</td>
+      <td>✅ "Throw a huge cake" → Opus → scene script → monster catches cake → celebration. <strong>THE DEMO MOMENT WORKS.</strong></td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td>All 6 task scenes (load backdrop, spawn initial actors). All 6 system prompts with vocabulary constraint. Response cache system (Tier 1 + 3). Fuzzy match.</td>
+      <td><strong>Explorer Mode UI.</strong> Text input + mic. Prompt Feedback panel with concrete tips. Distinct visual from Magic Mode. Task selection screen with 6 outrageous icons.</td>
+      <td>✅ Both tiers functional. Cache returns instant for demo inputs.</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td>End-to-end: all 6 tasks × 2 tiers. Error boundaries. <strong>Run Opus 4.6 cache builder for 30+ demo inputs overnight.</strong></td>
+      <td><strong>Badge system + Trophy Room.</strong> Lottie unlock animations. Confetti. Open Badges schema. Framer Motion page transitions.</td>
+      <td>✅ Full happy path, all tasks. Badges earn + display. No crashes.</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><strong>Deploy Vercel.</strong> Test on Chrome/Safari/Firefox. Stress test weird inputs. <em>Stretch: dynamic SVG prop generation.</em></td>
+      <td><strong>Polish.</strong> Responsive layout. Tier-appropriate visuals. Loading states. <em>Stretch: task intro animations.</em></td>
+      <td>✅ Deployed. No broken states in 30 min of testing.</td>
+    </tr>
+    <tr>
+      <td><strong>6-7</strong></td>
+      <td>Final bug fixes. Re-run cache builder with final prompts. <em>Stretch: dynamic asset gen demo.</em></td>
+      <td><strong>Record backup video. Pitch deck. Practice 3-min script.</strong> GitHub README with screenshots.</td>
+      <td>✅ Rehearsed 3×. Video backup. Pitch under 3 min.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-divider"></div>
+
+<!-- ============================================ -->
+<h2>🎤 Updated Demo Script (3 Minutes)</h2>
+
+<div class="card" style="border-left: 4px solid var(--accent);">
+  <h4>Minute 1: The Story (Danielle)</h4>
+  <p>"We have a daughter. Every AI tool for kids is ChatGPT in a cute skin. We asked: what if kids didn't talk TO AI — what if AI was the invisible game engine that makes their crazy ideas come alive? We built Prompt Quest."</p>
+</div>
+
+<div class="card" style="border-left: 4px solid var(--orange); margin-top: 0.5rem;">
+  <h4>Minute 2: The Demo (Drew drives, Danielle narrates)</h4>
+  <p><strong>Magic Mode — Monster Birthday Party:</strong> "Watch this. A 5-year-old taps the mic and says: 'throw the biggest cake ever and make the monster dance!'"</p>
+  <p>→ Opus scene script fires. Giant cake arcs across screen. Monster catches it, eats it, does happy dance. Confetti. Crowd goes wild.</p>
+  <p><strong>Explorer Mode — Wizard's Kitchen:</strong> "Now an 8-year-old types: 'fix the kitchen.' Watch what happens."</p>
+  <p>→ Partial success. Wizard waves wand. Plates slow down but fridge starts singing louder. Prompt feedback slides in: "You said fix it — but which things? The plates? The soup? The singing fridge? Try describing each one!"</p>
+  <p>→ Kid retries: "Tell the plates to land, put the soup back in the bowl, and ask the fridge to stop singing."</p>
+  <p>→ Full success. Each element resolves. Fridge takes a bow after one last song. Celebration.</p>
+</div>
+
+<div class="card" style="border-left: 4px solid var(--green); margin-top: 0.5rem;">
+  <h4>Minute 3: The Insight (Danielle)</h4>
+  <p>"That child just learned prompt engineering — specificity, completeness, sequencing — without a single lecture. The game teaches through play, not instructions. And every failure is funnier than success, so kids WANT to try again."</p>
+  <p>"Built with Opus 4.6 — the 1M context window holds our entire game vocabulary, educational framework, and creative engine in a single prompt. Opus generates responses that are genuinely funny and creative, not template-y. That's what makes the magic work."</p>
+  <p><em>[Show Trophy Room with earned badges. Cut.]</em></p>
+</div>
+
+<div class="section-divider"></div>
+
+<div class="callout callout-green">
+  <strong>Summary: What Changed</strong>
+  <br><br>
+  <strong style="color: var(--text);">🐔 → 🎪</strong> Farm → Outrageous scenarios (monsters, space dogs, dinosaurs in school). Every task is a comedy setup where failure is as entertaining as success.<br><br>
+  <strong style="color: var(--text);">Runtime rendering → Assembly</strong> Pre-built library of actors (with atlas animations), backdrops, props, and Lottie reactions. Claude's scene script just says which pre-built pieces to place where. Zero runtime generation.<br><br>
+  <strong style="color: var(--text);">Sonnet → Opus 4.6</strong> Required by hackathon. Use for generation quality (creative, funny, smart). Pre-cache with Opus overnight. 1M context window = single mega-prompt with entire game vocabulary.<br><br>
+  <strong style="color: var(--text);">Stretch goal: dynamic asset gen</strong> When a kid requests something not in the library, Opus generates an SVG on the fly. This is the "push the boundaries" moment judges want to see.
+</div>
+
+<p style="text-align: center; margin-top: 2rem; color: var(--text-dim); font-size: 0.85rem;">
+  Prompt Quest · Outrageous Tasks & Asset Library Architecture · Built with Opus 4.6 · Feb 2026
+</p>
+
+</body>
+</html>
