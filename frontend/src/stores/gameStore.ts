@@ -38,6 +38,7 @@ interface GameState {
   cameraTarget: [number, number, number]; // where camera should look
   isTransitioning: boolean; // true during camera fly
   playerPosition: [number, number, number]; // player world position
+  cameraYaw: number; // horizontal camera rotation in radians (0 = behind player)
 
   // Actions
   setInput: (input: string) => void;
@@ -48,6 +49,7 @@ interface GameState {
   enterZone: (zoneId: string) => void;
   exitZone: () => void;
   updatePlayerPosition: (pos: [number, number, number]) => void;
+  rotateCameraYaw: (deltaYaw: number) => void;
 }
 
 const SYSTEM_PROMPTS: Record<string, string> = {
@@ -172,6 +174,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   cameraTarget: VILLAGE_CENTER,
   isTransitioning: false,
   playerPosition: [0, 0, 0],
+  cameraYaw: 0,
 
   setInput: (input: string) => set({ userInput: input }),
 
@@ -268,5 +271,9 @@ export const useGameStore = create<GameState>((set, get) => ({
         return;
       }
     }
+  },
+
+  rotateCameraYaw: (deltaYaw: number) => {
+    set((s) => ({ cameraYaw: s.cameraYaw + deltaYaw }));
   },
 }));
