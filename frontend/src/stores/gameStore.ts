@@ -60,7 +60,7 @@ const SYSTEM_PROMPTS: Record<string, string> = {
 
 // Zone center positions in world space — circular ring at radius ~35
 export const ZONE_CENTERS: Record<string, [number, number, number]> = {
-  'skeleton-birthday': [0, 0, -35],       // north
+  'skeleton-birthday': [0, 0, -55],       // north — reached via canyon pass
   'knight-space':      [25, 0, -25],      // northeast
   'barbarian-school':  [35, 0, 0],        // east
   'skeleton-pizza':    [25, 0, 25],       // southeast
