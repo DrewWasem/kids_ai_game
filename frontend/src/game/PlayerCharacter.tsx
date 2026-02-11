@@ -13,6 +13,7 @@ import { useRef, useEffect, useCallback } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Character3D, type Character3DHandle } from './Character3D'
+import { useGameStore } from '../stores/gameStore'
 
 const WALK_SPEED = 8
 const RUN_SPEED = 14
@@ -58,38 +59,52 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
     }
   }, [enabled])
 
+  // Read cameraYaw from store via ref to avoid re-renders every frame
+  const cameraYawRef = useRef(0)
+  useFrame(() => {
+    cameraYawRef.current = useGameStore.getState().cameraYaw
+  })
+
   useFrame((_, delta) => {
     if (!enabled || !groupRef.current) return
 
     const keys = keysRef.current
-    const dir = { x: 0, z: 0 }
+    let dirX = 0
+    let dirZ = 0
 
-    if (keys.has('KeyW') || keys.has('ArrowUp')) dir.z -= 1
-    if (keys.has('KeyS') || keys.has('ArrowDown')) dir.z += 1
-    if (keys.has('KeyA') || keys.has('ArrowLeft')) dir.x -= 1
-    if (keys.has('KeyD') || keys.has('ArrowRight')) dir.x += 1
+    if (keys.has('KeyW') || keys.has('ArrowUp')) dirZ -= 1
+    if (keys.has('KeyS') || keys.has('ArrowDown')) dirZ += 1
+    if (keys.has('KeyA') || keys.has('ArrowLeft')) dirX -= 1
+    if (keys.has('KeyD') || keys.has('ArrowRight')) dirX += 1
 
-    const moving = dir.x !== 0 || dir.z !== 0
+    const moving = dirX !== 0 || dirZ !== 0
     const running = moving && (keys.has('ShiftLeft') || keys.has('ShiftRight'))
     const speed = running ? RUN_SPEED : WALK_SPEED
 
     if (moving) {
       // Normalize diagonal movement
-      const len = Math.sqrt(dir.x * dir.x + dir.z * dir.z)
-      dir.x /= len
-      dir.z /= len
+      const len = Math.sqrt(dirX * dirX + dirZ * dirZ)
+      dirX /= len
+      dirZ /= len
+
+      // Rotate movement direction by camera yaw so WASD is always camera-relative
+      const yaw = cameraYawRef.current
+      const cosYaw = Math.cos(yaw)
+      const sinYaw = Math.sin(yaw)
+      const worldX = dirX * cosYaw - dirZ * sinYaw
+      const worldZ = dirX * sinYaw + dirZ * cosYaw
 
       // Move position
       const pos = groupRef.current.position
-      pos.x += dir.x * speed * delta
-      pos.z += dir.z * speed * delta
+      pos.x += worldX * speed * delta
+      pos.z += worldZ * speed * delta
 
       // Clamp to bounds
       pos.x = THREE.MathUtils.clamp(pos.x, BOUNDS.minX, BOUNDS.maxX)
       pos.z = THREE.MathUtils.clamp(pos.z, BOUNDS.minZ, BOUNDS.maxZ)
 
-      // Face movement direction
-      const angle = Math.atan2(dir.x, dir.z)
+      // Face movement direction (world space)
+      const angle = Math.atan2(worldX, worldZ)
       groupRef.current.rotation.y = angle
 
       // Report position
