@@ -212,6 +212,35 @@ const PROP_PATHS: Record<string, string> = {
   bow: 'kaykit/packs/rpg_tools/fishing_rod.gltf',
 }
 
+/** Scale overrides for spawned props — Tiny Treats models are miniature and need scaling up */
+const PROP_SCALE: Record<string, number> = {
+  // Baked goods (tiny — need ~3x to be visible next to 2.6u characters)
+  cake: 3.0, cake_birthday: 3.0, cake_chocolate: 3.0, 'cake-giant': 4.0,
+  cupcake: 3.0, pie: 3.0, pie_apple: 3.0, pie_cherry: 3.0, cookie: 2.5, bread: 3.0,
+  // Picnic items
+  picnic_basket: 2.5, picnic_basket_round: 2.5, picnic_blanket: 3.0,
+  sandwich: 3.0, teapot: 3.0, apple: 3.0, basket: 2.5, blanket: 3.0,
+  bottle: 2.5, cup: 2.5, lunchbox: 2.5,
+  // Kitchen
+  stove: 2.0, fridge: 2.0, pot: 2.5, pan: 2.5, oven: 2.0,
+  // Restaurant food
+  pizza: 2.5, pizza_pepperoni: 2.5, pizza_cheese: 2.5, plate: 2.5, plates: 2.0,
+  // Park
+  bench: 2.0, tree: 2.0, tree_large: 2.0, bush: 2.0,
+  // Playground
+  slide: 2.0, swing: 2.0, seesaw: 2.0, sandbox: 2.0, merry_go_round: 2.0,
+  // Holiday
+  present: 2.5, present_A_red: 2.5, present_B_blue: 2.5, present_C_green: 2.5,
+  balloon: 2.5, candle: 2.5,
+}
+
+function resolvePropScale(propId: string): number {
+  if (PROP_SCALE[propId]) return PROP_SCALE[propId]
+  const base = propId.split('_')[0]
+  if (base !== propId && PROP_SCALE[base]) return PROP_SCALE[base]
+  return 1.0
+}
+
 function resolvePropPath(propId: string): string | null {
   // Exact match
   if (PROP_PATHS[propId]) return PROP_PATHS[propId]
@@ -354,6 +383,7 @@ interface ActiveActor {
   modelPath?: string
   position: [number, number, number]
   animation?: string
+  scale?: number
 }
 
 interface ActiveEffect {
@@ -537,6 +567,12 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
       return
     }
 
+    // Intro scripts (empty actions) — display narration only, keep hero actors
+    if (script.actions.length === 0) {
+      playingRef.current = false
+      return
+    }
+
     // Prevent re-execution if already playing
     if (playingRef.current) return
     playingRef.current = true
@@ -688,6 +724,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
           type: 'prop',
           modelPath: propPath!,
           position: pos,
+          scale: resolvePropScale(actorId),
         }
 
     setActors((prev) => {
@@ -931,6 +968,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
               <Prop3D
                 modelPath={actor.modelPath}
                 position={actor.position}
+                scale={actor.scale || 1}
                 animate
                 ref={(ref) => {
                   if (ref) actorRefs.current.set(actor.id, ref)

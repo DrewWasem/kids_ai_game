@@ -37,6 +37,11 @@ export default function App() {
     'dungeon-concert':   { label: "Dungeon Rock Concert", emoji: '🎸' },
     'skeleton-pizza':    { label: "Skeleton Pizza Delivery", emoji: '🍕' },
     'adventurers-picnic': { label: "Adventurers' Picnic", emoji: '🧺' },
+    'knight-space': { label: "Knight's Space Mission", emoji: '🚀' },
+    'mage-kitchen': { label: "Mage vs. The Kitchen", emoji: '🧙' },
+    'barbarian-school': { label: "Barbarian's School Day", emoji: '📚' },
+    'dungeon-concert': { label: 'Dungeon Rock Concert', emoji: '🎸' },
+    'skeleton-pizza': { label: 'Skeleton Pizza Delivery', emoji: '🍕' },
   };
 
   const zoneInfo = currentZone ? ZONE_LABELS[currentZone] : null;
@@ -98,18 +103,18 @@ export default function App() {
             </div>
           </div>
 
-          {/* Prompt Input — only visible when in a zone */}
-          {currentZone && !isTransitioning ? (
+          {/* Prompt Input — visible as soon as a zone is entered */}
+          {currentZone ? (
             <div className="transition-opacity duration-500">
               <PromptInput />
             </div>
           ) : (
             <div className="px-5 py-4 text-center">
               <p className="font-heading font-bold text-lg text-quest-text-dark">
-                {isTransitioning ? 'Traveling...' : 'Click a glowing marker to start a quest!'}
+                {isTransitioning ? 'Traveling...' : 'Walk to a glowing circle to start a quest!'}
               </p>
               <p className="text-sm text-quest-text-light mt-1">
-                {isTransitioning ? '' : 'Explore the village and find quest zones'}
+                {isTransitioning ? '' : 'Use WASD or arrow keys to move \u2022 Hold Shift to run'}
               </p>
             </div>
           )}

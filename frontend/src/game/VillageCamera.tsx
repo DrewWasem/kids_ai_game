@@ -1,11 +1,14 @@
 /**
  * VillageCamera — Camera controller for the medieval village world.
  *
- * Handles:
- * - Smooth camera transitions between village center and quest zones
- * - Different camera distances for overview vs zone views
- * - Limited orbit controls within current zone
- * - Camera fly animation using useFrame with ease-out cubic
+ * Two modes:
+ * 1. Village mode (no currentZone): third-person follow behind player
+ *    - Disables OrbitControls
+ *    - Camera lerps to playerPos + FOLLOW_OFFSET
+ *    - Look-target lerps to playerPos
+ * 2. Zone mode (currentZone set): fly-to zone center + orbit controls
+ *    - Camera flies to zone with ease-out cubic
+ *    - OrbitControls enabled after arrival
  */
 
 import { useRef, useEffect } from 'react'
@@ -14,15 +17,15 @@ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import * as THREE from 'three'
 import { useGameStore } from '../stores/gameStore'
 
-// Camera offsets: village overview shows the whole 7x-scale village, zones zoom in
-const VILLAGE_CAMERA_OFFSET = new THREE.Vector3(0, 40, 60)
-const ZONE_CAMERA_OFFSET = new THREE.Vector3(0, 18, 28)
+// Follow offset for third-person village walking (close enough to see character detail)
+const FOLLOW_OFFSET = new THREE.Vector3(0, 8, 14)
+const ZONE_CAMERA_OFFSET = new THREE.Vector3(0, 8, 14)
 
-// Orbit settings
+// Orbit settings (zone mode only)
 const MIN_POLAR_ANGLE = 0.3
 const MAX_POLAR_ANGLE = 1.2
 const MIN_DISTANCE = 12
-const MAX_DISTANCE = 120
+const MAX_DISTANCE = 60
 
 // Ease-out cubic for smooth deceleration
 function easeOutCubic(t: number): number {
@@ -30,15 +33,21 @@ function easeOutCubic(t: number): number {
 }
 
 const TRANSITION_DURATION = 2.0 // seconds
+const FOLLOW_SMOOTHING = 3.0 // exponential smoothing factor
+
+// Reusable vectors to avoid GC pressure
+const _targetPos = new THREE.Vector3()
+const _targetLook = new THREE.Vector3()
 
 export function VillageCamera() {
   const cameraTarget = useGameStore((s) => s.cameraTarget)
   const currentZone = useGameStore((s) => s.currentZone)
   const isTransitioning = useGameStore((s) => s.isTransitioning)
+  const playerPosition = useGameStore((s) => s.playerPosition)
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   const controlsRef = useRef<any>(null)
 
-  // Animation state
+  // Animation state for fly-to transitions
   const transitionRef = useRef({
     active: false,
     startPos: new THREE.Vector3(),
@@ -49,20 +58,27 @@ export function VillageCamera() {
     duration: TRANSITION_DURATION,
   })
 
-  // Start transition when cameraTarget or zone changes
+  // Skip fly-to on initial mount — follow mode handles it
+  const mountedRef = useRef(false)
+
+  // Start fly-to transition when entering/exiting a zone
   useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true
+      return
+    }
     if (!cameraRef.current || !controlsRef.current) return
 
     const cam = cameraRef.current
     const controls = controlsRef.current
     const t = transitionRef.current
 
-    // Pick offset based on whether we're going to a zone or back to village
-    const offset = currentZone ? ZONE_CAMERA_OFFSET : VILLAGE_CAMERA_OFFSET
+    // Pick offset: zone = orbit view, village = follow offset from player
+    const offset = currentZone ? ZONE_CAMERA_OFFSET : FOLLOW_OFFSET
 
     // Calculate destination
     const endTarget = new THREE.Vector3(...cameraTarget)
-    endTarget.y = 1
+    endTarget.y = currentZone ? 1 : 0
     const endPos = endTarget.clone().add(offset)
 
     t.active = true
@@ -76,26 +92,54 @@ export function VillageCamera() {
     controls.enabled = false
   }, [cameraTarget, currentZone])
 
-  // Animate camera position + target
+  // Main frame loop: handles transitions + follow mode
   useFrame((_, delta) => {
+    if (!cameraRef.current || !controlsRef.current) return
+
+    const cam = cameraRef.current
+    const controls = controlsRef.current
     const t = transitionRef.current
-    if (!t.active || !cameraRef.current || !controlsRef.current) return
 
-    t.elapsed += delta
-    const progress = Math.min(t.elapsed / t.duration, 1)
-    const eased = easeOutCubic(progress)
+    // --- Fly-to transition (entering or exiting zone) ---
+    if (t.active) {
+      t.elapsed += delta
+      const progress = Math.min(t.elapsed / t.duration, 1)
+      const eased = easeOutCubic(progress)
 
-    cameraRef.current.position.lerpVectors(t.startPos, t.endPos, eased)
-    controlsRef.current.target.lerpVectors(t.startTarget, t.endTarget, eased)
-    controlsRef.current.update()
+      cam.position.lerpVectors(t.startPos, t.endPos, eased)
+      controls.target.lerpVectors(t.startTarget, t.endTarget, eased)
+      controls.update()
 
-    if (progress >= 1) {
-      t.active = false
-      controlsRef.current.enabled = true
-      if (isTransitioning) {
-        useGameStore.setState({ isTransitioning: false })
+      if (progress >= 1) {
+        t.active = false
+        // Only enable orbit in zone mode
+        controls.enabled = !!currentZone
+        if (isTransitioning) {
+          useGameStore.setState({ isTransitioning: false })
+        }
       }
+      return
     }
+
+    // --- Village follow mode (no zone, no transition) ---
+    if (!currentZone) {
+      controls.enabled = false
+
+      // Target: camera behind and above player
+      _targetPos.set(
+        playerPosition[0] + FOLLOW_OFFSET.x,
+        playerPosition[1] + FOLLOW_OFFSET.y,
+        playerPosition[2] + FOLLOW_OFFSET.z,
+      )
+      _targetLook.set(playerPosition[0], playerPosition[1], playerPosition[2])
+
+      // Exponential smoothing: 1 - exp(-factor * delta)
+      const smoothing = 1 - Math.exp(-FOLLOW_SMOOTHING * delta)
+      cam.position.lerp(_targetPos, smoothing)
+      controls.target.lerp(_targetLook, smoothing)
+      controls.update()
+    }
+    // Zone mode: orbit controls handle it
   })
 
   return (
@@ -104,18 +148,19 @@ export function VillageCamera() {
         ref={cameraRef}
         makeDefault
         fov={45}
-        position={[0, 40, 60]}
+        position={[0, 8, 14]}
         near={0.1}
         far={500}
       />
       <OrbitControls
         ref={controlsRef}
-        target={[0, 1, 0]}
+        target={[0, 0, 0]}
         minPolarAngle={MIN_POLAR_ANGLE}
         maxPolarAngle={MAX_POLAR_ANGLE}
         minDistance={MIN_DISTANCE}
         maxDistance={MAX_DISTANCE}
         enablePan={false}
+        enabled={false}
       />
     </>
   )

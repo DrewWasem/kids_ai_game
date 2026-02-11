@@ -18,11 +18,12 @@
  * plus existing task environment pieces offset to zone positions.
  */
 
-import { memo, useMemo, useCallback, Suspense } from 'react'
-import { useGLTF, Html, Sky, Cloud, Clouds } from '@react-three/drei'
+import { memo, useMemo, Suspense } from 'react'
+import { useGLTF, Sky, Cloud, Clouds } from '@react-three/drei'
 import * as THREE from 'three'
 import { ASSET_BASE } from '../data/asset-manifest'
-import { useGameStore, ZONE_CENTERS } from '../stores/gameStore'
+import { ZONE_CENTERS, ZONE_META } from '../stores/gameStore'
+import { QuestZoneCircle } from './QuestZoneCircle'
 
 // ============================================================================
 // HEX GRID HELPERS
@@ -144,78 +145,6 @@ const Piece = memo(({ model, position, rotation, scale = 1 }: PieceProps) => {
   )
 })
 Piece.displayName = 'Piece'
-
-// ============================================================================
-// ZONE MARKER — Clickable portal/signpost at zone entrance
-// ============================================================================
-
-interface ZoneMarkerProps {
-  zoneId: string
-  position: [number, number, number]
-  label: string
-  emoji: string
-}
-
-function ZoneMarker({ zoneId, position, label, emoji }: ZoneMarkerProps) {
-  const enterZone = useGameStore((s) => s.enterZone)
-  const currentZone = useGameStore((s) => s.currentZone)
-  const isTransitioning = useGameStore((s) => s.isTransitioning)
-
-  const handleClick = useCallback(() => {
-    if (isTransitioning) return
-    if (currentZone === zoneId) return
-    enterZone(zoneId)
-  }, [enterZone, zoneId, currentZone, isTransitioning])
-
-  // Hide marker when already in this zone
-  if (currentZone === zoneId) return null
-
-  return (
-    <group position={position}>
-      {/* Glowing pillar */}
-      <mesh position={[0, 1.5, 0]} onClick={handleClick}>
-        <cylinderGeometry args={[0.3, 0.4, 3, 8]} />
-        <meshStandardMaterial
-          color="#7C3AED"
-          emissive="#7C3AED"
-          emissiveIntensity={0.5}
-          transparent
-          opacity={0.9}
-        />
-      </mesh>
-      {/* Glowing orb on top */}
-      <mesh position={[0, 3.2, 0]} onClick={handleClick}>
-        <sphereGeometry args={[0.5, 16, 16]} />
-        <meshStandardMaterial
-          color="#FBBF24"
-          emissive="#FF8C42"
-          emissiveIntensity={1.0}
-        />
-      </mesh>
-      {/* Point light glow */}
-      <pointLight
-        color="#7C3AED"
-        intensity={3}
-        distance={8}
-        decay={2}
-        position={[0, 3, 0]}
-      />
-      {/* Label */}
-      <Html position={[0, 4.5, 0]} center>
-        <button
-          onClick={handleClick}
-          className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-2 border-quest-purple/30
-                     font-heading font-bold text-sm text-quest-text-dark whitespace-nowrap
-                     hover:border-quest-purple hover:shadow-glow-purple transition-all cursor-pointer
-                     select-none"
-        >
-          <span className="mr-1.5">{emoji}</span>
-          {label}
-        </button>
-      </Html>
-    </group>
-  )
-}
 
 // ============================================================================
 // HEX TERRAIN — Grass tiles covering the village area
@@ -823,49 +752,21 @@ export function VillageWorld() {
         <KitchenZone />
       </Suspense>
 
-      {/* Zone markers (clickable portals) — circular ring */}
-      <ZoneMarker
-        zoneId="skeleton-birthday"
-        position={[0, 0, -18]}
-        label="Dungeon"
-        emoji="💀"
-      />
-      <ZoneMarker
-        zoneId="knight-space"
-        position={[18, 0, -18]}
-        label="Space Station"
-        emoji="🚀"
-      />
-      <ZoneMarker
-        zoneId="barbarian-school"
-        position={[25, 0, 0]}
-        label="School"
-        emoji="📚"
-      />
-      <ZoneMarker
-        zoneId="skeleton-pizza"
-        position={[18, 0, 18]}
-        label="Pizza Shop"
-        emoji="🍕"
-      />
-      <ZoneMarker
-        zoneId="adventurers-picnic"
-        position={[0, 0, 18]}
-        label="The Park"
-        emoji="🧺"
-      />
-      <ZoneMarker
-        zoneId="dungeon-concert"
-        position={[-18, 0, 18]}
-        label="Concert Hall"
-        emoji="🎸"
-      />
-      <ZoneMarker
-        zoneId="mage-kitchen"
-        position={[-25, 0, 0]}
-        label="Kitchen"
-        emoji="🧙"
-      />
+      {/* Quest zone circles — glowing ground rings at each zone entrance */}
+      {Object.entries(ZONE_CENTERS).map(([zoneId, center]) => {
+        const meta = ZONE_META[zoneId]
+        if (!meta) return null
+        return (
+          <QuestZoneCircle
+            key={zoneId}
+            zoneId={zoneId}
+            position={center}
+            label={meta.label}
+            emoji={meta.emoji}
+            color={meta.color}
+          />
+        )
+      })}
     </group>
   )
 }

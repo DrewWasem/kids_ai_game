@@ -1,8 +1,10 @@
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, useEffect, ReactNode } from 'react';
+import { Suspense, useEffect, useCallback, ReactNode } from 'react';
 import * as THREE from 'three';
 import { VillageWorld } from './VillageWorld';
 import { VillageCamera } from './VillageCamera';
+import { PlayerCharacter } from './PlayerCharacter';
+import { useGameStore } from '../stores/gameStore';
 
 /** Exposes window.__measureScene() for 3D size debugging */
 function SceneMeasurer() {
@@ -55,6 +57,24 @@ interface R3FGameProps {
   children?: ReactNode;
 }
 
+/** Reads store state inside Canvas to control player */
+function PlayerController() {
+  const currentZone = useGameStore((s) => s.currentZone)
+  const updatePlayerPosition = useGameStore((s) => s.updatePlayerPosition)
+
+  const handlePositionUpdate = useCallback(
+    (pos: [number, number, number]) => updatePlayerPosition(pos),
+    [updatePlayerPosition],
+  )
+
+  return (
+    <PlayerCharacter
+      enabled={!currentZone}
+      onPositionUpdate={handlePositionUpdate}
+    />
+  )
+}
+
 export default function R3FGame({ children }: R3FGameProps) {
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -69,6 +89,11 @@ export default function R3FGame({ children }: R3FGameProps) {
 
         {/* Persistent village world with all zones */}
         <VillageWorld />
+
+        {/* Walkable player character */}
+        <Suspense fallback={null}>
+          <PlayerController />
+        </Suspense>
 
         {/* Scene content (ScenePlayer3D actors) */}
         <Suspense fallback={null}>
