@@ -351,17 +351,19 @@ function ImpenetrableForest() {
   const pick = (i: number, arr: string[]) => arr[i % arr.length]
   const rot = (i: number) => ((i * 137.5) % 360) * (Math.PI / 180) // golden angle
 
-  // Skip trees in north/south road corridors (~30° wide gaps)
+  // Skip trees in north/south road corridors
+  // North corridor wider (~58°) because scale-7 trees are huge and crowd the dungeon road
   const isInCorridor = (angle: number): boolean => {
     const north = 3 * Math.PI / 2  // 270° = negative Z direction
     const south = Math.PI / 2       // 90° = positive Z direction
-    const halfWidth = 0.26           // ~15° each side → ~30° corridor
+    const northHalf = 0.50           // ~29° each side → ~58° corridor (wide for dungeon road)
+    const southHalf = 0.26           // ~15° each side → ~30° corridor
     const normalize = (a: number) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
     const a = normalize(angle)
     const diffN = Math.abs(a - north)
     const diffS = Math.abs(a - south)
-    return Math.min(diffN, 2 * Math.PI - diffN) < halfWidth
-        || Math.min(diffS, 2 * Math.PI - diffS) < halfWidth
+    return Math.min(diffN, 2 * Math.PI - diffN) < northHalf
+        || Math.min(diffS, 2 * Math.PI - diffS) < southHalf
   }
 
   const trees = useMemo(() => {
@@ -471,11 +473,28 @@ function DungeonCliffs() {
       <Piece model={DECORATION.hills_B_trees} position={[20, 0, -60]} scale={6.0} />
       <Piece model={DECORATION.rock_D} position={[18, 0, -46]} scale={5.5} />
 
-      {/* ── Entrance narrows (south, Z≈-45) — boulders flanking the opening ── */}
+      {/* ── Approach cliffs (Z=-27 to Z=-45) — flanking the path from village to dungeon ── */}
+      {/* Left side — starts small, grows toward dungeon */}
+      <Piece model={DECORATION.rock_C} position={[-8, 0, -27]} scale={4.5} />
+      <Piece model={DECORATION.rock_A} position={[-10, 0, -30]} scale={5.0} />
+      <Piece model={DECORATION.hill_A} position={[-11, 0, -34]} scale={5.0} />
+      <Piece model={DECORATION.rock_E} position={[-9, 0, -37]} scale={5.5} />
+      <Piece model={DECORATION.hill_C} position={[-12, 0, -40]} scale={5.5} />
+      <Piece model={DECORATION.rock_A} position={[-13, 0, -43]} scale={6.0} />
+      <Piece model={DECORATION.hill_C} position={[-16, 0, -46]} scale={5.5} />
+
+      {/* Right side — mirrors left */}
+      <Piece model={DECORATION.rock_D} position={[8, 0, -27]} scale={4.5} />
+      <Piece model={DECORATION.rock_B} position={[10, 0, -30]} scale={5.0} />
+      <Piece model={DECORATION.hill_B} position={[11, 0, -34]} scale={5.0} />
+      <Piece model={DECORATION.rock_C} position={[9, 0, -37]} scale={5.5} />
+      <Piece model={DECORATION.hill_A} position={[12, 0, -40]} scale={5.5} />
+      <Piece model={DECORATION.rock_B} position={[13, 0, -43]} scale={6.0} />
+      <Piece model={DECORATION.hill_B} position={[16, 0, -46]} scale={5.5} />
+
+      {/* Entrance narrows — boulders where approach meets the bowl */}
       <Piece model={DECORATION.rock_A} position={[-12, 0, -45]} scale={6.5} />
       <Piece model={DECORATION.rock_B} position={[12, 0, -45]} scale={6.5} />
-      <Piece model={DECORATION.hill_C} position={[-16, 0, -46]} scale={5.5} />
-      <Piece model={DECORATION.hill_B} position={[16, 0, -46]} scale={5.5} />
 
       {/* ── Trees on cliff tops for silhouette ── */}
       <Piece model={DECORATION.tree_A} position={[-22, 0, -66]} scale={7.0} />

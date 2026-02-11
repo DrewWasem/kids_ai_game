@@ -16,7 +16,7 @@ import { Character3D, type Character3DHandle } from './Character3D'
 
 const WALK_SPEED = 8
 const RUN_SPEED = 14
-const BOUNDS = { minX: -40, maxX: 40, minZ: -45, maxZ: 45 }
+const BOUNDS = { minX: -40, maxX: 40, minZ: -65, maxZ: 45 }
 
 interface PlayerCharacterProps {
   enabled: boolean
