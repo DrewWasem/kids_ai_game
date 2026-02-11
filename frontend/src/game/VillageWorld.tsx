@@ -5,9 +5,9 @@
  * visible. Zones are areas within it hosting different quests.
  *
  * Layout (top-down, Z axis):
- *   North (Z=-16): Dungeon Zone (skeleton-birthday)
+ *   North (Z=-35): Dungeon Zone (skeleton-birthday)
  *   Center (Z=0):  Village Center (tavern, market, well, etc.)
- *   South (Z=+16): Park Zone (adventurers-picnic)
+ *   South (Z=+35): Park Zone (adventurers-picnic)
  *   Roads connect all three areas.
  *
  * Uses KayKit Medieval Hexagon Pack for terrain + buildings,
@@ -225,7 +225,7 @@ function HexTerrain() {
     // Road tiles — 3 columns wide (col -1, 0, +1) for a visible road
     const roadCols = new Set([-1, 0, 1])
     const roadRows = new Set<string>()
-    for (let row = -10; row <= 10; row++) {
+    for (let row = -24; row <= 24; row++) {
       for (const col of roadCols) {
         roadRows.add(`${col},${row}`)
         const pos = hexToWorld(col, row)
@@ -235,9 +235,9 @@ function HexTerrain() {
       }
     }
 
-    // Wide grass area — col -14 to +14 for the larger-scale buildings
-    for (let col = -14; col <= 14; col++) {
-      for (let row = -16; row <= 16; row++) {
+    // Wide grass area — col -30 to +30 for the 7x-scale buildings
+    for (let col = -30; col <= 30; col++) {
+      for (let row = -30; row <= 30; row++) {
         if (roadRows.has(`${col},${row}`)) continue // Road already placed
         const pos = hexToWorld(col, row)
         result.push({ model: TILES.grass, position: pos })
@@ -261,59 +261,66 @@ function HexTerrain() {
 // ============================================================================
 
 function VillageCenter() {
-  // Scale 3.0 = buildings 3-5x character height (measured: char=2.61, townhall native=2.08 → 6.24 = 2.4x char)
-  const s = 3.0
+  // Scale 7.0 = buildings at real-world proportions vs character (2.61u tall)
+  // Townhall: 14.6u (5.6x char), Home_A: 5.9u (2.3x char), Stables: 4.3u (1.6x char)
+  const s = 7.0
   // Decoration props need same scale to match buildings (hex props are strategy-game scale)
-  const d = 3.0
+  const d = 7.0
   return (
     <group name="village-center" position={[0, 0, 0]}>
       {/* Town hall — center-right, biggest building and focal point */}
-      <Piece model={BUILDINGS.townhall} position={[8, 0, -2]} rotation={[0, -Math.PI / 2, 0]} scale={s * 1.1} />
+      <Piece model={BUILDINGS.townhall} position={[18, 0, -5]} rotation={[0, -Math.PI / 2, 0]} scale={s * 1.1} />
 
       {/* Tavern — left of center */}
-      <Piece model={BUILDINGS.tavern} position={[-8, 0, -3]} rotation={[0, Math.PI / 4, 0]} scale={s} />
+      <Piece model={BUILDINGS.tavern} position={[-18, 0, -7]} rotation={[0, Math.PI / 4, 0]} scale={s} />
 
       {/* Market stall — right side, facing road */}
-      <Piece model={BUILDINGS.market} position={[6, 0, 4]} rotation={[0, -Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.market} position={[14, 0, 9]} rotation={[0, -Math.PI / 3, 0]} scale={s} />
 
       {/* Well — village square center */}
-      <Piece model={BUILDINGS.well} position={[-4, 0, 1]} scale={s} />
+      <Piece model={BUILDINGS.well} position={[-8, 0, 2]} scale={s} />
 
       {/* Blacksmith — left side */}
-      <Piece model={BUILDINGS.blacksmith} position={[-10, 0, 3]} rotation={[0, Math.PI / 2, 0]} scale={s} />
+      <Piece model={BUILDINGS.blacksmith} position={[-24, 0, 7]} rotation={[0, Math.PI / 2, 0]} scale={s} />
 
       {/* Homes — spread around the village */}
-      <Piece model={BUILDINGS.home_A} position={[10, 0, -5]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_B} position={[-10, 0, -4]} rotation={[0, Math.PI / 3, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_A} position={[-12, 0, 6]} rotation={[0, Math.PI / 6, 0]} scale={s * 0.9} />
-      <Piece model={BUILDINGS.home_B} position={[12, 0, 5]} rotation={[0, -Math.PI / 6, 0]} scale={s * 0.9} />
+      <Piece model={BUILDINGS.home_A} position={[24, 0, -12]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_B} position={[-24, 0, -10]} rotation={[0, Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_A} position={[-28, 0, 14]} rotation={[0, Math.PI / 6, 0]} scale={s * 0.9} />
+      <Piece model={BUILDINGS.home_B} position={[28, 0, 12]} rotation={[0, -Math.PI / 6, 0]} scale={s * 0.9} />
 
       {/* Church — right side, tall spire visible from afar */}
-      <Piece model={BUILDINGS.church} position={[12, 0, 1]} rotation={[0, -Math.PI / 2, 0]} scale={s * 1.1} />
+      <Piece model={BUILDINGS.church} position={[28, 0, 2]} rotation={[0, -Math.PI / 2, 0]} scale={s * 1.1} />
 
       {/* Windmill — left, tall and distinctive */}
-      <Piece model={BUILDINGS.windmill} position={[-13, 0, 0]} rotation={[0, Math.PI / 6, 0]} scale={s * 1.1} />
+      <Piece model={BUILDINGS.windmill} position={[-30, 0, 0]} rotation={[0, Math.PI / 6, 0]} scale={s * 1.1} />
 
       {/* Stables — near the road */}
-      <Piece model={BUILDINGS.stables} position={[5, 0, -5]} rotation={[0, 0, 0]} scale={s} />
+      <Piece model={BUILDINGS.stables} position={[10, 0, -12]} rotation={[0, 0, 0]} scale={s} />
+
+      {/* Watchtower — far right, guards the village */}
+      <Piece model={BUILDINGS.watchtower} position={[32, 0, -8]} rotation={[0, -Math.PI / 4, 0]} scale={s} />
+
+      {/* Stage — near the center for performances */}
+      <Piece model={BUILDINGS.stage_A} position={[-6, 0, -10]} scale={s * 0.8} />
 
       {/* Decoration props at matching scale */}
-      <Piece model={DECORATION.barrel} position={[-5, 0, -1]} scale={d} />
-      <Piece model={DECORATION.crate_A} position={[4, 0, 1]} scale={d} />
-      <Piece model={DECORATION.haybale} position={[-5, 0, 5]} scale={d} />
-      <Piece model={DECORATION.wheelbarrow} position={[3, 0, -3]} scale={d} />
-      <Piece model={DECORATION.sack} position={[-4, 0, 3]} scale={d} />
-      <Piece model={DECORATION.bucket_water} position={[-3, 0, 0.5]} scale={d} />
-      <Piece model={DECORATION.trough} position={[3, 0, 2.5]} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={[1, 0, -5]} scale={d} />
+      <Piece model={DECORATION.barrel} position={[-12, 0, -2]} scale={d} />
+      <Piece model={DECORATION.crate_A} position={[8, 0, 2]} scale={d} />
+      <Piece model={DECORATION.haybale} position={[-12, 0, 12]} scale={d} />
+      <Piece model={DECORATION.wheelbarrow} position={[6, 0, -7]} scale={d} />
+      <Piece model={DECORATION.sack} position={[-9, 0, 7]} scale={d} />
+      <Piece model={DECORATION.bucket_water} position={[-6, 0, 1]} scale={d} />
+      <Piece model={DECORATION.trough} position={[6, 0, 6]} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={[2, 0, -12]} scale={d} />
 
       {/* Trees around the village edges — also scaled up */}
-      <Piece model={DECORATION.tree_A} position={[-14, 0, -1]} scale={d} />
-      <Piece model={DECORATION.tree_B} position={[14, 0, -1]} scale={d} />
-      <Piece model={DECORATION.trees_small} position={[-13, 0, 5]} scale={d * 0.8} />
-      <Piece model={DECORATION.trees_small} position={[13, 0, -4]} scale={d * 0.8} />
-      <Piece model={DECORATION.tree_A} position={[-5, 0, -6]} scale={d * 0.9} />
-      <Piece model={DECORATION.tree_B} position={[9, 0, 6.5]} scale={d * 0.9} />
+      <Piece model={DECORATION.tree_A} position={[-32, 0, -2]} scale={d} />
+      <Piece model={DECORATION.tree_B} position={[32, 0, -2]} scale={d} />
+      <Piece model={DECORATION.trees_small} position={[-30, 0, 12]} scale={d * 0.8} />
+      <Piece model={DECORATION.trees_small} position={[30, 0, -10]} scale={d * 0.8} />
+      <Piece model={DECORATION.tree_A} position={[-12, 0, -14]} scale={d * 0.9} />
+      <Piece model={DECORATION.tree_B} position={[20, 0, 15]} scale={d * 0.9} />
     </group>
   )
 }
@@ -323,44 +330,44 @@ function VillageCenter() {
 // ============================================================================
 
 function VillagePerimeter() {
-  // Perimeter elements pushed further out for the larger-scale village
+  // Perimeter pushed far out for the 7x-scale village (~65u wide)
   return (
     <group name="village-perimeter">
       {/* Mountains — large backdrop ring */}
-      <Piece model={DECORATION.mountain_A} position={[-24, 0, -24]} scale={4.0} />
-      <Piece model={DECORATION.mountain_B} position={[24, 0, -26]} scale={3.5} />
-      <Piece model={DECORATION.mountain_A} position={[-24, 0, 14]} scale={3.0} />
-      <Piece model={DECORATION.mountain_B} position={[24, 0, 18]} scale={3.5} />
-      <Piece model={DECORATION.mountain_A} position={[0, 0, -34]} scale={4.5} />
-      <Piece model={DECORATION.mountain_B} position={[-14, 0, -30]} scale={3.0} />
-      <Piece model={DECORATION.mountain_A} position={[14, 0, -30]} scale={3.5} />
-      <Piece model={DECORATION.mountain_B} position={[-22, 0, 30]} scale={3.0} />
-      <Piece model={DECORATION.mountain_A} position={[22, 0, 32]} scale={3.5} />
-      <Piece model={DECORATION.mountain_B} position={[0, 0, 36]} scale={4.0} />
+      <Piece model={DECORATION.mountain_A} position={[-55, 0, -55]} scale={9.0} />
+      <Piece model={DECORATION.mountain_B} position={[55, 0, -60]} scale={8.0} />
+      <Piece model={DECORATION.mountain_A} position={[-55, 0, 30]} scale={7.0} />
+      <Piece model={DECORATION.mountain_B} position={[55, 0, 40]} scale={8.0} />
+      <Piece model={DECORATION.mountain_A} position={[0, 0, -70]} scale={10.0} />
+      <Piece model={DECORATION.mountain_B} position={[-32, 0, -65]} scale={7.0} />
+      <Piece model={DECORATION.mountain_A} position={[32, 0, -65]} scale={8.0} />
+      <Piece model={DECORATION.mountain_B} position={[-50, 0, 65]} scale={7.0} />
+      <Piece model={DECORATION.mountain_A} position={[50, 0, 70]} scale={8.0} />
+      <Piece model={DECORATION.mountain_B} position={[0, 0, 75]} scale={9.0} />
 
       {/* Hills — medium distance ring */}
-      <Piece model={DECORATION.hills_trees} position={[-16, 0, -12]} scale={2.5} />
-      <Piece model={DECORATION.hills_trees} position={[16, 0, 10]} scale={2.5} />
-      <Piece model={DECORATION.hill_A} position={[-16, 0, 20]} scale={2.0} />
-      <Piece model={DECORATION.hill_B} position={[16, 0, -14]} scale={2.0} />
-      <Piece model={DECORATION.hills_trees} position={[-18, 0, 2]} scale={2.5} />
-      <Piece model={DECORATION.hill_A} position={[18, 0, -2]} scale={2.0} />
+      <Piece model={DECORATION.hills_trees} position={[-38, 0, -28]} scale={6.0} />
+      <Piece model={DECORATION.hills_trees} position={[38, 0, 22]} scale={6.0} />
+      <Piece model={DECORATION.hill_A} position={[-38, 0, 45]} scale={5.0} />
+      <Piece model={DECORATION.hill_B} position={[38, 0, -32]} scale={5.0} />
+      <Piece model={DECORATION.hills_trees} position={[-42, 0, 5]} scale={6.0} />
+      <Piece model={DECORATION.hill_A} position={[42, 0, -5]} scale={5.0} />
 
-      {/* Dense tree clusters along the edges — scaled up */}
-      <Piece model={DECORATION.trees_large} position={[-15, 0, -16]} scale={2.5} />
-      <Piece model={DECORATION.trees_medium} position={[15, 0, 20]} scale={2.5} />
-      <Piece model={DECORATION.trees_B_large} position={[-15, 0, 8]} scale={2.5} />
-      <Piece model={DECORATION.trees_medium} position={[15, 0, -8]} scale={2.5} />
-      <Piece model={DECORATION.trees_large} position={[-17, 0, -4]} scale={2.5} />
-      <Piece model={DECORATION.trees_B_large} position={[17, 0, 4]} scale={2.5} />
-      <Piece model={DECORATION.trees_large} position={[-14, 0, 24]} scale={2.0} />
-      <Piece model={DECORATION.trees_B_large} position={[14, 0, -20]} scale={2.0} />
+      {/* Dense tree clusters along the edges */}
+      <Piece model={DECORATION.trees_large} position={[-35, 0, -36]} scale={6.0} />
+      <Piece model={DECORATION.trees_medium} position={[35, 0, 45]} scale={6.0} />
+      <Piece model={DECORATION.trees_B_large} position={[-35, 0, 18]} scale={6.0} />
+      <Piece model={DECORATION.trees_medium} position={[35, 0, -18]} scale={6.0} />
+      <Piece model={DECORATION.trees_large} position={[-40, 0, -10]} scale={6.0} />
+      <Piece model={DECORATION.trees_B_large} position={[40, 0, 10]} scale={6.0} />
+      <Piece model={DECORATION.trees_large} position={[-32, 0, 55]} scale={5.0} />
+      <Piece model={DECORATION.trees_B_large} position={[32, 0, -48]} scale={5.0} />
 
       {/* Rocks scattered around edges */}
-      <Piece model={DECORATION.rock_A} position={[-12, 0, -14]} scale={3.0} />
-      <Piece model={DECORATION.rock_B} position={[12, 0, 14]} scale={3.0} />
-      <Piece model={DECORATION.rock_A} position={[-14, 0, 26]} scale={2.5} />
-      <Piece model={DECORATION.rock_B} position={[14, 0, -22]} scale={2.5} />
+      <Piece model={DECORATION.rock_A} position={[-28, 0, -32]} scale={7.0} />
+      <Piece model={DECORATION.rock_B} position={[28, 0, 32]} scale={7.0} />
+      <Piece model={DECORATION.rock_A} position={[-32, 0, 58]} scale={6.0} />
+      <Piece model={DECORATION.rock_B} position={[32, 0, -50]} scale={6.0} />
     </group>
   )
 }
@@ -426,11 +433,11 @@ function DungeonZone() {
       <pointLight color="#ff6600" intensity={3} distance={10} decay={2} position={[4, 3, -3]} />
       <pointLight color="#ff4400" intensity={2} distance={8} decay={2} position={[0, 2, -4]} />
 
-      {/* Approach decoration (hex props scaled up to match character world) */}
-      <Piece model={DECORATION.flag_red} position={[-5, 0, 3]} scale={3.0} />
-      <Piece model={DECORATION.flag_red} position={[5, 0, 3]} scale={3.0} />
-      <Piece model={DECORATION.weaponrack} position={[-3, 0, 2]} scale={3.0} />
-      <Piece model={DECORATION.target} position={[3, 0, 2]} scale={3.0} />
+      {/* Approach decoration (hex props scaled to match 7x village) */}
+      <Piece model={DECORATION.flag_red} position={[-5, 0, 3]} scale={7.0} />
+      <Piece model={DECORATION.flag_red} position={[5, 0, 3]} scale={7.0} />
+      <Piece model={DECORATION.weaponrack} position={[-3, 0, 2]} scale={7.0} />
+      <Piece model={DECORATION.target} position={[3, 0, 2]} scale={7.0} />
     </group>
   )
 }
@@ -475,13 +482,13 @@ function ParkZone() {
       <Piece model="tiny-treats/pretty-park/hedge_straight_long.gltf" position={[-6, 0, 3]} rotation={[0, Math.PI / 2, 0]} />
       <Piece model="tiny-treats/pretty-park/hedge_straight_long.gltf" position={[6, 0, 3]} rotation={[0, -Math.PI / 2, 0]} />
 
-      {/* Stone fence entrance (hex pack — scale 2.0 to match character proportions) */}
-      <Piece model={BUILDINGS.fence_stone} position={[-5, 0, -6]} scale={2.0} />
-      <Piece model={BUILDINGS.fence_stone} position={[-3, 0, -6]} scale={2.0} />
-      <Piece model={BUILDINGS.fence_stone_gate} position={[-1, 0, -6]} scale={2.0} />
-      <Piece model={BUILDINGS.fence_stone_gate} position={[1, 0, -6]} scale={2.0} />
-      <Piece model={BUILDINGS.fence_stone} position={[3, 0, -6]} scale={2.0} />
-      <Piece model={BUILDINGS.fence_stone} position={[5, 0, -6]} scale={2.0} />
+      {/* Stone fence entrance (hex pack — scale 4.5 for 7x village proportions) */}
+      <Piece model={BUILDINGS.fence_stone} position={[-5, 0, -6]} scale={4.5} />
+      <Piece model={BUILDINGS.fence_stone} position={[-3, 0, -6]} scale={4.5} />
+      <Piece model={BUILDINGS.fence_stone_gate} position={[-1, 0, -6]} scale={4.5} />
+      <Piece model={BUILDINGS.fence_stone_gate} position={[1, 0, -6]} scale={4.5} />
+      <Piece model={BUILDINGS.fence_stone} position={[3, 0, -6]} scale={4.5} />
+      <Piece model={BUILDINGS.fence_stone} position={[5, 0, -6]} scale={4.5} />
     </group>
   )
 }
@@ -491,26 +498,26 @@ function ParkZone() {
 // ============================================================================
 
 function RoadDecoration() {
-  const d = 3.0 // Scale hex decoration to match building scale
+  const d = 7.0 // Scale hex decoration to match 7x building scale
   return (
     <group name="road-decoration">
-      {/* Signposts along the road */}
-      <Piece model={DECORATION.flag_blue} position={[3, 0, -6]} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={[3, 0, -12]} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={[3, 0, 6]} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={[3, 0, 12]} scale={d} />
+      {/* Signposts along the road — spread further for expanded village */}
+      <Piece model={DECORATION.flag_blue} position={[5, 0, -14]} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={[5, 0, -26]} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={[5, 0, 14]} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={[5, 0, 26]} scale={d} />
 
       {/* Props along the road */}
-      <Piece model={DECORATION.barrel} position={[-3, 0, -8]} scale={d} />
-      <Piece model={DECORATION.crate_B} position={[-3, 0, 8]} scale={d} />
-      <Piece model={DECORATION.haybale} position={[3, 0, -4]} scale={d} />
-      <Piece model={DECORATION.trough} position={[-3, 0, 4]} scale={d} />
+      <Piece model={DECORATION.barrel} position={[-5, 0, -18]} scale={d} />
+      <Piece model={DECORATION.crate_B} position={[-5, 0, 18]} scale={d} />
+      <Piece model={DECORATION.haybale} position={[5, 0, -8]} scale={d} />
+      <Piece model={DECORATION.trough} position={[-5, 0, 8]} scale={d} />
 
       {/* Trees along the road */}
-      <Piece model={DECORATION.tree_A} position={[-5, 0, -8]} scale={d} />
-      <Piece model={DECORATION.tree_B} position={[5, 0, -10]} scale={d} />
-      <Piece model={DECORATION.tree_A} position={[-5, 0, 8]} scale={d} />
-      <Piece model={DECORATION.tree_B} position={[5, 0, 10]} scale={d} />
+      <Piece model={DECORATION.tree_A} position={[-8, 0, -18]} scale={d} />
+      <Piece model={DECORATION.tree_B} position={[8, 0, -22]} scale={d} />
+      <Piece model={DECORATION.tree_A} position={[-8, 0, 18]} scale={d} />
+      <Piece model={DECORATION.tree_B} position={[8, 0, 22]} scale={d} />
     </group>
   )
 }
@@ -530,8 +537,8 @@ function VillageAtmosphere() {
         rayleigh={1.5}
       />
 
-      {/* Global fog — soft edges, pushes far for the larger village */}
-      <fog attach="fog" args={['#b8d8e8', 40, 180]} />
+      {/* Global fog — soft edges, pushed far for the 7x-scale village */}
+      <fog attach="fog" args={['#b8d8e8', 80, 350]} />
 
       {/* Hemisphere light — warm village afternoon */}
       <hemisphereLight
@@ -548,11 +555,11 @@ function VillageAtmosphere() {
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-camera-left={-50}
-        shadow-camera-right={50}
-        shadow-camera-top={50}
-        shadow-camera-bottom={-50}
-        shadow-camera-far={120}
+        shadow-camera-left={-100}
+        shadow-camera-right={100}
+        shadow-camera-top={100}
+        shadow-camera-bottom={-100}
+        shadow-camera-far={250}
       />
 
       {/* Fill light from opposite side */}
@@ -571,7 +578,7 @@ function VillageAtmosphere() {
           color="#ffffff"
           opacity={0.4}
           speed={0.15}
-          position={[-8, 14, -25] as [number, number, number]}
+          position={[-15, 30, -50] as [number, number, number]}
         />
         <Cloud
           segments={15}
@@ -580,7 +587,7 @@ function VillageAtmosphere() {
           color="#ffffff"
           opacity={0.35}
           speed={0.1}
-          position={[10, 16, -20] as [number, number, number]}
+          position={[20, 35, -40] as [number, number, number]}
         />
       </Clouds>
     </>
@@ -627,16 +634,16 @@ export function VillageWorld() {
         <ParkZone />
       </Suspense>
 
-      {/* Zone markers (clickable portals) */}
+      {/* Zone markers (clickable portals) — further apart for expanded village */}
       <ZoneMarker
         zoneId="skeleton-birthday"
-        position={[0, 0, -8]}
+        position={[0, 0, -18]}
         label="Dungeon"
         emoji="💀"
       />
       <ZoneMarker
         zoneId="adventurers-picnic"
-        position={[0, 0, 8]}
+        position={[0, 0, 18]}
         label="The Park"
         emoji="🧺"
       />

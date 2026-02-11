@@ -14,15 +14,15 @@ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import * as THREE from 'three'
 import { useGameStore } from '../stores/gameStore'
 
-// Camera offsets: village overview shows the whole village, zones zoom in
-const VILLAGE_CAMERA_OFFSET = new THREE.Vector3(0, 18, 28)
-const ZONE_CAMERA_OFFSET = new THREE.Vector3(0, 9, 14)
+// Camera offsets: village overview shows the whole 7x-scale village, zones zoom in
+const VILLAGE_CAMERA_OFFSET = new THREE.Vector3(0, 40, 60)
+const ZONE_CAMERA_OFFSET = new THREE.Vector3(0, 18, 28)
 
 // Orbit settings
 const MIN_POLAR_ANGLE = 0.3
 const MAX_POLAR_ANGLE = 1.2
-const MIN_DISTANCE = 8
-const MAX_DISTANCE = 50
+const MIN_DISTANCE = 12
+const MAX_DISTANCE = 120
 
 // Ease-out cubic for smooth deceleration
 function easeOutCubic(t: number): number {
@@ -104,9 +104,9 @@ export function VillageCamera() {
         ref={cameraRef}
         makeDefault
         fov={45}
-        position={[0, 18, 28]}
+        position={[0, 40, 60]}
         near={0.1}
-        far={200}
+        far={500}
       />
       <OrbitControls
         ref={controlsRef}

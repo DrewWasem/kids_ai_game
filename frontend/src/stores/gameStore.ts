@@ -71,10 +71,10 @@ const SYSTEM_PROMPTS: Record<string, string> = {
   'octopus-band': OCTOPUS_BAND_PROMPT,
 };
 
-// Zone center positions in world space
+// Zone center positions in world space (expanded for 7x building scale)
 export const ZONE_CENTERS: Record<string, [number, number, number]> = {
-  'skeleton-birthday': [0, 0, -16],
-  'adventurers-picnic': [0, 0, 16],
+  'skeleton-birthday': [0, 0, -35],
+  'adventurers-picnic': [0, 0, 35],
 };
 
 // Village center camera position
