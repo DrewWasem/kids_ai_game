@@ -208,4 +208,15 @@ frontend/public/assets/raw-packs/
 # Temporary files
 tmp/
 temp/
+tmp_render/
 *.tmp
+
+# Source archives (already extracted)
+*.zip
+
+# Backup files
+*.backup
+
+# Dev test pages
+frontend/test-*.html
+frontend/src/test-*.tsx
