@@ -5,7 +5,7 @@
  * visible. Zones are areas within it hosting different quests.
  *
  * Layout (top-down, Z axis):
- *   North (Z=-35): Dungeon Zone (skeleton-birthday)
+ *   North (Z=-55): Dungeon Zone (skeleton-birthday)
  *   Center (Z=0):  Village Center (tavern, market, well, etc.)
  *   South (Z=+35): Park Zone (adventurers-picnic)
  *   Roads connect all three areas.
@@ -82,13 +82,22 @@ const DECORATION = {
   trees_medium: HEX + 'decoration/nature/trees_A_medium.gltf',
   trees_small: HEX + 'decoration/nature/trees_A_small.gltf',
   trees_B_large: HEX + 'decoration/nature/trees_B_large.gltf',
+  trees_B_medium: HEX + 'decoration/nature/trees_B_medium.gltf',
+  trees_B_small: HEX + 'decoration/nature/trees_B_small.gltf',
   mountain_A: HEX + 'decoration/nature/mountain_A_grass_trees.gltf',
   mountain_B: HEX + 'decoration/nature/mountain_B_grass.gltf',
+  mountain_C: HEX + 'decoration/nature/mountain_C_grass_trees.gltf',
   hill_A: HEX + 'decoration/nature/hill_single_A.gltf',
   hill_B: HEX + 'decoration/nature/hill_single_B.gltf',
+  hill_C: HEX + 'decoration/nature/hill_single_C.gltf',
   hills_trees: HEX + 'decoration/nature/hills_A_trees.gltf',
+  hills_B_trees: HEX + 'decoration/nature/hills_B_trees.gltf',
+  hills_C_trees: HEX + 'decoration/nature/hills_C_trees.gltf',
   rock_A: HEX + 'decoration/nature/rock_single_A.gltf',
   rock_B: HEX + 'decoration/nature/rock_single_B.gltf',
+  rock_C: HEX + 'decoration/nature/rock_single_C.gltf',
+  rock_D: HEX + 'decoration/nature/rock_single_D.gltf',
+  rock_E: HEX + 'decoration/nature/rock_single_E.gltf',
   // Props
   barrel: HEX + 'decoration/props/barrel.gltf',
   crate_A: HEX + 'decoration/props/crate_A_big.gltf',
@@ -223,9 +232,10 @@ function HexTerrain() {
     const result: { model: string; position: [number, number, number]; rotation?: [number, number, number] }[] = []
 
     // Road tiles — 3 columns wide (col -1, 0, +1) for a visible road
+    // Extended north to row -36 (Z≈-62) to reach the relocated dungeon
     const roadCols = new Set([-1, 0, 1])
     const roadRows = new Set<string>()
-    for (let row = -24; row <= 24; row++) {
+    for (let row = -36; row <= 24; row++) {
       for (const col of roadCols) {
         roadRows.add(`${col},${row}`)
         const pos = hexToWorld(col, row)
@@ -235,9 +245,9 @@ function HexTerrain() {
       }
     }
 
-    // Wide grass area — col -30 to +30 for the 7x-scale buildings
-    for (let col = -30; col <= 30; col++) {
-      for (let row = -30; row <= 30; row++) {
+    // Wide grass area — extended to cover perimeter forest + mountain ring
+    for (let col = -45; col <= 45; col++) {
+      for (let row = -55; row <= 50; row++) {
         if (roadRows.has(`${col},${row}`)) continue // Road already placed
         const pos = hexToWorld(col, row)
         result.push({ model: TILES.grass, position: pos })
@@ -331,43 +341,253 @@ function VillageCenter() {
 
 function VillagePerimeter() {
   // Perimeter pushed far out for the 7x-scale village (~65u wide)
+  // North mountains pushed to Z=-80+ to sit behind the dungeon cliff bowl
   return (
     <group name="village-perimeter">
       {/* Mountains — large backdrop ring */}
-      <Piece model={DECORATION.mountain_A} position={[-55, 0, -55]} scale={9.0} />
-      <Piece model={DECORATION.mountain_B} position={[55, 0, -60]} scale={8.0} />
+      {/* North backdrop — pushed behind dungeon cliff bowl */}
+      <Piece model={DECORATION.mountain_A} position={[0, 0, -85]} scale={10.0} />
+      <Piece model={DECORATION.mountain_B} position={[-35, 0, -82]} scale={8.0} />
+      <Piece model={DECORATION.mountain_A} position={[35, 0, -82]} scale={9.0} />
+      <Piece model={DECORATION.mountain_C} position={[-55, 0, -75]} rotation={[0, Math.PI / 5, 0]} scale={8.0} />
+      <Piece model={DECORATION.mountain_C} position={[55, 0, -75]} rotation={[0, -Math.PI / 5, 0]} scale={8.0} />
+      {/* East/west flanks */}
+      <Piece model={DECORATION.mountain_C} position={[65, 0, -20]} rotation={[0, Math.PI / 4, 0]} scale={8.0} />
+      <Piece model={DECORATION.mountain_C} position={[-65, 0, -20]} rotation={[0, -Math.PI / 3, 0]} scale={7.5} />
+      <Piece model={DECORATION.mountain_A} position={[65, 0, 10]} rotation={[0, Math.PI / 6, 0]} scale={8.5} />
+      <Piece model={DECORATION.mountain_B} position={[-65, 0, 10]} rotation={[0, -Math.PI / 5, 0]} scale={7.0} />
+      <Piece model={DECORATION.mountain_A} position={[-60, 0, -40]} rotation={[0, Math.PI / 5, 0]} scale={9.0} />
+      <Piece model={DECORATION.mountain_B} position={[60, 0, -40]} rotation={[0, -Math.PI / 6, 0]} scale={8.0} />
+      {/* South backdrop */}
       <Piece model={DECORATION.mountain_A} position={[-55, 0, 30]} scale={7.0} />
       <Piece model={DECORATION.mountain_B} position={[55, 0, 40]} scale={8.0} />
-      <Piece model={DECORATION.mountain_A} position={[0, 0, -70]} scale={10.0} />
-      <Piece model={DECORATION.mountain_B} position={[-32, 0, -65]} scale={7.0} />
-      <Piece model={DECORATION.mountain_A} position={[32, 0, -65]} scale={8.0} />
       <Piece model={DECORATION.mountain_B} position={[-50, 0, 65]} scale={7.0} />
       <Piece model={DECORATION.mountain_A} position={[50, 0, 70]} scale={8.0} />
       <Piece model={DECORATION.mountain_B} position={[0, 0, 75]} scale={9.0} />
+      <Piece model={DECORATION.mountain_C} position={[-40, 0, 72]} rotation={[0, Math.PI / 3, 0]} scale={8.0} />
 
-      {/* Hills — medium distance ring */}
-      <Piece model={DECORATION.hills_trees} position={[-38, 0, -28]} scale={6.0} />
+      {/* Hills — medium distance ring (avoiding canyon/bowl zone) */}
       <Piece model={DECORATION.hills_trees} position={[38, 0, 22]} scale={6.0} />
       <Piece model={DECORATION.hill_A} position={[-38, 0, 45]} scale={5.0} />
-      <Piece model={DECORATION.hill_B} position={[38, 0, -32]} scale={5.0} />
       <Piece model={DECORATION.hills_trees} position={[-42, 0, 5]} scale={6.0} />
       <Piece model={DECORATION.hill_A} position={[42, 0, -5]} scale={5.0} />
+      <Piece model={DECORATION.hill_C} position={[48, 0, 30]} scale={5.0} />
+      <Piece model={DECORATION.hills_B_trees} position={[-48, 0, 50]} scale={6.0} />
+      <Piece model={DECORATION.hill_B} position={[45, 0, 55]} scale={5.5} />
+      <Piece model={DECORATION.hill_A} position={[50, 0, -15]} scale={5.5} />
+      <Piece model={DECORATION.hills_trees} position={[-50, 0, -12]} scale={6.0} />
+      <Piece model={DECORATION.hills_B_trees} position={[25, 0, 58]} scale={5.5} />
 
-      {/* Dense tree clusters along the edges */}
-      <Piece model={DECORATION.trees_large} position={[-35, 0, -36]} scale={6.0} />
+      {/* Dense tree clusters along the edges (avoiding north canyon) */}
       <Piece model={DECORATION.trees_medium} position={[35, 0, 45]} scale={6.0} />
       <Piece model={DECORATION.trees_B_large} position={[-35, 0, 18]} scale={6.0} />
       <Piece model={DECORATION.trees_medium} position={[35, 0, -18]} scale={6.0} />
       <Piece model={DECORATION.trees_large} position={[-40, 0, -10]} scale={6.0} />
       <Piece model={DECORATION.trees_B_large} position={[40, 0, 10]} scale={6.0} />
       <Piece model={DECORATION.trees_large} position={[-32, 0, 55]} scale={5.0} />
-      <Piece model={DECORATION.trees_B_large} position={[32, 0, -48]} scale={5.0} />
 
-      {/* Rocks scattered around edges */}
-      <Piece model={DECORATION.rock_A} position={[-28, 0, -32]} scale={7.0} />
+      {/* Rocks scattered around edges (avoiding canyon/bowl overlap) */}
       <Piece model={DECORATION.rock_B} position={[28, 0, 32]} scale={7.0} />
       <Piece model={DECORATION.rock_A} position={[-32, 0, 58]} scale={6.0} />
-      <Piece model={DECORATION.rock_B} position={[32, 0, -50]} scale={6.0} />
+      <Piece model={DECORATION.rock_D} position={[-42, 0, 38]} scale={5.5} />
+      <Piece model={DECORATION.rock_D} position={[48, 0, 18]} scale={5.0} />
+      <Piece model={DECORATION.rock_E} position={[-48, 0, 20]} scale={5.5} />
+      <Piece model={DECORATION.rock_A} position={[15, 0, 60]} scale={6.0} />
+    </group>
+  )
+}
+
+// ============================================================================
+// IMPENETRABLE FOREST — Dense tree ring hiding the world edge
+// ============================================================================
+
+function ImpenetrableForest() {
+  // Tree models to mix for visual variety
+  const treeModels = [
+    DECORATION.tree_A,
+    DECORATION.tree_B,
+    DECORATION.trees_large,
+    DECORATION.trees_medium,
+    DECORATION.trees_small,
+    DECORATION.trees_B_large,
+    DECORATION.trees_B_medium,
+    DECORATION.trees_B_small,
+  ]
+
+  // Deterministic pseudo-random from index (avoids Math.random for consistency)
+  const pick = (i: number, arr: string[]) => arr[i % arr.length]
+  const rot = (i: number) => ((i * 137.5) % 360) * (Math.PI / 180) // golden angle
+
+  // Skip trees in north/south road corridors (~30° wide gaps)
+  const isInCorridor = (angle: number): boolean => {
+    const north = 3 * Math.PI / 2  // 270° = negative Z direction
+    const south = Math.PI / 2       // 90° = positive Z direction
+    const halfWidth = 0.26           // ~15° each side → ~30° corridor
+    const normalize = (a: number) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
+    const a = normalize(angle)
+    const diffN = Math.abs(a - north)
+    const diffS = Math.abs(a - south)
+    return Math.min(diffN, 2 * Math.PI - diffN) < halfWidth
+        || Math.min(diffS, 2 * Math.PI - diffS) < halfWidth
+  }
+
+  const trees = useMemo(() => {
+    const result: { model: string; position: [number, number, number]; rotation: [number, number, number]; scale: number }[] = []
+
+    // === Inner ring (R=38-42): Pulled back from village buildings (outermost at R=33) ===
+    const innerAngles = 14
+    for (let i = 0; i < innerAngles; i++) {
+      const angle = (i / innerAngles) * Math.PI * 2 + 0.2
+      if (isInCorridor(angle)) continue
+      const r = 38 + (i % 3) * 2.0
+      const x = Math.cos(angle) * r
+      const z = Math.sin(angle) * r
+      result.push({
+        model: pick(i, [DECORATION.trees_large, DECORATION.trees_B_large, DECORATION.trees_medium, DECORATION.tree_A]),
+        position: [x, 0, z],
+        rotation: [0, rot(i), 0],
+        scale: 7.0 + (i % 3) * 0.5,
+      })
+    }
+
+    // === Middle ring (R=38-48): Dense forest wall — the main barrier ===
+    const midAngles = 20
+    for (let i = 0; i < midAngles; i++) {
+      const angle = (i / midAngles) * Math.PI * 2
+      if (isInCorridor(angle)) continue
+      const r = 38 + (i % 4) * 3
+      const x = Math.cos(angle) * r
+      const z = Math.sin(angle) * r
+      result.push({
+        model: pick(i + 3, treeModels),
+        position: [x, 0, z],
+        rotation: [0, rot(i + 50), 0],
+        scale: 7.5 + (i % 4) * 0.5,
+      })
+      // Double up every other position for density
+      if (i % 2 === 0) {
+        const offset = 2.5 + (i % 3)
+        result.push({
+          model: pick(i + 7, treeModels),
+          position: [x + offset, 0, z + offset],
+          rotation: [0, rot(i + 100), 0],
+          scale: 7.0 + (i % 3) * 0.8,
+        })
+      }
+    }
+
+    // === Outer ring (R=50-62): Sparse large trees behind mountains ===
+    const outerAngles = 16
+    for (let i = 0; i < outerAngles; i++) {
+      const angle = (i / outerAngles) * Math.PI * 2 + 0.3
+      if (isInCorridor(angle)) continue
+      const r = 52 + (i % 3) * 4
+      const x = Math.cos(angle) * r
+      const z = Math.sin(angle) * r
+      result.push({
+        model: pick(i + 5, [DECORATION.trees_large, DECORATION.trees_B_large, DECORATION.tree_A, DECORATION.tree_B]),
+        position: [x, 0, z],
+        rotation: [0, rot(i + 200), 0],
+        scale: 8.5 + (i % 3) * 1.0,
+      })
+    }
+
+    return result
+  }, [])
+
+  return (
+    <group name="impenetrable-forest">
+      {trees.map((t, i) => (
+        <Piece key={`forest-${i}`} model={t.model} position={t.position} rotation={t.rotation} scale={t.scale} />
+      ))}
+    </group>
+  )
+}
+
+// ============================================================================
+// CANYON PASS — Walled path + natural cliffs leading to the dungeon (Z=-16 to Z=-48)
+// ============================================================================
+
+function CanyonPass() {
+  const ws = 5.5 // wall scale (hex walls at 7x village scale, slightly smaller for path width)
+  return (
+    <group name="canyon-pass">
+      {/* ── Gate entrance (Z=-15) — stone walls with gate opening ── */}
+      <Piece model={BUILDINGS.wall_gate} position={[-3, 0, -15]} scale={ws} />
+      <Piece model={BUILDINGS.wall_gate} position={[3, 0, -15]} scale={ws} />
+      <Piece model={DECORATION.rock_E} position={[-7, 0, -15]} scale={5.0} />
+      <Piece model={DECORATION.rock_B} position={[7, 0, -15]} scale={5.0} />
+
+      {/* ── Stone wall corridor (Z=-15 to Z=-26) — civilized approach ── */}
+      {/* Left wall */}
+      <Piece model={BUILDINGS.wall_straight} position={[-5, 0, -18]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+      <Piece model={BUILDINGS.wall_straight} position={[-5, 0, -21]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+      <Piece model={BUILDINGS.wall_straight} position={[-5, 0, -24]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+      {/* Right wall */}
+      <Piece model={BUILDINGS.wall_straight} position={[5, 0, -18]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+      <Piece model={BUILDINGS.wall_straight} position={[5, 0, -21]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+      <Piece model={BUILDINGS.wall_straight} position={[5, 0, -24]} rotation={[0, Math.PI / 2, 0]} scale={ws} />
+
+      {/* ── Transition zone (Z=-26 to Z=-32) — walls crumble, cliffs begin ── */}
+      <Piece model={BUILDINGS.wall_straight} position={[-6, 0, -27]} rotation={[0, Math.PI / 2, 0]} scale={ws * 0.9} />
+      <Piece model={DECORATION.rock_A} position={[-8, 0, -27]} scale={5.0} />
+      <Piece model={BUILDINGS.wall_straight} position={[6, 0, -27]} rotation={[0, Math.PI / 2, 0]} scale={ws * 0.9} />
+      <Piece model={DECORATION.rock_B} position={[8, 0, -27]} scale={5.0} />
+      <Piece model={DECORATION.rock_C} position={[-7, 0, -30]} scale={6.0} />
+      <Piece model={DECORATION.rock_D} position={[7, 0, -30]} scale={6.0} />
+
+      {/* ── Natural cliff corridor (Z=-32 to Z=-48) — raw rock and mountains ── */}
+      {/* Left cliff wall */}
+      <Piece model={DECORATION.mountain_A} position={[-12, 0, -34]} scale={5.5} />
+      <Piece model={DECORATION.hill_A} position={[-10, 0, -38]} scale={5.0} />
+      <Piece model={DECORATION.rock_A} position={[-9, 0, -42]} scale={6.0} />
+      <Piece model={DECORATION.mountain_C} position={[-13, 0, -46]} scale={5.0} />
+      <Piece model={DECORATION.tree_A} position={[-14, 0, -36]} scale={7.0} />
+      <Piece model={DECORATION.tree_A} position={[-15, 0, -44]} scale={6.5} />
+
+      {/* Right cliff wall */}
+      <Piece model={DECORATION.mountain_B} position={[12, 0, -34]} scale={5.5} />
+      <Piece model={DECORATION.hill_B} position={[10, 0, -38]} scale={5.0} />
+      <Piece model={DECORATION.rock_B} position={[9, 0, -42]} scale={6.0} />
+      <Piece model={DECORATION.mountain_C} position={[13, 0, -46]} rotation={[0, Math.PI, 0]} scale={5.0} />
+      <Piece model={DECORATION.tree_B} position={[14, 0, -36]} scale={7.0} />
+      <Piece model={DECORATION.tree_B} position={[15, 0, -44]} scale={6.5} />
+
+      {/* ── Cliff bowl enclosure around dungeon (Z=-48 to Z=-65) ── */}
+      {/* Blocks access from all sides except the canyon path from the south */}
+
+      {/* Back wall (north, behind dungeon) */}
+      <Piece model={DECORATION.mountain_A} position={[0, 0, -68]} scale={8.0} />
+      <Piece model={DECORATION.mountain_B} position={[-15, 0, -66]} scale={7.0} />
+      <Piece model={DECORATION.mountain_C} position={[15, 0, -66]} scale={7.0} />
+      <Piece model={DECORATION.hill_C} position={[-8, 0, -65]} scale={6.0} />
+      <Piece model={DECORATION.hill_A} position={[8, 0, -65]} scale={6.0} />
+
+      {/* Left arc (northwest) */}
+      <Piece model={DECORATION.mountain_A} position={[-22, 0, -62]} rotation={[0, Math.PI / 4, 0]} scale={7.0} />
+      <Piece model={DECORATION.mountain_C} position={[-26, 0, -56]} rotation={[0, Math.PI / 3, 0]} scale={6.5} />
+      <Piece model={DECORATION.hill_B} position={[-24, 0, -50]} scale={5.5} />
+      <Piece model={DECORATION.rock_C} position={[-20, 0, -48]} scale={6.0} />
+      <Piece model={DECORATION.hills_trees} position={[-18, 0, -58]} scale={5.5} />
+
+      {/* Right arc (northeast) */}
+      <Piece model={DECORATION.mountain_B} position={[22, 0, -62]} rotation={[0, -Math.PI / 4, 0]} scale={7.0} />
+      <Piece model={DECORATION.mountain_C} position={[26, 0, -56]} rotation={[0, -Math.PI / 3, 0]} scale={6.5} />
+      <Piece model={DECORATION.hill_A} position={[24, 0, -50]} scale={5.5} />
+      <Piece model={DECORATION.rock_D} position={[20, 0, -48]} scale={6.0} />
+      <Piece model={DECORATION.hills_B_trees} position={[18, 0, -58]} scale={5.5} />
+
+      {/* Fill gaps — connect canyon walls to bowl edges */}
+      <Piece model={DECORATION.hill_C} position={[-16, 0, -48]} scale={5.0} />
+      <Piece model={DECORATION.rock_E} position={[-14, 0, -50]} scale={5.5} />
+      <Piece model={DECORATION.hill_B} position={[16, 0, -48]} scale={5.0} />
+      <Piece model={DECORATION.rock_A} position={[14, 0, -50]} scale={5.5} />
+
+      {/* Trees on cliff tops for silhouette */}
+      <Piece model={DECORATION.tree_A} position={[-20, 0, -64]} scale={7.0} />
+      <Piece model={DECORATION.tree_B} position={[20, 0, -64]} scale={7.0} />
+      <Piece model={DECORATION.tree_A} position={[-28, 0, -54]} scale={6.5} />
+      <Piece model={DECORATION.tree_B} position={[28, 0, -54]} scale={6.5} />
     </group>
   )
 }
@@ -501,23 +721,24 @@ function RoadDecoration() {
   const d = 7.0 // Scale hex decoration to match 7x building scale
   return (
     <group name="road-decoration">
-      {/* Signposts along the road — spread further for expanded village */}
-      <Piece model={DECORATION.flag_blue} position={[5, 0, -14]} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={[5, 0, -26]} scale={d} />
+      {/* Signposts along the road — village section only (canyon has its own walls) */}
+      <Piece model={DECORATION.flag_blue} position={[5, 0, -10]} scale={d} />
       <Piece model={DECORATION.flag_blue} position={[5, 0, 14]} scale={d} />
       <Piece model={DECORATION.flag_blue} position={[5, 0, 26]} scale={d} />
 
       {/* Props along the road */}
-      <Piece model={DECORATION.barrel} position={[-5, 0, -18]} scale={d} />
       <Piece model={DECORATION.crate_B} position={[-5, 0, 18]} scale={d} />
       <Piece model={DECORATION.haybale} position={[5, 0, -8]} scale={d} />
       <Piece model={DECORATION.trough} position={[-5, 0, 8]} scale={d} />
+      <Piece model={DECORATION.barrel} position={[-4, 0, -12]} scale={d} />
 
-      {/* Trees along the road */}
-      <Piece model={DECORATION.tree_A} position={[-8, 0, -18]} scale={d} />
-      <Piece model={DECORATION.tree_B} position={[8, 0, -22]} scale={d} />
+      {/* Trees along the road — south only, north approach is walled canyon */}
       <Piece model={DECORATION.tree_A} position={[-8, 0, 18]} scale={d} />
       <Piece model={DECORATION.tree_B} position={[8, 0, 22]} scale={d} />
+
+      {/* Torches inside the canyon walls for atmosphere */}
+      <Piece model={DECORATION.flag_red} position={[3.5, 0, -19]} scale={d * 0.8} />
+      <Piece model={DECORATION.flag_red} position={[-3.5, 0, -22]} scale={d * 0.8} />
     </group>
   )
 }
@@ -569,8 +790,8 @@ function VillageAtmosphere() {
         position={[-8, 5, -5]}
       />
 
-      {/* Clouds */}
-      <Clouds limit={200} material={THREE.MeshLambertMaterial}>
+      {/* Clouds — scattered across sky at varying heights */}
+      <Clouds limit={400} material={THREE.MeshLambertMaterial}>
         <Cloud
           segments={20}
           bounds={[15, 2, 8] as [number, number, number]}
@@ -588,6 +809,51 @@ function VillageAtmosphere() {
           opacity={0.35}
           speed={0.1}
           position={[20, 35, -40] as [number, number, number]}
+        />
+        <Cloud
+          segments={18}
+          bounds={[12, 2, 7] as [number, number, number]}
+          volume={7}
+          color="#ffffff"
+          opacity={0.3}
+          speed={0.08}
+          position={[45, 40, 20] as [number, number, number]}
+        />
+        <Cloud
+          segments={22}
+          bounds={[18, 3, 10] as [number, number, number]}
+          volume={9}
+          color="#ffffff"
+          opacity={0.25}
+          speed={0.12}
+          position={[-40, 45, 30] as [number, number, number]}
+        />
+        <Cloud
+          segments={12}
+          bounds={[8, 2, 5] as [number, number, number]}
+          volume={5}
+          color="#ffffff"
+          opacity={0.35}
+          speed={0.18}
+          position={[30, 28, 55] as [number, number, number]}
+        />
+        <Cloud
+          segments={16}
+          bounds={[14, 2, 6] as [number, number, number]}
+          volume={7}
+          color="#ffffff"
+          opacity={0.3}
+          speed={0.06}
+          position={[-50, 38, -20] as [number, number, number]}
+        />
+        <Cloud
+          segments={10}
+          bounds={[9, 2, 4] as [number, number, number]}
+          volume={5}
+          color="#ffffff"
+          opacity={0.4}
+          speed={0.2}
+          position={[10, 25, 65] as [number, number, number]}
         />
       </Clouds>
     </>
@@ -619,6 +885,16 @@ export function VillageWorld() {
         <VillagePerimeter />
       </Suspense>
 
+      {/* Dense forest ring hiding world edges */}
+      <Suspense fallback={null}>
+        <ImpenetrableForest />
+      </Suspense>
+
+      {/* Canyon pass — cliff walls flanking dungeon approach */}
+      <Suspense fallback={null}>
+        <CanyonPass />
+      </Suspense>
+
       {/* Road decoration */}
       <Suspense fallback={null}>
         <RoadDecoration />
@@ -637,7 +913,7 @@ export function VillageWorld() {
       {/* Zone markers (clickable portals) — further apart for expanded village */}
       <ZoneMarker
         zoneId="skeleton-birthday"
-        position={[0, 0, -18]}
+        position={[0, 0, -14]}
         label="Dungeon"
         emoji="💀"
       />

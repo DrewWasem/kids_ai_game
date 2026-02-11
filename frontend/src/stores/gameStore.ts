@@ -73,7 +73,7 @@ const SYSTEM_PROMPTS: Record<string, string> = {
 
 // Zone center positions in world space (expanded for 7x building scale)
 export const ZONE_CENTERS: Record<string, [number, number, number]> = {
-  'skeleton-birthday': [0, 0, -35],
+  'skeleton-birthday': [0, 0, -55],
   'adventurers-picnic': [0, 0, 35],
 };
 
