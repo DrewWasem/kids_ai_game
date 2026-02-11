@@ -1,6 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import R3FGame from './game/R3FGame';
-import type { R3FGameRef } from './game/R3FGame';
 import ScenePlayer3D from './game/ScenePlayer3D';
 import PromptInput from './components/PromptInput';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -9,7 +8,6 @@ import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
 
 export default function App() {
-  const r3fRef = useRef<R3FGameRef>(null);
   const currentZone = useGameStore((s) => s.currentZone);
   const currentTask = useGameStore((s) => s.currentTask);
   const lastScript = useGameStore((s) => s.lastScript);
@@ -33,6 +31,11 @@ export default function App() {
   // Zone labels for display
   const ZONE_LABELS: Record<string, { label: string; emoji: string }> = {
     'skeleton-birthday': { label: "Skeleton's Surprise Birthday", emoji: '💀' },
+    'knight-space':      { label: "Knight's Space Mission", emoji: '🚀' },
+    'mage-kitchen':      { label: "Mage vs. Kitchen", emoji: '🧙' },
+    'barbarian-school':  { label: "Barbarian's School", emoji: '📚' },
+    'dungeon-concert':   { label: "Dungeon Rock Concert", emoji: '🎸' },
+    'skeleton-pizza':    { label: "Skeleton Pizza Delivery", emoji: '🍕' },
     'adventurers-picnic': { label: "Adventurers' Picnic", emoji: '🧺' },
   };
 
@@ -85,7 +88,7 @@ export default function App() {
           <div className="flex-1 min-h-0 flex items-center justify-center px-4 py-2">
             <div className="relative rounded-game-lg overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30"
                  style={{ width: 1024, height: 576, maxWidth: '100%', maxHeight: '60vh' }}>
-              <R3FGame ref={r3fRef}>
+              <R3FGame>
                 <ScenePlayer3D
                   script={lastScript}
                   taskId={currentTask}

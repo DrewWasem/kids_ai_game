@@ -4,11 +4,15 @@
  * Renders a hex-tile village connecting quest zones. The village is always
  * visible. Zones are areas within it hosting different quests.
  *
- * Layout (top-down, Z axis):
- *   North (Z=-35): Dungeon Zone (skeleton-birthday)
- *   Center (Z=0):  Village Center (tavern, market, well, etc.)
- *   South (Z=+35): Park Zone (adventurers-picnic)
- *   Roads connect all three areas.
+ * Layout (top-down, circular ring at radius ~35):
+ *   North (Z=-35):     Dungeon Zone (skeleton-birthday)
+ *   Northeast:         Space Zone (knight-space)
+ *   East (X=+35):      School Zone (barbarian-school)
+ *   Southeast:         Pizza Zone (skeleton-pizza)
+ *   South (Z=+35):     Park Zone (adventurers-picnic)
+ *   Southwest:         Concert Zone (dungeon-concert)
+ *   West (X=-35):      Kitchen Zone (mage-kitchen)
+ *   Center (Z=0):      Village Center (tavern, market, well, etc.)
  *
  * Uses KayKit Medieval Hexagon Pack for terrain + buildings,
  * plus existing task environment pieces offset to zone positions.
@@ -494,6 +498,166 @@ function ParkZone() {
 }
 
 // ============================================================================
+// SPACE ZONE — Northeast area (knight-space quest)
+// ============================================================================
+
+function SpaceZone() {
+  const center = ZONE_CENTERS['knight-space']
+
+  return (
+    <group name="space-zone" position={center}>
+      {/* Landing pad */}
+      <Piece model="kaykit/packs/space_base/landingpad_large.gltf" position={[0, 0, 0]} />
+      {/* Base modules */}
+      <Piece model="kaykit/packs/space_base/basemodule_A.gltf" position={[-4, 0, -3]} />
+      <Piece model="kaykit/packs/space_base/basemodule_B.gltf" position={[4, 0, -3]} />
+      {/* Tunnel connecting modules */}
+      <Piece model="kaykit/packs/space_base/tunnel_straight_A.gltf" position={[0, 0, -3]} />
+      {/* Dropship on the pad */}
+      <Piece model="kaykit/packs/space_base/dropship.gltf" position={[0, 0, 2]} />
+      {/* Cargo and containers */}
+      <Piece model="kaykit/packs/space_base/containers_A.gltf" position={[-5, 0, 2]} />
+      <Piece model="kaykit/packs/space_base/cargo_A.gltf" position={[5, 0, 1]} />
+      {/* Solar panel */}
+      <Piece model="kaykit/packs/space_base/solarpanel.gltf" position={[-6, 0, -5]} />
+      {/* Dome */}
+      <Piece model="kaykit/packs/space_base/dome.gltf" position={[0, 0, -6]} />
+      {/* Accent lights */}
+      <pointLight color="#38BDF8" intensity={3} distance={10} decay={2} position={[0, 3, 0]} />
+      <pointLight color="#7C3AED" intensity={2} distance={8} decay={2} position={[-4, 2, -3]} />
+    </group>
+  )
+}
+
+// ============================================================================
+// SCHOOL ZONE — East area (barbarian-school quest)
+// ============================================================================
+
+function SchoolZone() {
+  const center = ZONE_CENTERS['barbarian-school']
+
+  return (
+    <group name="school-zone" position={center}>
+      {/* Playground equipment */}
+      <Piece model="tiny-treats/fun-playground/swing_A_large.gltf" position={[-4, 0, -3]} />
+      <Piece model="tiny-treats/fun-playground/slide_A.gltf" position={[4, 0, -2]} />
+      <Piece model="tiny-treats/fun-playground/merry_go_round.gltf" position={[0, 0, 0]} />
+      <Piece model="tiny-treats/fun-playground/seesaw_large.gltf" position={[-3, 0, 3]} />
+      <Piece model="tiny-treats/fun-playground/sandbox_round_decorated.gltf" position={[3, 0, 3]} />
+      {/* Trees */}
+      <Piece model="tiny-treats/fun-playground/tree_large.gltf" position={[-6, 0, -1]} />
+      <Piece model="tiny-treats/fun-playground/tree_small.gltf" position={[6, 0, -1]} />
+      {/* Fence ring */}
+      <Piece model="tiny-treats/fun-playground/fence_straight_long.gltf" position={[-5, 0, -5]} />
+      <Piece model="tiny-treats/fun-playground/fence_straight_long.gltf" position={[5, 0, -5]} />
+      <Piece model="tiny-treats/fun-playground/fence_straight_long.gltf" position={[-5, 0, 5]} />
+      <Piece model="tiny-treats/fun-playground/fence_straight_long.gltf" position={[5, 0, 5]} />
+      {/* Picnic table (schoolyard) */}
+      <Piece model="tiny-treats/fun-playground/picnic_table.gltf" position={[0, 0, -5]} />
+    </group>
+  )
+}
+
+// ============================================================================
+// PIZZA ZONE — Southeast area (skeleton-pizza quest)
+// ============================================================================
+
+function PizzaZone() {
+  const center = ZONE_CENTERS['skeleton-pizza']
+
+  return (
+    <group name="pizza-zone" position={center}>
+      {/* Restaurant walls */}
+      <Piece model="kaykit/packs/restaurant/wall.gltf" position={[-3, 0, -4]} />
+      <Piece model="kaykit/packs/restaurant/wall_doorway.gltf" position={[0, 0, -4]} />
+      <Piece model="kaykit/packs/restaurant/wall.gltf" position={[3, 0, -4]} />
+      {/* Kitchen counter */}
+      <Piece model="kaykit/packs/restaurant/kitchencounter_straight_A.gltf" position={[-2, 0, -2]} />
+      <Piece model="kaykit/packs/restaurant/kitchencounter_straight_decorated.gltf" position={[0, 0, -2]} />
+      <Piece model="kaykit/packs/restaurant/kitchencounter_straight_B.gltf" position={[2, 0, -2]} />
+      {/* Food crates */}
+      <Piece model="kaykit/packs/restaurant/crate_cheese.gltf" position={[-4, 0, -1]} />
+      <Piece model="kaykit/packs/restaurant/crate_tomatoes.gltf" position={[-4, 0, 1]} />
+      {/* Dining area */}
+      <Piece model="kaykit/packs/restaurant/chair_A.gltf" position={[3, 0, 1]} />
+      <Piece model="kaykit/packs/restaurant/chair_A.gltf" position={[3, 0, 3]} />
+      <Piece model="kaykit/packs/restaurant/plate_small.gltf" position={[2, 0.8, 2]} />
+      {/* Warm pizza shop lighting */}
+      <pointLight color="#FF8C42" intensity={3} distance={10} decay={2} position={[0, 3, -2]} />
+      <pointLight color="#FBBF24" intensity={2} distance={8} decay={2} position={[0, 2, 2]} />
+    </group>
+  )
+}
+
+// ============================================================================
+// CONCERT ZONE — Southwest area (dungeon-concert quest)
+// ============================================================================
+
+function ConcertZone() {
+  const center = ZONE_CENTERS['dungeon-concert']
+
+  return (
+    <group name="concert-zone" position={center}>
+      {/* Stage area — dungeon stone walls as backdrop */}
+      <Piece model="kaykit/packs/dungeon/wall_half.gltf" position={[-4, 0, -4]} />
+      <Piece model="kaykit/packs/dungeon/wall_half.gltf" position={[-2, 0, -4]} />
+      <Piece model="kaykit/packs/dungeon/wall_half.gltf" position={[0, 0, -4]} />
+      <Piece model="kaykit/packs/dungeon/wall_half.gltf" position={[2, 0, -4]} />
+      <Piece model="kaykit/packs/dungeon/wall_half.gltf" position={[4, 0, -4]} />
+      {/* Stage platform (hex pack) */}
+      <Piece model={BUILDINGS.stage_A} position={[0, 0, -2]} scale={7.0} />
+      {/* Decorated pillars as "speaker stacks" */}
+      <Piece model="kaykit/packs/dungeon/pillar_decorated.gltf" position={[-5, 0, -2]} scale={1.3} />
+      <Piece model="kaykit/packs/dungeon/pillar_decorated.gltf" position={[5, 0, -2]} scale={1.3} />
+      {/* Banners as concert decorations */}
+      <Piece model="kaykit/packs/dungeon/banner_patternA_blue.gltf" position={[-3, 1.5, -3.8]} scale={0.7} />
+      <Piece model="kaykit/packs/dungeon/banner_patternB_red.gltf" position={[0, 1.5, -3.8]} scale={0.7} />
+      <Piece model="kaykit/packs/dungeon/banner_patternA_green.gltf" position={[3, 1.5, -3.8]} scale={0.7} />
+      {/* Torches for atmosphere */}
+      <Piece model="kaykit/packs/dungeon/torch_lit.gltf" position={[-5, 0, -4]} />
+      <Piece model="kaykit/packs/dungeon/torch_lit.gltf" position={[5, 0, -4]} />
+      {/* Concert stage lights — colorful! */}
+      <pointLight color="#7C3AED" intensity={4} distance={12} decay={2} position={[-3, 4, -2]} />
+      <pointLight color="#EC4899" intensity={4} distance={12} decay={2} position={[3, 4, -2]} />
+      <pointLight color="#38BDF8" intensity={3} distance={10} decay={2} position={[0, 5, -3]} />
+    </group>
+  )
+}
+
+// ============================================================================
+// KITCHEN ZONE — West area (mage-kitchen quest)
+// ============================================================================
+
+function KitchenZone() {
+  const center = ZONE_CENTERS['mage-kitchen']
+
+  return (
+    <group name="kitchen-zone" position={center}>
+      {/* Kitchen walls (L-shape) */}
+      <Piece model="tiny-treats/charming-kitchen/wall_tiles_kitchen_straight.gltf" position={[-3, 0, -4]} />
+      <Piece model="tiny-treats/charming-kitchen/wall_tiles_kitchen_doorway.gltf" position={[0, 0, -4]} />
+      <Piece model="tiny-treats/charming-kitchen/wall_tiles_kitchen_straight.gltf" position={[3, 0, -4]} />
+      {/* Countertops */}
+      <Piece model="tiny-treats/charming-kitchen/countertop_straight_A.gltf" position={[-3, 0, -3]} />
+      <Piece model="tiny-treats/charming-kitchen/countertop_sink.gltf" position={[-1, 0, -3]} />
+      <Piece model="tiny-treats/charming-kitchen/countertop_straight_B.gltf" position={[1, 0, -3]} />
+      {/* Stove and fridge */}
+      <Piece model="tiny-treats/charming-kitchen/stove.gltf" position={[3, 0, -3]} />
+      <Piece model="tiny-treats/charming-kitchen/fridge.gltf" position={[-5, 0, -3]} />
+      {/* Table and chairs */}
+      <Piece model="tiny-treats/charming-kitchen/table_A.gltf" position={[0, 0, 1]} />
+      <Piece model="tiny-treats/charming-kitchen/chair.gltf" position={[-1.5, 0, 1]} />
+      <Piece model="tiny-treats/charming-kitchen/chair.gltf" position={[1.5, 0, 1]} rotation={[0, Math.PI, 0]} />
+      {/* Kitchen props */}
+      <Piece model="tiny-treats/charming-kitchen/pot.gltf" position={[3, 0.9, -3]} />
+      <Piece model="tiny-treats/charming-kitchen/kettle.gltf" position={[-3, 0.9, -3]} />
+      {/* Warm kitchen light */}
+      <pointLight color="#FBBF24" intensity={3} distance={10} decay={2} position={[0, 3, -1]} />
+    </group>
+  )
+}
+
+// ============================================================================
 // ROAD DECORATION — Props along the road between zones
 // ============================================================================
 
@@ -634,7 +798,32 @@ export function VillageWorld() {
         <ParkZone />
       </Suspense>
 
-      {/* Zone markers (clickable portals) — further apart for expanded village */}
+      {/* Quest zone: Space Station (northeast) */}
+      <Suspense fallback={null}>
+        <SpaceZone />
+      </Suspense>
+
+      {/* Quest zone: School (east) */}
+      <Suspense fallback={null}>
+        <SchoolZone />
+      </Suspense>
+
+      {/* Quest zone: Pizza Shop (southeast) */}
+      <Suspense fallback={null}>
+        <PizzaZone />
+      </Suspense>
+
+      {/* Quest zone: Concert Hall (southwest) */}
+      <Suspense fallback={null}>
+        <ConcertZone />
+      </Suspense>
+
+      {/* Quest zone: Kitchen (west) */}
+      <Suspense fallback={null}>
+        <KitchenZone />
+      </Suspense>
+
+      {/* Zone markers (clickable portals) — circular ring */}
       <ZoneMarker
         zoneId="skeleton-birthday"
         position={[0, 0, -18]}
@@ -642,10 +831,40 @@ export function VillageWorld() {
         emoji="💀"
       />
       <ZoneMarker
+        zoneId="knight-space"
+        position={[18, 0, -18]}
+        label="Space Station"
+        emoji="🚀"
+      />
+      <ZoneMarker
+        zoneId="barbarian-school"
+        position={[25, 0, 0]}
+        label="School"
+        emoji="📚"
+      />
+      <ZoneMarker
+        zoneId="skeleton-pizza"
+        position={[18, 0, 18]}
+        label="Pizza Shop"
+        emoji="🍕"
+      />
+      <ZoneMarker
         zoneId="adventurers-picnic"
         position={[0, 0, 18]}
         label="The Park"
         emoji="🧺"
+      />
+      <ZoneMarker
+        zoneId="dungeon-concert"
+        position={[-18, 0, 18]}
+        label="Concert Hall"
+        emoji="🎸"
+      />
+      <ZoneMarker
+        zoneId="mage-kitchen"
+        position={[-25, 0, 0]}
+        label="Kitchen"
+        emoji="🧙"
       />
     </group>
   )

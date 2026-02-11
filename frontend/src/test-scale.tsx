@@ -7,7 +7,7 @@
  * Also shows height reference poles with labels.
  */
 import { Suspense, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useGLTF, useAnimations, Html, Sky } from '@react-three/drei'
 import * as THREE from 'three'
 import { SkeletonUtils } from 'three-stdlib'

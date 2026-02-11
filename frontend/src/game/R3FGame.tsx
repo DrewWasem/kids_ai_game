@@ -1,5 +1,5 @@
 import { Canvas, useThree } from '@react-three/fiber';
-import { Suspense, forwardRef, useImperativeHandle, useEffect, ReactNode } from 'react';
+import { Suspense, useEffect, ReactNode } from 'react';
 import * as THREE from 'three';
 import { VillageWorld } from './VillageWorld';
 import { VillageCamera } from './VillageCamera';
@@ -51,21 +51,11 @@ function SceneMeasurer() {
   return null;
 }
 
-export interface R3FGameRef {
-  loadTask: (taskId: string) => void;
-}
-
 interface R3FGameProps {
   children?: ReactNode;
 }
 
-const R3FGame = forwardRef<R3FGameRef, R3FGameProps>(({ children }, ref) => {
-  useImperativeHandle(ref, () => ({
-    loadTask: (newTaskId: string) => {
-      console.log('[R3FGame] loadTask called:', newTaskId);
-    },
-  }));
-
+export default function R3FGame({ children }: R3FGameProps) {
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <Canvas
@@ -75,7 +65,7 @@ const R3FGame = forwardRef<R3FGameRef, R3FGameProps>(({ children }, ref) => {
       >
         {/* Camera with zone transition support */}
         <VillageCamera />
-        <SceneMeasurer />
+        {import.meta.env.DEV && <SceneMeasurer />}
 
         {/* Persistent village world with all zones */}
         <VillageWorld />
@@ -87,8 +77,4 @@ const R3FGame = forwardRef<R3FGameRef, R3FGameProps>(({ children }, ref) => {
       </Canvas>
     </div>
   );
-});
-
-R3FGame.displayName = 'R3FGame';
-
-export default R3FGame;
+}

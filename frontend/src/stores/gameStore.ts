@@ -3,14 +3,6 @@ import type { SceneScript } from '../types/scene-script';
 import type { ResponseSource } from '../services/resolver';
 import { resolveResponse } from '../services/resolver';
 
-// Legacy 2D prompts (kept for fallback)
-import { MONSTER_PARTY_PROMPT } from '../prompts/monster-party';
-import { ROBOT_PIZZA_PROMPT } from '../prompts/robot-pizza';
-import { WIZARD_KITCHEN_PROMPT } from '../prompts/wizard-kitchen';
-import { DINOSAUR_SCHOOL_PROMPT } from '../prompts/dinosaur-school';
-import { DOG_SPACE_PROMPT } from '../prompts/dog-space';
-import { OCTOPUS_BAND_PROMPT } from '../prompts/octopus-band';
-
 // 3D prompts
 import { SKELETON_BIRTHDAY_PROMPT } from '../prompts/skeleton-birthday';
 import { KNIGHT_SPACE_PROMPT } from '../prompts/knight-space';
@@ -62,19 +54,17 @@ const SYSTEM_PROMPTS: Record<string, string> = {
   'dungeon-concert': DUNGEON_CONCERT_PROMPT,
   'skeleton-pizza': SKELETON_PIZZA_PROMPT,
   'adventurers-picnic': ADVENTURERS_PICNIC_PROMPT,
-  // Legacy 2D tasks (kept for fallback)
-  'monster-party': MONSTER_PARTY_PROMPT,
-  'robot-pizza': ROBOT_PIZZA_PROMPT,
-  'wizard-kitchen': WIZARD_KITCHEN_PROMPT,
-  'dinosaur-school': DINOSAUR_SCHOOL_PROMPT,
-  'dog-space': DOG_SPACE_PROMPT,
-  'octopus-band': OCTOPUS_BAND_PROMPT,
 };
 
-// Zone center positions in world space (expanded for 7x building scale)
+// Zone center positions in world space — circular ring at radius ~35
 export const ZONE_CENTERS: Record<string, [number, number, number]> = {
-  'skeleton-birthday': [0, 0, -35],
-  'adventurers-picnic': [0, 0, 35],
+  'skeleton-birthday': [0, 0, -35],       // north
+  'knight-space':      [25, 0, -25],      // northeast
+  'barbarian-school':  [35, 0, 0],        // east
+  'skeleton-pizza':    [25, 0, 25],       // southeast
+  'adventurers-picnic':[0, 0, 35],        // south
+  'dungeon-concert':   [-25, 0, 25],      // southwest
+  'mage-kitchen':      [-35, 0, 0],       // west
 };
 
 // Village center camera position

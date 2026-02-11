@@ -19,6 +19,20 @@
     "paths": { "@/*": ["src/*"] }
   },
   "include": ["src"],
-  "exclude": ["src/**/__tests__/**"],
+  "exclude": [
+    "src/**/__tests__/**",
+    "src/game/scenes/MonsterPartyScene.ts",
+    "src/game/scenes/RobotPizzaScene.ts",
+    "src/game/scenes/WizardKitchenScene.ts",
+    "src/game/scenes/DinosaurSchoolScene.ts",
+    "src/game/scenes/DogSpaceScene.ts",
+    "src/game/scenes/OctopusBandScene.ts",
+    "src/game/SceneScriptPlayer.ts",
+    "src/game/SoundManager.ts",
+    "src/game/AssetLoader.ts",
+    "src/game/EventBus.ts",
+    "src/game/PhaserGame.tsx",
+    "src/test-scale.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

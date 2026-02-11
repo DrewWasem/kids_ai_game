@@ -16,8 +16,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         <div className="flex items-center justify-center h-screen bg-quest-bg stars-bg">
           <div className="max-w-md text-center p-8 bg-quest-card/80 backdrop-blur-sm rounded-2xl border-2 border-quest-border shadow-glow-purple animate-scale-in">
             <div className="text-5xl mb-4">🔮</div>
-            <h2 className="font-heading text-xl font-bold text-quest-red mb-2">Oops! A spell went wrong</h2>
-            <p className="text-quest-text-secondary text-sm mb-6">{this.state.error?.message}</p>
+            <h2 className="font-heading text-xl font-bold text-quest-orange mb-2">Oops! A spell went wrong</h2>
+            <p className="text-quest-text-secondary text-sm mb-6">The magic got a bit tangled! Let's try that again.</p>
             <button
               onClick={() => window.location.reload()}
               className="btn-game bg-gradient-to-br from-quest-accent to-quest-purple text-white
