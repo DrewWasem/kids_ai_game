@@ -449,29 +449,29 @@ function DungeonCliffs() {
   return (
     <group name="dungeon-cliffs">
       {/* ── Back wall (north, behind dungeon Z=-68 to -72) ── */}
-      <Piece model={DECORATION.mountain_A} position={[0, 0, -72]} scale={9.0} />
-      <Piece model={DECORATION.mountain_B} position={[-18, 0, -70]} scale={7.5} />
-      <Piece model={DECORATION.mountain_C} position={[18, 0, -70]} scale={7.5} />
-      <Piece model={DECORATION.hill_C} position={[-9, 0, -68]} scale={6.0} />
-      <Piece model={DECORATION.hill_A} position={[9, 0, -68]} scale={6.0} />
-      <Piece model={DECORATION.rock_C} position={[-4, 0, -67]} scale={5.0} />
-      <Piece model={DECORATION.rock_D} position={[4, 0, -67]} scale={5.0} />
+      <Piece model={DECORATION.mountain_A} position={[0, 0, -72]} scale={13.0} />
+      <Piece model={DECORATION.mountain_B} position={[-18, 0, -70]} scale={11.0} />
+      <Piece model={DECORATION.mountain_C} position={[18, 0, -70]} scale={11.0} />
+      <Piece model={DECORATION.hill_C} position={[-9, 0, -68]} scale={9.0} />
+      <Piece model={DECORATION.hill_A} position={[9, 0, -68]} scale={9.0} />
+      <Piece model={DECORATION.rock_C} position={[-4, 0, -67]} scale={7.0} />
+      <Piece model={DECORATION.rock_D} position={[4, 0, -67]} scale={7.0} />
 
       {/* ── Left wall (west, X=-18 to -28) ── */}
-      <Piece model={DECORATION.mountain_A} position={[-25, 0, -64]} rotation={[0, Math.PI / 4, 0]} scale={7.5} />
-      <Piece model={DECORATION.mountain_C} position={[-28, 0, -58]} rotation={[0, Math.PI / 3, 0]} scale={7.0} />
-      <Piece model={DECORATION.hill_B} position={[-26, 0, -52]} scale={6.0} />
-      <Piece model={DECORATION.rock_A} position={[-22, 0, -49]} scale={6.0} />
-      <Piece model={DECORATION.hills_trees} position={[-20, 0, -60]} scale={6.0} />
-      <Piece model={DECORATION.rock_E} position={[-18, 0, -46]} scale={5.5} />
+      <Piece model={DECORATION.mountain_A} position={[-25, 0, -64]} rotation={[0, Math.PI / 4, 0]} scale={11.0} />
+      <Piece model={DECORATION.mountain_C} position={[-28, 0, -58]} rotation={[0, Math.PI / 3, 0]} scale={10.0} />
+      <Piece model={DECORATION.hill_B} position={[-26, 0, -52]} scale={9.0} />
+      <Piece model={DECORATION.rock_A} position={[-22, 0, -49]} scale={8.0} />
+      <Piece model={DECORATION.hills_trees} position={[-20, 0, -60]} scale={9.0} />
+      <Piece model={DECORATION.rock_E} position={[-18, 0, -46]} scale={7.5} />
 
       {/* ── Right wall (east, X=+18 to +28) ── */}
-      <Piece model={DECORATION.mountain_B} position={[25, 0, -64]} rotation={[0, -Math.PI / 4, 0]} scale={7.5} />
-      <Piece model={DECORATION.mountain_C} position={[28, 0, -58]} rotation={[0, -Math.PI / 3, 0]} scale={7.0} />
-      <Piece model={DECORATION.hill_A} position={[26, 0, -52]} scale={6.0} />
-      <Piece model={DECORATION.rock_B} position={[22, 0, -49]} scale={6.0} />
-      <Piece model={DECORATION.hills_B_trees} position={[20, 0, -60]} scale={6.0} />
-      <Piece model={DECORATION.rock_D} position={[18, 0, -46]} scale={5.5} />
+      <Piece model={DECORATION.mountain_B} position={[25, 0, -64]} rotation={[0, -Math.PI / 4, 0]} scale={11.0} />
+      <Piece model={DECORATION.mountain_C} position={[28, 0, -58]} rotation={[0, -Math.PI / 3, 0]} scale={10.0} />
+      <Piece model={DECORATION.hill_A} position={[26, 0, -52]} scale={9.0} />
+      <Piece model={DECORATION.rock_B} position={[22, 0, -49]} scale={8.0} />
+      <Piece model={DECORATION.hills_B_trees} position={[20, 0, -60]} scale={9.0} />
+      <Piece model={DECORATION.rock_D} position={[18, 0, -46]} scale={7.5} />
 
       {/* ── Approach cliffs (Z=-27 to Z=-45) — flanking the path from village to dungeon ── */}
       {/* Left side — starts small, grows toward dungeon */}
@@ -497,13 +497,13 @@ function DungeonCliffs() {
       <Piece model={DECORATION.rock_B} position={[12, 0, -45]} scale={6.5} />
 
       {/* ── Trees on cliff tops for silhouette ── */}
-      <Piece model={DECORATION.tree_A} position={[-22, 0, -66]} scale={7.0} />
-      <Piece model={DECORATION.tree_B} position={[22, 0, -66]} scale={7.0} />
-      <Piece model={DECORATION.tree_A} position={[-30, 0, -56]} scale={6.5} />
-      <Piece model={DECORATION.tree_B} position={[30, 0, -56]} scale={6.5} />
-      <Piece model={DECORATION.tree_A} position={[0, 0, -74]} scale={7.5} />
-      <Piece model={DECORATION.tree_B} position={[-12, 0, -72]} scale={6.5} />
-      <Piece model={DECORATION.tree_A} position={[12, 0, -72]} scale={6.5} />
+      <Piece model={DECORATION.tree_A} position={[-22, 0, -66]} scale={10.0} />
+      <Piece model={DECORATION.tree_B} position={[22, 0, -66]} scale={10.0} />
+      <Piece model={DECORATION.tree_A} position={[-30, 0, -56]} scale={9.0} />
+      <Piece model={DECORATION.tree_B} position={[30, 0, -56]} scale={9.0} />
+      <Piece model={DECORATION.tree_A} position={[0, 0, -74]} scale={10.0} />
+      <Piece model={DECORATION.tree_B} position={[-12, 0, -72]} scale={9.0} />
+      <Piece model={DECORATION.tree_A} position={[12, 0, -72]} scale={9.0} />
     </group>
   )
 }
@@ -636,13 +636,6 @@ function ParkZone() {
       <Piece model="tiny-treats/pretty-park/hedge_straight_long.gltf" position={[-6, 0, 3]} rotation={[0, Math.PI / 2, 0]} />
       <Piece model="tiny-treats/pretty-park/hedge_straight_long.gltf" position={[6, 0, 3]} rotation={[0, -Math.PI / 2, 0]} />
 
-      {/* Stone fence entrance (hex pack — scale 4.5 for 7x village proportions) */}
-      <Piece model={BUILDINGS.fence_stone} position={[-5, 0, -6]} scale={4.5} />
-      <Piece model={BUILDINGS.fence_stone} position={[-3, 0, -6]} scale={4.5} />
-      <Piece model={BUILDINGS.fence_stone_gate} position={[-1, 0, -6]} scale={4.5} />
-      <Piece model={BUILDINGS.fence_stone_gate} position={[1, 0, -6]} scale={4.5} />
-      <Piece model={BUILDINGS.fence_stone} position={[3, 0, -6]} scale={4.5} />
-      <Piece model={BUILDINGS.fence_stone} position={[5, 0, -6]} scale={4.5} />
     </group>
   )
 }
