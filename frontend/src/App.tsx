@@ -32,16 +32,11 @@ export default function App() {
   const ZONE_LABELS: Record<string, { label: string; emoji: string }> = {
     'skeleton-birthday': { label: "Skeleton's Surprise Birthday", emoji: '💀' },
     'knight-space':      { label: "Knight's Space Mission", emoji: '🚀' },
-    'mage-kitchen':      { label: "Mage vs. Kitchen", emoji: '🧙' },
-    'barbarian-school':  { label: "Barbarian's School", emoji: '📚' },
+    'mage-kitchen':      { label: "Mage vs. The Kitchen", emoji: '🧙' },
+    'barbarian-school':  { label: "Barbarian's School Day", emoji: '📚' },
     'dungeon-concert':   { label: "Dungeon Rock Concert", emoji: '🎸' },
     'skeleton-pizza':    { label: "Skeleton Pizza Delivery", emoji: '🍕' },
     'adventurers-picnic': { label: "Adventurers' Picnic", emoji: '🧺' },
-    'knight-space': { label: "Knight's Space Mission", emoji: '🚀' },
-    'mage-kitchen': { label: "Mage vs. The Kitchen", emoji: '🧙' },
-    'barbarian-school': { label: "Barbarian's School Day", emoji: '📚' },
-    'dungeon-concert': { label: 'Dungeon Rock Concert', emoji: '🎸' },
-    'skeleton-pizza': { label: 'Skeleton Pizza Delivery', emoji: '🍕' },
   };
 
   const zoneInfo = currentZone ? ZONE_LABELS[currentZone] : null;
