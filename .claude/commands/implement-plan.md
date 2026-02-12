@@ -31,6 +31,17 @@ For each task:
 - Report: "MISMATCH in Task {id}: Plan says {X}, but I found {Y}."
 - Wait for user guidance before proceeding. Do NOT guess or improvise.
 
+### Step 3.5: SME Checkpoint (per phase)
+
+At the start of each phase, check whether domain-specific SME consultation would catch issues early:
+
+- **Phase involves kid-facing text?** → Run `/sme child-game-design "review this text: {text}"` before shipping
+- **Phase involves 3D scene changes?** → Consider `/sme 3d-game-development "review this scene setup"` for R3F patterns
+- **Phase involves story/curriculum content?** → Run `/sme story-writer "review these responses"` for comedy/pedagogy quality
+- **Phase involves system prompt changes?** → Run `/sme prompt-writer "validate this prompt change"` for vocabulary compliance
+
+This is a **lightweight check** — only invoke if the phase directly touches that domain. Skip for pure infrastructure/refactoring phases.
+
 ### Step 4: Phase checkpoint
 After completing all tasks in a phase:
 

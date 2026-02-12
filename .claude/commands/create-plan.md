@@ -71,6 +71,29 @@ Use the **plan-architect** agent (`.claude/agents/plan-architect.md`) approach. 
 - Separate automated vs manual verification
 - No unresolved questions
 
+### Step 4.5: SME Review Gate
+
+Before saving the plan, check the SME routing table and consult relevant SMEs:
+
+| Plan involves... | Consult | Purpose |
+|---|---|---|
+| Kid-facing text (narration, feedback, UI copy) | `child-game-design` | Verify brand voice, age-appropriateness |
+| Story content (stages, responses, curriculum) | `story-writer` | Verify narrative quality, comedy, 3-element formula |
+| System prompts or cache generation | `prompt-writer` | Verify prompt structure, vocabulary compliance |
+| 3D scene layout, models, camera, lighting | `3d-game-development` | Verify R3F patterns, performance |
+| Character casting or animation choices | `character-director` | Verify personality consistency, animation mapping |
+| ANY content shipping to kids | `ece-professor` | **Strongly recommended** — verify developmental appropriateness |
+
+**How:** Run `/sme <name> "Review this plan for {domain concerns}: {paste key plan sections}"`.
+
+Add SME feedback to the plan under:
+```markdown
+## SME Review
+- **{sme-name}:** {key feedback or "Approved"}
+```
+
+If an SME flags issues, revise the plan before saving. If the user declines SME review, note it: `## SME Review: Skipped (user decision)`.
+
 ### Step 5: Save to memory
 Write the plan to `.claude/memory/plans/{date}-{plan-slug}.md`.
 Update `.claude/memory/plans/_index.md`.

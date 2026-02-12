@@ -18,8 +18,32 @@ echo "Context was compacted. Re-loading key memories ($TOTAL total stored)."
 echo ""
 echo "--- AVAILABLE COMMANDS ---"
 echo "Workflow: /conductor | /research | /create-plan | /implement-plan | /validate-plan"
+echo "Content:  /compose-task | /review-content | /test-prompt | /build-cache"
 echo "Memory:   /remember | /recall [topic] | /memory-status"
+echo "SMEs:     /sme <name> \"task\" — Available: story-writer, character-director, ece-professor, prompt-writer, child-game-design, 3d-game-development, 3d-scale-tester"
+echo "Rule:     For non-trivial tasks, use /conductor. Check SME routing table for domain expertise."
 echo "--- END COMMANDS ---"
+
+# SME session log (what was consulted before compaction)
+SME_LOG="$MEMORY_DIR/.sme-session-log"
+if [ -f "$SME_LOG" ]; then
+    echo ""
+    echo "--- SME STATE (pre-compaction) ---"
+    cat "$SME_LOG"
+    echo "--- END SME STATE ---"
+fi
+
+# SME gaps (persistent across compactions)
+SME_GAPS=$(find "$MEMORY_DIR/context" -name "sme-gap-*.md" -type f 2>/dev/null)
+if [ -n "$SME_GAPS" ]; then
+    echo ""
+    echo "--- SME GAPS IDENTIFIED ---"
+    for gap in $SME_GAPS; do
+        echo "$(basename "$gap" .md): $(head -3 "$gap" | tail -1)"
+    done
+    echo "Consider creating SMEs for these domains. Ask user before creating."
+    echo "--- END SME GAPS ---"
+fi
 
 # Load structured compaction summary if it exists
 COMPACTION_SUMMARY="$MEMORY_DIR/sessions/.compaction-summary.md"

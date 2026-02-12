@@ -75,7 +75,7 @@ export default function App() {
                 className="btn-game text-sm px-4 py-2 rounded-xl border-2
                   bg-white/60 text-quest-text-mid border-quest-border hover:border-quest-orange/50 hover:text-quest-text-dark hover:bg-quest-panel-bg"
               >
-                🏘️ Village
+                🚪 Leave Quest
               </button>
             )}
 

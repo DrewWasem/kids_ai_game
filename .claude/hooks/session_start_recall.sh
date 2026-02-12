@@ -26,9 +26,23 @@ echo "Memory system active — $TOTAL memories across $DOMAINS domains."
 echo ""
 echo "--- AVAILABLE COMMANDS ---"
 echo "Workflow: /conductor (orchestrate complex tasks) | /research | /create-plan | /implement-plan | /validate-plan"
+echo "Content:  /compose-task (new game content) | /review-content (SME audit) | /test-prompt | /build-cache"
 echo "Memory:   /remember (save context) | /recall [topic] (search memory) | /memory-status"
-echo "Rule:     For non-trivial tasks (3+ files, unfamiliar code, architectural decisions), use /conductor or follow Research -> Plan -> Implement."
+echo "SMEs:     /sme <name> \"task\" — story-writer | character-director | ece-professor | prompt-writer | child-game-design | 3d-game-development | 3d-scale-tester"
+echo "Rule:     For non-trivial tasks, use /conductor. Check SME routing table (in conductor skill) for domain expertise needs."
 echo "--- END COMMANDS ---"
+
+# === SME GAP ALERTS ===
+SME_GAPS=$(find "$MEMORY_DIR/context" -name "sme-gap-*.md" -type f 2>/dev/null)
+if [ -n "$SME_GAPS" ]; then
+    echo ""
+    echo "--- SME GAPS (unresolved) ---"
+    for gap in $SME_GAPS; do
+        echo "- $(basename "$gap" .md): $(head -3 "$gap" | tail -1)"
+    done
+    echo "Ask user if they want to create SMEs for these domains."
+    echo "--- END SME GAPS ---"
+fi
 
 # === MEMORY CONTEXT INJECTION ===
 

@@ -36,6 +36,21 @@ Wait for the answer. Then ask the next question based on what you learned.
 - The user signals impatience ("just do it", "you get the idea")
 - You've asked 3-5 questions (don't interrogate)
 
+### Phase 1.5: SME Check
+
+Before proposing approaches, check whether domain expertise would improve the brainstorm:
+
+| Topic involves... | Suggest |
+|---|---|
+| Story/narrative design | `/sme story-writer "evaluate approaches for {topic}"` |
+| 3D visuals, scenes, models | `/sme 3d-game-development "advise on {topic}"` |
+| Kid-facing UX or text | `/sme child-game-design "review approaches for {topic}"` |
+| Educational content design | `/sme ece-professor "evaluate {topic} for age-appropriateness"` |
+| Character behavior/casting | `/sme character-director "advise on {topic}"` |
+| System prompts or caching | `/sme prompt-writer "evaluate approaches for {topic}"` |
+
+If relevant, either consult the SME before proposing (preferred) or include "SME consultation recommended" in the approach details.
+
 ### Phase 2: Propose Approaches (2-3 Options)
 
 Present 2-3 distinct approaches. For each:
@@ -47,6 +62,7 @@ Present 2-3 distinct approaches. For each:
 **Cons:** {bullet list}
 **Effort:** {small / medium / large}
 **Files touched:** {approximate list}
+**SME input:** {any SME consulted, or "recommended: /sme {name}"}
 ```
 
 End with a recommendation: "I'd suggest Approach {X} because {reason}. What do you think?"

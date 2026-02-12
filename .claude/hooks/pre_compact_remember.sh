@@ -52,6 +52,24 @@ SUMMARY="$SESSIONS_DIR/.compaction-summary.md"
         echo ""
     fi
 
+    # SME state — which SMEs were consulted this session
+    SME_LOG="$MEMORY_DIR/.sme-session-log"
+    if [ -f "$SME_LOG" ]; then
+        echo ""
+        echo "## SME Consultations This Session"
+        cat "$SME_LOG"
+    fi
+
+    # SME gaps identified this session
+    SME_GAPS=$(find "$MEMORY_DIR/context" -name "sme-gap-*.md" -newer "$SESSIONS_DIR/.last-compaction" 2>/dev/null)
+    if [ -n "$SME_GAPS" ]; then
+        echo ""
+        echo "## SME Gaps Identified"
+        for gap in $SME_GAPS; do
+            echo "- $(basename "$gap"): $(head -1 "$gap")"
+        done
+    fi
+
     # Message count
     COUNTER_FILE="$MEMORY_DIR/.message-counter"
     if [ -f "$COUNTER_FILE" ]; then

@@ -16,6 +16,18 @@ Run this 30 minutes before any demo or presentation.
 
 5. **Deployment** — If a Vercel URL is configured, check that it's accessible.
 
+6. **Content audit** — Run `/review-content all` to validate:
+   - No forbidden words in kid-facing text
+   - All asset references valid
+   - Brand voice compliance
+   - Educational review (ece-professor)
+   - If any CRITICAL issues found, fix before demo.
+
+7. **Story matcher test** — For each showcase zone, submit 2-3 test inputs and verify:
+   - Story matcher finds a match (check console for "story-match" source)
+   - Scene plays without errors
+   - Narration and feedback display correctly
+
 ## Manual Checklist (remind Drew)
 
 Print this checklist for Drew to run through manually:

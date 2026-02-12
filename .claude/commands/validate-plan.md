@@ -20,6 +20,26 @@ Also dispatch:
 - An **implementer** agent to run all automated success criteria commands and report results.
 - A **memory-locator** agent to check if the implementation contradicts any established decisions or patterns in memory.
 
+### Step 2.5: SME Validation Pass
+
+If the plan involves kid-facing content, run domain-specific SME reviews in parallel:
+
+| Content type | SME to invoke | What they check |
+|---|---|---|
+| Narration, feedback, UI text | `/sme child-game-design "audit this text for brand voice"` | Forbidden words, tone, age-appropriateness, exclamation count |
+| Story responses, curriculum | `/sme story-writer "review these responses for comedy and pedagogy"` | FUNNY_FAIL funnier than success, 3-element formulas, narration ≤20 words |
+| System prompts | `/sme prompt-writer "validate prompt structure and vocabulary"` | JSON schema, vocabulary contract, action limits |
+| Character usage | `/sme character-director "verify character consistency"` | Personality matches, animation appropriateness |
+| **All kid-facing content** | `/sme ece-professor "developmental review of implementation"` | **Strongly recommended** — Piaget/Vygotsky alignment, COPPA, no inappropriate content |
+
+Add SME findings to the validation report under:
+```markdown
+### SME Review
+| SME | Verdict | Key Findings |
+|-----|---------|-------------|
+| {name} | APPROVED / ISSUES | {summary} |
+```
+
 ### Step 3: Synthesize validation report
 
 ```markdown

@@ -33,5 +33,15 @@ Test a Claude API system prompt with varied inputs and report the JSON parse suc
 
 5. **Summary**: X/10 passed all checks. If < 10/10, recommend specific prompt fixes.
 
+## SME Integration
+
+After generating results, consult relevant SMEs for quality review:
+
+1. **Always run:** `/sme prompt-writer "Review these test results for vocabulary compliance and prompt quality: {paste results table}"`
+2. **If any FUNNY_FAIL responses exist:** `/sme child-game-design "Review these failure responses for brand voice — are they funny, not mean? {paste FUNNY_FAIL narrations}"`
+3. **If creating/modifying prompts for a new task:** `/sme story-writer "Does this prompt produce good comedy? Review the narrations."` + `/sme ece-professor "Are these responses age-appropriate for 7-11?"`
+
+Flag SME concerns in the results summary.
+
 ## Goal
 100% parse rate. If any input produces unparseable output, the prompt needs fixing before moving on.

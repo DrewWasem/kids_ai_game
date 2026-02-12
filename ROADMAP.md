@@ -89,6 +89,24 @@
 
 ---
 
+## Story Progression & Zone Locking
+
+Kids must complete zones in order to progress. When a kid walks to a locked zone, the game tells them which zone to go to next.
+
+| Order | Zone ID | Story Title | Skill Taught |
+|-------|---------|-------------|--------------|
+| 1 | `skeleton-birthday` | Skeleton's Surprise Birthday | **Specificity** |
+| 2 | `skeleton-pizza` | Skeleton's Pizza Disaster | **Completeness** |
+| 3 | `mage-kitchen` | Mage vs. The Cursed Kitchen | **Context** |
+| 4 | `barbarian-school` | Barbarian's First Day of School | **Step-by-Step** |
+| 5 | `knight-space` | Knight's Accidental Space Mission | **Perspective** |
+| 6 | `dungeon-concert` | Dungeon Rock Concert | **Creative Constraints** |
+| 7 | `adventurers-picnic` | Adventurers' Disastrous Picnic | **Integration** |
+
+Each zone teaches one prompt engineering skill, building on the last. Zone 1 (Skeleton Birthday) is always unlocked. Completing a zone unlocks the next. Locked zones display a message directing the player to the correct next zone.
+
+---
+
 ## Remaining Work (Feb 11-16)
 
 ### Story Curriculum System (Feb 11-12)

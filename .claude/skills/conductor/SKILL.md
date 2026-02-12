@@ -11,6 +11,10 @@ Before implementing any non-trivial change, STOP and assess whether the task nee
 
 ## Assessment Checklist
 
+**On EVERY non-trivial request, run these two checks before doing anything:**
+
+### Check 1: Orchestration needed?
+
 **Orchestrate (Research → Plan → Implement) when ANY of these are true:**
 - The task touches 3+ files
 - You're unfamiliar with the relevant code area
@@ -25,6 +29,14 @@ Before implementing any non-trivial change, STOP and assess whether the task nee
 - The solution is obvious and unambiguous
 - The user gave specific instructions
 - No architectural impact
+
+### Check 2: SME needed? (runs even on "just do it" tasks)
+
+Scan the task against the SME routing table below. If a match exists:
+- **For "just do it" tasks:** Mention the relevant SME once — "This touches kid-facing text. Want me to run it by `child-game-design`?" If the user says no or ignores it, proceed without.
+- **For orchestrated tasks:** SME consultation is woven into each phase (see SME Routing below).
+
+This check is **lightweight** — one sentence, not a ceremony. The goal is awareness, not friction.
 
 ## The Orchestrated Workflow
 
@@ -88,6 +100,62 @@ Before implementing any non-trivial change, STOP and assess whether the task nee
 | **plan-architect** | Design implementation plans | Planning |
 | **implementer** | Execute plan tasks precisely | Implementation |
 | **reviewer** | Verify spec compliance + quality | Validation |
+| **content-auditor** | Validate brand voice + asset refs | Validation, Pre-demo |
+
+## SME Routing
+
+**Every orchestrated workflow MUST check whether an SME should be consulted.** SMEs are domain specialists that run as isolated subagents — zero cost when not invoked, high value when relevant.
+
+### SME Routing Table
+
+| Task involves... | Consult SME | When |
+|---|---|---|
+| Writing/editing narration, feedback, or any kid-facing text | `story-writer` + `child-game-design` | Planning, Implementation |
+| Creating/modifying story stages, responses, or curriculum | `story-writer` + `character-director` | Planning |
+| System prompts, cache entries, or Claude API interaction | `prompt-writer` | Planning, Validation |
+| 3D scenes, models, scale, positioning, camera, lighting | `3d-game-development` | Research, Planning |
+| Measuring or adjusting 3D model proportions | `3d-scale-tester` | Implementation |
+| Casting characters, assigning animations, personality | `character-director` | Planning |
+| Anything shipping to kids (final review gate) | `ece-professor` | Validation |
+| Educational content, age-appropriateness, pedagogy | `ece-professor` | Planning, Validation |
+
+### How to Consult
+
+Use `/sme <name> "<task>"` — this spawns an isolated subagent with domain knowledge. The SME's response returns to the parent context, and the subagent is released.
+
+**Multiple SMEs can run in parallel** — they don't conflict.
+
+### Auto-Suggest Protocol
+
+At each phase transition, the Conductor SHOULD check the routing table and suggest relevant SMEs:
+
+1. **Before Research:** "This involves 3D scenes — consider `/sme 3d-game-development` for architecture guidance."
+2. **Before Planning:** "This touches kid-facing text — I'll consult `story-writer` and `child-game-design` for the plan."
+3. **Before Validation:** "This is shipping to kids — running `ece-professor` for final review."
+
+If the user declines an SME suggestion, proceed without it. SMEs are recommended, not mandatory (except `ece-professor` for kid-facing content, which should be strongly recommended).
+
+### SME Gap Detection (automatic)
+
+This check runs passively during ANY work — not just `/research`. Watch for these signals:
+
+**Trigger:** You find yourself needing domain knowledge that no existing SME covers, AND this has happened more than once (in this session or across sessions via memory).
+
+**Signals that a new SME is needed:**
+- You're looking up the same domain docs/patterns repeatedly
+- You're making judgment calls in a domain you're not confident about
+- The user keeps correcting you on domain-specific conventions
+- A memory search shows prior sessions hit the same knowledge gap
+
+**When triggered (keep it lightweight):**
+1. Mention it naturally: "I keep needing {domain} expertise and we don't have an SME for that. Want me to create one?"
+2. If yes → scaffold it from the template at `.claude/smes/` (sme.yaml + system-prompt.md + knowledge/)
+3. If no → drop it, don't ask again this session
+
+**Do NOT:**
+- Ask about SME creation for one-off questions
+- Create an SME without asking first
+- Turn this into a ceremony — one sentence is enough
 
 ## Context Management
 
@@ -104,6 +172,12 @@ If context is getting full mid-workflow:
 1. Save current progress: update plan checkboxes, write session notes.
 2. Let compaction happen — the post-compact hook will re-inject key context.
 3. Resume from the plan file: read it, find the first unchecked task, continue.
+
+**SME state across compaction:**
+- Pre-compact hook saves the SME session log (which SMEs were consulted + outcomes)
+- Post-compact hook re-injects: SME session log, SME gap alerts, full SME roster
+- You do NOT need to re-consult SMEs that were already consulted pre-compaction
+- Check the `--- SME STATE ---` block in post-compact output before re-invoking
 
 ## Anti-Rationalization
 

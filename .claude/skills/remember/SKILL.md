@@ -17,6 +17,7 @@ Extract valuable information from the current conversation and persist it into t
 4. **Preferences** -- User's stated preferences for style, tools, workflow
 5. **Context** -- Project architecture, business logic, domain knowledge
 6. **Session summary** -- What was accomplished this session
+7. **SME gaps** -- Domains where specialist knowledge was needed but no SME exists (see below)
 
 ## What NOT To Remember
 
@@ -53,6 +54,21 @@ For each verified item:
 2. Update the domain's `_index.md` table.
 3. Update the root `_index.md` date for that domain.
 4. If a domain has >8 files, reorganize into subdirectories.
+
+### SME Gap Check (automatic)
+
+During Pass 1 extraction, also scan the conversation for **SME gap signals**:
+- Were there repeated questions about a domain not covered by an existing SME?
+- Did the user correct domain-specific assumptions more than once?
+- Was external documentation consulted for a domain that could be encoded as SME knowledge?
+
+If a gap is detected, add it as a memory item:
+- **Category:** context
+- **Tags:** sme-gap, {domain}
+- **File:** `.claude/memory/context/sme-gap-{domain}.md`
+- **Content:** What domain, what evidence, which existing SMEs were insufficient
+
+This persists across sessions — next time `/recall` or `/start-day` runs, the gap surfaces and the user can decide whether to create the SME.
 
 ### Session Summary
 

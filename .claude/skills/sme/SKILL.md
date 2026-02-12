@@ -57,7 +57,14 @@ Task(
 )
 ```
 
-### Step 4: Return
+### Step 4: Log
+Append to `.claude/memory/.sme-session-log` (create if doesn't exist):
+```
+[TIMESTAMP] /sme <name> — "<short task summary>" — Result: <1-line outcome>
+```
+This log survives compaction via the pre-compact hook, so post-compact context knows which SMEs were already consulted.
+
+### Step 5: Return
 Present the subagent's response to the user.
 
 ## List Command

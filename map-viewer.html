@@ -56,6 +56,9 @@
   <div class="leg-item"><div class="leg-dot" style="background:#2d5016; border-radius: 50%;"></div> Trees / Forest</div>
   <div class="leg-item"><div class="leg-dot" style="background:#6b6b6b; border-radius: 3px;"></div> Mountains / Cliffs</div>
   <div class="leg-item"><div class="leg-dot" style="background:#4a90d9"></div> Pond</div>
+  <hr style="border-color:#444; margin:8px 0">
+  <div class="leg-item"><div class="leg-dot" style="background:transparent; border:2px solid #ff4444;"></div> Avoidance Circles</div>
+  <button id="toggleClearance" style="margin-top:8px; padding:4px 12px; background:#333; color:#eee; border:1px solid #666; border-radius:6px; cursor:pointer; font-size:12px; width:100%;">Toggle Clearances</button>
 </div>
 <div id="coords"></div>
 <div id="tooltip"></div>
@@ -84,7 +87,7 @@ const VILLAGE_BUILDINGS = [
   { x: -8, z: 2, label: 'Well', w: 3, h: 3 },
   { x: -24, z: 7, label: 'Blacksmith', w: 5, h: 4 },
   { x: 24, z: -12, label: 'Home', w: 4, h: 4 },
-  { x: -24, z: -10, label: 'Home', w: 4, h: 4 },
+  { x: -15, z: -14, label: 'Home', w: 4, h: 4 },
   { x: -28, z: 14, label: 'Home', w: 4, h: 3 },
   { x: 28, z: 12, label: 'Home', w: 4, h: 3 },
   { x: 28, z: 2, label: 'Church', w: 5, h: 7 },
@@ -151,6 +154,51 @@ const PERIMETER_TREES = [
 
 const POND = { x: 12, z: 18, w: 8, h: 5 };
 
+
+// Object clearance zones — [x, z, radius] (matches VillageWorld.tsx exactly)
+const OBJECT_CLEARANCES = [
+  // Village Center Buildings
+  [18, -5, 5], [-18, -7, 4], [14, 9, 3.5], [-8, 2, 2.5], [-24, 7, 3.5],
+  [24, -12, 3.5], [-15, -14, 3.5], [-28, 14, 3], [28, 12, 3], [28, 2, 4],
+  [-30, 0, 4], [10, -12, 3.5], [32, -8, 2.5], [-6, -10, 3],
+  // Decoration
+  [-12, -2, 1.5], [8, 2, 1.5], [-12, 12, 1.5], [6, -7, 1.5], [-9, 7, 1.5],
+  [-6, 1, 1.5], [6, 6, 2], [2, -12, 1],
+  // Village Trees
+  [-32, -2, 3], [32, -2, 3], [-30, 12, 2.5], [30, -10, 2.5], [20, 15, 2.5],
+  // Zone Landmarks
+  [-10, -60, 4], [31, -30, 3], [41, -4, 3], [31, 30, 3],
+  [8, 40, 3], [-31, 30, 3], [-41, -4, 3],
+  // Pond
+  [12, 18, 4],
+  // Road Decoration
+  [-8, 18, 2.5], [8, 22, 2.5], [5, -10, 1], [5, 14, 1], [5, 26, 1],
+  [-5, 18, 1.5], [5, -8, 1.5], [-5, 8, 2], [-4, -12, 1.5],
+  // Zone Entrance Flags
+  [18, -18, 1], [21, -21, 1], [26, -2, 1], [26, 2, 1],
+  [18, 18, 1], [21, 21, 1], [-2, 26, 1], [2, 26, 1],
+  [-18, 18, 1], [-21, 21, 1], [-26, -2, 1], [-26, 2, 1],
+  // Zone Approach Decor
+  [20, -20, 2], [24, -18, 2], [28, -6, 2], [28, 6, 2],
+  [20, 20, 2], [24, 22, 2], [-5, 28, 1.5], [5, 28, 1.5],
+  [-20, 20, 2], [-24, 22, 2], [-28, -6, 1.5], [-28, 6, 1.5],
+  // Dungeon entrance props
+  [-8, -51, 1.5], [8, -51, 1.5], [-6, -52, 2], [6, -52, 2],
+  // Strategic Hills
+  [15, -12, 3], [-15, 15, 3], [20, 12, 3], [-12, -20, 3], [8, 22, 3],
+  // Perimeter Hills
+  [45, 30, 3], [-38, 45, 3], [-50, 5, 3], [50, -5, 3],
+  [48, 38, 3], [-48, 50, 3], [45, 55, 3], [50, -20, 3],
+  [-55, -12, 3], [25, 58, 3],
+  // Perimeter Tree Clusters
+  [42, 45, 3], [-42, 38, 3], [40, -35, 3],
+  [-50, -10, 3], [50, 10, 3], [-32, 55, 3],
+  // Perimeter Rocks
+  [38, 42, 2], [-32, 58, 2], [-45, 42, 2],
+  [50, 18, 2], [-50, 25, 2], [15, 60, 2],
+];
+
+let showClearances = true;
 
 const SPOKE_TARGETS = [
   [0, -55],    // N → dungeon
@@ -366,6 +414,31 @@ function draw() {
     }
   }
 
+
+  // Object clearance circles
+  if (showClearances) {
+    for (const [cx, cz, cr] of OBJECT_CLEARANCES) {
+      const [sx, sy] = toScreen(cx, cz);
+      const r = cr * scale; // exact clearance radius
+      ctx.strokeStyle = 'rgba(255, 68, 68, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Fill with translucent red
+      ctx.fillStyle = 'rgba(255, 68, 68, 0.08)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      ctx.fill();
+      // Center dot
+      ctx.fillStyle = 'rgba(255, 68, 68, 0.6)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 
   // Zone circles and labels
   for (const [id, zone] of Object.entries(ZONE_CENTERS)) {
@@ -642,6 +715,12 @@ canvas.addEventListener('mousemove', (e) => {
   } else {
     tooltipEl.style.display = 'none';
   }
+});
+
+document.getElementById('toggleClearance').addEventListener('click', () => {
+  showClearances = !showClearances;
+  document.getElementById('toggleClearance').textContent = showClearances ? 'Hide Clearances' : 'Show Clearances';
+  draw();
 });
 
 window.addEventListener('resize', resize);

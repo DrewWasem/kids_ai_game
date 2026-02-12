@@ -14,11 +14,13 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Character3D, type Character3DHandle } from './Character3D'
 import { useGameStore } from '../stores/gameStore'
+import { collidesWithAny } from './collision-registry'
 import { resolveCollisions, VILLAGE_COLLIDERS } from './collision-map'
 
 const WALK_SPEED = 8
 const RUN_SPEED = 14
 const BOUNDS = { minX: -40, maxX: 40, minZ: -65, maxZ: 45 }
+const PLAYER_RADIUS = 0.5 // character collision radius
 
 interface PlayerCharacterProps {
   enabled: boolean
@@ -95,10 +97,24 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
       const worldX = dirX * cosYaw - dirZ * sinYaw
       const worldZ = dirX * sinYaw + dirZ * cosYaw
 
-      // Move position
+      // Move position with collision detection
       const pos = groupRef.current.position
-      pos.x += worldX * speed * delta
-      pos.z += worldZ * speed * delta
+      const newX = pos.x + worldX * speed * delta
+      const newZ = pos.z + worldZ * speed * delta
+
+      // Try full movement first
+      if (!collidesWithAny(newX, newZ, PLAYER_RADIUS)) {
+        pos.x = newX
+        pos.z = newZ
+      } else {
+        // Wall-slide: try each axis independently
+        if (!collidesWithAny(newX, pos.z, PLAYER_RADIUS)) {
+          pos.x = newX
+        } else if (!collidesWithAny(pos.x, newZ, PLAYER_RADIUS)) {
+          pos.z = newZ
+        }
+        // Both blocked = stop (player is stuck against a corner)
+      }
 
       // Collision resolution — push out of static objects
       const resolved = resolveCollisions(pos.x, pos.z, VILLAGE_COLLIDERS)
