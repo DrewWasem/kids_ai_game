@@ -167,7 +167,7 @@ const SPAWN_EXCLUSIONS: [number, number, number][] = [
   [26, -3, 3],    // Watchtower
   [-8, -10, 4],   // Stage
   // Pond
-  [16, 18, 4],
+  [8, 18, 4],
   // Zone landmarks (new positions)
   [-12, -75, 5],  [44, -42, 3],  [54, 1, 3],  [44, 42, 3],
   [6, 53, 3],     [-44, 42, 3],  [-54, 1, 3],
@@ -368,14 +368,16 @@ function isOnRingRoad(x: number, z: number, halfWidth: number): boolean {
   return Math.abs(dist - 42) < halfWidth
 }
 
-/** Check if position is within 10u of any zone center (for transition tiles) */
-function isNearZoneCenter(x: number, z: number): boolean {
+/** Squared distance to nearest zone center */
+function distSqToNearestZone(x: number, z: number): number {
+  let minDsq = Infinity
   for (const [cx, , cz] of Object.values(ZONE_CENTERS)) {
     const dx = x - cx
     const dz = z - cz
-    if (dx * dx + dz * dz < 100) return true // 10u radius
+    const dsq = dx * dx + dz * dz
+    if (dsq < minDsq) minDsq = dsq
   }
-  return false
+  return minDsq
 }
 
 function HexTerrain() {
@@ -384,12 +386,11 @@ function HexTerrain() {
     const result: { model: string; position: [number, number, number]; rotation?: [number, number, number]; scale?: number }[] = []
     const roadPositions = new Set<string>()
 
-    // 1. Grass (or transition near zones) everywhere first
+    // 1. Grass tiles everywhere
     for (let col = -55; col <= 55; col++) {
       for (let row = -60; row <= 50; row++) {
         const [wx, , wz] = hexToWorld(col, row)
-        const tileModel = isNearZoneCenter(wx, wz) ? TILES.transition : TILES.grass
-        result.push({ model: tileModel, position: [wx, 0, wz] })
+        result.push({ model: TILES.grass, position: [wx, 0, wz] })
       }
     }
 
@@ -481,14 +482,14 @@ function VillageCenter() {
       {/* Stage — performance area */}
       <Piece model={BUILDINGS.stage_A} position={[-8, 0, -10]} scale={5.6} />
 
-      {/* Decoration props */}
-      <Piece model={DECORATION.barrel} position={[-8, 0, -2]} scale={d} />
-      <Piece model={DECORATION.crate_A} position={[6, 0, 2]} scale={d} />
-      <Piece model={DECORATION.haybale} position={[-10, 0, 10]} scale={d} />
-      <Piece model={DECORATION.wheelbarrow} position={[6, 0, -7]} scale={d} />
-      <Piece model={DECORATION.sack} position={[-6, 0, 7]} scale={d} />
-      <Piece model={DECORATION.bucket_water} position={[-7, 0, 1]} scale={d} />
-      <Piece model={DECORATION.trough} position={[8, 0, 6]} scale={d} />
+      {/* Decoration props — positioned between spoke roads */}
+      <Piece model={DECORATION.barrel} position={[-8, 0, -5]} scale={d} />
+      <Piece model={DECORATION.crate_A} position={[9, 0, -4]} scale={d} />
+      <Piece model={DECORATION.haybale} position={[-14, 0, 7]} scale={d} />
+      <Piece model={DECORATION.wheelbarrow} position={[10, 0, -4]} scale={d} />
+      <Piece model={DECORATION.sack} position={[-8, 0, 14]} scale={d} />
+      <Piece model={DECORATION.bucket_water} position={[-11, 0, -3]} scale={d} />
+      <Piece model={DECORATION.trough} position={[13, 0, 5]} scale={d} />
       <Piece model={DECORATION.flag_blue} position={[6, 0, -12]} scale={15.0} />
 
       {/* Trees around the village edges */}
@@ -992,20 +993,9 @@ function ParkZone() {
 
   return (
     <group name="park-zone" position={center}>
-      {/* Tree ring (scaled down from original scene - these are viewed from above now) */}
-      <Piece model="tiny-treats/pretty-park/tree_large.gltf" position={[-6, 0, -4]} scale={ts} />
-      <Piece model={DECORATION.tree_A} position={[-4, 0, -5]} scale={0.9} />
-      <Piece model="tiny-treats/pretty-park/tree.gltf" position={[-2, 0, -6]} scale={ts} />
-      <Piece model={DECORATION.tree_B} position={[0, 0, -6]} scale={0.9} />
-      <Piece model="tiny-treats/pretty-park/tree_large.gltf" position={[2, 0, -5.5]} scale={ts} />
-      <Piece model={DECORATION.tree_A} position={[4, 0, -5]} scale={0.9} />
-      <Piece model="tiny-treats/pretty-park/tree.gltf" position={[6, 0, -3]} scale={ts} />
+      {/* Side trees */}
       <Piece model={DECORATION.tree_B} position={[7, 0, 0]} scale={0.9} />
       <Piece model="tiny-treats/pretty-park/tree_large.gltf" position={[-7, 0, 0]} scale={ts} />
-
-      {/* Bushes */}
-      <Piece model="tiny-treats/pretty-park/bush.gltf" position={[-5, 0, -3]} scale={0.8} />
-      <Piece model="tiny-treats/pretty-park/bush_large.gltf" position={[5, 0, -4]} scale={0.7} />
 
       {/* Flowers */}
       <Piece model="tiny-treats/pretty-park/flower_A.gltf" position={[-3, 0, -2]} />
@@ -1238,11 +1228,11 @@ function RoadDecoration() {
       <Piece model={DECORATION.flag_blue} position={[6, 0, 15]} scale={15.0} />
       <Piece model={DECORATION.flag_blue} position={[6, 0, 35]} scale={15.0} />
 
-      {/* Props along the boulevard */}
-      <Piece model={DECORATION.crate_B} position={[-6, 0, 20]} scale={d} />
-      <Piece model={DECORATION.haybale} position={[6, 0, -10]} scale={d} />
-      <Piece model={DECORATION.trough} position={[-6, 0, 10]} scale={d} />
-      <Piece model={DECORATION.barrel} position={[-5, 0, -18]} scale={d} />
+      {/* Props along the boulevard — offset to grass beside road */}
+      <Piece model={DECORATION.crate_B} position={[-8, 0, 20]} scale={d} />
+      <Piece model={DECORATION.haybale} position={[12, 0, -6]} scale={d} />
+      <Piece model={DECORATION.trough} position={[-6, 0, 14]} scale={d} />
+      <Piece model={DECORATION.barrel} position={[-7, 0, -18]} scale={d} />
 
       {/* Trees along the boulevard */}
       <Piece model={DECORATION.tree_A} position={[-9, 0, 20]} scale={d} />
@@ -1253,19 +1243,19 @@ function RoadDecoration() {
         <Piece key={`lantern-${i}`} model={DECORATION.street_lantern} position={l.position} rotation={l.rotation} scale={1.5} />
       ))}
 
-      {/* Zone-colored flags mid-spoke (scale 15 = ~4u tall) */}
+      {/* Zone-colored flags — road-side markers (offset 5u perpendicular to spoke) */}
       {/* knight-space (NE) — blue */}
-      <Piece model={DECORATION.flag_blue} position={[22, 0, -22]} scale={15.0} />
+      <Piece model={DECORATION.flag_blue} position={[25, 0, -18]} scale={15.0} />
       {/* barbarian-school (E) — red */}
-      <Piece model={DECORATION.flag_red} position={[32, 0, 3]} scale={15.0} />
+      <Piece model={DECORATION.flag_red} position={[31, 0, 8]} scale={15.0} />
       {/* skeleton-pizza (SE) — yellow */}
-      <Piece model={DECORATION.flag_yellow} position={[22, 0, 22]} scale={15.0} />
+      <Piece model={DECORATION.flag_yellow} position={[18, 0, 26]} scale={15.0} />
       {/* adventurers-picnic (S) — green */}
-      <Piece model={DECORATION.flag_green} position={[6, 0, 38]} scale={15.0} />
+      <Piece model={DECORATION.flag_green} position={[8, 0, 36]} scale={15.0} />
       {/* dungeon-concert (SW) — red */}
-      <Piece model={DECORATION.flag_red} position={[-22, 0, 22]} scale={15.0} />
+      <Piece model={DECORATION.flag_red} position={[-26, 0, 18]} scale={15.0} />
       {/* mage-kitchen (W) — green */}
-      <Piece model={DECORATION.flag_green} position={[-32, 0, 3]} scale={15.0} />
+      <Piece model={DECORATION.flag_green} position={[-33, 0, -2]} scale={15.0} />
     </group>
   )
 }
@@ -1303,50 +1293,50 @@ function ExplorationAreas() {
   const d = 7.0
   return (
     <group name="exploration-areas">
-      {/* ── Stargazer Hill (NE quadrant, X=15-25, Z=-25 to -15) ── */}
-      <Piece model={DECORATION.hills_trees} position={[18, 0, -20]} scale={6.5} />
-      <Piece model={DECORATION.hills_B_trees} position={[22, 0, -18]} scale={7.0} />
-      <Piece model={DECORATION.rock_A} position={[16, 0, -16]} scale={5.0} />
-      <Piece model={DECORATION.rock_C} position={[20, 0, -24]} scale={4.5} />
-      <Piece model={DECORATION.rock_E} position={[24, 0, -16]} scale={4.0} />
+      {/* ── Stargazer Hill (NE quadrant, offset from NE spoke) ── */}
+      <Piece model={DECORATION.hills_trees} position={[22, 0, -15]} scale={6.5} />
+      <Piece model={DECORATION.hills_B_trees} position={[26, 0, -14]} scale={7.0} />
+      <Piece model={DECORATION.rock_A} position={[20, 0, -12]} scale={5.0} />
+      <Piece model={DECORATION.rock_C} position={[25, 0, -19]} scale={4.5} />
+      <Piece model={DECORATION.rock_E} position={[28, 0, -12]} scale={4.0} />
 
       {/* ── Rocky Pass (N corridor, X=-10 to 10, Z=-30 to -48) ── */}
       {/* Rocks grow larger approaching the dungeon */}
       <Piece model={DECORATION.rock_A} position={[-8, 0, -32]} scale={3.5} />
       <Piece model={DECORATION.rock_B} position={[8, 0, -34]} scale={4.0} />
       <Piece model={DECORATION.hill_A} position={[-6, 0, -36]} scale={4.0} />
-      <Piece model={DECORATION.rock_C} position={[7, 0, -38]} scale={4.5} />
-      <Piece model={DECORATION.hill_B} position={[-9, 0, -40]} scale={5.0} />
-      <Piece model={DECORATION.rock_D} position={[9, 0, -42]} scale={5.5} />
-      <Piece model={DECORATION.hill_C} position={[-7, 0, -44]} scale={5.5} />
+      <Piece model={DECORATION.rock_C} position={[8, 0, -36]} scale={4.5} />
+      <Piece model={DECORATION.hill_B} position={[-9, 0, -36]} scale={5.0} />
+      <Piece model={DECORATION.rock_D} position={[11, 0, -46]} scale={5.5} />
+      <Piece model={DECORATION.hill_C} position={[-9, 0, -46]} scale={5.5} />
       <Piece model={DECORATION.rock_E} position={[8, 0, -46]} scale={6.0} />
 
       {/* ── Flower Meadow (W quadrant, X=-25 to -15, Z=5 to 20) ── */}
       <Piece model={DECORATION.flower_A} position={[-20, 0, 8]} scale={d} />
       <Piece model={DECORATION.flower_B} position={[-18, 0, 12]} scale={d} />
       <Piece model={DECORATION.flower_A} position={[-22, 0, 15]} scale={d} />
-      <Piece model={DECORATION.flower_B} position={[-16, 0, 18]} scale={d} />
-      <Piece model={DECORATION.trees_small} position={[-24, 0, 10]} scale={5.0} />
-      <Piece model={DECORATION.tree_A} position={[-15, 0, 14]} scale={5.5} />
-      <Piece model={DECORATION.hill_A} position={[-20, 0, 17]} scale={4.0} />
+      <Piece model={DECORATION.flower_B} position={[-12, 0, 22]} scale={d} />
+      <Piece model={DECORATION.trees_small} position={[-24, 0, 16]} scale={5.0} />
+      <Piece model={DECORATION.tree_A} position={[-10, 0, 20]} scale={5.5} />
+      <Piece model={DECORATION.hill_A} position={[-15, 0, 24]} scale={4.0} />
 
       {/* ── Training Grounds (E quadrant, X=25-35, Z=-5 to 10) ── */}
       <Piece model={DECORATION.haybale} position={[28, 0, -2]} scale={d} />
-      <Piece model={DECORATION.haybale} position={[32, 0, 3]} scale={d} />
-      <Piece model={DECORATION.target} position={[30, 0, -4]} rotation={[0, Math.PI / 4, 0]} scale={d} />
-      <Piece model={DECORATION.target} position={[26, 0, 6]} rotation={[0, -Math.PI / 4, 0]} scale={d} />
+      <Piece model={DECORATION.haybale} position={[32, 0, -3]} scale={d} />
+      <Piece model={DECORATION.target} position={[30, 0, -6]} rotation={[0, Math.PI / 4, 0]} scale={d} />
+      <Piece model={DECORATION.target} position={[26, 0, 10]} rotation={[0, -Math.PI / 4, 0]} scale={d} />
       <Piece model={DECORATION.weaponrack} position={[34, 0, 0]} scale={d} />
 
       {/* ── Market Road (SE quadrant, X=15-25, Z=20-30) ── */}
       <Piece model={DECORATION.barrel} position={[18, 0, 26]} scale={d} />
-      <Piece model={DECORATION.crate_A} position={[25, 0, 27]} scale={d} />
-      <Piece model={DECORATION.sack} position={[20, 0, 29]} scale={d} />
-      <Piece model={DECORATION.wheelbarrow} position={[16, 0, 27]} scale={d} />
-      <Piece model={DECORATION.trough} position={[27, 0, 31]} scale={d} />
+      <Piece model={DECORATION.crate_A} position={[30, 0, 22]} scale={d} />
+      <Piece model={DECORATION.sack} position={[24, 0, 31]} scale={d} />
+      <Piece model={DECORATION.wheelbarrow} position={[14, 0, 30]} scale={d} />
+      <Piece model={DECORATION.trough} position={[36, 0, 30]} scale={d} />
 
       {/* ── Extra scatter for variety ── */}
       <Piece model={DECORATION.hills_C_trees} position={[-18, 0, -22]} scale={5.0} />
-      <Piece model={DECORATION.rock_B} position={[14, 0, 15]} scale={4.0} />
+      <Piece model={DECORATION.rock_B} position={[10, 0, 17]} scale={4.0} />
       <Piece model={DECORATION.trees_B_small} position={[-12, 0, 28]} scale={5.0} />
       <Piece model={DECORATION.hill_B} position={[30, 0, 15]} scale={4.5} />
       <Piece model={DECORATION.rock_D} position={[-28, 0, -15]} scale={4.0} />
@@ -1359,7 +1349,7 @@ function ExplorationAreas() {
 // ============================================================================
 
 function VillagePond() {
-  const pondCenter: [number, number, number] = [16, 0, 18]
+  const pondCenter: [number, number, number] = [8, 0, 18]
   return (
     <group name="village-pond" position={pondCenter}>
       {/* Water hex tiles (slightly above ground to prevent z-fighting) */}
@@ -1403,62 +1393,62 @@ function ZoneApproachDecor() {
   return (
     <group name="zone-approach-decor">
       {/* ── Space Zone (NE) — adventure/combat ── */}
-      <Piece model={DECORATION.crate_A} position={along([38, -38], 15, -4)} scale={d} />
-      <Piece model={DECORATION.target} position={along([38, -38], 15, 4)} scale={d} />
-      <Piece model={DECORATION.barrel} position={along([38, -38], 10, -4)} scale={d} />
-      <Piece model={DECORATION.bucket_arrows} position={along([38, -38], 10, 4)} scale={d} />
-      <Piece model={DECORATION.flag_blue} position={along([38, -38], 5, -3)} scale={f} />
-      <Piece model={DECORATION.flag_blue} position={along([38, -38], 5, 3)} scale={f} />
+      <Piece model={DECORATION.crate_A} position={along([38, -38], 20, -6)} scale={d} />
+      <Piece model={DECORATION.target} position={along([38, -38], 20, 6)} scale={d} />
+      <Piece model={DECORATION.barrel} position={along([38, -38], 8, -6)} scale={d} />
+      <Piece model={DECORATION.bucket_arrows} position={along([38, -38], 8, 6)} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={along([38, -38], 5, -5)} scale={f} />
+      <Piece model={DECORATION.flag_blue} position={along([38, -38], 5, 5)} scale={f} />
 
       {/* ── School Zone (E) — training ── */}
-      <Piece model={DECORATION.haybale} position={along([48, 5], 15, -4)} scale={d} />
-      <Piece model={DECORATION.target} position={along([48, 5], 15, 4)} scale={d} />
-      <Piece model={DECORATION.bucket_arrows} position={along([48, 5], 10, -4)} scale={d} />
-      <Piece model={DECORATION.crate_B} position={along([48, 5], 10, 4)} scale={d} />
-      <Piece model={DECORATION.flag_red} position={along([48, 5], 5, -3)} scale={f} />
-      <Piece model={DECORATION.flag_red} position={along([48, 5], 5, 3)} scale={f} />
+      <Piece model={DECORATION.haybale} position={along([48, 5], 20, -6)} scale={d} />
+      <Piece model={DECORATION.target} position={along([48, 5], 20, 6)} scale={d} />
+      <Piece model={DECORATION.bucket_arrows} position={along([48, 5], 22, -6)} scale={d} />
+      <Piece model={DECORATION.crate_B} position={along([48, 5], 22, 6)} scale={d} />
+      <Piece model={DECORATION.flag_red} position={along([48, 5], 2, -5)} scale={f} />
+      <Piece model={DECORATION.flag_red} position={along([48, 5], 2, 5)} scale={f} />
 
       {/* ── Pizza Zone (SE) — delivery/food ── */}
-      <Piece model={DECORATION.barrel} position={along([38, 38], 15, -4)} scale={d} />
-      <Piece model={DECORATION.crate_A} position={along([38, 38], 15, 4)} scale={d} />
-      <Piece model={DECORATION.sack} position={along([38, 38], 10, -4)} scale={d} />
-      <Piece model={DECORATION.wheelbarrow} position={along([38, 38], 10, 4)} scale={d} />
-      <Piece model={DECORATION.flag_yellow} position={along([38, 38], 5, -3)} scale={f} />
-      <Piece model={DECORATION.flag_yellow} position={along([38, 38], 5, 3)} scale={f} />
+      <Piece model={DECORATION.barrel} position={along([38, 38], 20, -6)} scale={d} />
+      <Piece model={DECORATION.crate_A} position={along([38, 38], 20, 6)} scale={d} />
+      <Piece model={DECORATION.sack} position={along([38, 38], 8, -6)} scale={d} />
+      <Piece model={DECORATION.wheelbarrow} position={along([38, 38], 8, 6)} scale={d} />
+      <Piece model={DECORATION.flag_yellow} position={along([38, 38], 5, -5)} scale={f} />
+      <Piece model={DECORATION.flag_yellow} position={along([38, 38], 5, 5)} scale={f} />
 
       {/* ── Park Zone (S) — nature/picnic ── */}
-      <Piece model={DECORATION.flower_A} position={[-5, 0, 35]} scale={d} />
-      <Piece model={DECORATION.flower_B} position={[5, 0, 35]} scale={d} />
-      <Piece model={DECORATION.trees_small} position={[-5, 0, 40]} scale={5.0} />
-      <Piece model={DECORATION.rock_B} position={[5, 0, 40]} scale={5.0} />
-      <Piece model={DECORATION.flag_green} position={[-3, 0, 44]} scale={f} />
-      <Piece model={DECORATION.flag_green} position={[3, 0, 44]} scale={f} />
+      <Piece model={DECORATION.flower_A} position={[-7, 0, 35]} scale={d} />
+      <Piece model={DECORATION.flower_B} position={[7, 0, 35]} scale={d} />
+      <Piece model={DECORATION.trees_small} position={[-7, 0, 37]} scale={5.0} />
+      <Piece model={DECORATION.rock_B} position={[7, 0, 37]} scale={5.0} />
+      <Piece model={DECORATION.flag_green} position={[-6, 0, 47]} scale={f} />
+      <Piece model={DECORATION.flag_green} position={[6, 0, 47]} scale={f} />
 
       {/* ── Concert Zone (SW) — gathering/camp ── */}
-      <Piece model={DECORATION.tent} position={along([-38, 38], 15, -4)} scale={d} />
-      <Piece model={DECORATION.weaponrack} position={along([-38, 38], 15, 4)} scale={d} />
-      <Piece model={DECORATION.barrel} position={along([-38, 38], 10, -4)} scale={d} />
-      <Piece model={DECORATION.crate_B} position={along([-38, 38], 10, 4)} scale={d} />
-      <Piece model={DECORATION.flag_red} position={along([-38, 38], 5, -3)} scale={f} />
-      <Piece model={DECORATION.flag_red} position={along([-38, 38], 5, 3)} scale={f} />
+      <Piece model={DECORATION.tent} position={along([-38, 38], 20, -6)} scale={d} />
+      <Piece model={DECORATION.weaponrack} position={along([-38, 38], 20, 6)} scale={d} />
+      <Piece model={DECORATION.barrel} position={along([-38, 38], 8, -6)} scale={d} />
+      <Piece model={DECORATION.crate_B} position={along([-38, 38], 8, 6)} scale={d} />
+      <Piece model={DECORATION.flag_red} position={along([-38, 38], 5, -5)} scale={f} />
+      <Piece model={DECORATION.flag_red} position={along([-38, 38], 5, 5)} scale={f} />
 
       {/* ── Kitchen Zone (W) — cooking supplies ── */}
-      <Piece model={DECORATION.sack} position={along([-48, 5], 15, -4)} scale={d} />
-      <Piece model={DECORATION.bucket_water} position={along([-48, 5], 15, 4)} scale={d} />
-      <Piece model={DECORATION.barrel} position={along([-48, 5], 10, -4)} scale={d} />
-      <Piece model={DECORATION.crate_A} position={along([-48, 5], 10, 4)} scale={d} />
-      <Piece model={DECORATION.flag_green} position={along([-48, 5], 5, -3)} scale={f} />
-      <Piece model={DECORATION.flag_green} position={along([-48, 5], 5, 3)} scale={f} />
+      <Piece model={DECORATION.sack} position={along([-48, 5], 20, -6)} scale={d} />
+      <Piece model={DECORATION.bucket_water} position={along([-48, 5], 20, 6)} scale={d} />
+      <Piece model={DECORATION.barrel} position={along([-48, 5], 22, -6)} scale={d} />
+      <Piece model={DECORATION.crate_A} position={along([-48, 5], 22, 6)} scale={d} />
+      <Piece model={DECORATION.flag_green} position={along([-48, 5], 2, -5)} scale={f} />
+      <Piece model={DECORATION.flag_green} position={along([-48, 5], 2, 5)} scale={f} />
 
-      {/* ── Dungeon approach (N boulevard) — extra props ── */}
-      <Piece model={DECORATION.rock_C} position={[-5, 0, -50]} scale={5.0} />
-      <Piece model={DECORATION.rock_D} position={[5, 0, -50]} scale={5.0} />
-      <Piece model={DECORATION.hill_A} position={[-5, 0, -55]} scale={5.5} />
-      <Piece model={DECORATION.hill_B} position={[5, 0, -55]} scale={5.5} />
-      <Piece model={DECORATION.rock_E} position={[-5, 0, -60]} scale={6.0} />
-      <Piece model={DECORATION.rock_A} position={[5, 0, -60]} scale={6.0} />
-      <Piece model={DECORATION.flag_red} position={[-4, 0, -64]} scale={f} />
-      <Piece model={DECORATION.flag_red} position={[4, 0, -64]} scale={f} />
+      {/* ── Dungeon approach (N boulevard) — flanking props on grass ── */}
+      <Piece model={DECORATION.rock_C} position={[-7, 0, -50]} scale={5.0} />
+      <Piece model={DECORATION.rock_D} position={[7, 0, -50]} scale={5.0} />
+      <Piece model={DECORATION.hill_A} position={[-7, 0, -55]} scale={5.5} />
+      <Piece model={DECORATION.hill_B} position={[7, 0, -55]} scale={5.5} />
+      <Piece model={DECORATION.rock_E} position={[-7, 0, -60]} scale={6.0} />
+      <Piece model={DECORATION.rock_A} position={[7, 0, -60]} scale={6.0} />
+      <Piece model={DECORATION.flag_red} position={[-6, 0, -64]} scale={f} />
+      <Piece model={DECORATION.flag_red} position={[6, 0, -64]} scale={f} />
     </group>
   )
 }
@@ -1469,13 +1459,13 @@ function ZoneApproachDecor() {
 
 function JunctionPlazas() {
   const f = 15.0
-  // Junctions at R≈42 where each spoke meets the ring road
+  // Junctions outside ring road (R≈49, off spokes)
   const junctions: { pos: [number, number, number]; flag: string }[] = [
-    { pos: [30, 0, -30], flag: DECORATION.flag_blue },    // NE
-    { pos: [42, 0, 4], flag: DECORATION.flag_red },       // E
-    { pos: [30, 0, 30], flag: DECORATION.flag_yellow },   // SE
-    { pos: [-30, 0, 30], flag: DECORATION.flag_red },     // SW
-    { pos: [-42, 0, 4], flag: DECORATION.flag_green },    // W
+    { pos: [40, 0, -29], flag: DECORATION.flag_blue },    // NE
+    { pos: [49, 0, 10], flag: DECORATION.flag_red },       // E
+    { pos: [29, 0, 40], flag: DECORATION.flag_yellow },   // SE
+    { pos: [-29, 0, 40], flag: DECORATION.flag_red },     // SW
+    { pos: [-49, 0, 10], flag: DECORATION.flag_green },    // W
   ]
 
   return (

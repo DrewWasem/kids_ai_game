@@ -344,7 +344,7 @@ export const TASK_ENVIRONMENTS: Record<string, EnvironmentProp[]> = {
   'adventurers-picnic': [
     { id: 'env-tree-l', path: 'tiny-treats/pretty-park/tree.gltf', position: [-5, 0, -3], scale: 2.0 },
     { id: 'env-tree-r', path: 'tiny-treats/pretty-park/tree_large.gltf', position: [5, 0, -4], scale: 2.0 },
-    { id: 'env-blanket', path: 'tiny-treats/pleasant-picnic/picnic_blanket_red.gltf', position: [0, 0.01, -1], scale: 2.0 },
+    { id: 'env-blanket', path: 'tiny-treats/pleasant-picnic/picnic_blanket_red.gltf', position: [0, 0.2, -1], scale: 2.0 },
     { id: 'env-bush', path: 'tiny-treats/pretty-park/bush.gltf', position: [-3, 0, -4], scale: 1.5 },
   ],
 }
