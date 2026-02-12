@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import R3FGame from './game/R3FGame';
 import ScenePlayer3D from './game/ScenePlayer3D';
 import PromptInput from './components/PromptInput';
@@ -6,7 +6,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
-import { getStoryById } from './data/stories/index';
+import { WORLDS } from './data/worlds';
+import { BADGES } from './services/badge-system';
 
 export default function App() {
   const currentZone = useGameStore((s) => s.currentZone);
@@ -16,6 +17,7 @@ export default function App() {
   const toggleMute = useGameStore((s) => s.toggleMute);
   const exitZone = useGameStore((s) => s.exitZone);
   const isTransitioning = useGameStore((s) => s.isTransitioning);
+  const badges = useGameStore((s) => s.badges);
   const [loading3D, setLoading3D] = useState(true);
 
   // Preload shared animations on mount, then dismiss loading screen
@@ -29,21 +31,8 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Zone labels for display
-  const ZONE_LABELS: Record<string, { label: string; emoji: string }> = {
-    'skeleton-birthday': { label: "Skeleton's Surprise Birthday", emoji: '💀' },
-    'knight-space':      { label: "Knight's Space Mission", emoji: '🚀' },
-    'mage-kitchen':      { label: "Mage vs. The Kitchen", emoji: '🧙' },
-    'barbarian-school':  { label: "Barbarian's School Day", emoji: '📚' },
-    'dungeon-concert':   { label: "Dungeon Rock Concert", emoji: '🎸' },
-    'skeleton-pizza':    { label: "Skeleton Pizza Delivery", emoji: '🍕' },
-    'adventurers-picnic': { label: "Adventurers' Picnic", emoji: '🧺' },
-  };
-
-  const currentStageIndex = useGameStore((s) => s.currentStageIndex);
-  const zoneInfo = currentZone ? ZONE_LABELS[currentZone] : null;
-  const story = useMemo(() => currentZone ? getStoryById(currentZone) : null, [currentZone]);
-  const stageLabel = story ? `Stage ${currentStageIndex + 1}/${story.stages.length}` : null;
+  const world = currentZone ? WORLDS[currentZone] : null;
+  const earnedBadges = BADGES.filter(b => badges[b.id]);
 
   return (
     <ErrorBoundary>
@@ -53,20 +42,34 @@ export default function App() {
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-quest-purple/30 to-transparent" />
 
           <div className="font-display text-2xl font-bold flex items-center gap-2">
-            <span className="text-xl animate-sparkle">✨</span>
+            <span className="text-xl animate-sparkle">{'\u{2728}'}</span>
             <span className="bg-gradient-to-r from-quest-purple via-quest-orange to-quest-yellow bg-clip-text text-transparent">
               Quest AI
             </span>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Badge tray — small icons showing earned badges */}
+            {earnedBadges.length > 0 && (
+              <div className="flex items-center gap-1 bg-white/60 px-2.5 py-1.5 rounded-xl border border-quest-purple/20" title={earnedBadges.map(b => b.label).join(', ')}>
+                {earnedBadges.map(b => (
+                  <span key={b.id} className="text-sm" title={`${b.label}: ${b.description}`}>
+                    {b.emoji}
+                  </span>
+                ))}
+                <span className="text-[10px] font-bold text-quest-text-muted ml-1">
+                  {earnedBadges.length}/{BADGES.length}
+                </span>
+              </div>
+            )}
+
             <button
               onClick={toggleMute}
               className="btn-game text-sm px-3 py-2 rounded-xl border-2
                 bg-white/60 text-quest-text-mid border-quest-border hover:border-quest-purple/50 hover:text-quest-text-dark"
               title={isMuted ? 'Unmute' : 'Mute'}
             >
-              {isMuted ? '🔇' : '🔊'}
+              {isMuted ? '\u{1F507}' : '\u{1F50A}'}
             </button>
 
             {currentZone && !isTransitioning && (
@@ -75,23 +78,20 @@ export default function App() {
                 className="btn-game text-sm px-4 py-2 rounded-xl border-2
                   bg-white/60 text-quest-text-mid border-quest-border hover:border-quest-orange/50 hover:text-quest-text-dark hover:bg-quest-panel-bg"
               >
-                🚪 Leave Quest
+                {'\u{1F6AA}'} Leave Quest
               </button>
             )}
 
-            {zoneInfo && (
+            {world && (
               <span className="text-sm font-heading font-bold text-quest-text-dark bg-white/80 px-3 py-1.5 rounded-xl border border-quest-purple/20">
-                {zoneInfo.emoji} {zoneInfo.label}
-                {stageLabel && (
-                  <span className="ml-2 text-xs font-medium text-quest-purple">{stageLabel}</span>
-                )}
+                {world.emoji} {world.label}
               </span>
             )}
           </div>
         </header>
 
         <div className="flex-1 min-h-0 flex flex-col">
-          {/* Game Canvas — full village always visible */}
+          {/* Game Canvas */}
           <div className="flex-1 min-h-0 flex items-center justify-center px-4 py-2">
             <div className="relative rounded-game-lg overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30"
                  style={{ width: 1024, height: 576, maxWidth: '100%', maxHeight: '60vh' }}>

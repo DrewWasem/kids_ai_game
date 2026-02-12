@@ -1,7 +1,8 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useTTS } from '../hooks/useTTS';
-import { getStoryById } from '../data/stories/index';
+import { WORLDS } from '../data/worlds';
+import { BADGES } from '../services/badge-system';
 import VoiceButton from './VoiceButton';
 
 const MAX_INPUT_LENGTH = 300;
@@ -12,48 +13,30 @@ const LOADING_MESSAGES = [
   'This is gonna be good\u2026',
   'Hold on, something\u2019s happening\u2026',
   'Mixing up some magic\u2026',
-  'The skeleton is warming up\u2026',
   'Loading the props\u2026',
+  'Something awesome is coming\u2026',
 ];
-
-const TASK_PLACEHOLDERS: Record<string, string> = {
-  // 3D tasks
-  'skeleton-birthday': "Plan the skeleton's birthday! Who comes, what decorations, and what cake?",
-  'knight-space': "The knight is lost in space! How does he survive and what does he do?",
-  'mage-kitchen': "The kitchen is alive! How does the mage tame the stove, pot, and fridge?",
-  'barbarian-school': "The barbarian is at school! How does he fit in, make friends, and learn?",
-  'dungeon-concert': "Start a rock band! Who plays what instrument? What song do they play?",
-  'skeleton-pizza': "Deliver the pizza! How does the skeleton get there without falling apart?",
-  'adventurers-picnic': "Plan the perfect picnic! What food, where to sit, and what activities?",
-  // Legacy 2D tasks
-  'monster-party': "How would you plan the monster's birthday party? Be specific!",
-  'robot-pizza': 'How should the robot deliver the pizza? Describe the route and obstacles!',
-  'wizard-kitchen': 'The kitchen is chaos! How do you fix the plates, soup, toaster, and fridge?',
-  'dinosaur-school': 'The T-Rex is too big for school! How can you solve each problem?',
-  'dog-space': "Plan the dog's space mission! What does the dog need to reach the moon?",
-  'octopus-band': 'Help the octopus start a rock band! What instruments, stage, and audience?',
-};
 
 const SUCCESS_STYLES = {
   FULL_SUCCESS: {
     bg: 'bg-quest-success/10 border-quest-success/40',
     text: 'text-quest-text-dark',
     badge: 'bg-quest-success/20 text-quest-success',
-    label: 'Amazing!',
+    label: 'Awesome!',
     icon: '\u{1F31F}',
   },
   PARTIAL_SUCCESS: {
     bg: 'bg-quest-yellow/10 border-quest-yellow/40',
     text: 'text-quest-text-dark',
     badge: 'bg-quest-yellow/20 text-amber-600',
-    label: 'Almost!',
+    label: 'Nice!',
     icon: '\u{1F4A1}',
   },
   FUNNY_FAIL: {
     bg: 'bg-quest-orange/10 border-quest-orange/40',
     text: 'text-quest-text-dark',
     badge: 'bg-quest-orange/20 text-quest-orange',
-    label: 'Oops!',
+    label: 'Ha!',
     icon: '\u{1F604}',
   },
 } as const;
@@ -69,25 +52,26 @@ export default function PromptInput() {
     lastSource,
     error,
     clearError,
-    currentStageIndex,
-    stageComplete,
-    hintsUsed,
-    advanceStage,
-    getHint,
+    badgeUnlocks,
+    clearBadgeUnlocks,
   } = useGameStore();
 
   const { speak } = useTTS();
-  const [currentHint, setCurrentHint] = useState<string | null>(null);
+  const [showBadgeCelebration, setShowBadgeCelebration] = useState(false);
 
-  // Get story data for current zone (memoized — only recomputes when task changes)
-  const story = useMemo(() => getStoryById(currentTask), [currentTask]);
-  const stage = story?.stages[currentStageIndex];
-  const totalStages = story?.stages.length ?? 0;
+  const world = WORLDS[currentTask];
 
-  // Clear hint when stage changes
+  // Badge celebration animation
   useEffect(() => {
-    setCurrentHint(null);
-  }, [currentStageIndex]);
+    if (badgeUnlocks.length > 0) {
+      setShowBadgeCelebration(true);
+      const timer = setTimeout(() => {
+        setShowBadgeCelebration(false);
+        clearBadgeUnlocks();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [badgeUnlocks, clearBadgeUnlocks]);
 
   const loadingMsgRef = useRef(LOADING_MESSAGES[0]);
   if (isLoading && loadingMsgRef.current === LOADING_MESSAGES[0]) {
@@ -122,6 +106,27 @@ export default function PromptInput() {
       {/* Top glow line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-quest-purple/30 to-transparent" />
 
+      {/* Badge celebration popup */}
+      {showBadgeCelebration && badgeUnlocks.length > 0 && (
+        <div className="mb-4 bg-quest-purple/10 border-2 border-quest-purple/40 rounded-game-md p-4 animate-bounce-in">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg animate-sparkle">{'\u{1F3C6}'}</span>
+            <span className="font-heading font-bold text-quest-purple">Badge{badgeUnlocks.length > 1 ? 's' : ''} Unlocked!</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {badgeUnlocks.map(id => {
+              const badge = BADGES.find(b => b.id === id);
+              if (!badge) return null;
+              return (
+                <span key={id} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-quest-purple/20 text-quest-purple text-sm font-semibold animate-scale-in">
+                  <span>{badge.emoji}</span> {badge.label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Narration result */}
       {lastScript && style && (
         <div className={`bubble-result mb-4 animate-slide-up border rounded-game-md p-4 ${style.bg} ${style.text}`}>
@@ -141,64 +146,16 @@ export default function PromptInput() {
               {lastScript.prompt_feedback}
             </p>
           )}
-          {lastScript.missing_elements && lastScript.missing_elements.length > 0 && (
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              <span className="text-xs font-semibold text-quest-text-light">Try adding:</span>
-              {lastScript.missing_elements.map((el: string) => (
-                <span key={el} className="text-xs px-2 py-0.5 rounded-full bg-quest-purple/10 text-quest-purple font-medium animate-scale-in">
-                  {el}
-                </span>
-              ))}
-            </div>
-          )}
-          {lastScript.success_level === 'FUNNY_FAIL' && (
-            <p className="mt-2 text-xs text-quest-text-muted italic">That was funny! Try being more specific this time.</p>
+          {/* Guide hint — friendly suggestion for what to try next */}
+          {lastScript.guide_hint && (
+            <p className="mt-2 text-sm text-quest-purple/80 italic leading-relaxed">
+              {'\u{1F4AC}'} {lastScript.guide_hint}
+            </p>
           )}
         </div>
       )}
 
-      {/* Stage progress + actions */}
-      {stage && (
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <span className="text-xs font-heading font-bold text-quest-text-mid bg-quest-purple/10 px-3 py-1.5 rounded-full">
-            Stage {currentStageIndex + 1} of {totalStages}: {stage.title}
-          </span>
-          <div className="flex items-center gap-2">
-            {/* Hint button — visible when there's a result and not yet complete */}
-            {lastScript && !stageComplete && hintsUsed < 3 && (
-              <button
-                onClick={() => {
-                  const hint = getHint();
-                  if (hint) setCurrentHint(hint);
-                }}
-                className="btn-game text-xs px-3 py-1.5 rounded-xl border-2
-                  bg-quest-yellow/10 text-amber-600 border-quest-yellow/30 hover:border-quest-yellow/60 hover:bg-quest-yellow/20"
-              >
-                💡 Hint ({3 - hintsUsed} left)
-              </button>
-            )}
-            {/* Next stage button — visible on completion */}
-            {stageComplete && (
-              <button
-                onClick={advanceStage}
-                className="btn-game text-xs px-4 py-1.5 rounded-xl border-2
-                  bg-quest-success/10 text-quest-success border-quest-success/30 hover:border-quest-success/60 hover:bg-quest-success/20 animate-bounce-in font-bold"
-              >
-                {currentStageIndex + 1 < totalStages ? '⭐ Next Stage →' : '🏆 Complete!'}
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Active hint display */}
-      {currentHint && (
-        <div className="mb-3 bg-quest-yellow/10 border border-quest-yellow/30 rounded-game-md px-4 py-3 animate-slide-up">
-          <p className="text-sm text-amber-700 font-semibold">💡 {currentHint}</p>
-        </div>
-      )}
-
-      {/* Error display — kid-friendly message, never raw technical errors */}
+      {/* Error display */}
       {error && (
         <div className="bubble-result mb-4 bg-quest-orange/10 border border-quest-orange/40 text-quest-text-dark rounded-game-md p-4 flex justify-between items-center">
           <p className="text-sm">The magic got a little tangled! Try again or try something different.</p>
@@ -213,7 +170,7 @@ export default function PromptInput() {
             value={userInput}
             onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
             onKeyDown={handleKeyDown}
-            placeholder={stage?.question ?? TASK_PLACEHOLDERS[currentTask] ?? TASK_PLACEHOLDERS['skeleton-birthday']}
+            placeholder={world?.placeholder ?? "What should happen? Be as specific as you can!"}
             disabled={isLoading}
             rows={2}
             maxLength={MAX_INPUT_LENGTH}

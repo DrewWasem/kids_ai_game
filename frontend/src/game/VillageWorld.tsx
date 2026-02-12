@@ -48,7 +48,7 @@ function hexToWorld(col: number, row: number): [number, number, number] {
 const HEX = 'kaykit/packs/medieval_hex/'
 
 const TILES = {
-  grass: HEX + 'tiles/base/hex_grass.gltf',
+  grass: HEX + 'tiles/base/hex_grass_bottom.gltf',
   road_A: 'tiny-treats/pretty-park/cobble_stones.gltf',
   road_B: 'tiny-treats/pretty-park/cobble_stones.gltf',
   road_C: 'tiny-treats/pretty-park/cobble_stones.gltf',
@@ -368,18 +368,6 @@ function isOnRingRoad(x: number, z: number, halfWidth: number): boolean {
   return Math.abs(dist - 42) < halfWidth
 }
 
-/** Squared distance to nearest zone center */
-function distSqToNearestZone(x: number, z: number): number {
-  let minDsq = Infinity
-  for (const [cx, , cz] of Object.values(ZONE_CENTERS)) {
-    const dx = x - cx
-    const dz = z - cz
-    const dsq = dx * dx + dz * dz
-    if (dsq < minDsq) minDsq = dsq
-  }
-  return minDsq
-}
-
 function HexTerrain() {
   // Generate a grid of hex tiles covering the larger world
   const tiles = useMemo(() => {
@@ -446,41 +434,37 @@ function VillageCenter() {
   const d = 7.0  // Decoration prop scale
   return (
     <group name="village-center" position={[0, 0, 0]}>
-      {/* Town hall — focal point, faces south */}
-      <Piece model={BUILDINGS.townhall} position={[12, 0, -5]} rotation={[0, -Math.PI / 2, 0]} scale={7.7} />
-
-      {/* Tavern — left of main road */}
-      <Piece model={BUILDINGS.tavern} position={[-16, 0, -7]} rotation={[0, Math.PI / 4, 0]} scale={s} />
-
-      {/* Market stall — right of main road, faces road */}
-      <Piece model={BUILDINGS.market} position={[16, 0, 5]} rotation={[0, -Math.PI / 3, 0]} scale={s} />
-
       {/* Well — village center landmark */}
       <Piece model={BUILDINGS.well} position={[0, 0, 0]} scale={2.5} />
 
-      {/* Blacksmith — south-west of center */}
-      <Piece model={BUILDINGS.blacksmith} position={[-9.3, 0, 25.2]} rotation={[0, Math.PI / 2, 0]} scale={s} />
+      {/* Town hall — focal point near center */}
+      <Piece model={BUILDINGS.townhall} position={[8.9, 0, -27.6]} rotation={[0, -Math.PI / 2, 0]} scale={7.7} />
 
-      {/* Homes — spread around the village square */}
-      <Piece model={BUILDINGS.home_A} position={[20, 0, -12]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_B} position={[-10, 0, -12]} rotation={[0, Math.PI / 3, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_A} position={[-22, 0, 10]} rotation={[0, Math.PI / 6, 0]} scale={6.3} />
-      <Piece model={BUILDINGS.home_B} position={[22, 0, 10]} rotation={[0, -Math.PI / 6, 0]} scale={6.3} />
+      {/* === NW sector (between W spoke and N boulevard) === */}
+      <Piece model={BUILDINGS.tavern} position={[-14, 0, -14]} rotation={[0, Math.PI / 4, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_B} position={[-12, 0, -20]} rotation={[0, Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.stage_A} position={[-18, 0, -18]} scale={5.6} />
 
-      {/* Church — right side, tall spire */}
-      <Piece model={BUILDINGS.church} position={[24, 0, 5]} rotation={[0, -Math.PI / 2, 0]} scale={7.7} />
+      {/* === NE sector (between N boulevard and NE spoke) === */}
+      <Piece model={BUILDINGS.stables} position={[-22.7, 0, -8.3]} rotation={[0, Math.PI / 2, 0]} scale={s} />
 
-      {/* Windmill — left side, tall blades */}
-      <Piece model={BUILDINGS.windmill} position={[-24, 0, 5]} rotation={[0, Math.PI / 6, 0]} scale={7.7} />
-
-      {/* Stables — near road, N side */}
-      <Piece model={BUILDINGS.stables} position={[8, 0, -12]} rotation={[0, 0, 0]} scale={s} />
-
-      {/* Watchtower — guard post, NE */}
+      {/* === E sector (between NE and E spokes) === */}
+      <Piece model={BUILDINGS.home_A} position={[28, 0, -8]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
       <Piece model={BUILDINGS.watchtower} position={[26, 0, -3]} rotation={[0, -Math.PI / 4, 0]} scale={s} />
 
-      {/* Stage — performance area */}
-      <Piece model={BUILDINGS.stage_A} position={[-8, 0, -10]} scale={5.6} />
+      {/* === SE sector (between E and SE spokes) === */}
+      <Piece model={BUILDINGS.market} position={[22, 0, 14]} rotation={[0, -Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_B} position={[22, 0, 10]} rotation={[0, -Math.PI / 6, 0]} scale={6.3} />
+
+      {/* === S sector (between SE spoke and S boulevard) === */}
+      <Piece model={BUILDINGS.church} position={[14, 0, 24]} rotation={[0, -Math.PI / 2, 0]} scale={7.7} />
+
+      {/* === SW sector (between S boulevard and SW spoke) === */}
+      <Piece model={BUILDINGS.blacksmith} position={[-9.3, 0, 25.2]} rotation={[0, Math.PI / 2, 0]} scale={s} />
+
+      {/* === W sector (between SW and W spokes) === */}
+      <Piece model={BUILDINGS.home_A} position={[-22, 0, 10]} rotation={[0, Math.PI / 6, 0]} scale={6.3} />
+      <Piece model={BUILDINGS.windmill} position={[-24, 0, 16]} rotation={[0, Math.PI / 6, 0]} scale={7.7} />
 
       {/* Decoration props — positioned between spoke roads */}
       <Piece model={DECORATION.barrel} position={[-8, 0, -5]} scale={d} />
@@ -1218,7 +1202,34 @@ function RoadDecoration() {
       }
     }
 
-    return result
+    // Remove lamp posts within 6 units of each other, keeping the one closer to center
+    const MIN_DIST = 6
+    const filtered: typeof result = []
+    for (const lamp of result) {
+      const [lx, , lz] = lamp.position
+      const lDistSq = lx * lx + lz * lz
+      let tooClose = false
+      for (let i = filtered.length - 1; i >= 0; i--) {
+        const [fx, , fz] = filtered[i].position
+        const dx2 = lx - fx
+        const dz2 = lz - fz
+        const distSq = dx2 * dx2 + dz2 * dz2
+        if (distSq < MIN_DIST * MIN_DIST) {
+          const fDistSq = fx * fx + fz * fz
+          if (lDistSq < fDistSq) {
+            // New lamp is closer to center — replace the existing one
+            filtered.splice(i, 1)
+          } else {
+            // Existing lamp is closer to center — skip this one
+            tooClose = true
+            break
+          }
+        }
+      }
+      if (!tooClose) filtered.push(lamp)
+    }
+
+    return filtered
   }, [])
 
   return (
@@ -1293,12 +1304,12 @@ function ExplorationAreas() {
   const d = 7.0
   return (
     <group name="exploration-areas">
-      {/* ── Stargazer Hill (NE quadrant, offset from NE spoke) ── */}
-      <Piece model={DECORATION.hills_trees} position={[22, 0, -15]} scale={6.5} />
-      <Piece model={DECORATION.hills_B_trees} position={[26, 0, -14]} scale={7.0} />
-      <Piece model={DECORATION.rock_A} position={[20, 0, -12]} scale={5.0} />
-      <Piece model={DECORATION.rock_C} position={[25, 0, -19]} scale={4.5} />
-      <Piece model={DECORATION.rock_E} position={[28, 0, -12]} scale={4.0} />
+      {/* ── Stargazer Hill (NE quadrant, far from center) ── */}
+      <Piece model={DECORATION.hills_trees} position={[45, 0, -18]} scale={6.5} />
+      <Piece model={DECORATION.hills_B_trees} position={[49, 0, -17]} scale={7.0} />
+      <Piece model={DECORATION.rock_A} position={[43, 0, -15]} scale={5.0} />
+      <Piece model={DECORATION.rock_C} position={[48, 0, -22]} scale={4.5} />
+      <Piece model={DECORATION.rock_E} position={[51, 0, -15]} scale={4.0} />
 
       {/* ── Rocky Pass (N corridor, X=-10 to 10, Z=-30 to -48) ── */}
       {/* Rocks grow larger approaching the dungeon */}

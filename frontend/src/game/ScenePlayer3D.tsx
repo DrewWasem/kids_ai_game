@@ -158,6 +158,9 @@ const PROP_PATHS: Record<string, string> = {
   flag: 'kaykit/packs/dungeon/banner_blue.gltf',
   spacesuit: 'kaykit/packs/space_base/cargo_A.gltf',
 
+  // === Kitchen extras ===
+  sink: 'tiny-treats/charming-kitchen/stove.gltf',
+
   // === Furniture Pack ===
   desk: 'kaykit/packs/furniture/desk.gltf',
   table: 'kaykit/packs/furniture/desk.gltf',
@@ -337,9 +340,9 @@ export const TASK_ENVIRONMENTS: Record<string, EnvironmentProp[]> = {
     { id: 'env-barrel-r', path: 'kaykit/packs/dungeon/barrel_large.gltf', position: [3, 0, -2], scale: 0.8 },
   ],
   'skeleton-pizza': [
-    { id: 'env-bench-l', path: 'tiny-treats/pretty-park/bench.gltf', position: [-4, 0, -2], scale: 1.5 },
-    { id: 'env-bench-r', path: 'tiny-treats/pretty-park/bench.gltf', position: [4, 0, -2], scale: 1.5 },
-    { id: 'env-tree', path: 'tiny-treats/pretty-park/tree.gltf', position: [0, 0, -5], scale: 2.0 },
+    { id: 'env-stove', path: 'tiny-treats/charming-kitchen/stove.gltf', position: [-4, 0, -3], scale: 1.5 },
+    { id: 'env-oven', path: 'kaykit/packs/restaurant/oven.gltf', position: [4, 0, -3], scale: 0.8 },
+    { id: 'env-table', path: 'kaykit/packs/dungeon/table_long.gltf', position: [0, 0, -4], scale: 0.8 },
   ],
   'adventurers-picnic': [
     { id: 'env-tree-l', path: 'tiny-treats/pretty-park/tree.gltf', position: [-5, 0, -3], scale: 2.0 },
@@ -364,24 +367,28 @@ const TASK_HERO_CHARACTERS: Record<string, HeroCharacter[]> = {
     { id: 'hero-skeleton', characterId: 'skeleton_warrior', position: 'center' },
   ],
   'knight-space': [
-    { id: 'hero-knight', characterId: 'knight', position: 'center' },
+    { id: 'hero-ranger', characterId: 'space_ranger', position: 'left' },
+    { id: 'hero-robot', characterId: 'robot', position: 'right' },
   ],
   'mage-kitchen': [
-    { id: 'hero-mage', characterId: 'mage', position: 'center' },
+    { id: 'hero-mage', characterId: 'mage', position: 'left' },
+    { id: 'hero-witch', characterId: 'witch', position: 'right' },
   ],
   'barbarian-school': [
-    { id: 'hero-barbarian', characterId: 'barbarian', position: 'center' },
+    { id: 'hero-barbarian', characterId: 'barbarian', position: 'left' },
+    { id: 'hero-clown', characterId: 'clown', position: 'right' },
   ],
   'dungeon-concert': [
-    { id: 'hero-skeleton', characterId: 'skeleton_warrior', position: 'left' },
-    { id: 'hero-knight', characterId: 'knight', position: 'right' },
+    { id: 'hero-knight', characterId: 'knight', position: 'left' },
+    { id: 'hero-rogue', characterId: 'rogue', position: 'right' },
   ],
   'skeleton-pizza': [
-    { id: 'hero-skeleton', characterId: 'skeleton_warrior', position: 'center' },
+    { id: 'hero-skeleton', characterId: 'skeleton_warrior', position: 'left' },
+    { id: 'hero-clown', characterId: 'clown', position: 'right' },
   ],
   'adventurers-picnic': [
-    { id: 'hero-knight', characterId: 'knight', position: 'left' },
-    { id: 'hero-ranger', characterId: 'ranger', position: 'right' },
+    { id: 'hero-ranger', characterId: 'ranger', position: 'left' },
+    { id: 'hero-druid', characterId: 'druid', position: 'right' },
   ],
 }
 

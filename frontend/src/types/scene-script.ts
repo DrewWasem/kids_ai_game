@@ -30,7 +30,13 @@ export type PropKey =
   | 'cake-3d' | 'cupcake' | 'bread' | 'pie'
   | 'blanket' | 'basket' | 'plate' | 'cup' | 'bottle'
   | 'candle' | 'book' | 'clock' | 'rug'
-  | 'slide' | 'swing' | 'sandbox';
+  | 'slide' | 'swing' | 'sandbox' | 'seesaw' | 'merry_go_round'
+  | 'sink' | 'oven' | 'stove' | 'fridge' | 'pan' | 'pot'
+  | 'pizza' | 'pizza_pepperoni' | 'apple'
+  | 'picnic_blanket'
+  | 'present_A_red' | 'present_B_blue'
+  | 'banner_blue' | 'banner_red'
+  | 'table_long' | 'chair_A';
 
 export type ReactionKey =
   | 'confetti-burst' | 'explosion-cartoon' | 'hearts-float'
@@ -141,10 +147,21 @@ export type Action =
   | SpawnAction | MoveAction | AnimateAction | ReactAction
   | EmoteAction | SfxAction | WaitAction | RemoveAction | SpawnGroupAction;
 
+export interface PromptAnalysis {
+  has_character: boolean;
+  has_action: boolean;
+  has_sequence: boolean;
+  has_detail: boolean;
+  has_multi_char: boolean;
+  has_environment: boolean;
+}
+
 export interface SceneScript {
   success_level: SuccessLevel;
   narration: string;
   actions: Action[];
   missing_elements?: string[];
   prompt_feedback: string;
+  guide_hint?: string;
+  prompt_analysis?: PromptAnalysis;
 }
