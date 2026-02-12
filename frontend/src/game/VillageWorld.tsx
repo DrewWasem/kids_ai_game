@@ -371,7 +371,7 @@ function isOnRingRoad(x: number, z: number, halfWidth: number): boolean {
 function HexTerrain() {
   // Generate a grid of hex tiles covering the village area
   const tiles = useMemo(() => {
-    const result: { model: string; position: [number, number, number]; rotation?: [number, number, number] }[] = []
+    const result: { model: string; position: [number, number, number]; rotation?: [number, number, number]; scale?: number }[] = []
     const roadPositions = new Set<string>()
 
     // 1. Grass everywhere first
@@ -382,12 +382,14 @@ function HexTerrain() {
     }
 
     // 2. Road tiles layered on top of grass
+    // Cobblestones are ~1x1 native, hex cells are ~1.5x1.73 — scale up to fill
+    const ROAD_SCALE = 1.8
     const addRoad = (col: number, row: number, model: string) => {
       const key = `${col},${row}`
       if (roadPositions.has(key)) return
       roadPositions.add(key)
       const [wx, , wz] = hexToWorld(col, row)
-      result.push({ model, position: [wx, 0.05, wz] })
+      result.push({ model, position: [wx, 0.05, wz], scale: ROAD_SCALE })
     }
 
     // Main N-S road — 3 columns wide (col -1 to +1)
@@ -417,7 +419,7 @@ function HexTerrain() {
   return (
     <group name="hex-terrain">
       {tiles.map((tile, i) => (
-        <Piece key={`tile-${i}`} model={tile.model} position={tile.position} rotation={tile.rotation} noCollision />
+        <Piece key={`tile-${i}`} model={tile.model} position={tile.position} rotation={tile.rotation} scale={tile.scale} noCollision />
       ))}
     </group>
   )
