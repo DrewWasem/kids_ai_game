@@ -81,8 +81,11 @@ export function VillageCamera() {
     const canvas = gl.domElement
 
     const onPointerDown = (e: PointerEvent) => {
-      // Right-click (2) or middle-click (1)
-      if (e.button === 2 || e.button === 1) {
+      // Left-click (0) in village mode, or right/middle-click anywhere
+      if (e.button === 0 && !currentZone) {
+        isDraggingRef.current = true
+        canvas.setPointerCapture(e.pointerId)
+      } else if (e.button === 2 || e.button === 1) {
         isDraggingRef.current = true
         canvas.setPointerCapture(e.pointerId)
         e.preventDefault()
@@ -96,7 +99,7 @@ export function VillageCamera() {
     }
 
     const onPointerUp = (e: PointerEvent) => {
-      if (e.button === 2 || e.button === 1) {
+      if (e.button === 0 || e.button === 2 || e.button === 1) {
         isDraggingRef.current = false
         canvas.releasePointerCapture(e.pointerId)
       }

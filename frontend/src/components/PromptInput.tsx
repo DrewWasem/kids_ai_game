@@ -1,6 +1,7 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useTTS } from '../hooks/useTTS';
+import { getStoryById } from '../data/stories/index';
 import VoiceButton from './VoiceButton';
 
 const MAX_INPUT_LENGTH = 300;
@@ -68,9 +69,25 @@ export default function PromptInput() {
     lastSource,
     error,
     clearError,
+    currentStageIndex,
+    stageComplete,
+    hintsUsed,
+    advanceStage,
+    getHint,
   } = useGameStore();
 
   const { speak } = useTTS();
+  const [currentHint, setCurrentHint] = useState<string | null>(null);
+
+  // Get story data for current zone (memoized — only recomputes when task changes)
+  const story = useMemo(() => getStoryById(currentTask), [currentTask]);
+  const stage = story?.stages[currentStageIndex];
+  const totalStages = story?.stages.length ?? 0;
+
+  // Clear hint when stage changes
+  useEffect(() => {
+    setCurrentHint(null);
+  }, [currentStageIndex]);
 
   const loadingMsgRef = useRef(LOADING_MESSAGES[0]);
   if (isLoading && loadingMsgRef.current === LOADING_MESSAGES[0]) {
@@ -140,10 +157,51 @@ export default function PromptInput() {
         </div>
       )}
 
-      {/* Error display */}
+      {/* Stage progress + actions */}
+      {stage && (
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="text-xs font-heading font-bold text-quest-text-mid bg-quest-purple/10 px-3 py-1.5 rounded-full">
+            Stage {currentStageIndex + 1} of {totalStages}: {stage.title}
+          </span>
+          <div className="flex items-center gap-2">
+            {/* Hint button — visible when there's a result and not yet complete */}
+            {lastScript && !stageComplete && hintsUsed < 3 && (
+              <button
+                onClick={() => {
+                  const hint = getHint();
+                  if (hint) setCurrentHint(hint);
+                }}
+                className="btn-game text-xs px-3 py-1.5 rounded-xl border-2
+                  bg-quest-yellow/10 text-amber-600 border-quest-yellow/30 hover:border-quest-yellow/60 hover:bg-quest-yellow/20"
+              >
+                💡 Hint ({3 - hintsUsed} left)
+              </button>
+            )}
+            {/* Next stage button — visible on completion */}
+            {stageComplete && (
+              <button
+                onClick={advanceStage}
+                className="btn-game text-xs px-4 py-1.5 rounded-xl border-2
+                  bg-quest-success/10 text-quest-success border-quest-success/30 hover:border-quest-success/60 hover:bg-quest-success/20 animate-bounce-in font-bold"
+              >
+                {currentStageIndex + 1 < totalStages ? '⭐ Next Stage →' : '🏆 Complete!'}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Active hint display */}
+      {currentHint && (
+        <div className="mb-3 bg-quest-yellow/10 border border-quest-yellow/30 rounded-game-md px-4 py-3 animate-slide-up">
+          <p className="text-sm text-amber-700 font-semibold">💡 {currentHint}</p>
+        </div>
+      )}
+
+      {/* Error display — kid-friendly message, never raw technical errors */}
       {error && (
         <div className="bubble-result mb-4 bg-quest-orange/10 border border-quest-orange/40 text-quest-text-dark rounded-game-md p-4 flex justify-between items-center">
-          <p className="text-sm">{error}</p>
+          <p className="text-sm">The magic got a little tangled! Try again or try something different.</p>
           <button onClick={clearError} className="text-quest-orange hover:text-quest-text-dark ml-3 text-lg leading-none">&times;</button>
         </div>
       )}
@@ -155,7 +213,7 @@ export default function PromptInput() {
             value={userInput}
             onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
             onKeyDown={handleKeyDown}
-            placeholder={TASK_PLACEHOLDERS[currentTask] ?? TASK_PLACEHOLDERS['skeleton-birthday']}
+            placeholder={stage?.question ?? TASK_PLACEHOLDERS[currentTask] ?? TASK_PLACEHOLDERS['skeleton-birthday']}
             disabled={isLoading}
             rows={2}
             maxLength={MAX_INPUT_LENGTH}

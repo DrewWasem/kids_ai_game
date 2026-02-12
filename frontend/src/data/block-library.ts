@@ -317,9 +317,33 @@ const PROP_BLOCKS: ActionBlock[] = [
     enterStyle: 'appear', supportsGroup: false, maxCount: 1, spreadDistance: 0,
   },
   {
-    id: 'chair', aliases: ['chairs', 'seat'],
+    id: 'chair', aliases: ['chairs', 'seat', 'chair_A'],
     category: 'prop', propId: 'chair',
     enterStyle: 'appear', supportsGroup: true, maxCount: 4, spreadDistance: 1.5,
+  },
+  {
+    id: 'bench', aliases: ['park_bench', 'seat'],
+    category: 'prop', propId: 'bench',
+    enterStyle: 'appear', supportsGroup: true, maxCount: 4, spreadDistance: 2.5,
+    scale: 1.0,
+  },
+  {
+    id: 'desk', aliases: ['school_desk', 'table_desk'],
+    category: 'prop', propId: 'desk',
+    enterStyle: 'appear', supportsGroup: true, maxCount: 6, spreadDistance: 2.0,
+    scale: 1.0,
+  },
+  {
+    id: 'table_round', aliases: ['round_table', 'table_round_A'],
+    category: 'prop', propId: 'table_round',
+    enterStyle: 'appear', supportsGroup: false, maxCount: 1, spreadDistance: 0,
+    scale: 1.0,
+  },
+  {
+    id: 'plate', aliases: ['dish'],
+    category: 'prop', propId: 'plate',
+    enterStyle: 'drop-in', supportsGroup: true, maxCount: 6, spreadDistance: 1.0,
+    scale: 0.6,
   },
   {
     id: 'chest', aliases: ['treasure', 'treasure_chest'],

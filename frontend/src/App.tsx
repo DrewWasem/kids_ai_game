@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import R3FGame from './game/R3FGame';
 import ScenePlayer3D from './game/ScenePlayer3D';
 import PromptInput from './components/PromptInput';
@@ -6,6 +6,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
+import { getStoryById } from './data/stories/index';
 
 export default function App() {
   const currentZone = useGameStore((s) => s.currentZone);
@@ -39,7 +40,10 @@ export default function App() {
     'adventurers-picnic': { label: "Adventurers' Picnic", emoji: '🧺' },
   };
 
+  const currentStageIndex = useGameStore((s) => s.currentStageIndex);
   const zoneInfo = currentZone ? ZONE_LABELS[currentZone] : null;
+  const story = useMemo(() => currentZone ? getStoryById(currentZone) : null, [currentZone]);
+  const stageLabel = story ? `Stage ${currentStageIndex + 1}/${story.stages.length}` : null;
 
   return (
     <ErrorBoundary>
@@ -78,6 +82,9 @@ export default function App() {
             {zoneInfo && (
               <span className="text-sm font-heading font-bold text-quest-text-dark bg-white/80 px-3 py-1.5 rounded-xl border border-quest-purple/20">
                 {zoneInfo.emoji} {zoneInfo.label}
+                {stageLabel && (
+                  <span className="ml-2 text-xs font-medium text-quest-purple">{stageLabel}</span>
+                )}
               </span>
             )}
           </div>

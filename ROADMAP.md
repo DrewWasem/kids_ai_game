@@ -91,20 +91,41 @@
 
 ## Remaining Work (Feb 11-16)
 
-### Final Polish (Feb 11-12)
-- [ ] Stress test all 7 tasks with edge cases (empty, 500 chars, gibberish, non-English)
-- [ ] Verify every failure path hits Tier 3 fallback gracefully
+### Story Curriculum System (Feb 11-12)
+
+Each zone becomes a multi-stage guided experience teaching a specific prompt engineering skill. 220 pre-rendered responses across 7 stories, 22 stages.
+
+**Plan:** [`docs/story-curriculum-plan.md`](docs/story-curriculum-plan.md) — Full curriculum design + integration plan (consolidated)
+
+**Completed:**
+- [x] Story types (`data/stories/types.ts`) — Story, StoryStage, StoryResponse, StoryElement
+- [x] 7 story data files (220 pre-rendered responses total)
+- [x] Barrel export (`data/stories/index.ts`) — STORY_ORDER, getStoryById
+
+**Integration (complete):**
+- [x] Wire 4 missing props into block-library (bench, desk, table_round, plate)
+- [x] Story element resolver — convert StoryResponse → SceneScript via block-resolver
+- [x] Story matcher — fuzzy match user input to pre-rendered StoryResponse
+- [x] Game store stage progression — currentStageIndex, advanceStage, getHint
+- [x] Stage-level fallback scripts (22 entries)
+- [x] UI: stage question, progress indicator, hint button, next stage button
+- [x] App.tsx: stage badge in zone header
+
+### Final Polish (Feb 12-13)
+- [x] Stress test all 7 tasks with edge cases (empty, 500 chars, gibberish, non-English, XSS, SQL injection, emoji)
+- [x] Verify every failure path hits Tier 3 fallback gracefully — 0 errors across 17 Puppeteer tests
 - [ ] Test voice input on Chrome
+- [x] Visual regression test — Puppeteer tests all 22 stages across 7 stories. 22/22 PASS, 27 cosmetic overlap warnings (non-blocking)
 - [ ] 30 minutes free-play testing per task
-- [ ] Performance audit — check GLTF loading times, frame rate
-- [ ] Mobile/responsive layout check (informational, not blocking)
-- [ ] Review all kid-facing text against brand brief (no "prompt", "error", "failed")
+- [x] Performance audit — memoized getStoryById, hoisted stopwords Set, bundle at 382 kB gzip
+- [x] Mobile/responsive layout check — tested iPhone SE, iPad, Desktop. Canvas scales via maxWidth:100%/maxHeight:60vh. Header slightly crowded on iPhone SE but functional. Debug coords dev-only.
+- [x] Review all kid-facing text — fixed "fail"→"stumble" in feedback, replaced raw error display with kid-friendly message, added fallback prompt for unknown tasks
 
 ### Demo Prep (Feb 14-15)
 - [ ] Record backup demo video (2-3 min) showing 2-3 tasks
-- [ ] Write 2-minute pitch script (see below)
+- [x] Write 2-minute pitch script (see below)
 - [ ] Practice pitch 3x
-- [ ] Prepare GitHub README with screenshots
+- [x] Prepare GitHub README with screenshots
 - [ ] Run pre-demo checklist
 
 ### Buffer (Feb 15-16)

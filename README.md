@@ -1,62 +1,107 @@
 # Prompt Quest
 
-An AI-powered game teaching kids (ages 8-10) prompt engineering through play. Built with Claude Opus 4.6 for the Claude Code Hackathon (Feb 10-16, 2026).
+A 3D game that teaches kids (ages 7-11) prompt engineering through play. Built solo with Claude Opus 4.6 for the Claude Code Hackathon (Feb 10-16, 2026).
 
-**Solo developer:** Drew
+**Builder:** Drew
 
 ## How It Works
 
-Kids solve outrageous puzzles by describing solutions in natural language. Claude interprets their input and brings it to life through Phaser animations. Better prompts = better results. Kids learn specificity, completeness, and clarity — through play, not lectures.
+Kids explore a 3D village and enter quest zones where they solve comedy puzzles by describing what should happen. Claude interprets their description and brings it to life with 3D characters, props, and animations. Better prompts = better results.
 
 ```
-Kid types: "throw a giant birthday cake with balloons and music"
-    → Claude Opus 4.6 evaluates the prompt
-    → Phaser animates: cake flies across screen, monster catches it, balloons appear, confetti!
-    → Feedback: "Great job! You described WHAT, HOW BIG, and added decorations!"
+Kid types: "Throw a giant birthday cake with balloons, presents, and a dance party"
+  -> Claude Opus 4.6 evaluates the prompt against a vocabulary contract
+  -> 3D scene assembles: cake spawns, balloons float in, skeleton dances, confetti bursts
+  -> Feedback: "Amazing! You described the cake, decorations, AND a celebration!"
 ```
 
-## Tasks
+The AI is invisible. Kids think they're playing a game. They're actually learning specificity, completeness, and creativity.
 
-- **Monster Birthday Party** — Plan a birthday party for a monster who's never had one
-- **Robot Pizza Delivery** — Program a robot to deliver pizza through an obstacle-filled city
+## The 7 Quests
+
+| # | Quest | Skill Taught | Stages |
+|---|-------|-------------|--------|
+| 1 | Skeleton's Surprise Birthday | Specificity — details matter | 3 |
+| 2 | Knight's Space Mission | Sequencing — order of events | 3 |
+| 3 | Mage vs. The Kitchen | Cause & effect — actions have consequences | 3 |
+| 4 | Barbarian's School Day | Audience — who is involved matters | 3 |
+| 5 | Dungeon Rock Concert | Completeness — cover all the pieces | 4 |
+| 6 | Skeleton Pizza Delivery | Constraints — working within limits | 3 |
+| 7 | Adventurers' Picnic | Creativity — surprise and delight | 3 |
+
+Each quest has multiple stages with progressive difficulty, 3 progressive hints per stage, and pre-rendered responses for instant feedback during demo.
 
 ## Features
 
-- **Voice input** — speak prompts via Web Speech API (Chrome)
-- **Three-tier response system** — Cache (instant) → Live API → Fallback (never errors)
-- **40 pre-cached responses** — instant, reliable demo without API dependency
-- **Fuzzy keyword matching** — similar prompts still hit the cache (60% overlap threshold)
-- **Kid-friendly feedback** — concrete game advice, not abstract prompting tips
-- **8 animation types** — spawn, move, animate, react, emote, wait, remove, sfx
-- **7 move styles** — linear, arc, bounce, float, shake, spin-in, drop-in
-- **Post-script celebrations** — confetti rain on success, screen shake on funny fails
+- **3D village world** — walk between quest zones with WASD/arrow keys, hold Shift to run
+- **28 animated characters** with 139 shared skeletal animations (idle, walk, dance, wave, attack, etc.)
+- **4,270+ 3D props** from KayKit + Tiny Treats asset libraries
+- **Story curriculum** — 7 stories, 22 stages, 220 pre-rendered responses teaching prompt engineering skills
+- **4-tier response system** — Story match (instant) -> Cache -> Live API -> Fallback (demo never errors)
+- **Voice input** via Web Speech API (Chrome)
+- **TTS narration** reads results aloud with kid-friendly pacing
+- **Synthesized SFX** via Web Audio API (no audio files needed)
+- **Per-quest atmospheres** — fog, sky color, sparkle particles, bloom, contact shadows
+- **Fog walk-through intro** on quest entry with hero character reveal
+- **Kid-friendly feedback** — concrete game advice, never raw errors or technical jargon
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| UI | React 18, TypeScript, Tailwind CSS, Zustand |
-| Game Engine | Phaser 3 (embedded in React via EventBus) |
+| UI | React 18 + TypeScript + Tailwind CSS |
+| 3D Engine | React Three Fiber + Drei |
+| State | Zustand |
 | AI | Claude Opus 4.6 (scene script generation) |
-| Voice | Web Speech API (Chrome, graceful fallback) |
+| Assets | KayKit + Tiny Treats (4,270+ GLTF models) |
+| Audio | Web Audio API (synthesized SFX) + SpeechSynthesis (TTS) |
+| Voice Input | Web Speech API (Chrome) |
 | Build | Vite 5 |
-| Test | Vitest + Testing Library (165 tests) |
-| Deploy | Vercel-ready (vercel.json configured) |
+| Deploy | Vercel |
 
 ## Architecture
 
 ```
-React UI (Zustand) → Three-Tier Resolver → Phaser SceneScriptPlayer
-                     ├── Tier 1: Cache (instant, fuzzy keyword matching)
-                     ├── Tier 2: Live API (Opus 4.6, 6s timeout)
-                     └── Tier 3: Fallback (safe default, demo never errors)
+                          +-----------------------+
+                          |    3D Village World   |
+                          |  (R3F + Drei + Three) |
+                          +-----------+-----------+
+                                      |
+                            Player walks to zone
+                                      |
+                          +-----------v-----------+
+                          |     Quest Zone UI     |
+                          | Stage question + input|
+                          +-----------+-----------+
+                                      |
+                              Kid types prompt
+                                      |
+              +-------------------------------------------+
+              |         4-Tier Response Resolver           |
+              |                                           |
+              |  Tier 0: Story Matcher (pre-rendered)     |
+              |  Tier 1: Cache (fuzzy keyword matching)   |
+              |  Tier 2: Live API (Opus 4.6, 6s timeout)  |
+              |  Tier 3: Fallback (safe default, instant)  |
+              +-------------------------------------------+
+                                      |
+                          +-----------v-----------+
+                          |   ScenePlayer3D       |
+                          | spawn, move, animate, |
+                          | react, emote, sfx     |
+                          +-----------+-----------+
+                                      |
+                          +-----------v-----------+
+                          |   Narration + Feedback |
+                          |   TTS + hint system    |
+                          +-----------------------+
 ```
 
 **Key design decisions:**
-- **Vocabulary Contract** — Claude can ONLY reference pre-built assets (9 actors, 29 props, 6 backdrops, 10 effects). This prevents hallucinating assets that don't exist.
-- **Scene Scripts** — Claude returns structured JSON (not free text), which Phaser executes as tween-based animations.
-- **Golden Response Cache** — 40 pre-computed Opus responses for zero-latency demo. Fuzzy keyword matching means variations of cached prompts also hit instantly.
-- **Placeholder system** — Missing textures render as colored rectangles with labels, so the game never crashes on missing assets.
+- **Vocabulary contract** — Claude can ONLY reference pre-built assets (28 characters, 87 props, 139 animations). This prevents hallucinating assets that don't exist.
+- **Scene scripts** — Claude returns structured JSON that the 3D engine executes as animated sequences. Never free text.
+- **Story curriculum** — 220 pre-rendered responses mean the demo runs at zero latency with no API dependency. Fuzzy keyword matching ensures variations of expected inputs still match.
+- **Error tolerance** — Unknown actors/props are silently skipped, missing characters auto-spawn on reference, SafeModel boundary catches GLTF failures. The demo never crashes.
 
 ## Quick Start
 
@@ -67,22 +112,31 @@ npm run dev
 # Open http://localhost:5174
 ```
 
-For live Claude API calls, create a `.env` file:
+For live Claude API calls:
 ```bash
 cp .env.example .env
-# Edit .env and add your VITE_ANTHROPIC_API_KEY
+# Add your VITE_ANTHROPIC_API_KEY
 ```
 
-Without an API key, cached responses and fallbacks still work — the game is fully playable.
+Without an API key, story responses, cached responses, and fallbacks all work — the game is fully playable.
+
+## Controls
+
+| Input | Action |
+|-------|--------|
+| WASD / Arrow keys | Move through village |
+| Shift (hold) | Sprint |
+| Q / E | Rotate camera |
+| Walk to glowing circle | Enter quest zone |
+| Type in text box | Describe what should happen |
+| Click microphone | Voice input (Chrome) |
 
 ## Commands
 
 ```bash
 cd frontend
 npm run dev          # Start dev server (port 5174)
-npm run build        # Production build (tsc + vite)
-npm run test         # Run 165 tests
-npm run test:watch   # Watch mode
+npm run build        # Production build (0 TS errors)
 npm run preview      # Preview production build
 ```
 
@@ -90,64 +144,79 @@ npm run preview      # Preview production build
 
 ```
 frontend/src/
-├── game/                         # Phaser game engine
-│   ├── SceneScriptPlayer.ts      # Core animation engine (8 action types)
-│   ├── scenes/                   # Game scenes
-│   │   ├── MonsterPartyScene.ts  # Monster Birthday Party
-│   │   └── RobotPizzaScene.ts    # Robot Pizza Delivery
-│   ├── PhaserGame.tsx            # React wrapper (forwardRef)
-│   └── EventBus.ts               # Scene ↔ React bridge
-├── services/                     # API + caching layer
-│   ├── claude.ts                 # Claude API client (Opus 4.6, 6s timeout)
+├── game/                         # 3D game engine (React Three Fiber)
+│   ├── R3FGame.tsx               # Root R3F canvas + village
+│   ├── VillageWorld.tsx          # Village layout with 7 quest zones
+│   ├── VillageCamera.tsx         # Third-person camera + player following
+│   ├── PlayerCharacter.tsx       # WASD-controlled player avatar
+│   ├── QuestZoneCircle.tsx       # Glowing zone entry rings
+│   ├── ScenePlayer3D.tsx         # Core scene script executor (~950 lines)
+│   ├── Character3D.tsx           # Animated character with skeleton clone
+│   ├── Prop3D.tsx                # GLTF prop loading with bounce entrance
+│   ├── AnimationController.ts    # 139 shared animation clips + crossfade
+│   ├── TaskAtmosphere.tsx        # Per-quest fog, sky, particles, bloom
+│   ├── TaskIntro.tsx             # Fog walk-through intro animation
+│   ├── SceneEnvironment3D.tsx    # Dungeon, space, kitchen backdrops
+│   └── SoundManager3D.ts        # Synthesized SFX (9 sound types)
+├── services/                     # AI + response resolution
+│   ├── claude.ts                 # Claude API client (Opus 4.6)
 │   ├── cache.ts                  # Fuzzy keyword match cache
-│   └── resolver.ts               # Three-tier resolver
-├── prompts/                      # System prompts per task
-│   ├── monster-party.ts          # Monster Birthday Party prompt
-│   └── robot-pizza.ts            # Robot Pizza Delivery prompt
-├── data/                         # Pre-generated data
-│   ├── demo-cache.json           # 40 cached responses
-│   └── fallback-scripts.ts       # Safe fallback for each task
+│   ├── resolver.ts               # 4-tier response resolver
+│   ├── story-matcher.ts          # Fuzzy match to pre-rendered responses
+│   ├── story-resolver.ts         # StoryResponse -> SceneScript converter
+│   └── block-resolver.ts         # Block format -> SceneScript converter
+├── data/                         # Pre-generated content
+│   ├── stories/                  # 7 story curricula (220 responses)
+│   │   ├── types.ts              # Story, StoryStage, StoryResponse types
+│   │   ├── skeleton-birthday.ts  # Specificity curriculum
+│   │   ├── knight-space.ts       # Sequencing curriculum
+│   │   ├── mage-kitchen.ts       # Cause & effect curriculum
+│   │   ├── barbarian-school.ts   # Audience curriculum
+│   │   ├── dungeon-concert.ts    # Completeness curriculum
+│   │   ├── skeleton-pizza.ts     # Constraints curriculum
+│   │   ├── adventurers-picnic.ts # Creativity curriculum
+│   │   └── index.ts              # Barrel export + getStoryById
+│   ├── block-library.ts          # 87 prop paths + character registry
+│   ├── fallback-scripts.ts       # 22 stage fallbacks + 7 zone fallbacks
+│   └── asset-manifest.ts         # Full asset registry
+├── prompts/                      # Claude system prompts
+│   ├── block/                    # Block-format prompts (7 quests)
+│   └── *.ts                      # Legacy scene-script prompts
 ├── stores/
-│   └── gameStore.ts              # Zustand state + submit flow
+│   └── gameStore.ts              # Zustand: zone nav, stage progression, input
 ├── components/
-│   ├── PromptInput.tsx           # Input + feedback panel
-│   ├── VoiceButton.tsx           # Web Speech API voice input
-│   └── ErrorBoundary.tsx         # Catch React errors
-├── types/
-│   └── scene-script.ts           # Vocabulary contract types
-└── App.tsx                       # Task selector + layout
+│   ├── PromptInput.tsx           # Input + feedback + hint + stage progress
+│   ├── VoiceButton.tsx           # Web Speech API mic button
+│   ├── LoadingScreen.tsx         # Branded preloader
+│   └── ErrorBoundary.tsx         # React error boundary
+├── hooks/
+│   └── useTTS.ts                 # Text-to-speech narration
+└── types/
+    ├── scene-script.ts           # SceneScript + action types
+    └── block-types.ts            # Block format types
 ```
 
-## Scene Script Format
+## How the Story System Works
 
-Claude returns structured JSON that Phaser executes:
+Each quest teaches a specific prompt engineering skill through progressive stages:
 
-```json
-{
-  "success_level": "FULL_SUCCESS",
-  "narration": "The monster loved the giant flying cake!",
-  "actions": [
-    { "type": "spawn", "target": "cake-giant", "position": "left" },
-    { "type": "move", "target": "cake-giant", "to": "center", "style": "arc" },
-    { "type": "animate", "target": "monster", "anim": "eat" },
-    { "type": "react", "effect": "confetti-burst", "position": "center" }
-  ],
-  "prompt_feedback": "Great job being specific about the cake size and adding action!",
-  "missing_elements": []
-}
-```
+1. **Enter a zone** - Player walks to a glowing circle, camera flies in, narration introduces the challenge
+2. **Read the question** - Each stage poses a specific question (e.g., "Who's invited to the party?")
+3. **Type a description** - Kid describes what should happen in natural language
+4. **Watch it play out** - Story matcher finds the best pre-rendered response, 3D scene animates
+5. **Get feedback** - Success level (Amazing/Almost/Oops), concrete tips, missing elements highlighted
+6. **Use hints if stuck** - 3 progressive hints per stage, from gentle nudge to specific suggestion
+7. **Advance to next stage** - On success, move to the next stage with increased complexity
 
-## Testing
+The curriculum progresses from simple specificity ("What kind of cake?") to creative expression ("Invent something nobody expects!").
 
-165 tests across 8 files covering:
-- Scene script type validation (32 tests)
-- JSON parsing + code fence stripping (11 tests)
-- Cache fuzzy matching + normalization (37 tests)
-- Three-tier resolver logic (10 tests)
-- Fallback vocabulary contract compliance (23 tests)
-- UI component rendering + interactions (9 tests)
-- Edge-case stress tests (34 tests)
-- Store state management (9 tests)
+## Build Stats
+
+- 672 modules, 1,465 kB JS (382 kB gzip)
+- 0 TypeScript errors
+- 17/17 Puppeteer stress tests passed (empty input, XSS, SQL injection, emoji, gibberish, etc.)
+- 220 pre-rendered story responses across 22 stages
+- 28 character models, 139 animations, 87 props
 
 ## License
 
@@ -155,6 +224,8 @@ MIT
 
 ## Credits
 
-- AI: [Claude Opus 4.6](https://anthropic.com) by Anthropic
-- Game Engine: [Phaser 3](https://phaser.io)
-- Build Tool: [Claude Code](https://claude.ai/code) by Anthropic
+- **AI:** [Claude Opus 4.6](https://anthropic.com) by Anthropic
+- **Build Tool:** [Claude Code](https://claude.ai/code) by Anthropic
+- **3D Engine:** [React Three Fiber](https://github.com/pmndrs/react-three-fiber) + [Drei](https://github.com/pmndrs/drei)
+- **3D Assets:** [KayKit](https://kaylousberg.com/game-assets) + [Tiny Treats](https://kaylousberg.com/game-assets)
+- **Fonts:** [Fredoka](https://fonts.google.com/specimen/Fredoka) + [Nunito](https://fonts.google.com/specimen/Nunito)

@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import type { SceneScript } from '../types/scene-script';
 import type { ResponseSource } from '../services/resolver';
 import { resolveResponse } from '../services/resolver';
+import { getStoryById } from '../data/stories/index';
+import { matchStoryInput } from '../services/story-matcher';
+import { resolveStoryResponse } from '../services/story-resolver';
 
 // 3D prompts (legacy scene-script format)
 import { SKELETON_BIRTHDAY_PROMPT } from '../prompts/skeleton-birthday';
@@ -39,6 +42,12 @@ interface GameState {
   history: HistoryEntry[];
   isMuted: boolean;
 
+  // Story curriculum progression
+  currentStageIndex: number;        // 0-based index into story stages
+  hintsUsed: number;                // 0-3, tracks hint progression
+  stageComplete: boolean;           // true after FULL_SUCCESS
+  storyProgress: Record<string, number>; // storyId → highest completed stage index
+
   // Village navigation
   currentZone: string | null; // null = village center, taskId = in zone
   cameraTarget: [number, number, number]; // where camera should look
@@ -56,6 +65,9 @@ interface GameState {
   exitZone: () => void;
   updatePlayerPosition: (pos: [number, number, number]) => void;
   rotateCameraYaw: (deltaYaw: number) => void;
+  advanceStage: () => void;
+  getHint: () => string | null;
+  completeStory: () => void;
 }
 
 const SYSTEM_PROMPTS: Record<string, string> = {
@@ -88,7 +100,9 @@ function getSystemPrompt(taskId: string): { prompt: string; isBlock: boolean } {
   if (SYSTEM_PROMPTS[taskId]) {
     return { prompt: SYSTEM_PROMPTS[taskId], isBlock: false };
   }
-  return { prompt: '', isBlock: false };
+  // Fallback: use skeleton-birthday prompt as generic fallback — demo never errors
+  console.warn(`[GameStore] Unknown task "${taskId}" — using fallback prompt`);
+  return { prompt: BLOCK_PROMPTS['skeleton-birthday'], isBlock: true };
 }
 
 // Zone center positions in world space — circular ring at radius ~35
@@ -182,6 +196,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   error: null,
   history: [],
   isMuted: false,
+  currentStageIndex: 0,
+  hintsUsed: 0,
+  stageComplete: false,
+  storyProgress: {},
   currentZone: null,
   cameraTarget: VILLAGE_CENTER,
   isTransitioning: false,
@@ -191,21 +209,36 @@ export const useGameStore = create<GameState>((set, get) => ({
   setInput: (input: string) => set({ userInput: input }),
 
   submitInput: async () => {
-    const { userInput, currentTask } = get();
+    const { userInput, currentTask, currentStageIndex } = get();
     const trimmed = userInput.trim();
     if (!trimmed) return;
 
-    const { prompt: systemPrompt, isBlock } = getSystemPrompt(currentTask);
-    if (!systemPrompt) {
-      set({ error: `Unknown task: ${currentTask}` });
-      return;
-    }
-
     set({ isLoading: true, error: null });
 
+    // Try story matcher first (Tier 0: pre-rendered responses)
+    const story = getStoryById(currentTask);
+    if (story && currentStageIndex < story.stages.length) {
+      const stage = story.stages[currentStageIndex];
+      const match = matchStoryInput(trimmed, stage.responses);
+      if (match) {
+        const script = resolveStoryResponse(match.response);
+        const isComplete = match.response.successLevel === 'FULL_SUCCESS';
+        set((state) => ({
+          lastScript: script,
+          lastSource: 'cache' as ResponseSource, // story match is effectively cached
+          isLoading: false,
+          stageComplete: isComplete,
+          history: [...state.history, { input: trimmed, script, source: 'cache' as ResponseSource, latencyMs: 0 }],
+        }));
+        console.log(`[GameStore] Story match (score=${match.score.toFixed(2)}, complete=${isComplete}):`, script);
+        return;
+      }
+    }
+
+    // Fall through to three-tier resolver: cache → live API → fallback
+    const { prompt: systemPrompt, isBlock } = getSystemPrompt(currentTask);
+
     try {
-      // Three-tier resolver: cache → live API → fallback
-      // Pass useBlockFormat flag so resolver knows to use block pipeline
       const { script, source, latencyMs } = await resolveResponse(
         currentTask,
         systemPrompt,
@@ -217,13 +250,12 @@ export const useGameStore = create<GameState>((set, get) => ({
         lastScript: script,
         lastSource: source,
         isLoading: false,
+        stageComplete: script.success_level === 'FULL_SUCCESS',
         history: [...state.history, { input: trimmed, script, source, latencyMs }],
       }));
 
-      // ScenePlayer3D reads lastScript from Zustand directly — no EventBus needed
       console.log(`[GameStore] Script resolved (${source}, ${latencyMs.toFixed(0)}ms):`, script);
     } catch (err) {
-      // This should never happen — resolver always returns fallback
       const message = err instanceof Error ? err.message : 'Something went wrong';
       console.error('[GameStore] Error:', message);
       set({ error: message, isLoading: false });
@@ -237,7 +269,26 @@ export const useGameStore = create<GameState>((set, get) => ({
   enterZone: (zoneId: string) => {
     const center = ZONE_CENTERS[zoneId];
     if (!center) return;
-    const intro = ZONE_INTROS[zoneId] || null;
+
+    // Try story-based intro first, fall back to legacy ZONE_INTROS
+    const story = getStoryById(zoneId);
+    const { storyProgress } = get();
+    const resumeStage = storyProgress[zoneId] ?? 0;
+    let intro: SceneScript | null = null;
+
+    if (story && resumeStage < story.stages.length) {
+      const stage = story.stages[resumeStage];
+      intro = {
+        success_level: 'PARTIAL_SUCCESS',
+        narration: stage.narration,
+        actions: [],
+        prompt_feedback: stage.question,
+        missing_elements: [],
+      };
+    } else {
+      intro = ZONE_INTROS[zoneId] || null;
+    }
+
     set({
       currentZone: zoneId,
       currentTask: zoneId,
@@ -247,8 +298,10 @@ export const useGameStore = create<GameState>((set, get) => ({
       lastSource: null,
       error: null,
       userInput: '',
+      currentStageIndex: resumeStage,
+      hintsUsed: 0,
+      stageComplete: false,
     });
-    // Transition completes after camera arrives (VillageCamera sets isTransitioning=false)
   },
 
   exitZone: () => {
@@ -261,7 +314,70 @@ export const useGameStore = create<GameState>((set, get) => ({
       lastScript: null,
       lastSource: null,
       userInput: '',
+      stageComplete: false,
+      hintsUsed: 0,
     });
+  },
+
+  advanceStage: () => {
+    const { currentTask, currentStageIndex, storyProgress } = get();
+    const story = getStoryById(currentTask);
+    if (!story) return;
+
+    const nextIndex = currentStageIndex + 1;
+    if (nextIndex >= story.stages.length) {
+      // Story complete — call completeStory
+      get().completeStory();
+      return;
+    }
+
+    const nextStage = story.stages[nextIndex];
+    const intro: SceneScript = {
+      success_level: 'PARTIAL_SUCCESS',
+      narration: nextStage.narration,
+      actions: [],
+      prompt_feedback: nextStage.question,
+      missing_elements: [],
+    };
+
+    set({
+      currentStageIndex: nextIndex,
+      hintsUsed: 0,
+      stageComplete: false,
+      lastScript: intro,
+      lastSource: null,
+      userInput: '',
+      storyProgress: { ...storyProgress, [currentTask]: nextIndex },
+    });
+    console.log(`[GameStore] Advanced to stage ${nextIndex + 1}/${story.stages.length}: "${nextStage.title}"`);
+  },
+
+  getHint: () => {
+    const { currentTask, currentStageIndex, hintsUsed } = get();
+    const story = getStoryById(currentTask);
+    if (!story || currentStageIndex >= story.stages.length) return null;
+
+    const stage = story.stages[currentStageIndex];
+    if (hintsUsed >= stage.hints.length) return null;
+
+    const hint = stage.hints[hintsUsed];
+    set({ hintsUsed: hintsUsed + 1 });
+    console.log(`[GameStore] Hint ${hintsUsed + 1}/3: "${hint}"`);
+    return hint;
+  },
+
+  completeStory: () => {
+    const { currentTask, storyProgress } = get();
+    const story = getStoryById(currentTask);
+    if (!story) return;
+
+    // Mark story as fully complete
+    set({
+      storyProgress: { ...storyProgress, [currentTask]: story.stages.length },
+    });
+    console.log(`[GameStore] Story "${story.title}" complete!`);
+    // Exit zone after a brief delay
+    setTimeout(() => get().exitZone(), 2000);
   },
 
   updatePlayerPosition: (pos: [number, number, number]) => {
