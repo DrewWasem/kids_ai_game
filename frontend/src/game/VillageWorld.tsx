@@ -297,7 +297,7 @@ function VillageCenter() {
 
       {/* Homes — spread around the village */}
       <Piece model={BUILDINGS.home_A} position={[24, 0, -12]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_B} position={[-24, 0, -10]} rotation={[0, Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_B} position={[-15, 0, -14]} rotation={[0, Math.PI / 3, 0]} scale={s} />
       <Piece model={BUILDINGS.home_A} position={[-28, 0, 14]} rotation={[0, Math.PI / 6, 0]} scale={s * 0.9} />
       <Piece model={BUILDINGS.home_B} position={[28, 0, 12]} rotation={[0, -Math.PI / 6, 0]} scale={s * 0.9} />
 
@@ -331,7 +331,6 @@ function VillageCenter() {
       <Piece model={DECORATION.tree_B} position={[32, 0, -2]} scale={d} />
       <Piece model={DECORATION.trees_small} position={[-30, 0, 12]} scale={d * 0.8} />
       <Piece model={DECORATION.trees_small} position={[30, 0, -10]} scale={d * 0.8} />
-      <Piece model={DECORATION.tree_A} position={[-18, 0, -14]} scale={d * 0.9} />
       <Piece model={DECORATION.tree_B} position={[20, 0, 15]} scale={d * 0.9} />
     </group>
   )
@@ -1064,6 +1063,8 @@ function TerrainScatter() {
         ([cx, , cz]) => Math.sqrt((x - cx) ** 2 + (z - cz) ** 2) < 12
       )
       if (tooCloseToZone) continue
+      // Clear trees/scatter near (-25.6, -16.8)
+      if (Math.sqrt((x - -25.6) ** 2 + (z - -16.8) ** 2) < 4) continue
 
       result.push({
         model: scatterModels[i % scatterModels.length],
@@ -1086,7 +1087,6 @@ function TerrainScatter() {
       <Piece model={DECORATION.hills_trees} position={[15, 0, -12]} scale={5.0} />
       <Piece model={DECORATION.hills_B_trees} position={[-15, 0, 15]} scale={5.5} />
       <Piece model={DECORATION.hills_C_trees} position={[20, 0, 12]} scale={4.5} />
-      <Piece model={DECORATION.hills_trees} position={[-20, 0, -15]} scale={5.0} />
       <Piece model={DECORATION.hill_A} position={[-12, 0, -20]} scale={5.0} />
       <Piece model={DECORATION.hill_B} position={[8, 0, 22]} scale={4.5} />
     </group>
