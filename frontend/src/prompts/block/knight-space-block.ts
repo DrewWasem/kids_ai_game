@@ -2,7 +2,7 @@
  * Block-format system prompt for Knight's Accidental Space Mission.
  */
 
-export const KNIGHT_SPACE_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const KNIGHT_SPACE_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Knight's Accidental Space Mission
 A knight accidentally launched himself into space and has no idea what he's doing!

@@ -55,7 +55,7 @@ export default function App() {
           <div className="font-display text-2xl font-bold flex items-center gap-2">
             <span className="text-xl animate-sparkle">✨</span>
             <span className="bg-gradient-to-r from-quest-purple via-quest-orange to-quest-yellow bg-clip-text text-transparent">
-              Prompt Quest
+              Quest AI
             </span>
           </div>
 

@@ -2,7 +2,7 @@
  * Block-format system prompt for Skeleton Pizza Delivery.
  */
 
-export const SKELETON_PIZZA_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const SKELETON_PIZZA_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Skeleton Pizza Delivery
 The skeleton has to deliver a pizza but keeps falling apart on the way!

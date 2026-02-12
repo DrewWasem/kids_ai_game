@@ -1,5 +1,5 @@
 /**
- * TaskAtmosphere — Per-task atmospheric rendering for Prompt Quest.
+ * TaskAtmosphere — Per-task atmospheric rendering for Quest AI.
  *
  * Renders fog, lighting, particles, sky/environment, post-processing,
  * and ground plane — all configured per task for unique moods.

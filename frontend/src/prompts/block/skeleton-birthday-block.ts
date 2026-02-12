@@ -6,7 +6,7 @@
  * The BlockResolver handles the rest client-side.
  */
 
-export const SKELETON_BIRTHDAY_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const SKELETON_BIRTHDAY_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Skeleton's Surprise Birthday Party
 A skeleton warrior is having its first birthday party in a dungeon!

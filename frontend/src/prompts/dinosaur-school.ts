@@ -1,4 +1,4 @@
-export const DINOSAUR_SCHOOL_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const DINOSAUR_SCHOOL_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Dinosaur's First Day of School
 A friendly T-Rex is starting kindergarten, but everything is too small! The door, the desk, the pencil, the chair, and the lunchbox are all human-sized. The child must give specific instructions to help the T-Rex survive the school day.

@@ -221,7 +221,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       const stage = story.stages[currentStageIndex];
       const match = matchStoryInput(trimmed, stage.responses);
       if (match) {
-        const script = resolveStoryResponse(match.response);
+        const script = resolveStoryResponse(match.response, currentTask);
         const isComplete = match.response.successLevel === 'FULL_SUCCESS';
         set((state) => ({
           lastScript: script,

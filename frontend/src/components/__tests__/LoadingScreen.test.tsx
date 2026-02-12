@@ -14,9 +14,9 @@ describe('LoadingScreen', () => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   describe('Basic rendering', () => {
-    it('should render the title "Prompt Quest"', () => {
+    it('should render the title "Quest AI"', () => {
       render(<LoadingScreen />);
-      expect(screen.getByText('Prompt Quest')).toBeInTheDocument();
+      expect(screen.getByText('Quest AI')).toBeInTheDocument();
     });
 
     it('should render the subtitle "Your words are your superpower."', () => {
@@ -170,7 +170,7 @@ describe('LoadingScreen', () => {
 
     it('should have gradient text on title', () => {
       render(<LoadingScreen />);
-      const title = screen.getByText('Prompt Quest');
+      const title = screen.getByText('Quest AI');
 
       // Check that gradient is applied (jsdom may not fully support all webkit properties)
       expect(title).toHaveStyle({
@@ -218,7 +218,7 @@ describe('LoadingScreen', () => {
 
     it('should render title with semantic heading element', () => {
       render(<LoadingScreen />);
-      const title = screen.getByText('Prompt Quest');
+      const title = screen.getByText('Quest AI');
       expect(title.tagName).toBe('H1');
     });
 

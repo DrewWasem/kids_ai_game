@@ -307,7 +307,7 @@ interface EnvironmentProp {
   scale?: number
 }
 
-const TASK_ENVIRONMENTS: Record<string, EnvironmentProp[]> = {
+export const TASK_ENVIRONMENTS: Record<string, EnvironmentProp[]> = {
   'skeleton-birthday': [
     { id: 'env-torch-l', path: 'kaykit/packs/dungeon/torch_lit.gltf', position: [-5, 0, -3], scale: 2.0 },
     { id: 'env-torch-r', path: 'kaykit/packs/dungeon/torch_lit.gltf', position: [5, 0, -3], scale: 2.0 },
@@ -551,6 +551,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
 
   const actorRefs = useRef<Map<string, Character3DHandle | Prop3DHandle>>(new Map())
   const spawnedIds = useRef<Set<string>>(new Set()) // Track spawned actors (avoids stale closure)
+  const actorPositionsRef = useRef<Map<string, [number, number, number]>>(new Map())
   const playingRef = useRef(false)
   const abortControllerRef = useRef<AbortController | null>(null)
 
@@ -573,6 +574,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
       setEnvProps([])
       setActors([])
       spawnedIds.current.clear()
+      actorPositionsRef.current.clear()
       return
     }
 
@@ -626,6 +628,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
     setEffects([])
     setEmotes([])
     spawnedIds.current.clear()
+    actorPositionsRef.current.clear()
 
     // Create abort controller for cleanup
     const abortController = new AbortController()
@@ -699,11 +702,11 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
 
     switch (action.type) {
       case 'spawn':
-        handleSpawn(action.target, action.position)
+        handleSpawn(action.target, action.position, action.resolvedPosition)
         break
 
       case 'move':
-        await handleMove(action.target, action.to, action.style)
+        await handleMove(action.target, action.to, action.style, action.resolvedPosition, action.duration_ms)
         break
 
       case 'animate':
@@ -711,7 +714,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
         break
 
       case 'react':
-        handleReact(action.effect, action.position)
+        handleReact(action.effect, action.position, action.resolvedPosition)
         break
 
       case 'emote':
@@ -743,8 +746,8 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
   // ACTION HANDLERS (error-tolerant)
   // ============================================================================
 
-  function handleSpawn(target: string, position: Position) {
-    const localPos = POSITION_MAP[position] || [0, 0, 0]
+  function handleSpawn(target: string, position: Position, resolvedPosition?: [number, number, number]) {
+    const localPos = resolvedPosition || POSITION_MAP[position] || [0, 0, 0]
     const pos = zonePosition(currentZone, localPos)
     const actorId = target
 
@@ -813,11 +816,12 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
     }
 
     spawnedIds.current.add(actorId)
-    console.log(`[ScenePlayer3D] Spawned ${actorId} at ${position}`)
+    actorPositionsRef.current.set(actorId, pos)
+    console.log(`[ScenePlayer3D] Spawned ${actorId} at ${position}${resolvedPosition ? ` [${resolvedPosition.join(', ')}]` : ''}`)
   }
 
-  function handleMove(target: string, to: Position, style?: string): Promise<void> {
-    const localPos = POSITION_MAP[to] || [0, 0, 0]
+  function handleMove(target: string, to: Position, style?: string, resolvedPosition?: [number, number, number], durationMs?: number): Promise<void> {
+    const localPos = resolvedPosition || POSITION_MAP[to] || [0, 0, 0]
     const newPos = zonePosition(currentZone, localPos)
     let currentActor = actors.find(a => a.id === target)
 
@@ -836,8 +840,14 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
       return Promise.resolve()
     }
 
-    const startPos = currentActor.position || [0, 0, 0]
-    const duration = 800 // ms
+    // Use ref for start position to avoid stale closure
+    const startPos = actorPositionsRef.current.get(target) || currentActor.position || [0, 0, 0]
+
+    // Distance-based tween duration: ~4 units/sec, clamped 600-2500ms
+    const dx = newPos[0] - startPos[0]
+    const dz = newPos[2] - startPos[2]
+    const distance = Math.sqrt(dx * dx + dz * dz)
+    const duration = durationMs || Math.round(Math.min(Math.max(distance / 4.0 * 1000, 600), 2500))
 
     // Also trigger walking animation for characters
     if (currentActor.type === 'character') {
@@ -857,6 +867,8 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
         startTime: Date.now(),
         duration,
         resolve: () => {
+          // Update position ref when tween completes
+          actorPositionsRef.current.set(target, newPos)
           // Return to idle after move
           if (currentActor.type === 'character') {
             handleAnimate(target, 'Idle_A')
@@ -866,7 +878,7 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
       }
       setTweens(prev => [...prev, tween])
 
-      console.log(`[ScenePlayer3D] Moving ${target} to ${to} (style: ${style || 'linear'})`)
+      console.log(`[ScenePlayer3D] Moving ${target} to ${to} (${duration}ms, style: ${style || 'linear'})`)
     })
   }
 
@@ -897,8 +909,8 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
     console.log(`[ScenePlayer3D] Animated ${target}: ${anim}`)
   }
 
-  function handleReact(effect: string, position: Position) {
-    const localPos = POSITION_MAP[position] || [0, 0, 0]
+  function handleReact(effect: string, position: Position, resolvedPosition?: [number, number, number]) {
+    const localPos = resolvedPosition || POSITION_MAP[position] || [0, 0, 0]
     const pos = zonePosition(currentZone, localPos)
     const effectId = `effect-${Date.now()}-${Math.random()}`
 

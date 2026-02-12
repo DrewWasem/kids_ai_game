@@ -69,6 +69,7 @@ export interface SpawnAction {
   target: ActorKey | PropKey;
   position: Position;
   delay_ms?: number;
+  resolvedPosition?: [number, number, number];
 }
 
 export interface MoveAction {
@@ -78,6 +79,7 @@ export interface MoveAction {
   style?: MoveStyle;
   delay_ms?: number;
   duration_ms?: number;
+  resolvedPosition?: [number, number, number];
 }
 
 export interface AnimateAction {
@@ -93,6 +95,7 @@ export interface ReactAction {
   effect: ReactionKey;
   position: Position;
   delay_ms?: number;
+  resolvedPosition?: [number, number, number];
 }
 
 export interface EmoteAction {

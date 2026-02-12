@@ -1,4 +1,4 @@
-export const BARBARIAN_SCHOOL_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const BARBARIAN_SCHOOL_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Barbarian's First Day of School
 A barbarian shows up for school. Everything is too small and confusing! Help the barbarian fit in.

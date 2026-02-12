@@ -66,7 +66,7 @@ export default function LoadingScreen({ progress }: LoadingScreenProps) {
             backgroundClip: 'text',
           }}
         >
-          Prompt Quest
+          Quest AI
         </h1>
 
         {/* Subtitle */}

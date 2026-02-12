@@ -1,4 +1,4 @@
-export const WIZARD_KITCHEN_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const WIZARD_KITCHEN_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Wizard's Kitchen Disaster
 A wizard's spell went wrong and the kitchen appliances are alive and causing chaos! Flying plates, overflowing soup, a dancing toaster, and a rampaging fridge. The child must give specific instructions to fix the chaos.

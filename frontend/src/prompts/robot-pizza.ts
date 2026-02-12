@@ -1,4 +1,4 @@
-export const ROBOT_PIZZA_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const ROBOT_PIZZA_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Robot Pizza Delivery
 The player must help a friendly robot deliver a pizza across the city. The robot is eager but needs clear, specific instructions to navigate obstacles and reach the destination!

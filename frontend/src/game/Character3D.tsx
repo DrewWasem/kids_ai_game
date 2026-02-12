@@ -1,5 +1,5 @@
 /**
- * Character3D — Reusable 3D character component for KayKit characters in Prompt Quest.
+ * Character3D — Reusable 3D character component for KayKit characters in Quest AI.
  *
  * Features:
  * - Loads character GLB from asset manifest

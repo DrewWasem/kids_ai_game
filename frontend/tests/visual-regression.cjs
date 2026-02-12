@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Visual Regression Test — Prompt Quest Story Progression
+ * Visual Regression Test — Quest AI Story Progression
  *
  * Runs all 22 stages across 7 stories via Puppeteer, taking screenshots
  * and validating scene rendering, character positions, and progression.
@@ -251,7 +251,7 @@ function analyzeScript(script) {
 
 async function main() {
   console.log('╔══════════════════════════════════════════════════════════════╗');
-  console.log('║     Prompt Quest — Visual Regression Test Suite             ║');
+  console.log('║     Quest AI — Visual Regression Test Suite             ║');
   console.log('╚══════════════════════════════════════════════════════════════╝\n');
 
   // Check dev server
@@ -555,7 +555,7 @@ function generateHtmlReport(report) {
 
   let html = `<!DOCTYPE html>
 <html><head>
-<title>Prompt Quest Visual Regression Report</title>
+<title>Quest AI Visual Regression Report</title>
 <style>
   body { font-family: -apple-system, sans-serif; max-width: 1400px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
   h1 { color: #333; }
@@ -583,7 +583,7 @@ function generateHtmlReport(report) {
   .analysis { font-size: 13px; color: #666; margin-top: 8px; }
 </style>
 </head><body>
-<h1>Prompt Quest Visual Regression Report</h1>
+<h1>Quest AI Visual Regression Report</h1>
 <p>Generated: ${report.timestamp}</p>
 <div class="summary">
   <div class="stat stat-pass">${report.passed} Passed</div>

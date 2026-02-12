@@ -3,7 +3,7 @@
  *
  * Plays a 5-second sequence when a task is selected:
  *   0-0.5s  Dense fog wall (nothing visible)
- *   0.5-2s  "Prompt Quest" title fades in, sparkles swirl
+ *   0.5-2s  "Quest AI" title fades in, sparkles swirl
  *   2-3s    Title scales up + disperses, camera begins dolly
  *   3-4.5s  Fog clears, camera pushes forward, silhouettes emerge
  *   4.5-5s  Settle at final position, unmount
@@ -189,7 +189,7 @@ export function TaskIntro({ taskId, onComplete }: TaskIntroProps) {
         outlineColor="#aa88ff"
         outlineOpacity={0}
       >
-        Prompt Quest
+        Quest AI
       </Text>
 
       {/* Dense intro sparkles — more particles, faster, bigger */}

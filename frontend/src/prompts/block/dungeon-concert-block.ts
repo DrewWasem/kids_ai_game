@@ -2,7 +2,7 @@
  * Block-format system prompt for Dungeon Rock Concert.
  */
 
-export const DUNGEON_CONCERT_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const DUNGEON_CONCERT_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Dungeon Rock Concert
 The dungeon creatures want to start a rock band but nobody knows how to play!

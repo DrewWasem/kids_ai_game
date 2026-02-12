@@ -1,4 +1,4 @@
-export const KNIGHT_SPACE_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const KNIGHT_SPACE_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Knight's Accidental Space Mission
 A knight accidentally launched himself to a space station. Help him survive in space!

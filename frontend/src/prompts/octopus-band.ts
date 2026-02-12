@@ -1,4 +1,4 @@
-export const OCTOPUS_BAND_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const OCTOPUS_BAND_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Octopus Rock Band
 An octopus with 8 arms wants to start a rock band! But how do you play music underwater? The child must help the octopus set up the band: what instruments, where to perform, what song, and who's in the audience.

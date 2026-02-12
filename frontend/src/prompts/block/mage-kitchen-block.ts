@@ -2,7 +2,7 @@
  * Block-format system prompt for Mage vs. The Cute Kitchen.
  */
 
-export const MAGE_KITCHEN_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const MAGE_KITCHEN_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Mage vs. The Cute Kitchen
 The mage tried a cooking spell and now the whole kitchen is alive and fighting back!

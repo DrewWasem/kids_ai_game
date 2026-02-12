@@ -2,7 +2,7 @@
  * Block-format system prompt for Barbarian's First Day of School.
  */
 
-export const BARBARIAN_SCHOOL_BLOCK_PROMPT = `You are the game engine for "Prompt Quest," a children's game (ages 7-11) teaching prompt engineering.
+export const BARBARIAN_SCHOOL_BLOCK_PROMPT = `You are the game engine for "Quest AI," a children's game (ages 7-11) teaching prompt engineering.
 
 TASK: Barbarian's First Day of School
 It's the barbarian's first day of school and everything is way too small for him!

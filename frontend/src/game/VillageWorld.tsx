@@ -166,9 +166,10 @@ function HexTerrain() {
 
     // Road tiles — 3 columns wide (col -1, 0, +1) for a visible road
     // Extended north to row -36 (Z≈-62) to reach the relocated dungeon
+    // Ends at row 18 (Z≈31) so road stops before the Park Zone at Z=35
     const roadCols = new Set([-1, 0, 1])
     const roadRows = new Set<string>()
-    for (let row = -36; row <= 24; row++) {
+    for (let row = -36; row <= 18; row++) {
       for (const col of roadCols) {
         roadRows.add(`${col},${row}`)
         const pos = hexToWorld(col, row)
@@ -644,10 +645,10 @@ function ParkZone() {
       <Piece model="tiny-treats/pretty-park/flower_A.gltf" position={[-3, 0, -2]} />
       <Piece model="tiny-treats/pretty-park/flower_B.gltf" position={[3, 0, -1.5]} />
 
-      {/* Park bench and fountain */}
+      {/* Park benches and fountain (fountain offset right so it doesn't block play area) */}
       <Piece model="tiny-treats/pretty-park/bench.gltf" position={[-4, 0, 2]} rotation={[0, Math.PI / 4, 0]} />
       <Piece model="tiny-treats/pretty-park/bench.gltf" position={[4, 0, 1]} rotation={[0, -Math.PI / 4, 0]} />
-      <Piece model="tiny-treats/pretty-park/fountain.gltf" position={[0, 0, -2]} scale={0.8} />
+      <Piece model="tiny-treats/pretty-park/fountain.gltf" position={[4, 0, -3]} scale={0.8} />
       <Piece model="tiny-treats/pretty-park/street_lantern.gltf" position={[-5, 0, 0]} />
       <Piece model="tiny-treats/pretty-park/street_lantern.gltf" position={[5, 0, 0]} />
 

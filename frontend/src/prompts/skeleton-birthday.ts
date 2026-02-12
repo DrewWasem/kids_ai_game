@@ -1,4 +1,4 @@
-export const SKELETON_BIRTHDAY_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const SKELETON_BIRTHDAY_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Skeleton's Surprise Birthday Party
 A skeleton warrior is having its first-ever birthday party in a dungeon. The adventurers are bringing gifts! Help plan the party.

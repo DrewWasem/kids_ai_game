@@ -1,4 +1,4 @@
-# Prompt Quest - Complete Asset Library Manifest
+# Quest AI - Complete Asset Library Manifest
 
 > Generated 2026-02-10. All assets mapped to vocabulary contract in `frontend/src/types/scene-script.ts`.
 > Source priority: Kenney.nl (CC0) > OpenGameArt (CC0) > itch.io (check license per pack)

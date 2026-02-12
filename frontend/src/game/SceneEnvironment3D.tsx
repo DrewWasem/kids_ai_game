@@ -323,15 +323,11 @@ const TASK_ENVIRONMENTS: Record<string, EnvironmentPiece[]> = {
     { model: 'tiny-treats/pretty-park/grass_A.gltf', position: [-3, 0, 0] },
     { model: 'tiny-treats/pretty-park/grass_B.gltf', position: [3, 0, 0] },
     { model: 'tiny-treats/pretty-park/grass_A.gltf', position: [0, 0, 2.5] },
-    // Path cobblestones leading to picnic area
-    { model: 'tiny-treats/pretty-park/cobble_stones.gltf', position: [0, 0.01, 4] },
-    { model: 'tiny-treats/pretty-park/cobble_stones.gltf', position: [0, 0.01, 5] },
     // Hedges along sides
     { model: 'tiny-treats/pretty-park/hedge_straight_long.gltf', position: [-6, 0, 3], rotation: [0, Math.PI / 2, 0] },
     { model: 'tiny-treats/pretty-park/hedge_straight_long.gltf', position: [6, 0, 3], rotation: [0, -Math.PI / 2, 0] },
-    // Park bench and fountain
+    // Park bench (fountain is in VillageWorld ParkZone — no duplicate needed)
     { model: 'tiny-treats/pretty-park/bench.gltf', position: [-4, 0, 2], rotation: [0, Math.PI / 4, 0] },
-    { model: 'tiny-treats/pretty-park/fountain.gltf', position: [0, 0, -3], scale: 0.8 },
     // Street lantern
     { model: 'tiny-treats/pretty-park/street_lantern.gltf', position: [-5, 0, 0] },
   ],

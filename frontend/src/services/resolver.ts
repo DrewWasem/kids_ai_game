@@ -5,6 +5,7 @@ import { evaluateInput, evaluateInputBlock, parseResponse } from './claude';
 import { resolveBlocks } from './block-resolver';
 import { BLOCK_LIBRARY } from '../data/block-library';
 import { FALLBACK_SCRIPTS } from '../data/fallback-scripts';
+import { layoutStage } from './stage-layout-engine';
 
 export type ResponseSource = 'cache' | 'live' | 'fallback';
 
@@ -60,6 +61,9 @@ export async function resolveResponse(
       // Legacy path: full SceneScript from Claude
       script = await evaluateInput(systemPrompt, userInput);
     }
+
+    // Apply stage layout for non-overlapping positions
+    script = layoutStage(script, taskId);
 
     const latencyMs = performance.now() - start;
     console.log(`[Resolver] Tier 2 — Live API (${latencyMs.toFixed(0)}ms)`);

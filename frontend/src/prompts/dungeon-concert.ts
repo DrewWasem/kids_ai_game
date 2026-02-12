@@ -1,4 +1,4 @@
-export const DUNGEON_CONCERT_PROMPT = `You are the game engine for "Prompt Quest," a children's educational game (ages 7-11) that teaches prompt engineering through play.
+export const DUNGEON_CONCERT_PROMPT = `You are the game engine for "Quest AI," a children's educational game (ages 7-11) that teaches prompt engineering through play.
 
 TASK: Dungeon Rock Concert
 The adventurers want to start a rock band in a dungeon. The skeleton is the drummer! Help them perform.

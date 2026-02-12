@@ -10,6 +10,7 @@ import type { BlockResponse } from '../types/block-types';
 import type { SceneScript, Action, ActorKey } from '../types/scene-script';
 import { resolveBlocks } from './block-resolver';
 import { BLOCK_LIBRARY } from '../data/block-library';
+import { layoutStage } from './stage-layout-engine';
 
 /**
  * Convert a StoryResponse into a playable SceneScript.
@@ -17,7 +18,7 @@ import { BLOCK_LIBRARY } from '../data/block-library';
  * Uses the existing block-resolver pipeline, then injects
  * animation overrides from StoryElement.anim fields.
  */
-export function resolveStoryResponse(response: StoryResponse): SceneScript {
+export function resolveStoryResponse(response: StoryResponse, taskId?: string): SceneScript {
   // 1. Convert StoryResponse → BlockResponse shape
   const blockResponse: BlockResponse = {
     success_level: response.successLevel,
@@ -75,5 +76,9 @@ export function resolveStoryResponse(response: StoryResponse): SceneScript {
     script.actions = finalActions;
   }
 
+  // Apply stage layout for non-overlapping positions and walk-in conversion
+  if (taskId) {
+    return layoutStage(script, taskId);
+  }
   return script;
 }
