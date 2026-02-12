@@ -265,7 +265,7 @@ function HexTerrain() {
   return (
     <group name="hex-terrain">
       {tiles.map((tile, i) => (
-        <Piece key={`tile-${i}`} model={tile.model} position={tile.position} rotation={tile.rotation} scale={[1, 0.1, 1]} />
+        <Piece key={`tile-${i}`} model={tile.model} position={tile.position} rotation={tile.rotation} />
       ))}
     </group>
   )
@@ -954,7 +954,7 @@ function RoadDecoration() {
 
       {/* Lanterns along all spoke roads */}
       {lanterns.map((l, i) => (
-        <Piece key={`lantern-${i}`} model={DECORATION.street_lantern} position={l.position} rotation={l.rotation} scale={d} />
+        <Piece key={`lantern-${i}`} model={DECORATION.street_lantern} position={l.position} rotation={l.rotation} scale={1.5} />
       ))}
 
       {/* Zone-colored flags near entrances */}
