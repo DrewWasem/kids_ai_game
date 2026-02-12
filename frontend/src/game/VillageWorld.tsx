@@ -454,7 +454,7 @@ function VillageCenter() {
       {/* Market stall — right of main road, faces road */}
       <Piece model={BUILDINGS.market} position={[16, 0, 5]} rotation={[0, -Math.PI / 3, 0]} scale={s} />
 
-      {/* Well — exact village center (scale 2.5 = waist-height ~1.5u) */}
+      {/* Well — village center landmark */}
       <Piece model={BUILDINGS.well} position={[0, 0, 0]} scale={2.5} />
 
       {/* Blacksmith — left side */}

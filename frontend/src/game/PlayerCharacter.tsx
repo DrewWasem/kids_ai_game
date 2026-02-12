@@ -136,7 +136,7 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
   })
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
+    <group ref={groupRef} position={[0, 0, 5]}>
       <Character3D
         ref={characterRef}
         characterId="knight"

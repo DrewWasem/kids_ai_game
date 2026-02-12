@@ -18,9 +18,14 @@ import * as THREE from 'three'
 import { useGameStore } from '../stores/gameStore'
 
 // Follow offset for third-person village walking (before yaw rotation)
-const FOLLOW_DISTANCE = 14
+const DEFAULT_FOLLOW_DISTANCE = 14
 const FOLLOW_HEIGHT = 8
 const ZONE_CAMERA_OFFSET = new THREE.Vector3(0, 8, 14)
+
+// Zoom limits for village follow mode (comma key toggles)
+const MIN_FOLLOW_DISTANCE = 8
+const MAX_FOLLOW_DISTANCE = 60
+const ZOOM_SPEED = 0.08 // multiplier per wheel delta
 
 // Orbit settings (zone mode only)
 const MIN_POLAR_ANGLE = 0.3
@@ -59,6 +64,9 @@ export function VillageCamera() {
   const isDraggingRef = useRef(false)
   // Track rotation keys
   const rotateKeysRef = useRef(new Set<string>())
+  // Zoom toggle (comma key) and follow distance
+  const zoomEnabledRef = useRef(false)
+  const followDistanceRef = useRef(DEFAULT_FOLLOW_DISTANCE)
 
   // Animation state for fly-to transitions
   const transitionRef = useRef({
@@ -113,16 +121,34 @@ export function VillageCamera() {
       if (e.code === 'KeyQ' || e.code === 'KeyE') {
         rotateKeysRef.current.add(e.code)
       }
+      // Comma toggles zoom mode
+      if (e.code === 'Comma') {
+        zoomEnabledRef.current = !zoomEnabledRef.current
+        console.log(`[Camera] Zoom ${zoomEnabledRef.current ? 'ON' : 'OFF'} (distance: ${followDistanceRef.current.toFixed(1)})`)
+      }
     }
 
     const onKeyUp = (e: KeyboardEvent) => {
       rotateKeysRef.current.delete(e.code)
     }
 
+    // Scroll/pinch zoom in village mode (only when zoom enabled)
+    const onWheel = (e: WheelEvent) => {
+      if (!zoomEnabledRef.current || currentZone) return
+      e.preventDefault()
+      const delta = e.deltaY > 0 ? 1 : -1
+      followDistanceRef.current = THREE.MathUtils.clamp(
+        followDistanceRef.current * (1 + delta * ZOOM_SPEED),
+        MIN_FOLLOW_DISTANCE,
+        MAX_FOLLOW_DISTANCE,
+      )
+    }
+
     canvas.addEventListener('pointerdown', onPointerDown)
     canvas.addEventListener('pointermove', onPointerMove)
     canvas.addEventListener('pointerup', onPointerUp)
     canvas.addEventListener('contextmenu', onContextMenu)
+    canvas.addEventListener('wheel', onWheel, { passive: false })
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
 
@@ -131,6 +157,7 @@ export function VillageCamera() {
       canvas.removeEventListener('pointermove', onPointerMove)
       canvas.removeEventListener('pointerup', onPointerUp)
       canvas.removeEventListener('contextmenu', onContextMenu)
+      canvas.removeEventListener('wheel', onWheel)
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
@@ -158,9 +185,9 @@ export function VillageCamera() {
     } else {
       // Returning to village — use yaw-rotated offset
       _followOffset.set(
-        Math.sin(cameraYaw) * FOLLOW_DISTANCE,
+        Math.sin(cameraYaw) * followDistanceRef.current,
         FOLLOW_HEIGHT,
-        Math.cos(cameraYaw) * FOLLOW_DISTANCE,
+        Math.cos(cameraYaw) * followDistanceRef.current,
       )
       endPos = endTarget.clone().add(_followOffset)
     }
@@ -218,9 +245,9 @@ export function VillageCamera() {
 
       // Compute yaw-rotated follow offset
       _followOffset.set(
-        Math.sin(cameraYaw) * FOLLOW_DISTANCE,
+        Math.sin(cameraYaw) * followDistanceRef.current,
         FOLLOW_HEIGHT,
-        Math.cos(cameraYaw) * FOLLOW_DISTANCE,
+        Math.cos(cameraYaw) * followDistanceRef.current,
       )
 
       // Target: camera at rotated offset from player
