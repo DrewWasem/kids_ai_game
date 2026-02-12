@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest — World Map (Top-Down)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
+  canvas { display: block; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+  #legend {
+    position: fixed; top: 16px; right: 16px;
+    background: rgba(20,20,40,0.92); border: 1px solid #444; border-radius: 12px;
+    padding: 16px; color: #eee; font-size: 13px; min-width: 200px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  #legend h2 { font-size: 16px; margin-bottom: 10px; color: #ffd700; }
+  .leg-item { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+  .leg-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; }
+  .leg-line { width: 20px; height: 3px; flex-shrink: 0; border-radius: 2px; }
+  #title {
+    position: fixed; top: 16px; left: 16px;
+    color: #ffd700; font-size: 22px; font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  }
+  #subtitle { color: #aaa; font-size: 12px; font-weight: 400; }
+  #coords {
+    position: fixed; bottom: 16px; left: 16px;
+    color: #888; font-size: 12px; font-family: monospace;
+  }
+  #tooltip {
+    position: fixed; pointer-events: none; display: none;
+    background: rgba(10,10,30,0.95); border: 1px solid #666; border-radius: 8px;
+    padding: 8px 12px; color: #fff; font-size: 13px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+<body>
+<canvas id="map"></canvas>
+<div id="title">Prompt Quest — World Map<br><span id="subtitle">Top-down view &middot; scroll to zoom &middot; drag to pan</span></div>
+<div id="legend">
+  <h2>Legend</h2>
+  <div class="leg-item"><div class="leg-dot" style="background:#7C3AED"></div> Skeleton Birthday (N)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#3B82F6"></div> Space Mission (NE)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div> School Day (E)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#FBBF24"></div> Pizza Delivery (SE)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#22C55E"></div> Adventurer Picnic (S)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#F97316"></div> Rock Concert (SW)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#A855F7"></div> Magic Kitchen (W)</div>
+  <hr style="border-color:#444; margin:8px 0">
+  <div class="leg-item"><div class="leg-line" style="background:#c4a265"></div> Spoke Roads</div>
+  <div class="leg-item"><div class="leg-line" style="background:#8B7355; border:1px dashed #aaa"></div> Ring Road</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a6741; width:14px; height:14px; border-radius: 3px;"></div> Buildings</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2d5016; border-radius: 50%;"></div> Trees / Forest</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#6b6b6b; border-radius: 3px;"></div> Mountains / Cliffs</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a90d9"></div> Pond</div>
+</div>
+<div id="coords"></div>
+<div id="tooltip"></div>
+
+<script>
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+const coordsEl = document.getElementById('coords');
+const tooltipEl = document.getElementById('tooltip');
+
+// ── World data ──
+const ZONE_CENTERS = {
+  'skeleton-birthday': { x: 0, z: -55, label: 'Skeleton Birthday', emoji: '💀', color: '#7C3AED', desc: 'Dungeon courtyard with walls, torches, banners' },
+  'knight-space':      { x: 25, z: -25, label: 'Space Mission', emoji: '🚀', color: '#3B82F6', desc: 'Landing pad, base modules, dropship, dome' },
+  'barbarian-school':  { x: 35, z: 0, label: 'School Day', emoji: '📚', color: '#EF4444', desc: 'Playground: swings, slide, merry-go-round, sandbox' },
+  'skeleton-pizza':    { x: 25, z: 25, label: 'Pizza Delivery', emoji: '🍕', color: '#FBBF24', desc: 'Restaurant with kitchen counter, dining area' },
+  'adventurers-picnic':{ x: 0, z: 35, label: 'Adventurer Picnic', emoji: '🧺', color: '#22C55E', desc: 'Park with fountain, benches, hedges, trees' },
+  'dungeon-concert':   { x: -25, z: 25, label: 'Rock Concert', emoji: '🎸', color: '#F97316', desc: 'Stage with dungeon walls, pillars, banners' },
+  'mage-kitchen':      { x: -35, z: 0, label: 'Magic Kitchen', emoji: '🧙', color: '#A855F7', desc: 'Kitchen with counters, stove, fridge, table' },
+};
+
+const VILLAGE_BUILDINGS = [
+  { x: 18, z: -5, label: 'Town Hall', w: 8, h: 6 },
+  { x: -18, z: -7, label: 'Tavern', w: 6, h: 5 },
+  { x: 14, z: 9, label: 'Market', w: 5, h: 4 },
+  { x: -8, z: 2, label: 'Well', w: 3, h: 3 },
+  { x: -24, z: 7, label: 'Blacksmith', w: 5, h: 4 },
+  { x: 24, z: -12, label: 'Home', w: 4, h: 4 },
+  { x: -24, z: -10, label: 'Home', w: 4, h: 4 },
+  { x: -28, z: 14, label: 'Home', w: 4, h: 3 },
+  { x: 28, z: 12, label: 'Home', w: 4, h: 3 },
+  { x: 28, z: 2, label: 'Church', w: 5, h: 7 },
+  { x: -30, z: 0, label: 'Windmill', w: 5, h: 5 },
+  { x: 10, z: -12, label: 'Stables', w: 5, h: 4 },
+  { x: 32, z: -8, label: 'Watchtower', w: 4, h: 4 },
+  { x: -6, z: -10, label: 'Stage', w: 5, h: 3 },
+];
+
+const LANDMARKS = [
+  { x: -10, z: -60, label: 'Red Castle', color: '#DC2626', w: 7, h: 7 },
+  { x: 31, z: -30, label: 'Blue Tower', color: '#3B82F6', w: 4, h: 4 },
+  { x: 41, z: -4, label: 'Red Tower', color: '#EF4444', w: 4, h: 4 },
+  { x: 31, z: 30, label: 'Yellow Shrine', color: '#FBBF24', w: 5, h: 4 },
+  { x: 8, z: 40, label: 'Green Tower', color: '#22C55E', w: 4, h: 4 },
+  { x: -31, z: 30, label: 'Yellow Tower', color: '#FBBF24', w: 4, h: 4 },
+  { x: -41, z: -4, label: 'Green Tower', color: '#22C55E', w: 4, h: 4 },
+];
+
+const MOUNTAINS = [
+  { x: 0, z: -85, s: 10 }, { x: -35, z: -82, s: 8 }, { x: 35, z: -82, s: 9 },
+  { x: -55, z: -75, s: 8 }, { x: 55, z: -75, s: 8 },
+  { x: 65, z: -20, s: 8 }, { x: -65, z: -20, s: 7.5 },
+  { x: 65, z: 10, s: 8.5 }, { x: -65, z: 10, s: 7 },
+  { x: -60, z: -40, s: 9 }, { x: 60, z: -40, s: 8 },
+  { x: -55, z: 30, s: 7 }, { x: 55, z: 40, s: 8 },
+  { x: -50, z: 65, s: 7 }, { x: 50, z: 70, s: 8 },
+  { x: 0, z: 75, s: 9 }, { x: -40, z: 72, s: 8 },
+];
+
+const HILLS = [
+  { x: 45, z: 30, s: 6 }, { x: -38, z: 45, s: 5 }, { x: -50, z: 5, s: 6 },
+  { x: 50, z: -5, s: 5 }, { x: 48, z: 38, s: 5 }, { x: -48, z: 50, s: 6 },
+  { x: 45, z: 55, s: 5.5 }, { x: 50, z: -20, s: 5.5 }, { x: -55, z: -12, s: 6 },
+  { x: 25, z: 58, s: 5.5 },
+];
+
+const DUNGEON_CLIFFS = [
+  // Back wall
+  { x: 0, z: -72, s: 13 }, { x: -18, z: -70, s: 11 }, { x: 18, z: -70, s: 11 },
+  { x: -9, z: -68, s: 9 }, { x: 9, z: -68, s: 9 },
+  // Left wall
+  { x: -25, z: -64, s: 11 }, { x: -28, z: -58, s: 10 }, { x: -26, z: -52, s: 9 },
+  { x: -22, z: -49, s: 8 }, { x: -18, z: -46, s: 7.5 },
+  // Right wall
+  { x: 25, z: -64, s: 11 }, { x: 28, z: -58, s: 10 }, { x: 26, z: -52, s: 9 },
+  { x: 22, z: -49, s: 8 }, { x: 18, z: -46, s: 7.5 },
+  // Approach cliffs
+  { x: -8, z: -27, s: 4.5 }, { x: -10, z: -30, s: 5 }, { x: -11, z: -34, s: 5 },
+  { x: -9, z: -37, s: 5.5 }, { x: -12, z: -40, s: 5.5 }, { x: -13, z: -43, s: 6 }, { x: -16, z: -46, s: 5.5 },
+  { x: 8, z: -27, s: 4.5 }, { x: 10, z: -30, s: 5 }, { x: 11, z: -34, s: 5 },
+  { x: 9, z: -37, s: 5.5 }, { x: 12, z: -40, s: 5.5 }, { x: 13, z: -43, s: 6 }, { x: 16, z: -46, s: 5.5 },
+];
+
+const VILLAGE_TREES = [
+  { x: -32, z: -2 }, { x: 32, z: -2 }, { x: -30, z: 12 }, { x: 30, z: -10 },
+  { x: -18, z: -14 }, { x: 20, z: 15 },
+];
+
+const PERIMETER_TREES = [
+  { x: 42, z: 45, s: 6 }, { x: -42, z: 38, s: 6 }, { x: 40, z: -35, s: 6 },
+  { x: -50, z: -10, s: 6 }, { x: 50, z: 10, s: 6 }, { x: -32, z: 55, s: 5 },
+];
+
+const POND = { x: 12, z: 18, w: 8, h: 5 };
+
+
+const SPOKE_TARGETS = [
+  [0, -55],    // N → dungeon
+  [25, -25],   // NE → knight-space
+  [35, 0],     // E  → barbarian-school
+  [25, 25],    // SE → skeleton-pizza
+  [0, 35],     // S  → park
+  [-25, 25],   // SW → dungeon-concert
+  [-35, 0],    // W  → mage-kitchen
+];
+
+// ── Camera / transform state ──
+let scale = 4.2;
+let offsetX = 0, offsetY = 0;
+let dragging = false, lastX = 0, lastY = 0;
+let mouseWorldX = 0, mouseWorldZ = 0;
+let hoverZone = null;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  draw();
+}
+
+// World coord → screen coord  (x right, z down — but we flip z so north is up)
+function toScreen(wx, wz) {
+  const sx = canvas.width/2 + (wx * scale) + offsetX;
+  const sy = canvas.height/2 + (wz * scale) + offsetY;  // +z = down on screen = south
+  return [sx, sy];
+}
+
+function toWorld(sx, sy) {
+  const wx = (sx - canvas.width/2 - offsetX) / scale;
+  const wz = (sy - canvas.height/2 - offsetY) / scale;
+  return [wx, wz];
+}
+
+// ── Drawing ──
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background — grass
+  ctx.fillStyle = '#2d5a1e';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Grass texture pattern (subtle dots)
+  ctx.fillStyle = 'rgba(40,80,25,0.4)';
+  for (let gx = -100; gx <= 100; gx += 4) {
+    for (let gz = -100; gz <= 100; gz += 4) {
+      const [sx, sy] = toScreen(gx, gz);
+      if (sx < -5 || sx > canvas.width+5 || sy < -5 || sy > canvas.height+5) continue;
+      const r = 1.2 * scale / 4;
+      ctx.beginPath();
+      ctx.arc(sx + ((gx*7+gz*13)%3), sy + ((gz*11+gx*3)%3), r, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // Ring road (circle at R≈30, skip north)
+  ctx.strokeStyle = '#8B7355';
+  ctx.lineWidth = Math.max(2, 5 * scale / 4);
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  for (let a = -0.25 * Math.PI; a <= 1.25 * Math.PI; a += 0.02) {
+    const wx = Math.cos(a) * 30;
+    const wz = Math.sin(a) * 30;
+    const [sx, sy] = toScreen(wx, wz);
+    if (a === -0.25 * Math.PI) ctx.moveTo(sx, sy);
+    else ctx.lineTo(sx, sy);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Spoke roads
+  ctx.strokeStyle = '#c4a265';
+  ctx.lineWidth = Math.max(2, 4 * scale / 4);
+  for (const [tx, tz] of SPOKE_TARGETS) {
+    const [sx1, sy1] = toScreen(0, 0);
+    const [sx2, sy2] = toScreen(tx, tz);
+    ctx.beginPath();
+    ctx.moveTo(sx1, sy1);
+    ctx.lineTo(sx2, sy2);
+    ctx.stroke();
+  }
+
+  // Dirt path fill along roads
+  ctx.strokeStyle = 'rgba(160,130,80,0.15)';
+  ctx.lineWidth = Math.max(6, 14 * scale / 4);
+  for (const [tx, tz] of SPOKE_TARGETS) {
+    const [sx1, sy1] = toScreen(0, 0);
+    const [sx2, sy2] = toScreen(tx, tz);
+    ctx.beginPath();
+    ctx.moveTo(sx1, sy1);
+    ctx.lineTo(sx2, sy2);
+    ctx.stroke();
+  }
+
+  // Mountains (perimeter)
+  for (const m of MOUNTAINS) {
+    const [sx, sy] = toScreen(m.x, m.z);
+    const r = m.s * scale * 0.6;
+    drawMountain(sx, sy, r);
+  }
+
+  // Hills
+  for (const h of HILLS) {
+    const [sx, sy] = toScreen(h.x, h.z);
+    const r = h.s * scale * 0.4;
+    drawHill(sx, sy, r);
+  }
+
+  // Dungeon cliffs
+  for (const c of DUNGEON_CLIFFS) {
+    const [sx, sy] = toScreen(c.x, c.z);
+    const r = c.s * scale * 0.35;
+    drawCliff(sx, sy, r);
+  }
+
+  // Impenetrable forest (rings)
+  drawForestRing(38, 42, 14);
+  drawForestRing(38, 48, 20);
+  drawForestRing(52, 62, 16);
+
+  // Perimeter trees
+  for (const t of PERIMETER_TREES) {
+    const [sx, sy] = toScreen(t.x, t.z);
+    drawTree(sx, sy, (t.s || 6) * scale * 0.3);
+  }
+
+  // Village pond
+  {
+    const [sx, sy] = toScreen(POND.x, POND.z);
+    const w = POND.w * scale;
+    const h = POND.h * scale;
+    ctx.fillStyle = '#3b82c4';
+    ctx.beginPath();
+    ctx.ellipse(sx, sy, w/2, h/2, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#6bb5e0';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Water lilies
+    ctx.fillStyle = '#66bb6a';
+    ctx.beginPath(); ctx.arc(sx - w*0.15, sy - h*0.1, 2*scale/4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx + w*0.2, sy + h*0.05, 1.5*scale/4, 0, Math.PI*2); ctx.fill();
+    // Bridge
+    ctx.strokeStyle = '#8B6914';
+    ctx.lineWidth = Math.max(2, 3 * scale / 4);
+    ctx.beginPath();
+    ctx.moveTo(sx - w*0.35, sy + h*0.15);
+    ctx.lineTo(sx + w*0.35, sy + h*0.15);
+    ctx.stroke();
+    // Label
+    if (scale > 2.5) {
+      ctx.fillStyle = '#a0d4f0';
+      ctx.font = `${Math.max(9, 10*scale/4)}px system-ui`;
+      ctx.textAlign = 'center';
+      ctx.fillText('pond', sx, sy + h/2 + 12*scale/4);
+    }
+  }
+
+  // Village center buildings
+  for (const b of VILLAGE_BUILDINGS) {
+    const [sx, sy] = toScreen(b.x, b.z);
+    const w = b.w * scale * 0.5;
+    const h = b.h * scale * 0.5;
+    // Building shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(sx - w/2 + 2, sy - h/2 + 2, w, h);
+    // Building
+    ctx.fillStyle = '#6b5b3a';
+    ctx.strokeStyle = '#4a3f28';
+    ctx.lineWidth = 1.5;
+    ctx.fillRect(sx - w/2, sy - h/2, w, h);
+    ctx.strokeRect(sx - w/2, sy - h/2, w, h);
+    // Roof accent
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(sx - w/2 + 1, sy - h/2, w - 2, Math.max(2, h*0.2));
+    // Label
+    if (scale > 3) {
+      ctx.fillStyle = '#ddd';
+      ctx.font = `${Math.max(8, 9*scale/4)}px system-ui`;
+      ctx.textAlign = 'center';
+      ctx.fillText(b.label, sx, sy + h/2 + 10*scale/4);
+    }
+  }
+
+  // Village trees
+  for (const t of VILLAGE_TREES) {
+    const [sx, sy] = toScreen(t.x, t.z);
+    drawTree(sx, sy, 5 * scale * 0.28);
+  }
+
+  // Zone landmarks
+  for (const lm of LANDMARKS) {
+    const [sx, sy] = toScreen(lm.x, lm.z);
+    const w = lm.w * scale * 0.5;
+    const h = lm.h * scale * 0.5;
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(sx - w/2 + 2, sy - h/2 + 2, w, h);
+    // Building
+    ctx.fillStyle = lm.color;
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1.5;
+    ctx.fillRect(sx - w/2, sy - h/2, w, h);
+    ctx.strokeRect(sx - w/2, sy - h/2, w, h);
+    if (scale > 2.5) {
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${Math.max(8, 9*scale/4)}px system-ui`;
+      ctx.textAlign = 'center';
+      ctx.fillText(lm.label, sx, sy + h/2 + 11*scale/4);
+    }
+  }
+
+
+  // Zone circles and labels
+  for (const [id, zone] of Object.entries(ZONE_CENTERS)) {
+    const [sx, sy] = toScreen(zone.x, zone.z);
+    const r = 12 * scale;
+
+    // Zone radius circle (dashed)
+    ctx.strokeStyle = zone.color + '55';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.arc(sx, sy, r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Zone fill
+    const isHover = hoverZone === id;
+    ctx.fillStyle = zone.color + (isHover ? '30' : '18');
+    ctx.beginPath();
+    ctx.arc(sx, sy, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Zone center dot
+    ctx.fillStyle = zone.color;
+    ctx.beginPath();
+    ctx.arc(sx, sy, Math.max(3, 5*scale/4), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Emoji + label
+    const fontSize = Math.max(12, 16 * scale / 4);
+    ctx.font = `${fontSize * 1.8}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText(zone.emoji, sx, sy - 6 * scale / 4);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = `bold ${fontSize}px system-ui`;
+    ctx.fillText(zone.label, sx, sy + 16 * scale / 4);
+
+    // Hover detail
+    if (isHover && scale > 2) {
+      ctx.fillStyle = '#ccc';
+      ctx.font = `${Math.max(9, 11*scale/4)}px system-ui`;
+      ctx.fillText(zone.desc, sx, sy + 28 * scale / 4);
+    }
+  }
+
+  // Village center label
+  {
+    const [sx, sy] = toScreen(0, 0);
+    ctx.fillStyle = '#ffd700';
+    ctx.font = `bold ${Math.max(13, 16*scale/4)}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText('Village Center', sx, sy + 4*scale/4);
+    // Cross marker
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 2;
+    const cs = 6 * scale / 4;
+    ctx.beginPath(); ctx.moveTo(sx-cs, sy); ctx.lineTo(sx+cs, sy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx, sy-cs); ctx.lineTo(sx, sy+cs); ctx.stroke();
+  }
+
+  // Compass rose
+  drawCompass();
+
+  // Scale bar
+  drawScaleBar();
+}
+
+function drawMountain(sx, sy, r) {
+  ctx.fillStyle = '#5a5a5a';
+  ctx.beginPath();
+  ctx.moveTo(sx - r, sy + r*0.6);
+  ctx.lineTo(sx - r*0.2, sy - r*0.8);
+  ctx.lineTo(sx + r*0.2, sy - r*0.9);
+  ctx.lineTo(sx + r, sy + r*0.5);
+  ctx.closePath();
+  ctx.fill();
+  // Snow cap
+  ctx.fillStyle = '#ddd';
+  ctx.beginPath();
+  ctx.moveTo(sx - r*0.15, sy - r*0.55);
+  ctx.lineTo(sx, sy - r*0.85);
+  ctx.lineTo(sx + r*0.15, sy - r*0.6);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#444';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(sx - r, sy + r*0.6);
+  ctx.lineTo(sx - r*0.2, sy - r*0.8);
+  ctx.lineTo(sx + r*0.2, sy - r*0.9);
+  ctx.lineTo(sx + r, sy + r*0.5);
+  ctx.closePath();
+  ctx.stroke();
+}
+
+function drawHill(sx, sy, r) {
+  ctx.fillStyle = '#4a7a3a';
+  ctx.beginPath();
+  ctx.ellipse(sx, sy + r*0.2, r, r*0.65, 0, Math.PI, 0);
+  ctx.fill();
+  ctx.fillStyle = '#3a6a2a';
+  ctx.beginPath();
+  ctx.ellipse(sx, sy + r*0.2, r, r*0.65, 0, 0, Math.PI);
+  ctx.fill();
+}
+
+function drawCliff(sx, sy, r) {
+  ctx.fillStyle = '#6b6050';
+  ctx.beginPath();
+  ctx.moveTo(sx - r, sy + r*0.4);
+  ctx.lineTo(sx - r*0.3, sy - r*0.7);
+  ctx.lineTo(sx + r*0.3, sy - r*0.6);
+  ctx.lineTo(sx + r, sy + r*0.3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#4a4035';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+function drawTree(sx, sy, r) {
+  // Trunk
+  ctx.fillStyle = '#5a3a1a';
+  ctx.fillRect(sx - r*0.15, sy - r*0.1, r*0.3, r*0.5);
+  // Canopy
+  ctx.fillStyle = '#2d7016';
+  ctx.beginPath();
+  ctx.arc(sx, sy - r*0.2, r*0.7, 0, Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#1a5a0a';
+  ctx.beginPath();
+  ctx.arc(sx + r*0.15, sy - r*0.3, r*0.5, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawForestRing(rMin, rMax, count) {
+  const corridors = [
+    { angle: 3*Math.PI/2, half: 0.50 },
+    { angle: Math.PI/2, half: 0.26 },
+    { angle: 7*Math.PI/4, half: 0.22 },
+    { angle: 0, half: 0.22 },
+    { angle: Math.PI/4, half: 0.22 },
+    { angle: 3*Math.PI/4, half: 0.22 },
+    { angle: Math.PI, half: 0.22 },
+  ];
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 + (rMin * 0.01);
+    // Check corridors
+    let skip = false;
+    for (const c of corridors) {
+      let diff = Math.abs(angle - c.angle);
+      diff = Math.min(diff, Math.PI*2 - diff);
+      if (diff < c.half) { skip = true; break; }
+    }
+    if (skip) continue;
+    const r = rMin + ((i * 7) % (rMax - rMin));
+    const wx = Math.cos(angle) * r;
+    const wz = Math.sin(angle) * r;
+    const [sx, sy] = toScreen(wx, wz);
+    const treeR = (6 + (i%3)) * scale * 0.25;
+    // Simple green circle for forest density
+    ctx.fillStyle = `rgba(${20+i%20}, ${70+i%30}, ${15+i%15}, 0.7)`;
+    ctx.beginPath();
+    ctx.arc(sx, sy, treeR, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function drawCompass() {
+  const cx = 60, cy = canvas.height - 60;
+  const r = 30;
+
+  ctx.fillStyle = 'rgba(20,20,40,0.7)';
+  ctx.beginPath(); ctx.arc(cx, cy, r+5, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#666'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(cx, cy, r+5, 0, Math.PI*2); ctx.stroke();
+
+  // N arrow (points up)
+  ctx.fillStyle = '#e74c3c';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.lineTo(cx - 6, cy);
+  ctx.lineTo(cx + 6, cy);
+  ctx.closePath();
+  ctx.fill();
+  // S arrow
+  ctx.fillStyle = '#888';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + r);
+  ctx.lineTo(cx - 6, cy);
+  ctx.lineTo(cx + 6, cy);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText('N', cx, cy - r - 8);
+  ctx.fillStyle = '#aaa'; ctx.font = '11px system-ui';
+  ctx.fillText('S', cx, cy + r + 14);
+  ctx.fillText('E', cx + r + 10, cy + 4);
+  ctx.fillText('W', cx - r - 10, cy + 4);
+}
+
+function drawScaleBar() {
+  const barWorldLen = 20; // 20 world units
+  const barPx = barWorldLen * scale;
+  const x = canvas.width - 40 - barPx;
+  const y = canvas.height - 30;
+
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + barPx, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, y-5); ctx.lineTo(x, y+5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+barPx, y-5); ctx.lineTo(x+barPx, y+5); ctx.stroke();
+
+  ctx.fillStyle = '#ccc'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  ctx.fillText(`${barWorldLen} units`, x + barPx/2, y - 10);
+}
+
+// ── Hit-test zones ──
+function hitTestZone(mx, my) {
+  for (const [id, zone] of Object.entries(ZONE_CENTERS)) {
+    const [sx, sy] = toScreen(zone.x, zone.z);
+    const r = 12 * scale;
+    const dx = mx - sx, dy = my - sy;
+    if (dx*dx + dy*dy < r*r) return id;
+  }
+  return null;
+}
+
+// ── Interaction ──
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+  const newScale = Math.max(1.5, Math.min(12, scale * zoomFactor));
+  // Zoom toward cursor
+  const mx = e.clientX, my = e.clientY;
+  offsetX = mx - (mx - offsetX) * (newScale / scale) - canvas.width/2 + canvas.width/2;
+  offsetY = my - (my - offsetY) * (newScale / scale) - canvas.height/2 + canvas.height/2;
+  // Simplified: just zoom toward center
+  offsetX *= newScale / scale;
+  offsetY *= newScale / scale;
+  scale = newScale;
+  draw();
+}, { passive: false });
+
+canvas.addEventListener('mousedown', (e) => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+canvas.addEventListener('mouseup', () => { dragging = false; });
+canvas.addEventListener('mouseleave', () => { dragging = false; });
+canvas.addEventListener('mousemove', (e) => {
+  if (dragging) {
+    offsetX += e.clientX - lastX;
+    offsetY += e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    draw();
+  }
+  const [wx, wz] = toWorld(e.clientX, e.clientY);
+  mouseWorldX = wx; mouseWorldZ = wz;
+  coordsEl.textContent = `World: (${wx.toFixed(1)}, ${wz.toFixed(1)})  Zoom: ${scale.toFixed(1)}x`;
+
+  const zone = hitTestZone(e.clientX, e.clientY);
+  if (zone !== hoverZone) {
+    hoverZone = zone;
+    draw();
+  }
+  if (zone) {
+    tooltipEl.style.display = 'block';
+    tooltipEl.style.left = (e.clientX + 15) + 'px';
+    tooltipEl.style.top = (e.clientY + 15) + 'px';
+    const z = ZONE_CENTERS[zone];
+    tooltipEl.innerHTML = `<strong>${z.emoji} ${z.label}</strong><br><span style="color:#aaa">${z.desc}</span><br><span style="color:#666;font-size:11px">Position: (${z.x}, ${z.z})</span>`;
+  } else {
+    tooltipEl.style.display = 'none';
+  }
+});
+
+window.addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

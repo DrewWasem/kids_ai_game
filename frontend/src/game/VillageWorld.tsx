@@ -47,13 +47,16 @@ const HEX = 'kaykit/packs/medieval_hex/'
 
 const TILES = {
   grass: HEX + 'tiles/base/hex_grass.gltf',
-  road_A: HEX + 'tiles/roads/hex_road_A.gltf',
-  road_B: HEX + 'tiles/roads/hex_road_B.gltf',
-  road_C: HEX + 'tiles/roads/hex_road_C.gltf',
-  road_D: HEX + 'tiles/roads/hex_road_D.gltf',
+  road_A: 'tiny-treats/pretty-park/cobble_stones.gltf',
+  road_B: 'tiny-treats/pretty-park/cobble_stones.gltf',
+  road_C: 'tiny-treats/pretty-park/cobble_stones.gltf',
+  road_D: 'tiny-treats/pretty-park/cobble_stones.gltf',
   water: HEX + 'tiles/base/hex_water.gltf',
   coast_A: HEX + 'tiles/coast/hex_coast_A.gltf',
   coast_B: HEX + 'tiles/coast/hex_coast_B.gltf',
+  coast_C: HEX + 'tiles/coast/hex_coast_C.gltf',
+  coast_D: HEX + 'tiles/coast/hex_coast_D.gltf',
+  coast_E: HEX + 'tiles/coast/hex_coast_E.gltf',
   transition: HEX + 'tiles/base/hex_transition.gltf',
 }
 
@@ -69,6 +72,14 @@ const BUILDINGS = {
   windmill: HEX + 'buildings/blue/building_windmill_blue.gltf',
   watchtower: HEX + 'buildings/blue/building_watchtower_blue.gltf',
   stables: HEX + 'buildings/blue/building_stables_blue.gltf',
+  // Colored building variants (landmarks)
+  castle_red: HEX + 'buildings/red/building_castle_red.gltf',
+  tower_A_blue: HEX + 'buildings/blue/building_tower_A_blue.gltf',
+  tower_B_red: HEX + 'buildings/red/building_tower_B_red.gltf',
+  shrine_yellow: HEX + 'buildings/yellow/building_shrine_yellow.gltf',
+  watchtower_green: HEX + 'buildings/green/building_watchtower_green.gltf',
+  tower_A_yellow: HEX + 'buildings/yellow/building_tower_A_yellow.gltf',
+  tower_B_green: HEX + 'buildings/green/building_tower_B_green.gltf',
   // Neutral
   bridge_A: HEX + 'buildings/neutral/building_bridge_A.gltf',
   stage_A: HEX + 'buildings/neutral/building_stage_A.gltf',
@@ -116,6 +127,20 @@ const DECORATION = {
   bucket_water: HEX + 'decoration/props/bucket_water.gltf',
   trough: HEX + 'decoration/props/trough.gltf',
   target: HEX + 'decoration/props/target.gltf',
+  tent: HEX + 'decoration/props/tent.gltf',
+  bucket_arrows: HEX + 'decoration/props/bucket_arrows.gltf',
+  flag_green: HEX + 'decoration/props/flag_green.gltf',
+  flag_yellow: HEX + 'decoration/props/flag_yellow.gltf',
+  // Water decoration
+  waterlily_A: HEX + 'decoration/nature/waterlily_A.gltf',
+  waterlily_B: HEX + 'decoration/nature/waterlily_B.gltf',
+  waterplant_A: HEX + 'decoration/nature/waterplant_A.gltf',
+  waterplant_B: HEX + 'decoration/nature/waterplant_B.gltf',
+  // Lantern (tiny-treats)
+  street_lantern: 'tiny-treats/pretty-park/street_lantern.gltf',
+  // Park flowers (for approach decor)
+  flower_A: 'tiny-treats/pretty-park/flower_A.gltf',
+  flower_B: 'tiny-treats/pretty-park/flower_B.gltf',
 }
 
 // ============================================================================
@@ -159,32 +184,76 @@ Piece.displayName = 'Piece'
 // HEX TERRAIN — Grass tiles covering the village area
 // ============================================================================
 
+// Spoke road targets (from origin to each zone center, excluding N/S which are on main road)
+const SPOKE_TARGETS: [number, number][] = [
+  [25, -25],   // NE → knight-space
+  [35, 0],     // E  → barbarian-school
+  [25, 25],    // SE → skeleton-pizza
+  [-25, 25],   // SW → dungeon-concert
+  [-35, 0],    // W  → mage-kitchen
+]
+
+/** Check if world position (x,z) is within `halfWidth` of a line from origin to (tx,tz) */
+function isOnSpoke(x: number, z: number, halfWidth: number): boolean {
+  for (const [tx, tz] of SPOKE_TARGETS) {
+    const len = Math.sqrt(tx * tx + tz * tz)
+    // Project point onto spoke line — t=0 at origin, t=1 at target
+    const t = (x * tx + z * tz) / (len * len)
+    if (t < -0.05 || t > 1.05) continue // Not along this spoke
+    // Perpendicular distance from point to line
+    const dist = Math.abs(x * tz - z * tx) / len
+    if (dist < halfWidth) return true
+  }
+  return false
+}
+
+/** Check if world position is on the ring road (circle at radius ~30) */
+function isOnRingRoad(x: number, z: number, halfWidth: number): boolean {
+  if (z < -35) return false // Skip ring in dungeon canyon area
+  const dist = Math.sqrt(x * x + z * z)
+  return Math.abs(dist - 30) < halfWidth
+}
+
 function HexTerrain() {
   // Generate a grid of hex tiles covering the village area
   const tiles = useMemo(() => {
     const result: { model: string; position: [number, number, number]; rotation?: [number, number, number] }[] = []
+    const roadPositions = new Set<string>()
 
-    // Road tiles — 3 columns wide (col -1, 0, +1) for a visible road
-    // Extended north to row -36 (Z≈-62) to reach the relocated dungeon
-    // Ends at row 18 (Z≈31) so road stops before the Park Zone at Z=35
-    const roadCols = new Set([-1, 0, 1])
-    const roadRows = new Set<string>()
-    for (let row = -36; row <= 18; row++) {
-      for (const col of roadCols) {
-        roadRows.add(`${col},${row}`)
-        const pos = hexToWorld(col, row)
-        // Use different road pieces for variety
-        const model = col === 0 ? TILES.road_A : TILES.road_B
-        result.push({ model, position: pos })
+    // 1. Grass everywhere first
+    for (let col = -45; col <= 45; col++) {
+      for (let row = -55; row <= 50; row++) {
+        result.push({ model: TILES.grass, position: hexToWorld(col, row) })
       }
     }
 
-    // Wide grass area — extended to cover perimeter forest + mountain ring
+    // 2. Road tiles layered on top of grass
+    const addRoad = (col: number, row: number, model: string) => {
+      const key = `${col},${row}`
+      if (roadPositions.has(key)) return
+      roadPositions.add(key)
+      const [wx, , wz] = hexToWorld(col, row)
+      result.push({ model, position: [wx, 0.05, wz] })
+    }
+
+    // Main N-S road — 3 columns wide (col -1 to +1)
+    // Ends at row 18 (Z≈31) so road stops before the Park Zone at Z=35
+    const roadCols = [-1, 0, 1]
+    for (let row = -36; row <= 18; row++) {
+      for (const col of roadCols) {
+        addRoad(col, row, TILES.road_A)
+      }
+    }
+
+    // Spoke roads + ring road
     for (let col = -45; col <= 45; col++) {
       for (let row = -55; row <= 50; row++) {
-        if (roadRows.has(`${col},${row}`)) continue // Road already placed
-        const pos = hexToWorld(col, row)
-        result.push({ model: TILES.grass, position: pos })
+        const [wx, , wz] = hexToWorld(col, row)
+        const onSpoke = isOnSpoke(wx, wz, 2.0)
+        const onRing = isOnRingRoad(wx, wz, 2.0)
+        if (onSpoke || onRing) {
+          addRoad(col, row, TILES.road_A)
+        }
       }
     }
 
@@ -229,7 +298,7 @@ function VillageCenter() {
 
       {/* Homes — spread around the village */}
       <Piece model={BUILDINGS.home_A} position={[24, 0, -12]} rotation={[0, -Math.PI / 2, 0]} scale={s} />
-      <Piece model={BUILDINGS.home_B} position={[-24, 0, -10]} rotation={[0, Math.PI / 3, 0]} scale={s} />
+      <Piece model={BUILDINGS.home_B} position={[-15, 0, -14]} rotation={[0, Math.PI / 3, 0]} scale={s} />
       <Piece model={BUILDINGS.home_A} position={[-28, 0, 14]} rotation={[0, Math.PI / 6, 0]} scale={s * 0.9} />
       <Piece model={BUILDINGS.home_B} position={[28, 0, 12]} rotation={[0, -Math.PI / 6, 0]} scale={s * 0.9} />
 
@@ -263,7 +332,6 @@ function VillageCenter() {
       <Piece model={DECORATION.tree_B} position={[32, 0, -2]} scale={d} />
       <Piece model={DECORATION.trees_small} position={[-30, 0, 12]} scale={d * 0.8} />
       <Piece model={DECORATION.trees_small} position={[30, 0, -10]} scale={d * 0.8} />
-      <Piece model={DECORATION.tree_A} position={[-18, 0, -14]} scale={d * 0.9} />
       <Piece model={DECORATION.tree_B} position={[20, 0, 15]} scale={d * 0.9} />
     </group>
   )
@@ -352,19 +420,26 @@ function ImpenetrableForest() {
   const pick = (i: number, arr: string[]) => arr[i % arr.length]
   const rot = (i: number) => ((i * 137.5) % 360) * (Math.PI / 180) // golden angle
 
-  // Skip trees in north/south road corridors
-  // North corridor wider (~58°) because scale-7 trees are huge and crowd the dungeon road
+  // Skip trees in road corridors — all 7 directions (N, S, NE, E, SE, SW, W)
+  // North corridor wider because scale-7 trees are huge and crowd the dungeon road
+  const corridors = [
+    { angle: 3 * Math.PI / 2, half: 0.50 },  // N → dungeon (wide)
+    { angle: Math.PI / 2,     half: 0.26 },   // S → park
+    { angle: 7 * Math.PI / 4, half: 0.22 },   // NE → space
+    { angle: 0,               half: 0.22 },   // E → school
+    { angle: Math.PI / 4,     half: 0.22 },   // SE → pizza
+    { angle: 3 * Math.PI / 4, half: 0.22 },   // SW → concert
+    { angle: Math.PI,         half: 0.22 },   // W → kitchen
+  ]
   const isInCorridor = (angle: number): boolean => {
-    const north = 3 * Math.PI / 2  // 270° = negative Z direction
-    const south = Math.PI / 2       // 90° = positive Z direction
-    const northHalf = 0.50           // ~29° each side → ~58° corridor (wide for dungeon road)
-    const southHalf = 0.26           // ~15° each side → ~30° corridor
-    const normalize = (a: number) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
+    const TWO_PI = 2 * Math.PI
+    const normalize = (a: number) => ((a % TWO_PI) + TWO_PI) % TWO_PI
     const a = normalize(angle)
-    const diffN = Math.abs(a - north)
-    const diffS = Math.abs(a - south)
-    return Math.min(diffN, 2 * Math.PI - diffN) < northHalf
-        || Math.min(diffS, 2 * Math.PI - diffS) < southHalf
+    for (const { angle: ca, half } of corridors) {
+      const diff = Math.abs(a - ca)
+      if (Math.min(diff, TWO_PI - diff) < half) return true
+    }
+    return false
   }
 
   // Skip trees that are too close to any quest zone center (would block camera view)
@@ -826,9 +901,40 @@ function KitchenZone() {
 
 function RoadDecoration() {
   const d = 7.0 // Scale hex decoration to match 7x building scale
+
+  // Generate lanterns along each spoke road
+  const lanterns = useMemo(() => {
+    const result: { position: [number, number, number]; rotation: [number, number, number] }[] = []
+
+    // Lanterns along main N-S road
+    for (let z = -24; z <= 24; z += 10) {
+      result.push({ position: [5, 0, z], rotation: [0, 0, 0] })
+      result.push({ position: [-5, 0, z + 5], rotation: [0, Math.PI, 0] })
+    }
+
+    // Lanterns along each spoke road (every ~10u, alternating sides)
+    for (const [tx, tz] of SPOKE_TARGETS) {
+      const len = Math.sqrt(tx * tx + tz * tz)
+      const dx = tx / len
+      const dz = tz / len
+      // Perpendicular direction for alternating sides
+      const px = -dz
+      const pz = dx
+      for (let t = 10; t < len - 5; t += 10) {
+        const side = (t / 10) % 2 === 0 ? 3 : -3
+        result.push({
+          position: [dx * t + px * side, 0, dz * t + pz * side],
+          rotation: [0, Math.atan2(dz, dx), 0],
+        })
+      }
+    }
+
+    return result
+  }, [])
+
   return (
     <group name="road-decoration">
-      {/* Signposts along the road — village section only (canyon has its own walls) */}
+      {/* Signposts along the main road */}
       <Piece model={DECORATION.flag_blue} position={[5, 0, -10]} scale={d} />
       <Piece model={DECORATION.flag_blue} position={[5, 0, 14]} scale={d} />
       <Piece model={DECORATION.flag_blue} position={[5, 0, 26]} scale={d} />
@@ -842,6 +948,183 @@ function RoadDecoration() {
       {/* Trees along the road */}
       <Piece model={DECORATION.tree_A} position={[-8, 0, 18]} scale={d} />
       <Piece model={DECORATION.tree_B} position={[8, 0, 22]} scale={d} />
+
+      {/* Lanterns along all spoke roads */}
+      {lanterns.map((l, i) => (
+        <Piece key={`lantern-${i}`} model={DECORATION.street_lantern} position={l.position} rotation={l.rotation} scale={1.5} />
+      ))}
+
+      {/* Zone-colored flags near entrances */}
+      {/* knight-space (NE) — blue */}
+      <Piece model={DECORATION.flag_blue} position={[18, 0, -18]} scale={d} />
+      <Piece model={DECORATION.flag_blue} position={[21, 0, -21]} scale={d} />
+      {/* barbarian-school (E) — red */}
+      <Piece model={DECORATION.flag_red} position={[26, 0, -2]} scale={d} />
+      <Piece model={DECORATION.flag_red} position={[26, 0, 2]} scale={d} />
+      {/* skeleton-pizza (SE) — yellow */}
+      <Piece model={DECORATION.flag_yellow} position={[18, 0, 18]} scale={d} />
+      <Piece model={DECORATION.flag_yellow} position={[21, 0, 21]} scale={d} />
+      {/* adventurers-picnic (S) — green */}
+      <Piece model={DECORATION.flag_green} position={[-2, 0, 26]} scale={d} />
+      <Piece model={DECORATION.flag_green} position={[2, 0, 26]} scale={d} />
+      {/* dungeon-concert (SW) — red */}
+      <Piece model={DECORATION.flag_red} position={[-18, 0, 18]} scale={d} />
+      <Piece model={DECORATION.flag_red} position={[-21, 0, 21]} scale={d} />
+      {/* mage-kitchen (W) — green */}
+      <Piece model={DECORATION.flag_green} position={[-26, 0, -2]} scale={d} />
+      <Piece model={DECORATION.flag_green} position={[-26, 0, 2]} scale={d} />
+    </group>
+  )
+}
+
+// ============================================================================
+// ZONE LANDMARKS — Tall colored buildings visible from village center
+// ============================================================================
+
+function ZoneLandmarks() {
+  return (
+    <group name="zone-landmarks">
+      {/* skeleton-birthday: Red castle, offset behind dungeon center */}
+      <Piece model={BUILDINGS.castle_red} position={[-10, 0, -60]} scale={8.0} />
+      {/* knight-space: Blue tower */}
+      <Piece model={BUILDINGS.tower_A_blue} position={[31, 0, -30]} scale={8.0} />
+      {/* barbarian-school: Red tower */}
+      <Piece model={BUILDINGS.tower_B_red} position={[41, 0, -4]} scale={8.0} />
+      {/* skeleton-pizza: Yellow shrine */}
+      <Piece model={BUILDINGS.shrine_yellow} position={[31, 0, 30]} scale={8.0} />
+      {/* adventurers-picnic: Green watchtower */}
+      <Piece model={BUILDINGS.watchtower_green} position={[8, 0, 40]} scale={8.0} />
+      {/* dungeon-concert: Yellow tower */}
+      <Piece model={BUILDINGS.tower_A_yellow} position={[-31, 0, 30]} scale={8.0} />
+      {/* mage-kitchen: Green tower */}
+      <Piece model={BUILDINGS.tower_B_green} position={[-41, 0, -4]} scale={8.0} />
+    </group>
+  )
+}
+
+// ============================================================================
+// TERRAIN SCATTER — Rocks, hills, trees between village and zones
+// ============================================================================
+
+function TerrainScatter() {
+  const items = useMemo(() => {
+    const result: { model: string; position: [number, number, number]; rotation: [number, number, number]; scale: number }[] = []
+
+    const scatterModels = [
+      DECORATION.rock_A, DECORATION.rock_B, DECORATION.rock_C, DECORATION.rock_D, DECORATION.rock_E,
+      DECORATION.hill_A, DECORATION.hill_B, DECORATION.hill_C,
+      DECORATION.trees_small, DECORATION.trees_B_small,
+    ]
+
+    // Seeded scatter in R=18-32 ring, avoiding spokes and zone centers
+    for (let i = 0; i < 32; i++) {
+      // Deterministic pseudo-random positions using golden angle distribution
+      const angle = i * 2.399 + 0.7 // golden angle ≈ 2.399 rad
+      const r = 18 + (i * 7.3 % 14) // spread between 18-32
+      const x = Math.cos(angle) * r
+      const z = Math.sin(angle) * r
+
+      // Skip dungeon canyon area
+      if (z < -35) continue
+      // Skip if too close to any spoke road
+      if (isOnSpoke(x, z, 5.0)) continue
+      // Skip if too close to ring road
+      if (isOnRingRoad(x, z, 5.0)) continue
+      // Skip if too close to any zone center
+      const tooCloseToZone = Object.values(ZONE_CENTERS).some(
+        ([cx, , cz]) => Math.sqrt((x - cx) ** 2 + (z - cz) ** 2) < 12
+      )
+      if (tooCloseToZone) continue
+      // Clear trees/scatter near (-25.6, -16.8)
+      if (Math.sqrt((x - -25.6) ** 2 + (z - -16.8) ** 2) < 4) continue
+
+      result.push({
+        model: scatterModels[i % scatterModels.length],
+        position: [x, 0, z],
+        rotation: [0, (i * 137.5 % 360) * Math.PI / 180, 0],
+        scale: 4.0 + (i % 4) * 0.5,
+      })
+    }
+
+    return result
+  }, [])
+
+  return (
+    <group name="terrain-scatter">
+      {items.map((item, i) => (
+        <Piece key={`scatter-${i}`} model={item.model} position={item.position} rotation={item.rotation} scale={item.scale} />
+      ))}
+
+      {/* Strategic hills for vertical interest (between spoke roads) */}
+      <Piece model={DECORATION.hills_trees} position={[15, 0, -12]} scale={5.0} />
+      <Piece model={DECORATION.hills_B_trees} position={[-15, 0, 15]} scale={5.5} />
+      <Piece model={DECORATION.hills_C_trees} position={[20, 0, 12]} scale={4.5} />
+      <Piece model={DECORATION.hill_A} position={[-12, 0, -20]} scale={5.0} />
+      <Piece model={DECORATION.hill_B} position={[8, 0, 22]} scale={4.5} />
+    </group>
+  )
+}
+
+// ============================================================================
+// VILLAGE POND — Water feature between S and SE spokes
+// ============================================================================
+
+function VillagePond() {
+  const pondCenter: [number, number, number] = [12, 0, 18]
+  return (
+    <group name="village-pond" position={pondCenter}>
+      {/* Water hex tiles (slightly above ground to prevent z-fighting) */}
+      <Piece model={TILES.water} position={[0, 0.02, 0]} />
+      <Piece model={TILES.water} position={[1.5, 0.02, 0]} />
+      <Piece model={TILES.water} position={[-1.5, 0.02, 0]} />
+      {/* Coast border tiles */}
+      <Piece model={TILES.coast_A} position={[0, 0.01, -1.8]} />
+      <Piece model={TILES.coast_B} position={[1.5, 0.01, -1.5]} />
+      <Piece model={TILES.coast_C} position={[-1.5, 0.01, -1.5]} />
+      <Piece model={TILES.coast_D} position={[2.5, 0.01, 0.5]} />
+      <Piece model={TILES.coast_E} position={[-2.5, 0.01, 0.5]} />
+      {/* Water lilies and plants */}
+      <Piece model={DECORATION.waterlily_A} position={[0.5, 0.05, 0.2]} scale={7.0} />
+      <Piece model={DECORATION.waterlily_B} position={[-0.8, 0.05, -0.3]} scale={7.0} />
+      <Piece model={DECORATION.waterplant_A} position={[1.8, 0.03, 0.5]} scale={7.0} />
+      <Piece model={DECORATION.waterplant_B} position={[-1.8, 0.03, -0.2]} scale={7.0} />
+      {/* Bridge crossing the pond */}
+      <Piece model={BUILDINGS.bridge_A} position={[0, 0, 0.8]} rotation={[0, Math.PI / 2, 0]} scale={7.0} />
+    </group>
+  )
+}
+
+// ============================================================================
+// ZONE APPROACH DECOR — Themed props near each zone entrance
+// ============================================================================
+
+function ZoneApproachDecor() {
+  const d = 7.0
+  return (
+    <group name="zone-approach-decor">
+      {/* knight-space (NE) — adventure/combat theme */}
+      <Piece model={DECORATION.crate_A} position={[20, 0, -20]} scale={d} />
+      <Piece model={DECORATION.target} position={[24, 0, -18]} rotation={[0, Math.PI / 4, 0]} scale={d} />
+
+      {/* barbarian-school (E) — school/training theme */}
+      <Piece model={DECORATION.haybale} position={[28, 0, -6]} scale={d} />
+      <Piece model={DECORATION.bucket_arrows} position={[28, 0, 6]} scale={d} />
+
+      {/* skeleton-pizza (SE) — delivery/food theme */}
+      <Piece model={DECORATION.barrel} position={[20, 0, 20]} scale={d} />
+      <Piece model={DECORATION.crate_B} position={[24, 0, 22]} scale={d} />
+
+      {/* adventurers-picnic (S) — nature/picnic theme */}
+      <Piece model={DECORATION.flower_A} position={[-5, 0, 28]} scale={d} />
+      <Piece model={DECORATION.flower_B} position={[5, 0, 28]} scale={d} />
+
+      {/* dungeon-concert (SW) — concert/gathering theme */}
+      <Piece model={DECORATION.weaponrack} position={[-20, 0, 20]} scale={d} />
+      <Piece model={DECORATION.tent} position={[-24, 0, 22]} scale={d} />
+
+      {/* mage-kitchen (W) — cooking theme */}
+      <Piece model={DECORATION.sack} position={[-28, 0, -6]} scale={d} />
+      <Piece model={DECORATION.bucket_water} position={[-28, 0, 6]} scale={d} />
     </group>
   )
 }
@@ -998,9 +1281,30 @@ export function VillageWorld() {
         <DungeonCliffs />
       </Suspense>
 
-      {/* Road decoration */}
+      {/* Zone landmarks — tall colored buildings per zone */}
+      <Suspense fallback={null}>
+        <ZoneLandmarks />
+      </Suspense>
+
+
+      {/* Road decoration (lanterns, flags, props) */}
       <Suspense fallback={null}>
         <RoadDecoration />
+      </Suspense>
+
+      {/* Terrain scatter — rocks, hills, trees between village and zones */}
+      <Suspense fallback={null}>
+        <TerrainScatter />
+      </Suspense>
+
+      {/* Village pond — water feature */}
+      <Suspense fallback={null}>
+        <VillagePond />
+      </Suspense>
+
+      {/* Zone approach decorations — themed props near entrances */}
+      <Suspense fallback={null}>
+        <ZoneApproachDecor />
       </Suspense>
 
       {/* Quest zone: Dungeon (north) */}
