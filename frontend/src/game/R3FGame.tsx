@@ -5,6 +5,7 @@ import { VillageWorld } from './VillageWorld';
 import { VillageCamera } from './VillageCamera';
 import { PlayerCharacter } from './PlayerCharacter';
 import { useGameStore } from '../stores/gameStore';
+import { VILLAGE_COLLIDERS, PLAYER_RADIUS } from './collision-map';
 
 /** Exposes window.__measureScene() for 3D size debugging */
 function SceneMeasurer() {
@@ -75,6 +76,32 @@ function PlayerController() {
   )
 }
 
+/** Dev-only: renders red wireframe rings at each collider position */
+function DebugColliders() {
+  return (
+    <group name="debug-colliders">
+      {VILLAGE_COLLIDERS.map((c, i) => (
+        <mesh key={i} position={[c.x, 0.15, c.z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[c.radius - 0.05, c.radius + 0.05, 32]} />
+          <meshBasicMaterial color="red" wireframe transparent opacity={0.6} />
+        </mesh>
+      ))}
+      {/* Player radius indicator follows player */}
+      <PlayerRadiusRing />
+    </group>
+  )
+}
+
+function PlayerRadiusRing() {
+  const pos = useGameStore((s) => s.playerPosition)
+  return (
+    <mesh position={[pos[0], 0.2, pos[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[PLAYER_RADIUS - 0.03, PLAYER_RADIUS + 0.03, 24]} />
+      <meshBasicMaterial color="lime" wireframe transparent opacity={0.8} />
+    </mesh>
+  )
+}
+
 function DebugCoords() {
   const pos = useGameStore((s) => s.playerPosition)
   return (
@@ -100,6 +127,7 @@ export default function R3FGame({ children }: R3FGameProps) {
         {/* Camera with zone transition support */}
         <VillageCamera />
         {import.meta.env.DEV && <SceneMeasurer />}
+        {import.meta.env.DEV && <DebugColliders />}
 
         {/* Persistent village world with all zones */}
         <VillageWorld />
