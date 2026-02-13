@@ -7,6 +7,27 @@ vi.mock('../../services/resolver', () => ({
   resolveResponse: vi.fn(),
 }));
 
+vi.mock('../../data/worlds', () => ({
+  WORLDS: {
+    'skeleton-birthday': { label: 'Birthday Bash', emoji: '💀', color: '#8B5CF6', hook: 'Test', placeholder: 'Test' },
+    'knight-space': { label: 'Space Station', emoji: '🚀', color: '#3B82F6', hook: 'Test', placeholder: 'Test' },
+    'mage-kitchen': { label: 'Kitchen Chaos', emoji: '🧙', color: '#F59E0B', hook: 'Test', placeholder: 'Test' },
+    'barbarian-school': { label: 'Monster Recess', emoji: '⚔️', color: '#EF4444', hook: 'Test', placeholder: 'Test' },
+    'dungeon-concert': { label: 'Dungeon Escape', emoji: '🏰', color: '#6B7280', hook: 'Test', placeholder: 'Test' },
+    'skeleton-pizza': { label: 'Pizza Pandemonium', emoji: '🍕', color: '#F97316', hook: 'Test', placeholder: 'Test' },
+    'adventurers-picnic': { label: 'Forest Mystery', emoji: '🌳', color: '#10B981', hook: 'Test', placeholder: 'Test' },
+  },
+  getWorldPrompt: vi.fn(() => 'mock prompt'),
+}));
+
+vi.mock('../../services/badge-system', () => ({
+  loadBadges: vi.fn(() => ({})),
+  saveBadges: vi.fn(),
+  checkBadges: vi.fn(() => []),
+  countSkills: vi.fn(() => 0),
+  BADGES: [],
+}));
+
 // Import after mocks are declared so the module picks up mocked dependencies
 import { useGameStore } from '../gameStore';
 import { resolveResponse } from '../../services/resolver';
@@ -41,6 +62,9 @@ describe('useGameStore', () => {
       lastSource: null,
       error: null,
       history: [],
+      vignetteSteps: null,
+      badges: {},
+      badgeUnlocks: [],
     });
     vi.clearAllMocks();
   });
@@ -55,6 +79,7 @@ describe('useGameStore', () => {
     expect(state.lastSource).toBeNull();
     expect(state.error).toBeNull();
     expect(state.history).toEqual([]);
+    expect(state.vignetteSteps).toBeNull();
   });
 
   // ---- 2. setInput ----
@@ -66,8 +91,8 @@ describe('useGameStore', () => {
   });
 
   // ---- 3. clearScript ----
-  it('clearScript sets lastScript and lastSource to null', () => {
-    useGameStore.setState({ lastScript: MOCK_SCRIPT, lastSource: 'live' });
+  it('clearScript sets lastScript, lastSource, and vignetteSteps to null', () => {
+    useGameStore.setState({ lastScript: MOCK_SCRIPT, lastSource: 'live', vignetteSteps: [{ parallel: [], delayAfter: 0.5 }] });
     expect(useGameStore.getState().lastScript).not.toBeNull();
 
     act(() => {
@@ -75,6 +100,7 @@ describe('useGameStore', () => {
     });
     expect(useGameStore.getState().lastScript).toBeNull();
     expect(useGameStore.getState().lastSource).toBeNull();
+    expect(useGameStore.getState().vignetteSteps).toBeNull();
   });
 
   // ---- 4. clearError ----
@@ -100,7 +126,7 @@ describe('useGameStore', () => {
     expect(mockResolveResponse).not.toHaveBeenCalled();
   });
 
-  // ---- 6. submitInput with valid input (3D pipeline, no EventBus) ----
+  // ---- 6. submitInput with valid input ----
   it('submitInput calls resolveResponse, sets lastScript/lastSource, adds to history', async () => {
     mockResolveResponse.mockResolvedValueOnce(MOCK_RESOLVED);
     useGameStore.setState({ userInput: 'Invite knight and mage with cake and banners' });
@@ -111,11 +137,10 @@ describe('useGameStore', () => {
 
     const state = useGameStore.getState();
 
-    // resolveResponse was called with the task, system prompt, and trimmed user input
+    // resolveResponse was called with 2 args: taskId and trimmed user input
     expect(mockResolveResponse).toHaveBeenCalledOnce();
     expect(mockResolveResponse).toHaveBeenCalledWith(
       'skeleton-birthday',
-      expect.any(String),
       'Invite knight and mage with cake and banners',
     );
 
@@ -133,31 +158,9 @@ describe('useGameStore', () => {
       source: 'live',
       latencyMs: 42,
     });
-
-    // 3D pipeline: ScenePlayer3D reads lastScript from Zustand — no EventBus emit
   });
 
-  // ---- 7. submitInput with cache hit ----
-  it('submitInput with cache source tracks source correctly', async () => {
-    const cachedResponse: ResolvedResponse = {
-      script: MOCK_SCRIPT,
-      source: 'cache',
-      latencyMs: 1,
-    };
-    mockResolveResponse.mockResolvedValueOnce(cachedResponse);
-    useGameStore.setState({ userInput: 'throw a huge birthday party for the skeleton' });
-
-    await act(async () => {
-      await useGameStore.getState().submitInput();
-    });
-
-    const state = useGameStore.getState();
-    expect(state.lastSource).toBe('cache');
-    expect(state.history[0].source).toBe('cache');
-    expect(state.history[0].latencyMs).toBe(1);
-  });
-
-  // ---- 8. submitInput with resolver error (should never happen, but handled) ----
+  // ---- 7. submitInput with resolver error ----
   it('submitInput sets error if resolver throws unexpectedly', async () => {
     mockResolveResponse.mockRejectedValueOnce(new Error('Unexpected resolver crash'));
     useGameStore.setState({ userInput: 'Do something cool' });
@@ -173,60 +176,32 @@ describe('useGameStore', () => {
     expect(state.history).toEqual([]);
   });
 
-  // ---- 9. submitInput with unknown task ----
-  it('submitInput with unknown task sets error', async () => {
-    useGameStore.setState({ userInput: 'Build a rocket', currentTask: 'rocket-launch' });
-
-    await act(async () => {
-      await useGameStore.getState().submitInput();
+  // ---- 8. setLastScript ----
+  it('setLastScript updates lastScript directly', () => {
+    act(() => {
+      useGameStore.getState().setLastScript(MOCK_SCRIPT);
     });
-
-    const state = useGameStore.getState();
-    expect(state.error).toBe('Unknown task: rocket-launch');
-    expect(state.isLoading).toBe(false);
-    expect(mockResolveResponse).not.toHaveBeenCalled();
+    expect(useGameStore.getState().lastScript).toEqual(MOCK_SCRIPT);
   });
 
-  // ---- 10. All 7 3D tasks are registered ----
-  it('has system prompts for all 7 3D tasks', async () => {
-    const tasks3D = [
-      'skeleton-birthday', 'knight-space', 'mage-kitchen',
-      'barbarian-school', 'dungeon-concert', 'skeleton-pizza', 'adventurers-picnic',
-    ];
-
-    for (const taskId of tasks3D) {
-      mockResolveResponse.mockResolvedValueOnce(MOCK_RESOLVED);
-      useGameStore.setState({ userInput: 'test input', currentTask: taskId, error: null });
-
-      await act(async () => {
-        await useGameStore.getState().submitInput();
-      });
-
-      // Should NOT get "Unknown task" error
-      expect(useGameStore.getState().error).toBeNull();
-    }
+  // ---- 9. setVignetteSteps ----
+  it('setVignetteSteps updates vignetteSteps', () => {
+    const steps = [{ parallel: [{ action: 'spawn' as const, character: 'knight', position: 'center' }], delayAfter: 0.5 }];
+    act(() => {
+      useGameStore.getState().setVignetteSteps(steps);
+    });
+    expect(useGameStore.getState().vignetteSteps).toEqual(steps);
   });
 
-  // ---- 11. Legacy 2D tasks still work ----
-  it('has system prompts for legacy 2D tasks', async () => {
-    const legacyTasks = [
-      'monster-party', 'robot-pizza', 'wizard-kitchen',
-      'dinosaur-school', 'dog-space', 'octopus-band',
-    ];
-
-    for (const taskId of legacyTasks) {
-      mockResolveResponse.mockResolvedValueOnce(MOCK_RESOLVED);
-      useGameStore.setState({ userInput: 'test input', currentTask: taskId, error: null });
-
-      await act(async () => {
-        await useGameStore.getState().submitInput();
-      });
-
-      expect(useGameStore.getState().error).toBeNull();
-    }
+  it('setVignetteSteps can be set to null', () => {
+    useGameStore.setState({ vignetteSteps: [{ parallel: [], delayAfter: 0.5 }] });
+    act(() => {
+      useGameStore.getState().setVignetteSteps(null);
+    });
+    expect(useGameStore.getState().vignetteSteps).toBeNull();
   });
 
-  // ---- 12. toggleMute ----
+  // ---- 10. toggleMute ----
   it('toggleMute flips isMuted state', () => {
     expect(useGameStore.getState().isMuted).toBe(false);
 
@@ -239,5 +214,14 @@ describe('useGameStore', () => {
       useGameStore.getState().toggleMute();
     });
     expect(useGameStore.getState().isMuted).toBe(false);
+  });
+
+  // ---- 11. clearBadgeUnlocks ----
+  it('clearBadgeUnlocks empties the badgeUnlocks array', () => {
+    useGameStore.setState({ badgeUnlocks: ['commander', 'director'] });
+    act(() => {
+      useGameStore.getState().clearBadgeUnlocks();
+    });
+    expect(useGameStore.getState().badgeUnlocks).toEqual([]);
   });
 });

@@ -15,9 +15,9 @@ const VALID_ACTOR_KEYS = [
   'monster', 'dog', 'trex', 'octopus', 'robot',
   'wizard', 'kid', 'fish', 'squirrel',
   // 3D KayKit characters
-  'knight', 'barbarian', 'mage', 'ranger', 'rogue',
-  'skeleton_warrior', 'skeleton_mage', 'skeleton_rogue', 'skeleton_minion',
-  'space_ranger', 'ninja', 'clown', 'witch',
+  'knight', 'barbarian', 'mage', 'ranger', 'rogue', 'druid', 'engineer',
+  'skeleton_warrior', 'skeleton_mage', 'skeleton_rogue', 'skeleton_minion', 'necromancer',
+  'space_ranger', 'ninja', 'clown', 'witch', 'vampire', 'black_knight', 'superhero', 'caveman', 'frost_golem', 'survivalist',
 ] as const;
 
 // Legacy 2D + 3D prop keys
@@ -36,7 +36,11 @@ const VALID_PROP_KEYS = [
   'cake-3d', 'cupcake', 'bread', 'pie',
   'blanket', 'basket', 'plate', 'cup', 'bottle',
   'candle', 'book', 'clock', 'rug',
-  'slide', 'swing', 'sandbox',
+  'slide', 'swing', 'sandbox', 'seesaw', 'merry_go_round',
+  'sink', 'oven', 'stove', 'pan', 'pot',
+  'pizza_pepperoni', 'apple', 'picnic_blanket',
+  'present_A_red', 'present_B_blue', 'banner_blue', 'banner_red',
+  'table_long', 'chair_A',
 ] as const;
 
 const VALID_SPAWN_TARGETS = [...VALID_ACTOR_KEYS, ...VALID_PROP_KEYS];
@@ -68,18 +72,8 @@ function wordCount(text: string): number {
 // ── Tests ───────────────────────────────────────────────────────────────────
 
 describe('FALLBACK_SCRIPTS', () => {
-  // 1. Has entries for legacy tasks
-  it('has entries for legacy 2D tasks', () => {
-    expect(FALLBACK_SCRIPTS).toHaveProperty('monster-party');
-    expect(FALLBACK_SCRIPTS).toHaveProperty('robot-pizza');
-    expect(FALLBACK_SCRIPTS).toHaveProperty('wizard-kitchen');
-    expect(FALLBACK_SCRIPTS).toHaveProperty('dinosaur-school');
-    expect(FALLBACK_SCRIPTS).toHaveProperty('dog-space');
-    expect(FALLBACK_SCRIPTS).toHaveProperty('octopus-band');
-  });
-
-  // 2. Has entries for all 7 new 3D tasks
-  it('has entries for all 7 new 3D tasks', () => {
+  // 1. Has entries for all 7 3D tasks
+  it('has entries for all 7 3D tasks', () => {
     expect(FALLBACK_SCRIPTS).toHaveProperty('skeleton-birthday');
     expect(FALLBACK_SCRIPTS).toHaveProperty('knight-space');
     expect(FALLBACK_SCRIPTS).toHaveProperty('mage-kitchen');
@@ -89,9 +83,9 @@ describe('FALLBACK_SCRIPTS', () => {
     expect(FALLBACK_SCRIPTS).toHaveProperty('adventurers-picnic');
   });
 
-  // 3. Has exactly 13 total tasks
-  it('has 13 total fallback scripts (6 legacy + 7 new)', () => {
-    expect(Object.keys(FALLBACK_SCRIPTS)).toHaveLength(13);
+  // 2. Has exactly 7 total tasks
+  it('has 7 total fallback scripts', () => {
+    expect(Object.keys(FALLBACK_SCRIPTS)).toHaveLength(7);
   });
 
   const taskKeys = Object.keys(FALLBACK_SCRIPTS);
@@ -233,12 +227,13 @@ describe('FALLBACK_SCRIPTS', () => {
       expect(spawns).toContain('pizza');
     });
 
-    it('adventurers-picnic spawns barbarian', () => {
+    it('adventurers-picnic spawns ranger and druid', () => {
       const script = FALLBACK_SCRIPTS['adventurers-picnic'];
       const spawns = script.actions
         .filter((a) => a.type === 'spawn')
         .map((a) => ('target' in a ? a.target : ''));
-      expect(spawns).toContain('barbarian');
+      expect(spawns).toContain('ranger');
+      expect(spawns).toContain('druid');
     });
   });
 });

@@ -21,6 +21,7 @@ import AnimalCharacter3D from './AnimalCharacter3D'
 import ProceduralBalloon from './ProceduralBalloon'
 import { SoundManager3D } from './SoundManager3D'
 import type { SceneScript, Action, Position, SpawnGroupAction } from '../types/scene-script'
+import type { VignetteStep } from '../types/madlibs'
 import { CHARACTERS, ANIMAL_MODELS, type CharacterKey } from '../data/asset-manifest'
 import { useGameStore, ZONE_CENTERS } from '../stores/gameStore'
 
@@ -500,6 +501,21 @@ interface ActiveEmote {
   startTime: number
 }
 
+interface ActiveTextPopup {
+  id: string
+  text: string
+  position: 'top' | 'center' | 'bottom'
+  size: 'small' | 'large' | 'huge'
+  startTime: number
+}
+
+interface ActiveScreenFlash {
+  id: string
+  color: string
+  duration: number
+  startTime: number
+}
+
 interface ActiveTween {
   id: string
   actorId: string
@@ -527,6 +543,15 @@ function getEffectEmojis(effect: string): string[] {
     splash: ['💦', '🌊', '💧', '💦', '🌊', '💧'],
     'sparkle-magic': ['✨', '💜', '🔮', '✨', '💜', '🔮', '✨'],
     'sad-cloud': ['☁️', '💧', '😢', '☁️', '💧', '😢'],
+    // Extended effects for vignettes
+    dust: ['💨', '🌫️', '💨', '🌫️', '💨', '🌫️'],
+    fire: ['🔥', '🔥', '🔥', '🔥', '🔥', '🔥'],
+    smoke: ['💨', '🌫️', '💨', '🌫️', '💨', '🌫️'],
+    steam: ['♨️', '☁️', '♨️', '☁️', '♨️', '☁️'],
+    magic_circle: ['🔮', '✨', '💜', '🔮', '✨', '💜', '🔮'],
+    bubbles: ['🫧', '🫧', '🫧', '🫧', '🫧', '🫧'],
+    'glow-pulse': ['✨', '💛', '✨', '💛', '✨', '💛'],
+    'skull-burst': ['💀', '☠️', '💀', '☠️', '💀', '☠️'],
   }
   return emojiMap[effect] || ['✨', '⭐', '💫', '✨', '⭐']
 }
@@ -592,16 +617,19 @@ function TweenRunner({
 
 export interface ScenePlayer3DProps {
   script: SceneScript | null
+  vignetteSteps?: VignetteStep[] | null
   taskId: string
   onComplete?: () => void
 }
 
-export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlayer3DProps) {
+export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplete }: ScenePlayer3DProps) {
   const [actors, setActors] = useState<ActiveActor[]>([])
   const [envProps, setEnvProps] = useState<EnvironmentProp[]>([])
   const [effects, setEffects] = useState<ActiveEffect[]>([])
   const [emotes, setEmotes] = useState<ActiveEmote[]>([])
   const [tweens, setTweens] = useState<ActiveTween[]>([])
+  const [textPopups, setTextPopups] = useState<ActiveTextPopup[]>([])
+  const [screenFlash, setScreenFlash] = useState<ActiveScreenFlash | null>(null)
 
   const actorRefs = useRef<Map<string, Character3DHandle | Prop3DHandle>>(new Map())
   const spawnedIds = useRef<Set<string>>(new Set()) // Track spawned actors (avoids stale closure)
@@ -745,6 +773,47 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
   }, [script, taskId])
 
   // ============================================================================
+  // VIGNETTE STEPS EXECUTION (parallel playback from Mad Libs system)
+  // ============================================================================
+
+  useEffect(() => {
+    if (!vignetteSteps || vignetteSteps.length === 0) return
+    if (playingRef.current) return
+    playingRef.current = true
+
+    // Clear previous scene
+    setEffects([])
+    setEmotes([])
+    setTextPopups([])
+    setScreenFlash(null)
+
+    const abortController = new AbortController()
+    abortControllerRef.current = abortController
+
+    executeVignetteSteps(vignetteSteps, abortController.signal)
+      .then(() => {
+        if (!abortController.signal.aborted) {
+          console.log(`[ScenePlayer3D] Vignette playback complete: ${taskId}`)
+          if (onComplete) onComplete()
+        }
+      })
+      .catch((err) => {
+        if (!abortController.signal.aborted) {
+          console.error('[ScenePlayer3D] Vignette execution error:', err)
+        }
+      })
+      .finally(() => {
+        playingRef.current = false
+      })
+
+    return () => {
+      abortController.abort()
+      playingRef.current = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vignetteSteps, taskId])
+
+  // ============================================================================
   // ACTION EXECUTOR (with error tolerance)
   // ============================================================================
 
@@ -813,8 +882,173 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
         await handleSpawnGroup(action as SpawnGroupAction, signal)
         break
 
+      case 'camera_shake':
+        handleCameraShake(action as any)
+        break
+
+      case 'camera_zoom':
+        // Camera zoom is a no-op for now (handled via store if needed)
+        break
+
+      case 'text_popup':
+        handleTextPopup(action as any)
+        break
+
+      case 'screen_flash':
+        handleScreenFlash(action as any)
+        break
+
+      case 'crowd_react':
+        handleCrowdReact(action as any)
+        break
+
+      case 'spawn_rain':
+        handleSpawnRain(action as any, signal)
+        break
+
+      case 'grow':
+        handleGrow(action as any)
+        break
+
+      case 'shrink_pop':
+        handleShrinkPop(action as any)
+        break
+
+      case 'delay':
+        await sleep(((action as any).duration_ms ?? 1000), signal)
+        break
+
       default:
         console.warn('[ScenePlayer3D] Unknown action type:', action)
+    }
+  }
+
+  // ============================================================================
+  // PARALLEL VIGNETTE STEP EXECUTION
+  // ============================================================================
+
+  async function executeVignetteSteps(steps: VignetteStep[], signal: AbortSignal) {
+    for (const step of steps) {
+      if (signal.aborted) break
+
+      // Execute all actions in parallel within a step
+      const actionPromises = step.parallel.map(async (va) => {
+        if (signal.aborted) return
+        try {
+          // Convert VignetteAction to engine action inline
+          const action = vignetteActionToEngineAction(va)
+          if (action) {
+            await executeAction(action, signal)
+          }
+        } catch (err) {
+          console.warn('[ScenePlayer3D] Vignette action failed (skipping):', va.action, err)
+        }
+      })
+
+      await Promise.all(actionPromises)
+
+      // Delay before next step
+      const delayMs = (step.delayAfter ?? 0.5) * 1000
+      if (delayMs > 0 && !signal.aborted) {
+        await sleep(delayMs, signal)
+      }
+    }
+  }
+
+  /** Convert a VignetteAction to a scene-engine Action for executeAction */
+  function vignetteActionToEngineAction(va: any): Action | null {
+    switch (va.action) {
+      case 'spawn':
+      case 'spawn_character':
+        return {
+          type: 'spawn',
+          target: (va.character ?? va.asset ?? 'mystery_crate') as any,
+          position: (va.position ?? 'center') as any,
+        }
+      case 'move':
+        return {
+          type: 'move',
+          target: (va.character ?? va.asset ?? '') as any,
+          to: (va.to ?? va.position ?? 'center') as any,
+          style: va.style ?? 'linear',
+        }
+      case 'animate':
+        return {
+          type: 'animate',
+          target: (va.character ?? '') as any,
+          anim: va.anim ?? 'Idle_A',
+        }
+      case 'react':
+        return {
+          type: 'react',
+          effect: (va.effect ?? 'confetti-burst') as any,
+          position: (va.position ?? 'center') as any,
+        }
+      case 'emote':
+        return {
+          type: 'emote',
+          target: (va.character ?? '') as any,
+          emoji: va.emoji ?? va.text,
+          text: va.text,
+        }
+      case 'sfx':
+        return {
+          type: 'sfx',
+          sound: va.sound ?? 'react',
+        }
+      case 'camera_shake':
+        return {
+          type: 'camera_shake' as any,
+          intensity: typeof va.intensity === 'number' ? va.intensity : 0.5,
+          duration: va.duration ?? 0.5,
+        }
+      case 'text_popup':
+        return {
+          type: 'text_popup' as any,
+          text: va.text ?? '',
+          position: va.position ?? 'center',
+          size: va.size ?? 'large',
+          duration_ms: 2000,
+        }
+      case 'screen_flash':
+        return {
+          type: 'screen_flash' as any,
+          color: va.color ?? 'white',
+          duration: va.duration ?? 0.2,
+        }
+      case 'crowd_react':
+        return {
+          type: 'crowd_react' as any,
+          characters: va.characters ?? 'all',
+          anim: va.anim ?? 'Cheering',
+        }
+      case 'spawn_rain':
+        return {
+          type: 'spawn_rain' as any,
+          asset: va.asset ?? 'mystery_crate',
+          count: va.quantity ?? 8,
+          area: (va.position ?? 'wide') as any,
+        }
+      case 'grow':
+        return {
+          type: 'grow' as any,
+          target: va.target ?? va.asset ?? '',
+          scale: va.scale ?? 2.0,
+          duration_ms: 800,
+        }
+      case 'shrink_pop':
+        return {
+          type: 'shrink_pop' as any,
+          target: va.target ?? va.asset ?? '',
+          duration_ms: 500,
+        }
+      case 'delay':
+        return {
+          type: 'delay' as any,
+          duration_ms: (va.duration ?? 1) * 1000,
+        }
+      default:
+        return null
     }
   }
 
@@ -1061,6 +1295,215 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
     actorRefs.current.delete(target)
     SoundManager3D.play('remove')
     console.log(`[ScenePlayer3D] Removed ${target}`)
+  }
+
+  // ============================================================================
+  // NEW ACTION HANDLERS (Mad Libs Pivot)
+  // ============================================================================
+
+  function handleCameraShake(action: { intensity?: number; duration?: number }) {
+    const intensity = action.intensity ?? 0.5
+    const duration = (action.duration ?? 0.5) * 1000
+    const startTime = Date.now()
+
+    // Use requestAnimationFrame loop for camera shake
+    const shakeInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      if (elapsed >= duration) {
+        clearInterval(shakeInterval)
+        // Reset camera (would need ref — for now just log)
+        return
+      }
+      const decay = 1 - elapsed / duration
+      const offsetX = (Math.random() - 0.5) * intensity * decay * 0.3
+      const offsetY = (Math.random() - 0.5) * intensity * decay * 0.2
+      // Apply via CSS transform on canvas container for simplicity
+      const canvas = document.querySelector('canvas')
+      if (canvas) {
+        canvas.style.transform = `translate(${offsetX * 20}px, ${offsetY * 20}px)`
+      }
+    }, 16)
+
+    // Cleanup
+    setTimeout(() => {
+      clearInterval(shakeInterval)
+      const canvas = document.querySelector('canvas')
+      if (canvas) canvas.style.transform = ''
+    }, duration + 50)
+
+    console.log(`[ScenePlayer3D] Camera shake: intensity=${intensity}, duration=${action.duration}s`)
+  }
+
+  function handleTextPopup(action: { text?: string; position?: string; size?: string; duration_ms?: number }) {
+    const popupId = `popup-${Date.now()}-${Math.random()}`
+    const popup: ActiveTextPopup = {
+      id: popupId,
+      text: action.text ?? '',
+      position: (action.position as 'top' | 'center' | 'bottom') ?? 'center',
+      size: (action.size as 'small' | 'large' | 'huge') ?? 'large',
+      startTime: Date.now(),
+    }
+    setTextPopups(prev => [...prev, popup])
+
+    // Auto-remove after duration
+    setTimeout(() => {
+      setTextPopups(prev => prev.filter(p => p.id !== popupId))
+    }, action.duration_ms ?? 2000)
+
+    console.log(`[ScenePlayer3D] Text popup: "${action.text}" at ${action.position}`)
+  }
+
+  function handleScreenFlash(action: { color?: string; duration?: number }) {
+    const flashId = `flash-${Date.now()}`
+    setScreenFlash({
+      id: flashId,
+      color: action.color ?? 'white',
+      duration: action.duration ?? 0.2,
+      startTime: Date.now(),
+    })
+
+    setTimeout(() => {
+      setScreenFlash(prev => prev?.id === flashId ? null : prev)
+    }, (action.duration ?? 0.2) * 1000)
+
+    console.log(`[ScenePlayer3D] Screen flash: ${action.color}`)
+  }
+
+  function handleCrowdReact(action: { characters?: string | string[]; anim?: string }) {
+    const animName = action.anim ?? 'Cheering'
+    // Apply animation to all spawned character actors
+    setActors(prev => prev.map(actor => {
+      if (actor.type !== 'character') return actor
+      if (action.characters === 'all' || action.characters === 'all_background' || action.characters === 'all_others') {
+        return { ...actor, animation: animName }
+      }
+      if (Array.isArray(action.characters) && action.characters.includes(actor.id)) {
+        return { ...actor, animation: animName }
+      }
+      return actor
+    }))
+
+    console.log(`[ScenePlayer3D] Crowd react: ${action.characters} → ${animName}`)
+  }
+
+  async function handleSpawnRain(action: { asset?: string; count?: number; area?: string }, signal: AbortSignal) {
+    const count = action.count ?? 8
+    const asset = action.asset ?? 'mystery_crate'
+
+    for (let i = 0; i < count; i++) {
+      if (signal.aborted) break
+
+      // Random X position based on area
+      let xRange = 8 // wide
+      if (action.area === 'center') xRange = 3
+      else if (action.area === 'left') xRange = 4
+      else if (action.area === 'right') xRange = 4
+
+      let xOffset = (Math.random() - 0.5) * xRange * 2
+      if (action.area === 'left') xOffset -= 3
+      if (action.area === 'right') xOffset += 3
+
+      const rainId = `rain-${i}-${Date.now()}`
+      const startPos: [number, number, number] = [xOffset, 8, (Math.random() - 0.5) * 4]
+      const worldPos = zonePosition(currentZone, startPos)
+
+      const propPath = resolvePropPath(asset)
+      if (!propPath) continue
+
+      const actor: ActiveActor = {
+        id: rainId,
+        type: 'prop',
+        modelPath: propPath,
+        position: worldPos,
+        scale: resolvePropScale(asset) * 0.6,
+      }
+
+      setActors(prev => [...prev, actor])
+
+      // Tween down
+      const endPos = zonePosition(currentZone, [xOffset, 0, startPos[2]])
+      setTweens(prev => [...prev, {
+        id: `tween-rain-${rainId}`,
+        actorId: rainId,
+        startPos: worldPos,
+        endPos: endPos,
+        style: 'bounce',
+        startTime: Date.now(),
+        duration: 1000 + Math.random() * 500,
+        resolve: () => {
+          // Remove after settling
+          setTimeout(() => {
+            setActors(prev => prev.filter(a => a.id !== rainId))
+          }, 2000)
+        },
+      }])
+
+      // Stagger spawns
+      await sleep(80, signal).catch(() => {})
+    }
+
+    console.log(`[ScenePlayer3D] Spawn rain: ${count}x ${asset}`)
+  }
+
+  function handleGrow(action: { target?: string; scale?: number; duration_ms?: number }) {
+    const targetId = action.target ?? ''
+    const targetScale = action.scale ?? 2.0
+
+    // Animate scale from 0 to target
+    setActors(prev => prev.map(a =>
+      a.id === targetId ? { ...a, scale: 0.01 } : a
+    ))
+
+    // Animate up over duration
+    const duration = action.duration_ms ?? 800
+    const startTime = Date.now()
+    const growInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = easeInOutQuad(progress)
+      const currentScale = eased * targetScale
+
+      setActors(prev => prev.map(a =>
+        a.id === targetId ? { ...a, scale: currentScale } : a
+      ))
+
+      if (progress >= 1) clearInterval(growInterval)
+    }, 16)
+
+    console.log(`[ScenePlayer3D] Grow: ${targetId} to scale ${targetScale}`)
+  }
+
+  function handleShrinkPop(action: { target?: string; effect?: string; duration_ms?: number }) {
+    const targetId = action.target ?? ''
+    const duration = action.duration_ms ?? 500
+    const startTime = Date.now()
+
+    // Get current scale
+    const actor = actors.find(a => a.id === targetId)
+    const startScale = actor?.scale ?? 1.0
+
+    const shrinkInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const currentScale = startScale * (1 - easeInOutQuad(progress))
+
+      setActors(prev => prev.map(a =>
+        a.id === targetId ? { ...a, scale: Math.max(currentScale, 0.01) } : a
+      ))
+
+      if (progress >= 1) {
+        clearInterval(shrinkInterval)
+        // Remove and pop effect
+        handleRemove(targetId)
+        if (action.effect) {
+          handleReact(action.effect, 'center' as Position)
+        } else {
+          handleReact('confetti-burst', 'center' as Position)
+        }
+      }
+    }, 16)
+
+    console.log(`[ScenePlayer3D] Shrink pop: ${targetId}`)
   }
 
   async function handleSpawnGroup(action: SpawnGroupAction, signal: AbortSignal) {
@@ -1321,6 +1764,59 @@ export default function ScenePlayer3D({ script, taskId, onComplete }: ScenePlaye
           </Html>
         )
       })}
+
+      {/* Text Popups (floating text overlays) */}
+      {textPopups.map((popup) => {
+        const yPos = popup.position === 'top' ? 4 : popup.position === 'bottom' ? -1 : 2
+        const popupPos = zonePosition(currentZone, [0, yPos, 0])
+        const fontSize = popup.size === 'huge' ? '2.5rem' : popup.size === 'large' ? '1.8rem' : '1.2rem'
+
+        return (
+          <Html key={popup.id} position={popupPos} center>
+            <div
+              className="select-none pointer-events-none text-center whitespace-nowrap"
+              style={{
+                fontSize,
+                fontWeight: 'bold',
+                color: 'white',
+                textShadow: '0 2px 8px rgba(0,0,0,0.7), 0 0 20px rgba(255,255,255,0.3)',
+                animation: 'text-popup-anim 2s ease-out forwards',
+              }}
+            >
+              {popup.text}
+            </div>
+            <style>{`
+              @keyframes text-popup-anim {
+                0% { transform: scale(0) translateY(0); opacity: 0; }
+                15% { transform: scale(1.2) translateY(0); opacity: 1; }
+                25% { transform: scale(1) translateY(0); opacity: 1; }
+                80% { transform: scale(1) translateY(-20px); opacity: 1; }
+                100% { transform: scale(0.8) translateY(-40px); opacity: 0; }
+              }
+            `}</style>
+          </Html>
+        )
+      })}
+
+      {/* Screen Flash (full-canvas overlay — rendered as Html at origin) */}
+      {screenFlash && (
+        <Html fullscreen>
+          <div
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              backgroundColor: screenFlash.color,
+              animation: `screen-flash-anim ${screenFlash.duration}s ease-out forwards`,
+              zIndex: 9999,
+            }}
+          />
+          <style>{`
+            @keyframes screen-flash-anim {
+              0% { opacity: 0.8; }
+              100% { opacity: 0; }
+            }
+          `}</style>
+        </Html>
+      )}
     </>
   )
 }

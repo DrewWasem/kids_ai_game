@@ -1,10 +1,12 @@
 import type { SceneScript } from '../types/scene-script';
+import type { QuestStage, Vignette } from '../types/madlibs';
 import { callClaude, parseSceneScript } from './claude';
 import { getWorldPrompt } from '../data/worlds';
 import { FALLBACK_SCRIPTS } from '../data/fallback-scripts';
 import { layoutStage } from './stage-layout-engine';
+import { resolveVignette, buildVignetteScript } from './vignette-resolver';
 
-export type ResponseSource = 'live' | 'fallback';
+export type ResponseSource = 'live' | 'fallback' | 'vignette';
 
 export interface ResolvedResponse {
   script: SceneScript;
@@ -46,4 +48,23 @@ export async function resolveResponse(
   console.log(`[Resolver] Tier 2 — Fallback (${latencyMs.toFixed(0)}ms)`);
 
   return { script: fallback, source: 'fallback', latencyMs };
+}
+
+/**
+ * Resolve a Mad Libs combo → pre-built vignette → SceneScript.
+ * Instant (no API call needed).
+ */
+export function resolveCombo(
+  selectedTags: Record<string, string>,
+  stage: QuestStage,
+): { script: SceneScript; vignette: Vignette; source: 'vignette'; latencyMs: number } {
+  const start = performance.now();
+
+  const vignette = resolveVignette(selectedTags, stage);
+  const script = buildVignetteScript(vignette, selectedTags);
+  const latencyMs = performance.now() - start;
+
+  console.log(`[Resolver] Vignette resolved: "${vignette.id}" (${latencyMs.toFixed(1)}ms)`);
+
+  return { script, vignette, source: 'vignette', latencyMs };
 }

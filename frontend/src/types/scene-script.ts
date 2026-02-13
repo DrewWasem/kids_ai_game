@@ -1,6 +1,9 @@
 export type SuccessLevel = 'FULL_SUCCESS' | 'PARTIAL_SUCCESS' | 'FUNNY_FAIL';
 
-export type ActionType = 'spawn' | 'move' | 'animate' | 'react' | 'emote' | 'sfx' | 'wait' | 'remove';
+export type ActionType =
+  | 'spawn' | 'move' | 'animate' | 'react' | 'emote' | 'sfx' | 'wait' | 'remove'
+  | 'camera_shake' | 'camera_zoom' | 'text_popup' | 'screen_flash'
+  | 'crowd_react' | 'spawn_rain' | 'grow' | 'shrink_pop' | 'delay';
 
 export type Position = 'left' | 'center' | 'right' | 'top' | 'bottom' | 'off-left' | 'off-right' | 'off-top';
 
@@ -143,9 +146,81 @@ export interface SpawnGroupAction {
   delay_ms?: number;
 }
 
+// ─── New Mad Libs Action Types ───────────────────────────────────────────────
+
+export interface CameraShakeAction {
+  type: 'camera_shake';
+  intensity: number;     // 0.0 - 1.0
+  duration: number;      // seconds
+  delay_ms?: number;
+}
+
+export interface CameraZoomAction {
+  type: 'camera_zoom';
+  target: string;        // 'center', 'left', 'right', 'out_wide'
+  speed: 'fast' | 'slow' | 'medium';
+  delay_ms?: number;
+}
+
+export interface TextPopupAction {
+  type: 'text_popup';
+  text: string;
+  position: 'top' | 'center' | 'bottom';
+  size: 'small' | 'large' | 'huge';
+  delay_ms?: number;
+  duration_ms?: number;
+}
+
+export interface ScreenFlashAction {
+  type: 'screen_flash';
+  color: string;         // 'white', 'gold', 'orange', etc.
+  duration: number;      // seconds
+  delay_ms?: number;
+}
+
+export interface CrowdReactAction {
+  type: 'crowd_react';
+  characters: string[] | 'all' | 'all_background' | 'all_others';
+  anim: AnimationName;
+  delay_ms?: number;
+}
+
+export interface SpawnRainAction {
+  type: 'spawn_rain';
+  asset: string;
+  count: number;
+  area: 'wide' | 'center' | 'left' | 'right';
+  delay_ms?: number;
+  duration_ms?: number;
+}
+
+export interface GrowAction {
+  type: 'grow';
+  target: string;
+  scale: number;
+  duration_ms?: number;
+  delay_ms?: number;
+}
+
+export interface ShrinkPopAction {
+  type: 'shrink_pop';
+  target: string;
+  effect?: ReactionKey;
+  delay_ms?: number;
+  duration_ms?: number;
+}
+
+export interface DelayAction {
+  type: 'delay';
+  duration_ms: number;
+  delay_ms?: number;
+}
+
 export type Action =
   | SpawnAction | MoveAction | AnimateAction | ReactAction
-  | EmoteAction | SfxAction | WaitAction | RemoveAction | SpawnGroupAction;
+  | EmoteAction | SfxAction | WaitAction | RemoveAction | SpawnGroupAction
+  | CameraShakeAction | CameraZoomAction | TextPopupAction | ScreenFlashAction
+  | CrowdReactAction | SpawnRainAction | GrowAction | ShrinkPopAction | DelayAction;
 
 export interface PromptAnalysis {
   has_character: boolean;

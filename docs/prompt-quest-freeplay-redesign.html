@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest — Free-Play Redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05060a;--s1:#0c0e17;--s2:#121521;--s3:#191d2d;--border:#252a40;--border2:#353b58;--text:#dde0f0;--dim:#6b7199;--mid:#8e94b8;--gold:#f5c542;--mint:#3ee8b5;--coral:#ff5a7e;--sky:#4da8ff;--violet:#9b7aff;--peach:#ffab6b;--lime:#a8e034;--hot:#ff3366;--cyan:#00d4ff;--teal:#2dd4a8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.72;-webkit-font-smoothing:antialiased;}
+
+.hero{position:relative;padding:3.5rem 2rem 2.5rem;text-align:center;overflow:hidden;border-bottom:1px solid var(--border);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 25% 60%,rgba(59,232,181,.06),transparent),radial-gradient(ellipse 500px 350px at 75% 40%,rgba(245,197,66,.05),transparent),radial-gradient(ellipse 400px 300px at 50% 20%,rgba(155,122,255,.04),transparent);pointer-events:none;}
+.hero-tag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--mint);display:block;margin-bottom:.5rem;}
+.hero h1{font-family:'Instrument Serif',serif;font-size:2.6rem;font-weight:400;letter-spacing:-.02em;line-height:1.15;background:linear-gradient(135deg,var(--gold) 0%,var(--peach) 40%,var(--coral) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{color:var(--dim);font-size:.82rem;max-width:700px;margin:.6rem auto 0;line-height:1.6;}
+
+.content{max-width:1100px;margin:0 auto;padding:2rem;}
+.section{margin:2.5rem 0;}
+.section-tag{font-size:.54rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--mint);margin-bottom:.15rem;display:block;}
+.section h2{font-family:'Instrument Serif',serif;font-size:1.55rem;font-weight:400;letter-spacing:-.01em;margin-bottom:.6rem;padding-bottom:.45rem;border-bottom:1px solid var(--border);}
+.section h3{font-size:.88rem;font-weight:700;margin:1.3rem 0 .4rem;color:var(--gold);}
+.section h4{font-size:.78rem;font-weight:600;margin:1rem 0 .3rem;color:var(--sky);}
+p,li{font-size:.82rem;margin-bottom:.4rem;}
+ul{padding-left:1.2rem;margin:.4rem 0;}
+
+.card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;margin:.6rem 0;}
+.card-title{font-size:.76rem;font-weight:700;margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;}
+
+.code{background:#080a12;border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;margin:.6rem 0;font-family:'Geist Mono',monospace;font-size:.68rem;line-height:1.75;overflow-x:auto;white-space:pre-wrap;}
+.code .c{color:#4a5070;}.code .k{color:var(--sky);}.code .s{color:var(--peach);}.code .n{color:var(--mint);}.code .v{color:var(--violet);}
+
+.callout{border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-size:.8rem;}
+.co-gold{background:rgba(245,197,66,.03);border-left:3px solid var(--gold);}
+.co-mint{background:rgba(62,232,181,.03);border-left:3px solid var(--mint);}
+.co-coral{background:rgba(255,90,126,.03);border-left:3px solid var(--coral);}
+.co-sky{background:rgba(77,168,255,.03);border-left:3px solid var(--sky);}
+.co-violet{background:rgba(155,122,255,.03);border-left:3px solid var(--violet);}
+
+.pill{display:inline-block;font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.15em .5em;border-radius:99px;margin-right:.15rem;vertical-align:middle;}
+.p-old{background:rgba(255,90,126,.08);color:var(--coral);border:1px solid rgba(255,90,126,.2);}
+.p-new{background:rgba(62,232,181,.08);color:var(--mint);border:1px solid rgba(62,232,181,.2);}
+.p-keep{background:rgba(77,168,255,.08);color:var(--sky);border:1px solid rgba(77,168,255,.2);}
+
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:2.5rem 0;}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;}
+.compare-col{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;}
+.compare-col.old{border-color:rgba(255,90,126,.2);}
+.compare-col.new{border-color:rgba(62,232,181,.2);}
+.compare-label{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;display:block;}
+.compare-label.old{color:var(--coral);}
+.compare-label.new{color:var(--mint);}
+
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.74rem;}
+th{background:var(--s2);text-align:left;padding:.5rem .65rem;font-weight:600;font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);border-bottom:2px solid var(--border);}
+td{padding:.45rem .65rem;border-bottom:1px solid rgba(37,42,64,.6);vertical-align:top;}
+tr:hover td{background:rgba(255,255,255,.015);}
+
+.flow-step{display:flex;align-items:flex-start;gap:.8rem;margin:.6rem 0;padding:.6rem .8rem;background:var(--s1);border:1px solid var(--border);border-radius:8px;}
+.flow-num{font-family:'Geist Mono',monospace;font-size:1rem;font-weight:700;color:var(--gold);min-width:1.5rem;text-align:center;line-height:1.2;}
+.flow-content{flex:1;}
+.flow-content strong{color:var(--text);font-size:.78rem;}
+.flow-content p{color:var(--dim);font-size:.72rem;margin:0;}
+
+@media(max-width:768px){.grid-2,.grid-3,.compare{grid-template-columns:1fr;}.hero h1{font-size:1.8rem;}.content{padding:1rem;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-tag">Prompt Quest · Redesign · Free-Play Architecture</span>
+  <h1>From Scripted Scenarios to Sandbox Play</h1>
+  <p class="hero-sub">Kill the "guess what the designer wanted" scenarios. Replace them with a free-play sandbox where kids learn prompt literacy by experimenting, failing funny, and iterating — the way real prompt engineering actually works. Practical, hackathon-scoped, buildable.</p>
+</div>
+
+<div class="content">
+
+<!-- ═══ THE PROBLEM ═══ -->
+<div class="section">
+<span class="section-tag">The Problem</span>
+<h2>Why the Scenarios Don't Work</h2>
+
+<div class="compare">
+<div class="compare-col old">
+<span class="compare-label old">❌ Current: Hidden Answer Design</span>
+<p><strong>"Nobody knows what to do! What game should they play?"</strong></p>
+<p>Expected answer: Musical chairs. But the child doesn't know chairs exist in the scene, doesn't know Walking_A → Running_A → Sit_Chair_Down is a chain, and has no reason to pick musical chairs over tag, hide and seek, or pin the tail on the donkey.</p>
+<p style="margin-top:.5rem;color:var(--coral);">This teaches kids to guess the adult's mind. That's the opposite of prompt engineering.</p>
+</div>
+<div class="compare-col new">
+<span class="compare-label new">✅ New: Open Sandbox Design</span>
+<p><strong>"It's party time! Tell the characters what to do!"</strong></p>
+<p>Kid types "play tag" → Claude maps it to Running_A + Dodge animations. Kid types "dance battle" → Claude uses Dance_A + Dance_B. Kid types "throw cake" → Throw animation + cake prop + splat effect. Every input produces <em>something</em>. Nothing is wrong.</p>
+<p style="margin-top:.5rem;color:var(--mint);">This teaches kids that specificity gets better results. That's actual prompt engineering.</p>
+</div>
+</div>
+
+<div class="callout co-gold">
+<strong>Core Insight:</strong> Real prompt literacy isn't about knowing the right answer. It's about learning that vague inputs → weird outputs, and specific inputs → better outputs. The learning loop is: try → see result → notice what's missing → try again with more detail.
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ THE NEW MODEL ═══ -->
+<div class="section">
+<span class="section-tag">The New Model</span>
+<h2>Worlds, Not Scenarios</h2>
+
+<p>Replace the 7 rigid scenarios with <strong>5 themed Worlds</strong>. Each World is a sandbox with a setting, a cast of characters, and a pile of props. The child gets a loose story hook, then drives the action through free-form prompts. There are no right answers — just a spectrum from vague (funny, chaotic) to specific (impressive, controlled).</p>
+
+<h3>The 5 Worlds</h3>
+
+<div class="grid-3">
+<div class="card">
+<div class="card-title">🎉 Party World</div>
+<p><strong>Setting:</strong> Decorated room with tables, balloons, cake</p>
+<p><strong>Characters:</strong> Knight, Clown, Skeleton_Warrior, Robot_One, Witch</p>
+<p><strong>Props:</strong> cake, presents, chairs, balloons, plates, confetti</p>
+<p><strong>Hook:</strong> "It's the Skeleton's birthday and nobody knows what to do! You're in charge — tell them!"</p>
+</div>
+<div class="card">
+<div class="card-title">🌲 Forest World</div>
+<p><strong>Setting:</strong> Forest clearing with trees, rocks, campfire</p>
+<p><strong>Characters:</strong> Ranger, Druid, Barbarian, Ninja, animals (Cat, Dog)</p>
+<p><strong>Props:</strong> trees, mushrooms, campfire, tent, rocks, logs</p>
+<p><strong>Hook:</strong> "The adventurers are lost in the woods! What happens next?"</p>
+</div>
+<div class="card">
+<div class="card-title">🚀 Space World</div>
+<p><strong>Setting:</strong> Space base with control panels, landing pad</p>
+<p><strong>Characters:</strong> SpaceRanger, Robot_One, Robot_Two, Engineer</p>
+<p><strong>Props:</strong> control panels, rocket, moon, stars, monitors</p>
+<p><strong>Hook:</strong> "Mission Control is broken! The robots are floating around doing nothing. Fix this mess!"</p>
+</div>
+<div class="card">
+<div class="card-title">🏰 Dungeon World</div>
+<p><strong>Setting:</strong> Stone dungeon room with torches, chests, doors</p>
+<p><strong>Characters:</strong> Knight, Mage, Rogue, Skeleton_Minion, Necromancer</p>
+<p><strong>Props:</strong> chests, potions, torches, barrels, keys, doors</p>
+<p><strong>Hook:</strong> "You found a mysterious room! There's a locked chest and a sleeping dragon. What do you do?"</p>
+</div>
+<div class="card">
+<div class="card-title">🍳 Kitchen World</div>
+<p><strong>Setting:</strong> Restaurant kitchen with counters, stove, fridge</p>
+<p><strong>Characters:</strong> Clown, Caveman, Superhero, Survivalist</p>
+<p><strong>Props:</strong> all food items, pots, pans, plates, utensils, stove</p>
+<p><strong>Hook:</strong> "The world's weirdest cooking show is about to start! What's on the menu?"</p>
+</div>
+</div>
+
+<div class="callout co-mint">
+<strong>Key difference:</strong> Each World tells the child <em>what's available</em> visually — they can see the characters standing there, they can see the props in the scene. There's no hidden context. The challenge is making something cool happen with what's in front of them.
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ HOW LEARNING WORKS ═══ -->
+<div class="section">
+<span class="section-tag">Learning Design</span>
+<h2>How Prompt Literacy Emerges from Free Play</h2>
+
+<h3>The Natural Learning Loop</h3>
+
+<div class="flow-step">
+<div class="flow-num">1</div>
+<div class="flow-content">
+<strong>Kid types something vague</strong>
+<p>"make them do stuff"</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">2</div>
+<div class="flow-content">
+<strong>System produces a funny but underwhelming result</strong>
+<p>All characters do Idle animation. Narrator: "They're... standing there! Doing stuff! Very... stuff-like. Maybe tell them WHAT stuff?"</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">3</div>
+<div class="flow-content">
+<strong>Kid tries again with more detail</strong>
+<p>"make the skeleton dance"</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">4</div>
+<div class="flow-content">
+<strong>System produces a better result</strong>
+<p>Skeleton does Dance_A. Narrator: "Now we're talking! The Skeleton's got moves! But the others look bored. What about them?"</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">5</div>
+<div class="flow-content">
+<strong>Kid gets ambitious</strong>
+<p>"the skeleton dances while the knight watches and claps and then the robot does a backflip"</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">6</div>
+<div class="flow-content">
+<strong>System produces something impressive</strong>
+<p>Skeleton → Dance_A, Knight → Idle_Clap (or closest), Robot → Jump_Full_Long. Sequenced with timing. Narrator: "A SHOW! The crowd goes wild! That was a really specific prompt — nice work!"</p>
+</div>
+</div>
+
+<h3>Gentle Scaffolding (Not Correct Answers)</h3>
+
+<p>Instead of pass/fail scoring, the system uses a <strong>Guide Character</strong> (a friendly narrator voice) who drops contextual hints based on what the child's prompt was missing. These aren't corrections — they're suggestions that model the thinking process.</p>
+
+<table>
+<tr><th>What Was Missing</th><th>Guide Says</th><th>Prompt Skill Taught</th></tr>
+<tr><td>No subject (who)</td><td>"Hmm, who should do that? Pick a character!"</td><td>Specificity — naming actors</td></tr>
+<tr><td>No action (what)</td><td>"They're ready! But... ready to do what?"</td><td>Action clarity</td></tr>
+<tr><td>No sequence (order)</td><td>"That was cool! Want to say what happens first, then next?"</td><td>Sequencing / ordering</td></tr>
+<tr><td>No detail (how)</td><td>"The skeleton danced! Was it fast? Slow? Silly? Tell me more!"</td><td>Descriptive detail</td></tr>
+<tr><td>Great prompt</td><td>"WOW. You told me who, what, and how. That's what a prompt master does!"</td><td>Reinforcement</td></tr>
+</table>
+
+<h3>Progress System: Prompt Badges (Not Stars)</h3>
+
+<p>Instead of 1-3 stars per scenario, kids earn <strong>Prompt Badges</strong> that track the prompt engineering skills they've demonstrated across <em>any</em> world. These persist across sessions.</p>
+
+<table>
+<tr><th>Badge</th><th>Skill</th><th>How to Earn</th></tr>
+<tr><td>🎯 Commander</td><td>Named a specific character</td><td>Use a character name in a prompt</td></tr>
+<tr><td>🎬 Director</td><td>Gave a specific action</td><td>Use an action verb (dance, run, fight, cook...)</td></tr>
+<tr><td>📝 Storyteller</td><td>Wrote a multi-step sequence</td><td>Use "then" or "and then" or "first...next"</td></tr>
+<tr><td>🎨 Detail Master</td><td>Added descriptive detail</td><td>Include adjectives or manner (slowly, angrily, twice)</td></tr>
+<tr><td>🌍 World Builder</td><td>Referenced the environment</td><td>Mention a prop or location in the scene</td></tr>
+<tr><td>🎪 Combo King</td><td>Coordinated multiple characters</td><td>Give instructions to 2+ characters in one prompt</td></tr>
+<tr><td>🔄 Iteratoooor</td><td>Improved on a previous prompt</td><td>Retry with more detail after a funny fail</td></tr>
+<tr><td>⭐ Prompt Master</td><td>Used 4+ skills in one prompt</td><td>Combine naming, action, sequence, and detail</td></tr>
+</table>
+
+<div class="callout co-violet">
+<strong>Why badges > stars:</strong> Stars punish ("you only got 1 star"). Badges reward ("you just unlocked Director!"). A kid who types "dance" earns Commander even though it was vague — because they DID name an action. Progress is always forward. This is how games like Minecraft and Roblox keep kids engaged without fail states.
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ TECHNICAL ARCHITECTURE ═══ -->
+<div class="section">
+<span class="section-tag">Architecture</span>
+<h2>Technical Implementation (Hackathon-Scoped)</h2>
+
+<h3>What Stays the Same</h3>
+<p>The core architecture from the implementation plan is <strong>solid and unchanged</strong>:</p>
+<ul>
+<li>React + Three.js + Vite frontend</li>
+<li>Claude Opus 4.6 as the "Assembler, Never Renderer" — generates SceneScript JSON</li>
+<li>SceneScriptPlayer sequences spawn/animate/move/react/sound/camera actions</li>
+<li>GLTFLoader + AnimationMixer for all 3D</li>
+<li>Vocabulary Contract constraining Claude to real assets</li>
+</ul>
+
+<h3>What Changes</h3>
+
+<div class="compare">
+<div class="compare-col old">
+<span class="compare-label old">Remove</span>
+<ul>
+<li>7 rigid task definitions with expected answers</li>
+<li>Golden Response Cache (no "right" answers to cache)</li>
+<li>Star rating (1-3) per scenario</li>
+<li>Task-specific system prompts with hidden success criteria</li>
+<li>Levenshtein fuzzy-matching to predetermined responses</li>
+</ul>
+</div>
+<div class="compare-col new">
+<span class="compare-label new">Add</span>
+<ul>
+<li>5 World definitions (setting, characters, props, hook)</li>
+<li>Prompt Analyzer (lightweight — detects skills used in prompt)</li>
+<li>Badge system with persistent progress</li>
+<li>Guide character narration that adapts to what's missing</li>
+<li>World-aware system prompt (tells Claude what's available)</li>
+</ul>
+</div>
+</div>
+
+<h3>Revised System Prompt for Claude (Per World)</h3>
+
+<div class="code"><span class="c">// System prompt sent to Claude Opus 4.6 for each world</span>
+
+You are the scene director for a kids' game. A child will describe what they 
+want to happen. Your job is to translate their words into a SceneScript.
+
+<span class="k">CURRENT WORLD: Party World</span>
+<span class="k">CHARACTERS ON STAGE:</span> Knight, Clown, Skeleton_Warrior, Robot_One, Witch
+<span class="k">PROPS AVAILABLE:</span> cake, present_01, present_02, chair, balloon, plates, table
+<span class="k">ANIMATIONS:</span> [full list of 139 clip names]
+<span class="k">EFFECTS:</span> confetti-burst, laugh-tears, sparkle-magic, explosion-cartoon, ...
+<span class="k">SOUNDS:</span> boing, celebration, funny-fail, whoosh, pop, ...
+
+<span class="v">RULES:</span>
+1. ALWAYS produce a scene. Never refuse. Every input makes something happen.
+2. If the prompt is vague, pick something funny and simple. 
+   "do stuff" → one character does a random silly animation.
+3. If the prompt is specific, make it impressive. Sequence actions, 
+   coordinate characters, use timing.
+4. Match the child's intent as best you can with available animations.
+   "play tag" → Running_A for multiple characters.
+   "throw cake" → Throw anim + spawn cake prop near target + splat effect.
+5. Keep narration funny, ≤30 words, age 5-8 appropriate.
+6. In your narration, HINT at what could be more specific without judging.
+   Good: "The skeleton danced! What if the others joined in?"
+   Bad: "You forgot to say which character."
+
+<span class="v">PROMPT ANALYSIS</span> (include in response):
+- has_character: boolean  <span class="c">// did they name a specific character?</span>
+- has_action: boolean     <span class="c">// did they give a specific action verb?</span>
+- has_sequence: boolean   <span class="c">// did they describe ordered steps?</span>
+- has_detail: boolean     <span class="c">// did they add HOW (fast, slow, silly)?</span>
+- has_multi_char: boolean <span class="c">// did they coordinate 2+ characters?</span>
+- has_environment: boolean<span class="c">// did they reference a prop or place?</span></div>
+
+<h3>Revised SceneScript Schema</h3>
+
+<div class="code">interface <span class="v">SceneScript</span> {
+  <span class="k">narration</span>: string;            <span class="c">// funny narrator text, ≤30 words</span>
+  <span class="k">guide_hint</span>?: string;          <span class="c">// optional scaffolding hint</span>
+  <span class="k">actions</span>: <span class="v">SceneAction</span>[];       <span class="c">// max 10 per response</span>
+  <span class="k">prompt_analysis</span>: {
+    <span class="k">has_character</span>: boolean;
+    <span class="k">has_action</span>: boolean;
+    <span class="k">has_sequence</span>: boolean;
+    <span class="k">has_detail</span>: boolean;
+    <span class="k">has_multi_char</span>: boolean;
+    <span class="k">has_environment</span>: boolean;
+  };
+}
+
+<span class="c">// SceneAction unchanged from original design</span>
+interface <span class="v">SceneAction</span> {
+  <span class="k">type</span>: <span class="s">"spawn"</span>|<span class="s">"animate"</span>|<span class="s">"move"</span>|<span class="s">"remove"</span>|<span class="s">"react"</span>|<span class="s">"sound"</span>|<span class="s">"camera"</span>|<span class="s">"light"</span>;
+  <span class="k">actor</span>?: string;
+  <span class="k">anim</span>?: string;
+  <span class="k">position</span>?: string;
+  <span class="k">effect</span>?: string;
+  <span class="k">delay_ms</span>?: number;
+  <span class="k">duration_ms</span>?: number;
+}</div>
+
+<h3>Prompt Analyzer: Client-Side Badge Detection</h3>
+
+<p>The <code>prompt_analysis</code> from Claude drives badge unlocks on the client. This is lightweight — no separate model call needed. Claude already understands the prompt; we just ask it to tag what skills it detected.</p>
+
+<div class="code"><span class="c">// Badge check runs after every SceneScript response</span>
+
+function <span class="v">checkBadges</span>(analysis: PromptAnalysis, badges: BadgeState): BadgeUnlock[] {
+  const unlocks: BadgeUnlock[] = [];
+  
+  <span class="k">if</span> (analysis.has_character && !badges.commander) 
+    unlocks.push({ id: <span class="s">'commander'</span>, label: <span class="s">'🎯 Commander'</span> });
+  <span class="k">if</span> (analysis.has_action && !badges.director)
+    unlocks.push({ id: <span class="s">'director'</span>, label: <span class="s">'🎬 Director'</span> });
+  <span class="k">if</span> (analysis.has_sequence && !badges.storyteller)
+    unlocks.push({ id: <span class="s">'storyteller'</span>, label: <span class="s">'📝 Storyteller'</span> });
+  <span class="k">if</span> (analysis.has_detail && !badges.detail_master)
+    unlocks.push({ id: <span class="s">'detail_master'</span>, label: <span class="s">'🎨 Detail Master'</span> });
+  <span class="k">if</span> (analysis.has_environment && !badges.world_builder)
+    unlocks.push({ id: <span class="s">'world_builder'</span>, label: <span class="s">'🌍 World Builder'</span> });
+  <span class="k">if</span> (analysis.has_multi_char && !badges.combo_king)
+    unlocks.push({ id: <span class="s">'combo_king'</span>, label: <span class="s">'🎪 Combo King'</span> });
+  
+  <span class="c">// Prompt Master: 4+ skills in one prompt</span>
+  const skillCount = Object.values(analysis).filter(Boolean).length;
+  <span class="k">if</span> (skillCount >= 4 && !badges.prompt_master)
+    unlocks.push({ id: <span class="s">'prompt_master'</span>, label: <span class="s">'⭐ Prompt Master'</span> });
+  
+  <span class="k">return</span> unlocks;
+}</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ PROGRESS & PERSISTENCE ═══ -->
+<div class="section">
+<span class="section-tag">Persistence</span>
+<h2>Progress Tracking — Keep It Simple</h2>
+
+<p>For a hackathon, you don't need a database. Here are three options in order of simplicity:</p>
+
+<h3>Option 1: localStorage Only <span class="pill p-new">Recommended for Hackathon</span></h3>
+
+<div class="code"><span class="c">// Simple, zero-infra persistence</span>
+
+interface <span class="v">PlayerProgress</span> {
+  <span class="k">username</span>: string;
+  <span class="k">badges</span>: Record&lt;string, boolean&gt;;
+  <span class="k">worlds_visited</span>: string[];
+  <span class="k">total_prompts</span>: number;
+  <span class="k">best_prompt_skills</span>: number; <span class="c">// highest skill count in a single prompt</span>
+  <span class="k">prompt_history</span>: { text: string; world: string; timestamp: number; }[];
+  <span class="k">created_at</span>: number;
+}
+
+<span class="c">// On app load</span>
+const progress = JSON.parse(localStorage.getItem(<span class="s">'pq_progress'</span>)) 
+  || createNewPlayer();
+
+<span class="c">// On name entry (first launch)</span>
+function <span class="v">createNewPlayer</span>(name: string): PlayerProgress {
+  return {
+    username: name,
+    badges: {},
+    worlds_visited: [],
+    total_prompts: 0,
+    best_prompt_skills: 0,
+    prompt_history: [],
+    created_at: Date.now()
+  };
+}
+
+<span class="c">// After each prompt</span>
+function <span class="v">saveProgress</span>(progress: PlayerProgress) {
+  localStorage.setItem(<span class="s">'pq_progress'</span>, JSON.stringify(progress));
+}</div>
+
+<div class="callout co-mint">
+<strong>Why this is enough:</strong> The demo is per-device. A kid at home will always use the same tablet/computer. localStorage persists indefinitely until cleared. For a hackathon demo, this is plenty — judges don't care about cross-device sync. If you want to show "returning player" in the demo, just pre-seed localStorage before recording.
+</div>
+
+<h3>Option 2: Anthropic Artifact Storage API <span class="pill p-keep">If Building as Artifact</span></h3>
+
+<p>If you deploy as a Claude artifact (React), you can use <code>window.storage</code> for persistence that survives sessions. Same data model as above, but replace localStorage calls with:</p>
+
+<div class="code">await window.storage.set(<span class="s">'player:drew-jr'</span>, JSON.stringify(progress));
+const result = await window.storage.get(<span class="s">'player:drew-jr'</span>);
+const progress = result ? JSON.parse(result.value) : createNewPlayer();</div>
+
+<h3>Option 3: Vercel KV / Upstash Redis <span class="pill p-old">Only If Multi-User Demo Needed</span></h3>
+
+<p>If you need to show multiple named players with a leaderboard (e.g., during a live demo), add a simple KV store. One serverless function:</p>
+
+<div class="code"><span class="c">// api/progress.ts (Vercel serverless)</span>
+import { kv } from <span class="s">'@vercel/kv'</span>;
+
+export async function GET(req) {
+  const name = new URL(req.url).searchParams.get(<span class="s">'name'</span>);
+  const data = await kv.get(<span class="s">`player:${name}`</span>);
+  return Response.json(data || null);
+}
+
+export async function POST(req) {
+  const body = await req.json();
+  await kv.set(<span class="s">`player:${body.username}`</span>, body);
+  return Response.json({ ok: true });
+}</div>
+
+<p>Vercel KV has a free tier (256MB, 30K requests/month). More than enough for hackathon + demo.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ WORLD DEFINITIONS ═══ -->
+<div class="section">
+<span class="section-tag">Asset Mapping</span>
+<h2>World → Asset Mapping (From Your Inventory)</h2>
+
+<p>Each world uses a curated subset of your 7,834 deployed assets. Here's the exact mapping to real files.</p>
+
+<h3>🎉 Party World</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Source</th></tr>
+<tr><td>Character</td><td>Knight, Clown, Skeleton_Warrior, Robot_One, Witch</td><td>kaykit/characters/</td></tr>
+<tr><td>Props</td><td>cake, plates, chair (×4), table, present (×3), balloon (svg)</td><td>quaternius/food/ + furniture/ + holiday/</td></tr>
+<tr><td>Environment</td><td>party-room backdrop, floor tiles</td><td>assets/backdrops/party-room.svg + medieval_hex tiles</td></tr>
+<tr><td>Effects</td><td>confetti-burst, laugh-tears, sparkle-magic, music</td><td>assets/effects/ + assets/reactions/</td></tr>
+<tr><td>Sounds</td><td>celebration, pop, boing, funny-fail</td><td>assets/sfx/</td></tr>
+</table>
+
+<h3>🌲 Forest World</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Source</th></tr>
+<tr><td>Character</td><td>Ranger, Druid, Barbarian, Ninja + Cat, Dog</td><td>kaykit/characters/ + quaternius/animals/</td></tr>
+<tr><td>Props</td><td>trees, rocks, mushrooms, campfire, logs, bushes</td><td>kaykit/packs/forest_nature/ + quaternius/nature/</td></tr>
+<tr><td>Environment</td><td>Forest clearing, grass tiles</td><td>forest_nature pack + ground tiles</td></tr>
+<tr><td>Effects</td><td>sparkle-magic, fire, smoke, splash</td><td>assets/effects/</td></tr>
+<tr><td>Sounds</td><td>whoosh, drop, boing, impact</td><td>assets/sfx/</td></tr>
+</table>
+
+<h3>🚀 Space World</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Source</th></tr>
+<tr><td>Character</td><td>SpaceRanger, SpaceRanger_FlightMode, Robot_One, Robot_Two, Engineer</td><td>kaykit/characters/</td></tr>
+<tr><td>Props</td><td>control panels, monitors, landing pad, antennas</td><td>kaykit/packs/space_base/</td></tr>
+<tr><td>Environment</td><td>space backdrop, space base tiles</td><td>assets/backdrops/space.png + space_base</td></tr>
+<tr><td>Effects</td><td>explosion-cartoon, star, spark, light</td><td>assets/effects/</td></tr>
+<tr><td>Sounds</td><td>laser, zap, whoosh, bong</td><td>assets/sfx/</td></tr>
+</table>
+
+<h3>🏰 Dungeon World</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Source</th></tr>
+<tr><td>Character</td><td>Knight, Mage, Rogue, Skeleton_Minion, Necromancer</td><td>kaykit/characters/</td></tr>
+<tr><td>Props</td><td>chests, barrels, torches, potions, doors, keys</td><td>kaykit/packs/dungeon/ + quaternius/medieval-props/</td></tr>
+<tr><td>Environment</td><td>Dungeon walls, floors, pillars</td><td>kaykit/packs/dungeon/</td></tr>
+<tr><td>Effects</td><td>fire, sparkle-magic, smoke, explosion-cartoon</td><td>assets/effects/</td></tr>
+<tr><td>Sounds</td><td>impact, whoosh, drop, jingle-celebrate</td><td>assets/sfx/</td></tr>
+</table>
+
+<h3>🍳 Kitchen World</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Source</th></tr>
+<tr><td>Character</td><td>Clown, Caveman, Superhero, Survivalist</td><td>kaykit/characters/</td></tr>
+<tr><td>Props</td><td>All food items, pots, pans, plates, stove, fridge, counters</td><td>quaternius/food/ + kaykit/packs/restaurant/ + tiny-treats/charming-kitchen/</td></tr>
+<tr><td>Environment</td><td>Kitchen/restaurant backdrop</td><td>restaurant pack + charming-kitchen</td></tr>
+<tr><td>Effects</td><td>fire, smoke, explosion-cartoon, sparkle-magic</td><td>assets/effects/</td></tr>
+<tr><td>Sounds</td><td>boing, pop, sizzle (impact), funny-fail</td><td>assets/sfx/</td></tr>
+</table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ ANIMATION MAPPING ═══ -->
+<div class="section">
+<span class="section-tag">Animation Intelligence</span>
+<h2>How Claude Maps Kid Language → Animations</h2>
+
+<p>The system prompt gives Claude the full animation list, but also includes a <strong>semantic mapping guide</strong> so Claude can translate kid language into the right clips. This is where the "intelligence" lives — Claude doesn't need the kid to say "Walking_A", it just needs to understand intent.</p>
+
+<table>
+<tr><th>Kid Might Say</th><th>Animation Clip(s)</th><th>Pack</th></tr>
+<tr><td>walk, go to, move over there</td><td>Walking_A, Walking_B, Walking_C</td><td>MovementBasic</td></tr>
+<tr><td>run, chase, hurry, rush</td><td>Running_A, Running_B</td><td>MovementBasic</td></tr>
+<tr><td>dance, boogie, party</td><td>Dance_A, Dance_B</td><td>General</td></tr>
+<tr><td>sit, sit down, take a seat</td><td>Sit_Chair_Down, Sit_Floor_Down</td><td>Simulation</td></tr>
+<tr><td>wave, say hi, greet</td><td>Wave</td><td>General</td></tr>
+<tr><td>clap, applaud, cheer</td><td>Clapping</td><td>General</td></tr>
+<tr><td>jump, hop, leap</td><td>Jump_Full_Short, Jump_Full_Long</td><td>MovementAdvanced</td></tr>
+<tr><td>fight, attack, hit, punch</td><td>Attack_OneHand, Attack_TwoHand, Punch</td><td>CombatMelee</td></tr>
+<tr><td>shoot, fire, zap</td><td>Shoot_OneHand, Shoot_Rifle</td><td>CombatRanged</td></tr>
+<tr><td>throw, toss, chuck</td><td>Throw</td><td>CombatRanged</td></tr>
+<tr><td>die, fall, collapse, faint</td><td>Death_A, Death_B</td><td>General</td></tr>
+<tr><td>cook, stir, mix</td><td>Stir (Tools)</td><td>Tools</td></tr>
+<tr><td>build, hammer, make</td><td>Hammer, Hammer_Table</td><td>Tools</td></tr>
+<tr><td>dig, shovel</td><td>Dig, Dig_Shovel</td><td>Tools</td></tr>
+<tr><td>sweep, clean</td><td>Sweep</td><td>Tools</td></tr>
+<tr><td>fish</td><td>Fishing_Cast, Fishing_Reel</td><td>Tools</td></tr>
+<tr><td>sneak, creep, tiptoe</td><td>Crouch_Walk</td><td>MovementAdvanced</td></tr>
+<tr><td>roll, dodge, tumble</td><td>Roll, Dodge_Left, Dodge_Right</td><td>MovementAdvanced</td></tr>
+<tr><td>sleep, rest, nap</td><td>Sit_Floor_Down (no sleep anim — closest match)</td><td>Simulation</td></tr>
+<tr><td>eat, munch, gobble</td><td>Eat (Simulation)</td><td>Simulation</td></tr>
+<tr><td>drink, sip, slurp</td><td>Drink (Simulation)</td><td>Simulation</td></tr>
+<tr><td>pick up, grab, take</td><td>PickUp</td><td>Simulation</td></tr>
+<tr><td>talk, chat, speak</td><td>Talk (Simulation)</td><td>Simulation</td></tr>
+<tr><td>cheer, celebrate, yay</td><td>Cheer</td><td>General</td></tr>
+<tr><td>be scared, frighten</td><td>HitReact_A</td><td>CombatMelee</td></tr>
+<tr><td>spin, twirl</td><td>Spin_Attack (closest)</td><td>CombatMelee</td></tr>
+</table>
+
+<div class="callout co-sky">
+<strong>This table goes into the system prompt.</strong> Claude uses it as a lookup but can also interpolate — if a kid says "do a superhero landing," Claude can sequence Jump_Full_Long → land → Cheer even though "superhero landing" isn't in the table. That's the power of having an LLM as the interpreter.
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ BUILD PLAN ═══ -->
+<div class="section">
+<span class="section-tag">Build Plan</span>
+<h2>What to Build for the Hackathon</h2>
+
+<h3>MVP Scope (3 days)</h3>
+
+<div class="flow-step">
+<div class="flow-num">1</div>
+<div class="flow-content">
+<strong>Day 1: World Loader + Scene Engine</strong>
+<p>Load one World (Party). Characters on stage. Props placed. Camera positioned. Text input box. Claude API wired up with world-specific system prompt. SceneScript → actions playing. This is mostly what you already have — refactored from task-based to world-based.</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">2</div>
+<div class="flow-content">
+<strong>Day 2: Badge System + Guide Hints + Polish</strong>
+<p>prompt_analysis → badge unlocks with celebration animation. Guide hint text appears after scene plays. Badge display panel. localStorage save/load. Username entry on first launch. Add 2nd world (Dungeon or Kitchen).</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-num">3</div>
+<div class="flow-content">
+<strong>Day 3: Remaining Worlds + Demo Recording</strong>
+<p>Add Forest, Space, Kitchen/Dungeon. World selector screen. Polish transitions. Record demo video showing the learning loop: vague prompt → funny result → hint → better prompt → badge unlock.</p>
+</div>
+</div>
+
+<h3>What Makes This a Hackathon Winner</h3>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-title">🧠 Actually Teaches Prompt Engineering</div>
+<p>Unlike scripted scenarios, this genuinely demonstrates the core skill: experimenting with inputs to understand how an AI system responds, then iterating for better results. The judges will immediately recognize this as the real thing.</p>
+</div>
+<div class="card">
+<div class="card-title">🎪 Demo-Friendly</div>
+<p>Free play is infinitely demo-able. You can type anything and get something fun. No risk of hitting a dead end or "wrong answer." Every prompt produces a scene. The demo writes itself.</p>
+</div>
+<div class="card">
+<div class="card-title">🏗️ Claude as Core Infrastructure</div>
+<p>This design makes Claude absolutely essential — it's the interpreter between kid language and 3D scenes. Without Claude, this is impossible. That's exactly what the hackathon wants to see.</p>
+</div>
+<div class="card">
+<div class="card-title">👨‍👩‍👧 Danielle's Input Shines</div>
+<p>The pedagogical design — badges over stars, scaffolding over correction, positive reinforcement over fail states — is the kind of thing a marketing VP / parent would nail. Credit where it's due in the demo.</p>
+</div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ EXAMPLE PLAY SESSION ═══ -->
+<div class="section">
+<span class="section-tag">Example</span>
+<h2>Sample Play Session: Party World</h2>
+
+<div class="card">
+<div class="card-title">🧒 Prompt 1: "make them party"</div>
+<p><strong>Scene:</strong> All 5 characters do Idle animation (they're already idling). One character does a single wave.</p>
+<p><strong>Narrator:</strong> "They're... ready to party? But nobody knows how! What should they DO at this party?"</p>
+<p><strong>Badges:</strong> None yet (no specific character, no specific action)</p>
+<p><strong>Guide hint:</strong> "Try telling one of them to do something! Like 'make the Clown dance!'"</p>
+</div>
+
+<div class="card">
+<div class="card-title">🧒 Prompt 2: "make the clown dance"</div>
+<p><strong>Scene:</strong> Clown does Dance_A. Music effect plays. Other characters turn to watch (HeadTurn).</p>
+<p><strong>Narrator:</strong> "The Clown's got the moves! The others are watching like 👀"</p>
+<p><strong>Badges:</strong> 🎯 Commander unlocked! 🎬 Director unlocked!</p>
+<p><strong>Guide hint:</strong> "Nice! You told me WHO and WHAT. What about the others?"</p>
+</div>
+
+<div class="card">
+<div class="card-title">🧒 Prompt 3: "the skeleton throws cake at the robot and then everyone laughs"</div>
+<p><strong>Scene:</strong> Skeleton_Warrior does Throw anim → cake prop spawns, moves toward Robot_One → cake hits → Robot does HitReact_A → all characters do Dance_A (closest to laughing) → laugh-tears effect → confetti.</p>
+<p><strong>Narrator:</strong> "FOOD FIGHT! The Robot didn't see it coming! Everyone is losing it! 🎂💥"</p>
+<p><strong>Badges:</strong> 📝 Storyteller unlocked! 🎪 Combo King unlocked! 🌍 World Builder unlocked!</p>
+<p><strong>Guide hint:</strong> "WOW — you said who, did what, to whom, and then what happened next. That's pro-level prompting!"</p>
+</div>
+
+<div class="card">
+<div class="card-title">🧒 Prompt 4: "now the witch slowly floats to the center and does a magic spell on the cake to make it giant and everyone runs away screaming"</div>
+<p><strong>Scene:</strong> Witch does Walking_B (slow) to center → SpellCast anim → sparkle-magic effect → cake scales up 3x → all other characters do Running_A away from center → explosion-cartoon effect → camera zoom out.</p>
+<p><strong>Narrator:</strong> "THE CAKE IS ALIVE! THE CAKE IS ALIIIIVE! Everyone is running for their lives! Best. Party. Ever."</p>
+<p><strong>Badges:</strong> 🎨 Detail Master unlocked! ⭐ Prompt Master unlocked!</p>
+<p><strong>Guide hint:</strong> "You just used 5 prompt skills in one sentence. I think YOU might be the wizard here."</p>
+</div>
+
+<div class="callout co-gold">
+<strong>Notice:</strong> No prompt was "wrong." Every single one produced something. The progression from vague → specific happened naturally because the kid could see what worked and what didn't. The badges track the journey. The guide hints suggest without prescribing. This IS prompt engineering education.
+</div>
+</div>
+
+</div>
+</body>
+</html>

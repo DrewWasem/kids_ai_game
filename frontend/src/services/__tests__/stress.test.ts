@@ -48,7 +48,7 @@ describe('parseSceneScript — stress / edge cases', () => {
     );
   });
 
-  it('succeeds when extra unknown fields are present', () => {
+  it('succeeds when extra unknown fields are present (they get stripped)', () => {
     const obj = {
       ...validScript(),
       bonus_field: 42,
@@ -57,8 +57,8 @@ describe('parseSceneScript — stress / edge cases', () => {
     const result = parseSceneScript(JSON.stringify(obj));
     expect(result.success_level).toBe('FULL_SUCCESS');
     expect(result.actions).toHaveLength(1);
-    // Extra fields are passed through (not stripped)
-    expect((result as Record<string, unknown>).bonus_field).toBe(42);
+    // Extra fields are stripped — parseSceneScript only extracts known fields
+    expect((result as Record<string, unknown>).bonus_field).toBeUndefined();
   });
 
   it('succeeds when JSON is wrapped in ```json fences', () => {
@@ -233,168 +233,7 @@ describe('Cache — stress / edge cases', () => {
 });
 
 // ===========================================================================
-// Section 3: Resolver edge cases
+// Section 3: Resolver edge cases (covered in resolver.test.ts)
 // ===========================================================================
-
-// These mocks must be declared before importing the resolver module
-vi.mock('../../services/cache', async () => {
-  // Import the real module to use its actual implementation in sections 1 & 2,
-  // but provide mock-able versions for the resolver tests.
-  // Because vi.mock is hoisted, we use a dynamic approach.
-  const actual = await vi.importActual<typeof import('../../services/cache')>('../../services/cache');
-  return {
-    ...actual,
-    getCachedResponse: vi.fn(actual.getCachedResponse),
-    saveToCache: vi.fn(actual.saveToCache),
-    loadDemoCache: actual.loadDemoCache,
-  };
-});
-
-vi.mock('../../services/claude', async () => {
-  const actual = await vi.importActual<typeof import('../../services/claude')>('../../services/claude');
-  return {
-    ...actual,
-    evaluateInput: vi.fn(),
-  };
-});
-
-vi.mock('../../data/fallback-scripts', () => ({
-  FALLBACK_SCRIPTS: {
-    'monster-party': {
-      success_level: 'PARTIAL_SUCCESS',
-      narration: 'Fallback: the monster waits patiently.',
-      actions: [
-        { type: 'spawn', target: 'monster', position: 'center' },
-      ],
-      prompt_feedback: 'Fallback feedback for monster-party',
-    } as SceneScript,
-  } as Record<string, SceneScript>,
-}));
-
-import { resolveResponse } from '../../services/resolver';
-import { evaluateInput } from '../../services/claude';
-
-const LIVE_SCRIPT: SceneScript = {
-  success_level: 'FULL_SUCCESS',
-  narration: 'Live API script!',
-  actions: [
-    { type: 'spawn', target: 'cake-giant', position: 'center' },
-    { type: 'react', effect: 'confetti-burst', position: 'center' },
-  ],
-  prompt_feedback: 'Excellent prompting!',
-};
-
-describe('resolveResponse — stress / edge cases', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    // Reset the cache mocks to return null by default for resolver tests
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-  });
-
-  it('when cache returns a hit, live API is never called', async () => {
-    const cachedScript: SceneScript = {
-      success_level: 'FULL_SUCCESS',
-      narration: 'Cached result',
-      actions: [{ type: 'spawn', target: 'cake', position: 'center' }],
-      prompt_feedback: 'From cache',
-    };
-    vi.mocked(getCachedResponse).mockReturnValue(cachedScript);
-
-    const result = await resolveResponse('monster-party', 'system', 'test input');
-
-    expect(result.script).toBe(cachedScript);
-    expect(result.source).toBe('cache');
-    expect(evaluateInput).not.toHaveBeenCalled();
-  });
-
-  it('when cache misses and API succeeds, result is saved to cache', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockResolvedValue(LIVE_SCRIPT);
-
-    await resolveResponse('monster-party', 'system', 'decorate the room');
-
-    expect(saveToCache).toHaveBeenCalledWith(
-      'monster-party',
-      'decorate the room',
-      LIVE_SCRIPT,
-    );
-  });
-
-  it('when cache misses and API throws, fallback is returned', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockRejectedValue(new Error('Network failure'));
-
-    const result = await resolveResponse('monster-party', 'system', 'anything');
-
-    expect(result.source).toBe('fallback');
-    expect(result.script.success_level).toBe('PARTIAL_SUCCESS');
-    expect(result.script.narration).toBe('Fallback: the monster waits patiently.');
-  });
-
-  it('when cache misses and API throws, error is logged via console.warn', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    const apiError = new Error('API timeout');
-    vi.mocked(evaluateInput).mockRejectedValue(apiError);
-
-    await resolveResponse('monster-party', 'system', 'anything');
-
-    expect(warnSpy).toHaveBeenCalledWith('[Resolver] Tier 2 failed:', apiError);
-  });
-
-  it('fallback always returns a valid SceneScript with all required fields', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockRejectedValue(new Error('fail'));
-
-    const result = await resolveResponse('monster-party', 'system', 'anything');
-
-    const script = result.script;
-    expect(script).toBeDefined();
-    expect(['FULL_SUCCESS', 'PARTIAL_SUCCESS', 'FUNNY_FAIL']).toContain(script.success_level);
-    expect(typeof script.narration).toBe('string');
-    expect(script.narration.length).toBeGreaterThan(0);
-    expect(Array.isArray(script.actions)).toBe(true);
-    expect(typeof script.prompt_feedback).toBe('string');
-  });
-
-  it('unknown taskId still returns a fallback (defaults to monster-party fallback)', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockRejectedValue(new Error('fail'));
-
-    const result = await resolveResponse('totally-unknown-task', 'system', 'anything');
-
-    expect(result.source).toBe('fallback');
-    // Should fall back to monster-party since 'totally-unknown-task' is not in FALLBACK_SCRIPTS
-    expect(result.script.narration).toBe('Fallback: the monster waits patiently.');
-    expect(result.script.prompt_feedback).toBe('Fallback feedback for monster-party');
-  });
-
-  it('response always has latencyMs >= 0 (cache path)', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(LIVE_SCRIPT);
-
-    const result = await resolveResponse('monster-party', 'system', 'test');
-
-    expect(typeof result.latencyMs).toBe('number');
-    expect(result.latencyMs).toBeGreaterThanOrEqual(0);
-  });
-
-  it('response always has latencyMs >= 0 (live path)', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockResolvedValue(LIVE_SCRIPT);
-
-    const result = await resolveResponse('monster-party', 'system', 'test');
-
-    expect(typeof result.latencyMs).toBe('number');
-    expect(result.latencyMs).toBeGreaterThanOrEqual(0);
-  });
-
-  it('response always has latencyMs >= 0 (fallback path)', async () => {
-    vi.mocked(getCachedResponse).mockReturnValue(null);
-    vi.mocked(evaluateInput).mockRejectedValue(new Error('fail'));
-
-    const result = await resolveResponse('monster-party', 'system', 'test');
-
-    expect(typeof result.latencyMs).toBe('number');
-    expect(result.latencyMs).toBeGreaterThanOrEqual(0);
-  });
-});
+// Resolver tests have been moved to resolver.test.ts for cleaner isolation.
+// The resolver now uses a 2-tier architecture (live API + fallback, no cache).

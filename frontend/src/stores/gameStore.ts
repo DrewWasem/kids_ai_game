@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { SceneScript } from '../types/scene-script';
+import type { VignetteStep } from '../types/madlibs';
 import type { ResponseSource } from '../services/resolver';
 import { resolveResponse } from '../services/resolver';
 import { WORLDS } from '../data/worlds';
@@ -23,6 +24,9 @@ interface GameState {
   history: HistoryEntry[];
   isMuted: boolean;
 
+  // Mad Libs state
+  vignetteSteps: VignetteStep[] | null;
+
   // Badge system
   badges: Record<string, boolean>;
   badgeUnlocks: string[]; // newly unlocked badges to animate
@@ -38,6 +42,8 @@ interface GameState {
   // Actions
   setInput: (input: string) => void;
   submitInput: () => Promise<void>;
+  setLastScript: (script: SceneScript) => void;
+  setVignetteSteps: (steps: VignetteStep[] | null) => void;
   clearScript: () => void;
   clearError: () => void;
   toggleMute: () => void;
@@ -95,6 +101,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   error: null,
   history: [],
   isMuted: false,
+  vignetteSteps: null,
   badges: loadBadges(),
   badgeUnlocks: [],
   currentZone: null,
@@ -162,7 +169,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  clearScript: () => set({ lastScript: null, lastSource: null }),
+  setLastScript: (script: SceneScript) => set({ lastScript: script }),
+  setVignetteSteps: (steps: VignetteStep[] | null) => set({ vignetteSteps: steps }),
+  clearScript: () => set({ lastScript: null, lastSource: null, vignetteSteps: null }),
   clearError: () => set({ error: null }),
   toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
   clearBadgeUnlocks: () => set({ badgeUnlocks: [] }),

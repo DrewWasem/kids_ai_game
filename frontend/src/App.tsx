@@ -1,25 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import R3FGame from './game/R3FGame';
 import ScenePlayer3D from './game/ScenePlayer3D';
 import PromptInput from './components/PromptInput';
+import MadLibsInput from './components/MadLibsInput';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
 import { WORLDS } from './data/worlds';
 import { BADGES } from './services/badge-system';
+import { getQuestStage } from './data/quest-stages';
 import CameraControls from './components/CameraControls';
 
 export default function App() {
   const currentZone = useGameStore((s) => s.currentZone);
   const currentTask = useGameStore((s) => s.currentTask);
   const lastScript = useGameStore((s) => s.lastScript);
+  const vignetteSteps = useGameStore((s) => s.vignetteSteps);
   const isMuted = useGameStore((s) => s.isMuted);
   const toggleMute = useGameStore((s) => s.toggleMute);
   const exitZone = useGameStore((s) => s.exitZone);
   const isTransitioning = useGameStore((s) => s.isTransitioning);
   const badges = useGameStore((s) => s.badges);
   const [loading3D, setLoading3D] = useState(true);
+
+  // Get the current quest stage (if any) for Mad Libs mode
+  const questStage = useMemo(() => {
+    if (!currentZone) return null;
+    return getQuestStage(currentZone);
+  }, [currentZone]);
 
   // Preload shared animations on mount, then dismiss loading screen
   useEffect(() => {
@@ -99,6 +108,7 @@ export default function App() {
               <R3FGame>
                 <ScenePlayer3D
                   script={lastScript}
+                  vignetteSteps={vignetteSteps}
                   taskId={currentTask}
                   onComplete={() => console.log('[App] Scene complete')}
                 />
@@ -107,10 +117,10 @@ export default function App() {
             </div>
           </div>
 
-          {/* Prompt Input — visible as soon as a zone is entered */}
+          {/* Input Panel — Mad Libs if quest stage exists, otherwise free-text */}
           {currentZone ? (
             <div className="transition-opacity duration-500">
-              <PromptInput />
+              {questStage ? <MadLibsInput stage={questStage} /> : <PromptInput />}
             </div>
           ) : (
             <div className="px-5 py-4 text-center">
