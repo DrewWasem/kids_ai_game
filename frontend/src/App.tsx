@@ -12,14 +12,18 @@ import { WORLDS } from './data/worlds';
 import { BADGES } from './services/badge-system';
 import { getQuestStage } from './data/quest-stages';
 import CameraControls from './components/CameraControls';
+import { Minimap } from './game/Minimap';
+import ControlsOverlay from './components/ControlsOverlay';
+import BadgeToast from './components/BadgeToast';
+import { CompassRose } from './game/CompassRose';
+import ScreenshotButton from './components/ScreenshotButton';
+import SettingsPanel from './components/SettingsPanel';
 
 export default function App() {
   const currentZone = useGameStore((s) => s.currentZone);
   const currentTask = useGameStore((s) => s.currentTask);
   const lastScript = useGameStore((s) => s.lastScript);
   const vignetteSteps = useGameStore((s) => s.vignetteSteps);
-  const isMuted = useGameStore((s) => s.isMuted);
-  const toggleMute = useGameStore((s) => s.toggleMute);
   const exitZone = useGameStore((s) => s.exitZone);
   const isTransitioning = useGameStore((s) => s.isTransitioning);
   const badges = useGameStore((s) => s.badges);
@@ -81,14 +85,7 @@ export default function App() {
               </div>
             )}
 
-            <button
-              onClick={toggleMute}
-              className="btn-game text-sm px-3 py-2 rounded-xl border-2
-                bg-white/60 text-quest-text-mid border-quest-border hover:border-quest-purple/50 hover:text-quest-text-dark"
-              title={isMuted ? 'Unmute' : 'Mute'}
-            >
-              {isMuted ? '\u{1F507}' : '\u{1F50A}'}
-            </button>
+            <SettingsPanel />
 
             {currentZone && !isTransitioning && (
               <button
@@ -125,8 +122,12 @@ export default function App() {
                 />
               </R3FGame>
               {!currentZone && !isTransitioning && !playingIntro && <CameraControls />}
+              {!playingIntro && <Minimap />}
+              {!currentZone && !isTransitioning && !playingIntro && <CompassRose />}
+              {!currentZone && !playingIntro && <ControlsOverlay />}
 
-              {/* Expand / Collapse toggle */}
+              {/* Screenshot + Expand / Collapse toggle */}
+              {!playingIntro && <ScreenshotButton />}
               {!playingIntro && <button
                 onClick={() => setExpanded(e => !e)}
                 className="absolute top-2 right-2 z-20 bg-black/50 hover:bg-black/70 text-white rounded-lg px-2 py-1.5 text-sm backdrop-blur-sm transition-colors"
@@ -156,6 +157,9 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Badge unlock toast — always rendered, self-hides when empty */}
+      <BadgeToast />
 
       {/* "Click to skip" hint during cinematic */}
       {playingIntro && (

@@ -42,6 +42,7 @@ interface GameState {
   // Cinematic intro animation override for the player character
   introAnimation: string | null;
   introPlayerYaw: number | null;
+  introPlayerPosition: [number, number, number] | null;
 
   // Actions
   setInput: (input: string) => void;
@@ -58,6 +59,7 @@ interface GameState {
   adjustCameraZoom: (delta: number) => void;
   clearBadgeUnlocks: () => void;
   setIntroAnimation: (anim: string | null, yaw?: number | null) => void;
+  setIntroPlayerPosition: (pos: [number, number, number] | null) => void;
 }
 
 // Zone center positions in world space — ring at R~48-53, dungeon at Z=-70
@@ -112,11 +114,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentZone: null,
   cameraTarget: VILLAGE_CENTER,
   isTransitioning: false,
-  playerPosition: [0, 0, 0],
+  playerPosition: [0, 0, 5],
   cameraYaw: 0,
   cameraZoom: 12,
   introAnimation: null,
   introPlayerYaw: null,
+  introPlayerPosition: null,
 
   setInput: (input: string) => set({ userInput: input }),
 
@@ -183,6 +186,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
   clearBadgeUnlocks: () => set({ badgeUnlocks: [] }),
   setIntroAnimation: (anim, yaw) => set({ introAnimation: anim, introPlayerYaw: yaw ?? null }),
+  setIntroPlayerPosition: (pos) => set({ introPlayerPosition: pos }),
 
   enterZone: (zoneId: string) => {
     const center = ZONE_CENTERS[zoneId];

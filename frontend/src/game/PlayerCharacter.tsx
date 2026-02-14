@@ -78,6 +78,13 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
       groupRef.current.rotation.y = introPlayerYaw
     }
   }, [introPlayerYaw])
+  const introPlayerPosition = useGameStore((s) => s.introPlayerPosition)
+  useEffect(() => {
+    if (introPlayerPosition && groupRef.current) {
+      groupRef.current.position.set(...introPlayerPosition)
+      onPositionUpdate(introPlayerPosition)
+    }
+  }, [introPlayerPosition, onPositionUpdate])
 
   // Read cameraYaw from store via ref to avoid re-renders every frame
   const cameraYawRef = useRef(0)
