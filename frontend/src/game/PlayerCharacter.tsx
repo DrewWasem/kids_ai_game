@@ -61,6 +61,9 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
     }
   }, [enabled])
 
+  // Character selection
+  const selectedCharacter = useGameStore((s) => s.selectedCharacter)
+
   // Cinematic intro animation override
   const introAnimation = useGameStore((s) => s.introAnimation)
   const introPlayerYaw = useGameStore((s) => s.introPlayerYaw)
@@ -166,7 +169,7 @@ export function PlayerCharacter({ enabled, onPositionUpdate }: PlayerCharacterPr
     <group ref={groupRef} position={[0, 0, 5]} visible={enabled}>
       <Character3D
         ref={characterRef}
-        characterId="knight"
+        characterId={selectedCharacter}
         animationPacks={['general', 'movement_basic', 'simulation']}
         currentAnimation="Idle_A"
       />

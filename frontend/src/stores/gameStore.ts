@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { SceneScript } from '../types/scene-script';
 import type { VignetteStep } from '../types/madlibs';
 import type { ResponseSource } from '../services/resolver';
+import type { CharacterKey } from '../data/asset-manifest';
 import { resolveResponse } from '../services/resolver';
 import { WORLDS } from '../data/worlds';
 import { checkBadges, loadBadges, saveBadges, countSkills } from '../services/badge-system';
@@ -69,6 +70,9 @@ interface GameState {
   cameraYaw: number;
   cameraZoom: number;
 
+  // Character selection
+  selectedCharacter: CharacterKey;
+
   // Cinematic intro animation override for the player character
   introAnimation: string | null;
   introPlayerYaw: number | null;
@@ -88,6 +92,7 @@ interface GameState {
   rotateCameraYaw: (deltaYaw: number) => void;
   adjustCameraZoom: (delta: number) => void;
   clearBadgeUnlocks: () => void;
+  setSelectedCharacter: (id: CharacterKey) => void;
   setIntroAnimation: (anim: string | null, yaw?: number | null) => void;
   setIntroPlayerPosition: (pos: [number, number, number] | null) => void;
   advanceStage: (zoneId: string) => void;
@@ -155,6 +160,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerPosition: [0, 0, 5],
   cameraYaw: 0,
   cameraZoom: 12,
+  selectedCharacter: 'knight',
   introAnimation: null,
   introPlayerYaw: null,
   introPlayerPosition: null,
@@ -223,6 +229,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   clearError: () => set({ error: null }),
   toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
   clearBadgeUnlocks: () => set({ badgeUnlocks: [] }),
+  setSelectedCharacter: (id: CharacterKey) => set({ selectedCharacter: id }),
   setIntroAnimation: (anim, yaw) => set({ introAnimation: anim, introPlayerYaw: yaw ?? null }),
   setIntroPlayerPosition: (pos) => set({ introPlayerPosition: pos }),
 

@@ -1,8 +1,11 @@
+import type { CharacterKey } from '../data/asset-manifest';
+import { PLAYER_CHARACTERS } from '../data/player-characters';
+
 interface TitleScreenProps {
-  onPlay: () => void;
+  onSelectCharacter: (id: CharacterKey) => void;
 }
 
-export default function TitleScreen({ onPlay }: TitleScreenProps) {
+export default function TitleScreen({ onSelectCharacter }: TitleScreenProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-quest-page-bg stars-bg-light px-6">
       {/* Logo */}
@@ -13,17 +16,35 @@ export default function TitleScreen({ onPlay }: TitleScreenProps) {
         </span>
       </div>
 
-      <p className="font-heading text-lg text-quest-text-mid mb-10">
+      <p className="font-heading text-lg text-quest-text-mid mb-8">
         Learn to talk to AI through play
       </p>
 
-      {/* Play button */}
-      <button
-        onClick={onPlay}
-        className="btn-primary text-xl px-12 py-5 rounded-2xl mb-16 shadow-lg hover:shadow-xl transition-shadow"
-      >
-        {'\u{1F3AE}'} Play
-      </button>
+      {/* Character Selection */}
+      <h2 className="font-heading font-bold text-xl text-quest-text-dark mb-4">
+        Choose Your Hero!
+      </h2>
+
+      <div className="grid grid-cols-4 gap-3 max-w-xl w-full mb-12">
+        {PLAYER_CHARACTERS.map((char) => (
+          <button
+            key={char.id}
+            onClick={() => onSelectCharacter(char.id)}
+            className={`group bg-gradient-to-br ${char.bgGradient} rounded-2xl p-3 border-2 ${char.borderColor}
+              hover:scale-105 hover:border-white hover:shadow-lg
+              active:scale-95
+              transition-all duration-150 cursor-pointer text-center`}
+          >
+            <div className="text-3xl sm:text-4xl mb-1">{char.emoji}</div>
+            <div className="font-heading font-bold text-xs sm:text-sm text-white drop-shadow-sm">
+              {char.displayName}
+            </div>
+            <div className="text-[10px] sm:text-xs text-white/80 mt-0.5">
+              {char.description}
+            </div>
+          </button>
+        ))}
+      </div>
 
       {/* Info cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl w-full">
