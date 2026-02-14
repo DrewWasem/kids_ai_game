@@ -11,6 +11,7 @@
  */
 
 import type { Vignette } from '../../types/madlibs';
+import { MARK } from '../blocking-templates';
 
 // ─── FIRE SPELL VIGNETTES ────────────────────────────────────────────────────
 
@@ -42,14 +43,14 @@ const FIRE_VIGNETTES: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'animate', character: 'barbarian', anim: 'throw' },
-        { action: 'spawn', asset: 'burger', position: 'cs-center' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'barbarian', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -563,9 +564,9 @@ const GROW_VIGNETTES: Vignette[] = [
         { action: 'emote', character: 'barbarian', emoji: '🤤' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'barbarian', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'jump_big' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
     ],
@@ -1079,14 +1080,14 @@ const LEVITATE_VIGNETTES: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'animate', character: 'space_ranger', anim: 'interact' },
-        { action: 'spawn', asset: 'plate', position: 'cs-center' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'spawn', asset: 'plate', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'stars-spin', position: 'center' },
+        { action: 'animate', character: 'space_ranger', anim: 'wave' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
+        { action: 'react', effect: 'stars-spin', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -1337,14 +1338,14 @@ const TRANSFORM_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'ranger', position: 'off-right' },
       ], delayAfter: 0.3 },
       { parallel: [
-        { action: 'move', character: 'ranger', to: 'ds-right', style: 'linear' },
-        { action: 'animate', character: 'ranger', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'move', character: 'ranger', to: MARK.DS_RIGHT, style: 'linear' },
+        { action: 'animate', character: 'ranger', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -1430,8 +1431,8 @@ const TRANSFORM_VIGNETTES: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'animate', character: 'mage', anim: 'cast_spell' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
-        { action: 'react', effect: 'confetti-burst', position: 'ds-center' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'react', effect: 'glow-pulse', position: MARK.DS_CENTER },
         { action: 'text_popup', text: '🎭 BE OUR GUEST! 🎭', position: 'top', size: 'large' },
       ], delayAfter: 1.5 },
     ],
@@ -1904,10 +1905,9 @@ const STAGE2_MEGA_VIGNETTES: Vignette[] = [
         { action: 'spawn', asset: 'burger', position: 'cs-right', scale: 1.5 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'barbarian', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'jump_big' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
     ],
@@ -2030,13 +2030,13 @@ const STAGE2_MEGA_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'magic' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
-        { action: 'react', effect: 'stars-spin', position: 'cs-left' },
-        { action: 'react', effect: 'stars-spin', position: 'cs-right' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_RIGHT },
         { action: 'camera_shake', intensity: 0.3, duration: 1.5 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
+        { action: 'animate', character: 'mage', anim: 'spin_attack' },
         { action: 'react', effect: 'hearts-float', position: 'wide' },
         { action: 'text_popup', text: 'DANCE PARTY!', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
@@ -2163,13 +2163,13 @@ const STAGE2_MEDIUM_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.7 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-center' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2285,8 +2285,8 @@ const STAGE2_MEDIUM_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2318,13 +2318,13 @@ const STAGE2_MEDIUM_VIGNETTES: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-left' },
-        { action: 'spawn', asset: 'burger', position: 'cs-right' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_LEFT },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_RIGHT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
         { action: 'text_popup', text: 'x3!', position: 'center', size: 'large' },
       ], delayAfter: 1.5 },
     ],
@@ -2629,16 +2629,16 @@ const STAGE2_QUANTITY_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-left' },
-        { action: 'spawn', asset: 'burger', position: 'cs-center' },
-        { action: 'spawn', asset: 'burger', position: 'cs-right' },
-        { action: 'spawn', asset: 'burger', position: 'ds-right' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_LEFT },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_CENTER },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_RIGHT },
+        { action: 'spawn', asset: 'burger', position: MARK.DS_RIGHT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'jump_big' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'text_popup', text: 'A DOZEN!', position: 'top', size: 'large' },
       ], delayAfter: 1.5 },
     ],
@@ -2750,8 +2750,8 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'screen_flash', color: 'white', duration: 0.2 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
     ],
@@ -2794,8 +2794,8 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'center' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'jump_big' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
     ],
@@ -2834,13 +2834,13 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'move', asset: 'burger', to: 'off-right', style: 'arc' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
         { action: 'text_popup', text: 'FOOD PARADE!', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2924,13 +2924,13 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'text_popup', text: 'PERFECT TEMP!', position: 'cs-center', size: 'large' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-center' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'spawn', asset: 'burger', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2959,19 +2959,19 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CS_CENTER },
         { action: 'screen_flash', color: 'purple', duration: 0.15 },
       ], delayAfter: 0.4 },
       { parallel: [
         { action: 'spawn_rain', asset: 'potion', quantity: 6, position: 'wide' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'text_popup', text: 'POTION FOUNTAIN!', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'jump_big' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
       ], delayAfter: 1.5 },
     ],
     feedback: {
