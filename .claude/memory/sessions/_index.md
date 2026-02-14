@@ -12,4 +12,4 @@ Auto-generated session summaries documenting work completed in each Claude Code 
 | [Medieval Village World Implementation](2026-02-11-village-world.md) | village, hex-terrain, zones, camera, scale-fix, 3d-measurement | 2026-02-11 | 2026-02-11 |
 | [Vignette Variety + Context Guardian Hooks](2026-02-14-vignette-variety-and-hooks.md) | vignettes, hooks, context-management, preloading, infrastructure | 2026-02-14 | 2026-02-14 |
 | [Session Transfer Kit Implementation](2026-02-14-session-transfer-kit.md) | context-management, session-transfer, hooks, agents, infrastructure, testing | 2026-02-14 | 2026-02-14 |
-| [Analysis Report & Overlap Fix](2026-02-14-analysis-report-and-overlap-fix.md) | analysis, report, overlap-fix, spread-system, puppeteer, vignettes, asset-gap | 2026-02-14 | 2026-02-14 |
+| [Analysis Report & Overlap Fix](2026-02-14-analysis-report-and-overlap-fix.md) | analysis, report, overlap-fix, spread-system, puppeteer, vignettes, asset-audit, asset-mapping, git-push, prop-expansion, level-4-5-planning | 2026-02-14 | 2026-02-14 |
