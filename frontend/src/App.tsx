@@ -8,6 +8,9 @@ import LoadingScreen from './components/LoadingScreen';
 import TitleScreen from './components/TitleScreen';
 import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
+import { useGLTF } from '@react-three/drei';
+import { CHARACTERS, ASSET_BASE } from './data/asset-manifest';
+import { PLAYER_CHARACTERS } from './data/player-characters';
 import { WORLDS } from './data/worlds';
 import { BADGES } from './services/badge-system';
 import { getQuestStage, getQuestStages } from './data/quest-stages';
@@ -29,6 +32,7 @@ export default function App() {
   const badges = useGameStore((s) => s.badges);
   const [loading3D, setLoading3D] = useState(true);
   const [expanded, setExpanded] = useState(false);
+  const setSelectedCharacter = useGameStore((s) => s.setSelectedCharacter);
   const [started, setStarted] = useState(false);
   const [playingIntro, setPlayingIntro] = useState(false);
 
@@ -39,10 +43,13 @@ export default function App() {
     return getQuestStage(currentZone, stageNumber);
   }, [currentZone, stageNumber]);
 
-  // Preload shared animations on mount, then dismiss loading screen
+  // Preload shared animations + selectable character GLBs on mount
   useEffect(() => {
     try {
       preloadAllAnimations();
+      for (const char of PLAYER_CHARACTERS) {
+        useGLTF.preload(`${ASSET_BASE}${CHARACTERS[char.id]}`);
+      }
     } catch {
       // Preload is best-effort
     }
@@ -54,7 +61,7 @@ export default function App() {
   const earnedBadges = BADGES.filter(b => badges[b.id]);
 
   if (!started) {
-    return <TitleScreen onPlay={() => { setStarted(true); setPlayingIntro(true); }} />;
+    return <TitleScreen onSelectCharacter={(id) => { setSelectedCharacter(id); setStarted(true); setPlayingIntro(true); }} />;
   }
 
   return (
