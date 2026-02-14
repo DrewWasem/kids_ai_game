@@ -12,18 +12,23 @@ import { WORLDS } from './data/worlds';
 import { BADGES } from './services/badge-system';
 import { getQuestStage, getQuestStages } from './data/quest-stages';
 import CameraControls from './components/CameraControls';
+import { Minimap } from './game/Minimap';
+import ControlsOverlay from './components/ControlsOverlay';
+import BadgeToast from './components/BadgeToast';
+import { CompassRose } from './game/CompassRose';
+import ScreenshotButton from './components/ScreenshotButton';
+import SettingsPanel from './components/SettingsPanel';
 
 export default function App() {
   const currentZone = useGameStore((s) => s.currentZone);
   const currentTask = useGameStore((s) => s.currentTask);
   const lastScript = useGameStore((s) => s.lastScript);
   const vignetteSteps = useGameStore((s) => s.vignetteSteps);
-  const isMuted = useGameStore((s) => s.isMuted);
-  const toggleMute = useGameStore((s) => s.toggleMute);
   const exitZone = useGameStore((s) => s.exitZone);
   const isTransitioning = useGameStore((s) => s.isTransitioning);
   const badges = useGameStore((s) => s.badges);
   const [loading3D, setLoading3D] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [started, setStarted] = useState(false);
   const [playingIntro, setPlayingIntro] = useState(false);
 
@@ -56,7 +61,7 @@ export default function App() {
     <ErrorBoundary>
       <div className="flex flex-col h-screen bg-quest-page-bg stars-bg-light">
         {/* Header */}
-        <header className={`relative px-5 py-3 flex items-center justify-between z-10 ${playingIntro ? 'hidden' : ''}`}>
+        <header className={`relative px-5 py-3 flex items-center justify-between z-10 ${expanded || playingIntro ? 'hidden' : ''}`}>
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-quest-purple/30 to-transparent" />
 
           <div className="font-display text-2xl font-bold flex items-center gap-2">
@@ -81,14 +86,7 @@ export default function App() {
               </div>
             )}
 
-            <button
-              onClick={toggleMute}
-              className="btn-game text-sm px-3 py-2 rounded-xl border-2
-                bg-white/60 text-quest-text-mid border-quest-border hover:border-quest-purple/50 hover:text-quest-text-dark"
-              title={isMuted ? 'Unmute' : 'Mute'}
-            >
-              {isMuted ? '\u{1F507}' : '\u{1F50A}'}
-            </button>
+            <SettingsPanel />
 
             {currentZone && !isTransitioning && (
               <button
@@ -129,9 +127,9 @@ export default function App() {
 
         <div className="flex-1 min-h-0 flex flex-col">
           {/* Game Canvas */}
-          <div className={`flex-1 min-h-0 flex items-center justify-center ${playingIntro ? 'px-0 py-0' : 'px-4 py-2'}`}>
-            <div className={`relative overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30 ${playingIntro ? 'rounded-none' : 'rounded-game-lg'}`}
-                 style={playingIntro
+          <div className={`flex-1 min-h-0 flex items-center justify-center ${expanded || playingIntro ? 'px-0 py-0' : 'px-4 py-2'}`}>
+            <div className={`relative overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30 ${expanded || playingIntro ? 'rounded-none' : 'rounded-game-lg'}`}
+                 style={expanded || playingIntro
                    ? { width: '100%', height: '100%' }
                    : { width: 1024, height: 576, maxWidth: '100%', maxHeight: '60vh' }
                  }>
@@ -144,11 +142,24 @@ export default function App() {
                 />
               </R3FGame>
               {!currentZone && !isTransitioning && !playingIntro && <CameraControls />}
+              {!playingIntro && <Minimap />}
+              {!currentZone && !isTransitioning && !playingIntro && <CompassRose />}
+              {!currentZone && !playingIntro && <ControlsOverlay />}
+
+              {/* Screenshot + Expand / Collapse toggle */}
+              {!playingIntro && <ScreenshotButton />}
+              {!playingIntro && <button
+                onClick={() => setExpanded(e => !e)}
+                className="absolute top-2 right-2 z-20 bg-black/50 hover:bg-black/70 text-white rounded-lg px-2 py-1.5 text-sm backdrop-blur-sm transition-colors"
+                title={expanded ? 'Collapse' : 'Expand'}
+              >
+                {expanded ? '\u{2199}\u{FE0F}' : '\u{2197}\u{FE0F}'}
+              </button>}
             </div>
           </div>
 
           {/* Input Panel — Mad Libs if quest stage exists, otherwise free-text */}
-          {!playingIntro && (
+          {!expanded && !playingIntro && (
             currentZone ? (
               <div className="transition-opacity duration-500">
                 {questStage ? <MadLibsInput stage={questStage} /> : <PromptInput />}
@@ -166,6 +177,9 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Badge unlock toast — always rendered, self-hides when empty */}
+      <BadgeToast />
 
       {/* "Click to skip" hint during cinematic */}
       {playingIntro && (

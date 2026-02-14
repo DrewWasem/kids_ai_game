@@ -87,28 +87,40 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
   const done = useRef(false)
   const lastTriggerIdx = useRef(-1)
   const setIntroAnimation = useGameStore((s) => s.setIntroAnimation)
+  const setIntroPlayerPosition = useGameStore((s) => s.setIntroPlayerPosition)
 
   // Build splines once
   const posSpline = useRef(createSpline(WAYPOINTS.map(w => w[0])))
   const lookSpline = useRef(createSpline(WAYPOINTS.map(w => w[1])))
 
-  // Set initial animation on mount
+  // Set initial animation and position on mount
   useEffect(() => {
     setIntroAnimation('Waving', 0)
-    return () => setIntroAnimation(null)
-  }, [setIntroAnimation])
+    if (setIntroPlayerPosition) {
+      setIntroPlayerPosition([0, 0, 5])
+    }
+    return () => {
+      setIntroAnimation(null)
+      if (setIntroPlayerPosition) {
+        setIntroPlayerPosition(null)
+      }
+    }
+  }, [setIntroAnimation, setIntroPlayerPosition])
 
   const finish = useCallback(() => {
     if (done.current) return
     done.current = true
     // Clear intro animation override
     setIntroAnimation(null)
+    if (setIntroPlayerPosition) {
+      setIntroPlayerPosition([0, 0, 5])
+    }
     // Snap camera to exact final position
     const last = WAYPOINTS[WAYPOINTS.length - 1]
     camera.position.copy(last[0])
     camera.lookAt(last[1])
     onComplete()
-  }, [camera, onComplete, setIntroAnimation])
+  }, [camera, onComplete, setIntroAnimation, setIntroPlayerPosition])
 
   // Click/tap to skip — delay listener so the Play button click doesn't immediately skip
   useEffect(() => {

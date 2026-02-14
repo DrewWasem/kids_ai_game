@@ -102,6 +102,7 @@ export default {
         'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
         'bounce-in': 'bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
         'twinkle': 'twinkle 3s ease-in-out infinite',
+        'slide-in-right': 'slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
       },
       keyframes: {
         float: {
@@ -141,6 +142,10 @@ export default {
         'twinkle': {
           '0%, 100%': { opacity: '0.3' },
           '50%': { opacity: '0.8' },
+        },
+        'slide-in-right': {
+          '0%': { opacity: '0', transform: 'translateX(100%)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
         },
       },
     },

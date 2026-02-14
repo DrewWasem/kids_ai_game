@@ -1448,25 +1448,28 @@ function ZoneLandmarks() {
       {/* ── skeleton-pizza [38, 0, 38]: Landmark (replaces old tower) ──
           Detail handled by PizzaZone() — tent at scale 7.0 serves as landmark */}
 
-      {/* ── adventurers-picnic: Dense forest behind zone (kept as-is) ── */}
+      {/* ── adventurers-picnic: Dense forest behind zone ── */}
+      {/* Green watchtowers flanking road */}
       <Piece model={BUILDINGS.watchtower_green} position={[11, 0, 53]} scale={10.0} />
       <Piece model={BUILDINGS.watchtower_green} position={[-11, 0, 53]} scale={10.0} />
+      {/* Trees within 10u of mountain_B [-20,0,64] removed for cinematic intro clearance */}
+      {/* Player starts at [-16.5, 17.5, 63] on this mountain */}
       <Piece model={DECORATION.trees_large} position={[0, 0, 56]} scale={5.0} />
       <Piece model={DECORATION.trees_B_large} position={[-8, 0, 58]} scale={5.5} />
-      <Piece model={DECORATION.trees_large} position={[8, 0, 58]} scale={5.0} />
-      <Piece model={DECORATION.tree_A} position={[-16, 0, 56]} scale={5.5} />
-      <Piece model={DECORATION.tree_B} position={[16, 0, 56]} scale={5.5} />
-      <Piece model={DECORATION.trees_B_medium} position={[-22, 0, 58]} scale={5.0} />
+      {/* removed: trees_large [8,0,58] — within intro clearance */}
+      {/* removed: tree_A [-16,0,56] — within 10u of player start */}
+      {/* removed: tree_B [16,0,56] — within intro clearance */}
+      {/* removed: trees_B_medium [-22,0,58] — within 10u of player start */}
       <Piece model={DECORATION.trees_medium} position={[22, 0, 58]} scale={5.0} />
       <Piece model={DECORATION.trees_B_large} position={[-4, 0, 62]} scale={6.0} />
-      <Piece model={DECORATION.trees_large} position={[4, 0, 62]} scale={6.0} />
-      <Piece model={DECORATION.tree_A} position={[-14, 0, 62]} scale={6.0} />
-      <Piece model={DECORATION.tree_B} position={[14, 0, 62]} scale={6.0} />
-      <Piece model={DECORATION.trees_medium} position={[-24, 0, 62]} scale={5.5} />
+      {/* removed: trees_large [4,0,62] — within intro clearance */}
+      {/* removed: tree_A [-14,0,62] — within 10u of player start */}
+      {/* removed: tree_B [14,0,62] — within intro clearance */}
+      {/* removed: trees_medium [-24,0,62] — within 10u of player start */}
       <Piece model={DECORATION.trees_B_medium} position={[24, 0, 62]} scale={5.5} />
       <Piece model={DECORATION.trees_B_large} position={[0, 0, 66]} scale={6.5} />
-      <Piece model={DECORATION.trees_large} position={[-12, 0, 66]} scale={6.0} />
-      <Piece model={DECORATION.trees_large} position={[12, 0, 66]} scale={6.0} />
+      {/* removed: trees_large [-12,0,66] — within 10u of player start */}
+      {/* removed: trees_large [12,0,66] — within intro clearance */}
 
       {/* ── dungeon-concert [-35, 0, 35]: Landmark (replaces old tower) ──
           Detail handled by ConcertZone() — stage at scale 7.0 serves as landmark */}
@@ -1670,11 +1673,11 @@ function VillageAtmosphere() {
         intensity={0.8}
       />
 
-      {/* Main directional light (sun) */}
+      {/* Main directional light (sun) — fixed at 2 PM */}
       <directionalLight
         color="#fff8e0"
         intensity={1.5}
-        position={[10, 15, 8]}
+        position={[-20, 25, 10]}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -1692,46 +1695,126 @@ function VillageAtmosphere() {
         position={[-8, 5, -5]}
       />
 
-      {/* Clouds — small wispy clouds high up so blue sky shows through */}
-      <Clouds limit={200} material={THREE.MeshLambertMaterial}>
+
+      <VillageClouds />
+    </>
+  )
+}
+
+/** Clouds auto-hide when camera rises above them (e.g. during intro Act 3 logo reveal) */
+function VillageClouds() {
+  const groupRef = useRef<THREE.Group>(null!)
+  useFrame(({ camera }) => {
+    if (groupRef.current) {
+      groupRef.current.visible = camera.position.y < 95
+    }
+  })
+  return (
+    <group ref={groupRef}>
+      <Clouds limit={400} material={THREE.MeshBasicMaterial}>
+        {/* ── Main cloud layer (y≈60-80) — camera flies through this ── */}
         <Cloud
-          segments={10}
-          bounds={[8, 1, 4] as [number, number, number]}
-          volume={3}
+          seed={1}
+          segments={22}
+          bounds={[45, 8, 35] as [number, number, number]}
+          volume={10}
+          growth={6}
           color="#ffffff"
-          opacity={0.2}
-          speed={0.1}
-          position={[-20, 60, -60] as [number, number, number]}
-        />
-        <Cloud
-          segments={8}
-          bounds={[6, 1, 3] as [number, number, number]}
-          volume={2}
-          color="#ffffff"
-          opacity={0.15}
+          opacity={0.9}
           speed={0.08}
-          position={[30, 70, -40] as [number, number, number]}
+          position={[0, 65, 0] as [number, number, number]}
         />
         <Cloud
-          segments={10}
-          bounds={[7, 1, 4] as [number, number, number]}
-          volume={3}
+          seed={7}
+          segments={18}
+          bounds={[28, 6, 40] as [number, number, number]}
+          volume={8}
+          growth={4}
           color="#ffffff"
-          opacity={0.2}
+          opacity={0.85}
           speed={0.06}
-          position={[50, 65, 30] as [number, number, number]}
+          position={[-30, 70, -20] as [number, number, number]}
         />
         <Cloud
-          segments={6}
-          bounds={[5, 1, 3] as [number, number, number]}
-          volume={2}
+          seed={13}
+          segments={16}
+          bounds={[38, 5, 22] as [number, number, number]}
+          volume={7}
+          growth={5}
           color="#ffffff"
-          opacity={0.15}
-          speed={0.12}
-          position={[-45, 75, 40] as [number, number, number]}
+          opacity={0.85}
+          speed={0.1}
+          position={[25, 68, 15] as [number, number, number]}
+        />
+        <Cloud
+          seed={29}
+          segments={14}
+          bounds={[20, 5, 30] as [number, number, number]}
+          volume={6}
+          growth={4}
+          color="#ffffff"
+          opacity={0.8}
+          speed={0.07}
+          position={[40, 75, -40] as [number, number, number]}
+        />
+        <Cloud
+          seed={42}
+          segments={15}
+          bounds={[32, 4, 18] as [number, number, number]}
+          volume={6}
+          growth={5}
+          color="#ffffff"
+          opacity={0.8}
+          speed={0.09}
+          position={[-40, 72, 30] as [number, number, number]}
+        />
+        <Cloud
+          seed={53}
+          segments={12}
+          bounds={[22, 5, 28] as [number, number, number]}
+          volume={5}
+          growth={3}
+          color="#ffffff"
+          opacity={0.75}
+          speed={0.05}
+          position={[15, 74, -50] as [number, number, number]}
+        />
+        <Cloud
+          seed={67}
+          segments={10}
+          bounds={[18, 4, 24] as [number, number, number]}
+          volume={5}
+          growth={4}
+          color="#ffffff"
+          opacity={0.75}
+          speed={0.07}
+          position={[-50, 67, -10] as [number, number, number]}
+        />
+        {/* ── Wispy high clouds above the main layer ── */}
+        <Cloud
+          seed={81}
+          segments={8}
+          bounds={[18, 3, 8] as [number, number, number]}
+          volume={4}
+          growth={6}
+          color="#ffffff"
+          opacity={0.5}
+          speed={0.05}
+          position={[0, 90, -30] as [number, number, number]}
+        />
+        <Cloud
+          seed={97}
+          segments={8}
+          bounds={[10, 2, 16] as [number, number, number]}
+          volume={3}
+          growth={5}
+          color="#ffffff"
+          opacity={0.5}
+          speed={0.04}
+          position={[-30, 85, 20] as [number, number, number]}
         />
       </Clouds>
-    </>
+    </group>
   )
 }
 

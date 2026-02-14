@@ -99,7 +99,7 @@ export default function R3FGame({ children, playingIntro, onIntroComplete }: R3F
       <Canvas
         shadows
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
         onCreated={({ gl: renderer }) => {
           renderer.setClearColor('#87CEEB', 1)
         }}
