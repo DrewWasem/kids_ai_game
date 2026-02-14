@@ -77,7 +77,7 @@ const RANGER_VIGNETTES: Vignette[] = [
       // Solar panel fixed!
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'right' },
+          { action: 'react', effect: 'sparkle-magic', position: 'right' },
           { action: 'screen_flash', color: 'yellow', duration: 0.2 },
           { action: 'sfx', sound: 'success' },
           { action: 'text_popup', text: '⚡ POWER RESTORED! ⚡', position: 'top', size: 'huge' },
@@ -87,7 +87,7 @@ const RANGER_VIGNETTES: Vignette[] = [
       // Ranger celebrates
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'Cheering' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -144,7 +144,7 @@ const RANGER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'wave' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -191,7 +191,7 @@ const RANGER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'text_popup', text: '🏗️ MODULAR OUTPOST!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -254,9 +254,9 @@ const RANGER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'taunt' },
           { action: 'animate', character: 'engineer', anim: 'wave' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -365,8 +365,8 @@ const RANGER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'space_ranger', anim: 'jump_big' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -424,7 +424,7 @@ const ROBOT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'Cheering' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -479,8 +479,8 @@ const ROBOT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'robot', anim: 'wave' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -582,7 +582,7 @@ const ROBOT_VIGNETTES: Vignette[] = [
       {
         parallel: [
           { action: 'spawn_character', character: 'knight', position: 'ds-right', anim: 'spawn_ground' },
-          { action: 'react', effect: 'confetti-burst', position: 'ds-right' },
+          { action: 'react', effect: 'sparkle-magic', position: 'ds-right' },
           { action: 'text_popup', text: '✅ LOCATED!', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -590,7 +590,7 @@ const ROBOT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'taunt' },
           { action: 'animate', character: 'knight', anim: 'wave' },
         ],
         delayAfter: 1.5,
@@ -701,7 +701,7 @@ const ROBOT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'jump_big' },
           { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -761,8 +761,8 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'Cheering' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -816,8 +816,8 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -873,8 +873,8 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'taunt' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -922,7 +922,7 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       {
         parallel: [
           { action: 'spawn_character', character: 'space_ranger', position: 'us-center', anim: 'spawn_air' },
-          { action: 'react', effect: 'confetti-burst', position: 'us-center' },
+          { action: 'react', effect: 'sparkle-magic', position: 'us-center' },
           { action: 'text_popup', text: '✅ RESCUED!', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -930,7 +930,7 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
+          { action: 'animate', character: 'engineer', anim: 'jump_big' },
           { action: 'animate', character: 'space_ranger', anim: 'wave' },
         ],
         delayAfter: 1.5,
@@ -1043,8 +1043,8 @@ const ENGINEER_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'Cheering' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -1159,8 +1159,8 @@ const KNIGHT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'knight', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'knight', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'emote', character: 'knight', emoji: '😎' },
         ],
         delayAfter: 1.5,
@@ -1215,7 +1215,7 @@ const KNIGHT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'knight', anim: 'celebrate' },
+          { action: 'animate', character: 'knight', anim: 'taunt' },
           { action: 'react', effect: 'sparkle-magic', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -1271,9 +1271,9 @@ const KNIGHT_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'knight', anim: 'celebrate' },
+          { action: 'animate', character: 'knight', anim: 'jump_big' },
           { action: 'animate', character: 'mage', anim: 'wave' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -1472,7 +1472,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'screen_flash', color: 'green', duration: 0.2 },
           { action: 'text_popup', text: '✅ TEAMWORK SUCCESS!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
@@ -1481,7 +1481,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -1570,8 +1570,8 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       // Everyone celebrates
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -1629,7 +1629,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '✅ EXPANSION COMPLETE!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -1637,7 +1637,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'taunt' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -1694,7 +1694,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '✅ RESCUE SUCCESS!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -1702,7 +1702,7 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -1764,8 +1764,8 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
         ],
         delayAfter: 1.5,
       },
@@ -1830,8 +1830,8 @@ const EVERYONE_VIGNETTES: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 1.5,
@@ -1992,7 +1992,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
+          { action: 'animate', character: 'engineer', anim: 'Cheering' },
           { action: 'text_popup', text: '✅ ROUTINE CHECK COMPLETE', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2044,7 +2044,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'taunt' },
           { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2103,7 +2103,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'wave' },
           { action: 'text_popup', text: '💡 CREATIVE FIX!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2164,7 +2164,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'screen_flash', color: 'green', duration: 0.2 },
           { action: 'text_popup', text: '✅ REACTOR STABLE!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
@@ -2173,7 +2173,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'taunt' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
@@ -2236,8 +2236,8 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'jump_big' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -2300,7 +2300,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'screen_flash', color: 'green', duration: 0.3 },
           { action: 'text_popup', text: '✅ STATION SAVED!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
@@ -2309,7 +2309,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
@@ -2401,7 +2401,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'Cheering' },
           { action: 'text_popup', text: '✅ DONE!', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2459,8 +2459,8 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'wave' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -2672,7 +2672,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'taunt' },
           { action: 'text_popup', text: '⚡ QUICK CHECK DONE!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2731,7 +2731,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
+          { action: 'animate', character: 'engineer', anim: 'jump_big' },
           { action: 'text_popup', text: '✅ CAREFUL FIX COMPLETE', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2784,7 +2784,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'Cheering' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '💡 CLEVER WORKAROUND!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2841,8 +2841,8 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'right' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'hearts-float', position: 'right' },
           { action: 'text_popup', text: '🚀 COORDINATED LAUNCH!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2896,7 +2896,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'knight', anim: 'celebrate' },
+          { action: 'animate', character: 'knight', anim: 'wave' },
           { action: 'react', effect: 'glow-pulse', position: 'right' },
           { action: 'text_popup', text: '🛡️ SHIELD PATCH WORKS!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2955,8 +2955,8 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '✅ TEAM SAVES THE DAY!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -3012,7 +3012,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'taunt' },
           { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '🚀 ESCAPE POD IMPROVISED!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -3125,7 +3125,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
+          { action: 'animate', character: 'robot', anim: 'jump_big' },
           { action: 'react', effect: 'glow-pulse', position: 'right' },
           { action: 'text_popup', text: '✅ EMERGENCY DOME UP!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -3185,7 +3185,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'knight', anim: 'celebrate' },
+          { action: 'animate', character: 'knight', anim: 'Cheering' },
           { action: 'text_popup', text: '⚡ RAPID RECON DONE!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -3237,7 +3237,7 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'wave' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '🎯 CREATIVE DRILL READY!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -3295,8 +3295,8 @@ export const KNIGHT_SPACE_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'right' },
+          { action: 'crowd_react', characters: 'all', anim: 'taunt' },
+          { action: 'react', effect: 'sparkle-magic', position: 'right' },
           { action: 'text_popup', text: '🚀 EMERGENCY LAUNCH GO!', position: 'top', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -3413,8 +3413,8 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'taunt' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'text_popup', text: '🌟 SOLAR LASER SUCCESS!', position: 'top', size: 'huge' },
         ],
         delayAfter: 2.0,
@@ -3469,7 +3469,7 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'screen_flash', color: 'green', duration: 0.2 },
           { action: 'text_popup', text: '🛸 ESCAPE POD READY!', position: 'top', size: 'huge' },
           { action: 'sfx', sound: 'success' },
@@ -3478,7 +3478,7 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'space_ranger', anim: 'jump_big' },
           { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
@@ -3539,8 +3539,8 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'robot', anim: 'Cheering' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -3601,8 +3601,8 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'engineer', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'engineer', anim: 'wave' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -3664,8 +3664,8 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'space_ranger', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'space_ranger', anim: 'taunt' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -3726,8 +3726,8 @@ export const KNIGHT_SPACE_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'robot', anim: 'jump_big' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
         ],
         delayAfter: 2.0,
       },
