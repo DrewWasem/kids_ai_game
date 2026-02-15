@@ -4,6 +4,13 @@
 # Enhanced: loads structured compaction summary + skill awareness
 
 MEMORY_DIR="${CLAUDE_PROJECT_DIR:-.}/.claude/memory"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
+
+# Reset context guardian flag so it can fire again in the new context window
+rm -f "$PROJECT_DIR/.claude/.context-guard-fired"
+
+# Reset transfer guard flag so context_monitor.sh can fire again after compaction
+rm -f "$HOME/.claude/.context-bridge/.transfer-guard-fired"
 
 if [ ! -d "$MEMORY_DIR" ]; then
     echo "Memory system: Tree not initialized. Context was compacted — some memories may be lost."
@@ -100,6 +107,33 @@ if [ -n "$IN_PROGRESS" ]; then
     head -30 "$IN_PROGRESS"
     echo "Resume with: /implement-plan $PLAN_NAME"
     echo "--- END ACTIVE PLAN ---"
+fi
+
+# Inject context guardian's work-in-progress if it exists
+WIP_FILE="$PROJECT_DIR/.claude/context-saves/work-in-progress.md"
+if [ -f "$WIP_FILE" ]; then
+    echo ""
+    echo "--- WORK IN PROGRESS (saved by context guardian) ---"
+    cat "$WIP_FILE"
+    echo "--- END WORK IN PROGRESS ---"
+fi
+
+# Inject latest guardian auto-save
+LATEST_SAVE=$(find "$PROJECT_DIR/.claude/context-saves" -name "guardian-*.md" -type f 2>/dev/null | sort -r | head -1)
+if [ -n "$LATEST_SAVE" ] && [ -f "$LATEST_SAVE" ]; then
+    echo ""
+    echo "--- PRE-COMPACT GUARDIAN STATE ---"
+    cat "$LATEST_SAVE"
+    echo "--- END GUARDIAN STATE ---"
+fi
+
+# Inject latest transfer handoff if it exists (from context session transfer system)
+LATEST_HANDOFF=$(find "$PROJECT_DIR/.claude/context-session-transfer/temp" -name "handoff-*.md" -type f 2>/dev/null | sort -r | head -1)
+if [ -n "$LATEST_HANDOFF" ] && [ -f "$LATEST_HANDOFF" ]; then
+    echo ""
+    echo "--- TRANSFER HANDOFF (from context session transfer) ---"
+    cat "$LATEST_HANDOFF"
+    echo "--- END TRANSFER HANDOFF ---"
 fi
 
 echo ""

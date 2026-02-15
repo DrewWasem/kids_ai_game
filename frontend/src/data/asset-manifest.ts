@@ -251,8 +251,21 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       // Baked Goods (Tiny Treats)
       { key: 'cake_birthday', path: 'tiny-treats/baked-goods/cake_birthday.gltf' },
       { key: 'pie_cherry', path: 'tiny-treats/baked-goods/pie_cherry.gltf' },
-      // Forest Nature (KayKit)
+      // Forest Nature (KayKit) — varied rocks, trees, bushes
       { key: 'rock', path: 'kaykit/packs/forest_nature/Rock_1_A_Color1.gltf' },
+      { key: 'rock_large', path: 'kaykit/packs/forest_nature/Rock_2_A_Color1.gltf' },
+      { key: 'rock_mossy', path: 'kaykit/packs/forest_nature/Rock_3_A_Color1.gltf' },
+      { key: 'tree_forest', path: 'kaykit/packs/forest_nature/Tree_1_A_Color1.gltf' },
+      { key: 'tree_tall', path: 'kaykit/packs/forest_nature/Tree_2_A_Color1.gltf' },
+      { key: 'tree_pine_forest', path: 'kaykit/packs/forest_nature/Tree_5_A_Color1.gltf' },
+      { key: 'bush_forest', path: 'kaykit/packs/forest_nature/Bush_1_A_Color1.gltf' },
+      { key: 'bush_round', path: 'kaykit/packs/forest_nature/Bush_2_A_Color1.gltf' },
+      { key: 'grass_patch', path: 'kaykit/packs/forest_nature/Grass_1_A_Color1.gltf' },
+      // Extra picnic food (Quaternius)
+      { key: 'banana', path: 'quaternius/food/banana_001.glb' },
+      { key: 'burger', path: 'quaternius/food/burger_001.glb' },
+      { key: 'sushi', path: 'quaternius/food/sushi_dish_001.glb' },
+      { key: 'ice_cream', path: 'quaternius/food/ice_cream_dish_001.glb' },
     ],
   },
 
@@ -275,6 +288,26 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       // Baked Goods (Tiny Treats)
       { key: 'cake_birthday', path: 'tiny-treats/baked-goods/cake_birthday.gltf' },
       { key: 'cupcake', path: 'tiny-treats/baked-goods/cupcake.gltf' },
+      // Party Candy & Treats (KayKit Halloween)
+      { key: 'candy_bucket', path: 'kaykit/packs/halloween/candy_bucket_B_decorated.gltf' },
+      { key: 'lollipop', path: 'kaykit/packs/halloween/lollipop_blue.gltf' },
+      { key: 'lollipop_pink', path: 'kaykit/packs/halloween/lollipop_pink.gltf' },
+      { key: 'lollipop_orange', path: 'kaykit/packs/halloween/lollipop_orange.gltf' },
+      { key: 'candy_blue', path: 'kaykit/packs/halloween/candy_blue_A.gltf' },
+      { key: 'candy_orange', path: 'kaykit/packs/halloween/candy_orange_A.gltf' },
+      { key: 'candy_pink', path: 'kaykit/packs/halloween/candy_pink_A.gltf' },
+      { key: 'candycorn', path: 'kaykit/packs/halloween/candycorn.gltf' },
+      // Bakery desserts (Tiny Treats)
+      { key: 'macaron', path: 'tiny-treats/bakery-interior/macaron_pink.gltf' },
+      { key: 'macaron_blue', path: 'tiny-treats/bakery-interior/macaron_blue.gltf' },
+      { key: 'cream_puff', path: 'tiny-treats/bakery-interior/cream_puff.gltf' },
+      { key: 'pretzel', path: 'tiny-treats/bakery-interior/pretzel.gltf' },
+      { key: 'pastry_stand', path: 'tiny-treats/bakery-interior/pastry_stand_A_decorated.gltf' },
+      { key: 'cookie_jar', path: 'tiny-treats/bakery-interior/cookie_jar.gltf' },
+      // Spooky party decorations (KayKit Halloween)
+      { key: 'pumpkin_jackolantern', path: 'kaykit/packs/halloween/pumpkin_orange_jackolantern.gltf' },
+      { key: 'skull_candle', path: 'kaykit/packs/halloween/skull_candle.gltf' },
+      { key: 'lantern_standing', path: 'kaykit/packs/halloween/lantern_standing.gltf' },
     ],
   },
 
@@ -305,12 +338,29 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       { key: 'cabinet_A', path: 'tiny-treats/charming-kitchen/cabinet_A.gltf' },
       { key: 'pot', path: 'tiny-treats/charming-kitchen/pot.gltf' },
       { key: 'pan', path: 'tiny-treats/charming-kitchen/pan.gltf' },
-      // Bakery Interior (Tiny Treats)
-      { key: 'oven', path: 'tiny-treats/bakery-interior/oven.gltf' },
       // Baked Goods (Tiny Treats)
       { key: 'cake_chocolate', path: 'tiny-treats/baked-goods/cake_chocolate.gltf' },
       { key: 'pie_apple', path: 'tiny-treats/baked-goods/pie_apple.gltf' },
       { key: 'bread', path: 'tiny-treats/baked-goods/bread.gltf' },
+      // Bakery Interior (Tiny Treats) — professional kitchen equipment
+      { key: 'bread_oven', path: 'tiny-treats/bakery-interior/bread_oven.gltf' },
+      { key: 'coffee_machine', path: 'tiny-treats/bakery-interior/coffee_machine.gltf' },
+      { key: 'stand_mixer', path: 'tiny-treats/bakery-interior/stand_mixer.gltf' },
+      { key: 'mixing_bowl', path: 'tiny-treats/bakery-interior/mixing_bowl.gltf' },
+      { key: 'dough_roller', path: 'tiny-treats/bakery-interior/dough_roller.gltf' },
+      { key: 'flour_sack', path: 'tiny-treats/bakery-interior/flour_sack_open.gltf' },
+      { key: 'whisk', path: 'tiny-treats/bakery-interior/whisk.gltf' },
+      { key: 'scale', path: 'tiny-treats/bakery-interior/scale.gltf' },
+      { key: 'egg', path: 'tiny-treats/bakery-interior/egg_A.gltf' },
+      { key: 'milk', path: 'tiny-treats/bakery-interior/milk.gltf' },
+      { key: 'serving_tray', path: 'tiny-treats/bakery-interior/serving_tray.gltf' },
+      // Magic props (Quaternius Medieval)
+      { key: 'potion_bottle', path: 'quaternius/medieval-props/Potion_2.gltf' },
+      { key: 'potion_flask', path: 'quaternius/medieval-props/Potion_4.gltf' },
+      { key: 'cauldron_medieval', path: 'quaternius/medieval-props/Cauldron.gltf' },
+      { key: 'scroll_ancient', path: 'quaternius/medieval-props/Scroll_1.gltf' },
+      { key: 'candle_medieval', path: 'quaternius/medieval-props/Candle_1.gltf' },
+      { key: 'candlestick_triple', path: 'quaternius/medieval-props/CandleStick_Triple.gltf' },
     ],
   },
 
@@ -327,8 +377,26 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       // Furniture (KayKit)
       { key: 'desk', path: 'kaykit/packs/furniture/desk.gltf' },
       { key: 'chair_A', path: 'kaykit/packs/furniture/chair_A.gltf' },
-      // Living Room (Tiny Treats — already extracted)
+      // Living Room
       { key: 'book_stack', path: 'living-room/book_stack.gltf' },
+      // School/Learning Props (KayKit RPG Tools)
+      { key: 'journal', path: 'kaykit/packs/rpg_tools/journal_open.gltf' },
+      { key: 'journal_closed', path: 'kaykit/packs/rpg_tools/journal_closed.gltf' },
+      { key: 'map', path: 'kaykit/packs/rpg_tools/map.gltf' },
+      { key: 'map_rolled', path: 'kaykit/packs/rpg_tools/map_rolled.gltf' },
+      { key: 'blueprint', path: 'kaykit/packs/rpg_tools/blueprint.gltf' },
+      { key: 'compass', path: 'kaykit/packs/rpg_tools/drafting_compass.gltf' },
+      { key: 'pencil', path: 'kaykit/packs/rpg_tools/pencil_A_long.gltf' },
+      { key: 'magnifying_glass', path: 'kaykit/packs/rpg_tools/magnifying_glass.gltf' },
+      { key: 'hammer', path: 'kaykit/packs/rpg_tools/hammer.gltf' },
+      { key: 'anvil', path: 'kaykit/packs/rpg_tools/anvil.gltf' },
+      // Medieval library props (Quaternius)
+      { key: 'bookcase', path: 'quaternius/medieval-props/Bookcase_2.gltf' },
+      { key: 'book_stack_medieval', path: 'quaternius/medieval-props/Book_Stack_2.gltf' },
+      { key: 'scroll_ancient', path: 'quaternius/medieval-props/Scroll_1.gltf' },
+      { key: 'bookstand', path: 'quaternius/medieval-props/BookStand.gltf' },
+      { key: 'workbench', path: 'quaternius/medieval-props/Workbench.gltf' },
+      { key: 'table_large', path: 'quaternius/medieval-props/Table_Large.gltf' },
     ],
   },
 
@@ -344,6 +412,22 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       { key: 'banner_red', path: 'kaykit/packs/dungeon/banner_red.gltf' },
       { key: 'table_long', path: 'kaykit/packs/dungeon/table_long.gltf' },
       { key: 'chair', path: 'kaykit/packs/dungeon/chair.gltf' },
+      // Real Musical Instruments (Poly-Pizza Coffeehouse)
+      { key: 'guitar', path: 'poly-pizza/interior/coffeehouse-lounge/Electric guitar.glb' },
+      { key: 'guitar_amp', path: 'poly-pizza/interior/coffeehouse-lounge/Guitar Amp.glb' },
+      { key: 'drums', path: 'poly-pizza/interior/coffeehouse-lounge/Drum Set.glb' },
+      { key: 'drumstick', path: 'poly-pizza/interior/coffeehouse-lounge/Drum stick.glb' },
+      { key: 'microphone', path: 'poly-pizza/interior/coffeehouse-lounge/Microphone.glb' },
+      { key: 'bass_speakers', path: 'poly-pizza/interior/coffeehouse-lounge/Bass Speakers.glb' },
+      { key: 'speaker', path: 'poly-pizza/interior/coffeehouse-lounge/Speaker.glb' },
+      { key: 'floor_monitor', path: 'poly-pizza/interior/coffeehouse-lounge/Floor Monitor.glb' },
+      { key: 'effects_pedal', path: 'poly-pizza/interior/coffeehouse-lounge/Electric Guitar Effects Pedal.glb' },
+      { key: 'headphones', path: 'poly-pizza/interior/coffeehouse-lounge/Headphones.glb' },
+      // Spooky atmosphere (KayKit Halloween)
+      { key: 'skull_candle', path: 'kaykit/packs/halloween/skull_candle.gltf' },
+      { key: 'lantern_standing', path: 'kaykit/packs/halloween/lantern_standing.gltf' },
+      { key: 'lantern_hanging', path: 'kaykit/packs/halloween/lantern_hanging.gltf' },
+      { key: 'coffin', path: 'kaykit/packs/halloween/coffin_decorated.gltf' },
     ],
   },
 
@@ -360,6 +444,18 @@ export const TASK_ASSETS: Record<string, TaskAssets> = {
       { key: 'plate', path: 'kaykit/packs/restaurant/plate.gltf' },
       // Pretty Park (Tiny Treats)
       { key: 'bench', path: 'tiny-treats/pretty-park/bench.gltf' },
+      // Bakery/Kitchen equipment (Tiny Treats)
+      { key: 'bread_oven', path: 'tiny-treats/bakery-interior/bread_oven.gltf' },
+      { key: 'counter_table', path: 'tiny-treats/bakery-interior/counter_table.gltf' },
+      { key: 'display_case', path: 'tiny-treats/bakery-interior/display_case_long.gltf' },
+      { key: 'cash_register', path: 'tiny-treats/bakery-interior/cash_register.gltf' },
+      { key: 'serving_tray', path: 'tiny-treats/bakery-interior/serving_tray.gltf' },
+      { key: 'dough_ball', path: 'tiny-treats/bakery-interior/dough_ball.gltf' },
+      { key: 'flour_sack', path: 'tiny-treats/bakery-interior/flour_sack_open.gltf' },
+      // Extra food (Quaternius)
+      { key: 'burger', path: 'quaternius/food/burger_001.glb' },
+      { key: 'sausages', path: 'quaternius/food/sausages_001.glb' },
+      { key: 'tomato', path: 'quaternius/food/tomato_001.glb' },
     ],
   },
 };

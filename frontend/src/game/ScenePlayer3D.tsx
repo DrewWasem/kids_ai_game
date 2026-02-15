@@ -53,14 +53,14 @@ class SafeModel extends Component<{ children: ReactNode }, { hasError: boolean }
 // Props sit in the BACK half (negative Z = backdrop behind characters).
 // This prevents characters from clipping into environment objects.
 const LOCAL_POSITION_MAP: Record<string, [number, number, number]> = {
-  // Original 8 positions
-  left: [-4, 0, 1.5],
-  center: [0, 0, 1],
-  right: [4, 0, 1.5],
-  top: [0, 0, -1],
-  bottom: [0, 0, 3.5],
-  'off-left': [-7, 0, 1],
-  'off-right': [7, 0, 1],
+  // Legacy positions — mapped onto the 15-mark stage grid
+  left: [-4.5, 0, 1.5],      // = ds-far-left
+  center: [0, 0, 0],          // = cs-center
+  right: [4.5, 0, 1.5],       // = ds-far-right
+  top: [0, 0, -1.5],          // = us-center
+  bottom: [0, 0, 1.5],        // = ds-center (audience front)
+  'off-left': [-7, 0, 0],     // wing entrance left
+  'off-right': [7, 0, 0],     // wing entrance right
   'off-top': [0, 5, 0],
 
   // Downstage (front row, Z=1.5 — closest to camera)
@@ -234,25 +234,120 @@ const PROP_PATHS: Record<string, string> = {
   fridge: 'tiny-treats/charming-kitchen/fridge.gltf',
   toaster: 'tiny-treats/charming-kitchen/stove.gltf',
 
-  // === RPG Tools / Instruments ===
+  // === RPG Tools / Weapons ===
   sword: 'kaykit/packs/dungeon/sword_shield.gltf',
   shield: 'kaykit/packs/dungeon/banner_shield_blue.gltf',
-  guitar: 'kaykit/packs/rpg_tools/axe.gltf',
-  drums: 'kaykit/packs/dungeon/barrel_small.gltf',
-  keyboard: 'kaykit/packs/furniture/desk.gltf',
-  microphone: 'kaykit/packs/dungeon/torch.gltf',
-  pencil: 'kaykit/packs/rpg_tools/chisel.gltf',
+  pencil: 'kaykit/packs/rpg_tools/pencil_A_long.gltf',
+  hammer: 'kaykit/packs/rpg_tools/hammer.gltf',
+  saw: 'kaykit/packs/rpg_tools/saw.gltf',
+  anvil: 'kaykit/packs/rpg_tools/anvil.gltf',
+  magnifying_glass: 'kaykit/packs/rpg_tools/magnifying_glass.gltf',
+  lantern: 'kaykit/packs/rpg_tools/lantern.gltf',
+  key: 'kaykit/packs/rpg_tools/key_A.gltf',
+  scissors: 'kaykit/packs/rpg_tools/scissors.gltf',
+  pickaxe: 'kaykit/packs/rpg_tools/pickaxe.gltf',
+  shovel: 'kaykit/packs/rpg_tools/shovel.gltf',
+  bucket: 'kaykit/packs/rpg_tools/bucket_metal.gltf',
+
+  // === Real Musical Instruments (Poly-Pizza Coffeehouse) ===
+  guitar: 'poly-pizza/interior/coffeehouse-lounge/Electric guitar.glb',
+  guitar_amp: 'poly-pizza/interior/coffeehouse-lounge/Guitar Amp.glb',
+  drums: 'poly-pizza/interior/coffeehouse-lounge/Drum Set.glb',
+  drumstick: 'poly-pizza/interior/coffeehouse-lounge/Drum stick.glb',
+  keyboard: 'poly-pizza/interior/coffeehouse-lounge/Cash register.glb',
+  microphone: 'poly-pizza/interior/coffeehouse-lounge/Microphone.glb',
+  bass_speakers: 'poly-pizza/interior/coffeehouse-lounge/Bass Speakers.glb',
+  speaker: 'poly-pizza/interior/coffeehouse-lounge/Speaker.glb',
+  floor_monitor: 'poly-pizza/interior/coffeehouse-lounge/Floor Monitor.glb',
+  effects_pedal: 'poly-pizza/interior/coffeehouse-lounge/Electric Guitar Effects Pedal.glb',
+  headphones: 'poly-pizza/interior/coffeehouse-lounge/Headphones.glb',
+
+  // === School / Learning Props ===
+  journal: 'kaykit/packs/rpg_tools/journal_open.gltf',
+  journal_closed: 'kaykit/packs/rpg_tools/journal_closed.gltf',
+  map: 'kaykit/packs/rpg_tools/map.gltf',
+  map_rolled: 'kaykit/packs/rpg_tools/map_rolled.gltf',
+  blueprint: 'kaykit/packs/rpg_tools/blueprint.gltf',
+  compass: 'kaykit/packs/rpg_tools/drafting_compass.gltf',
+  chisel: 'kaykit/packs/rpg_tools/chisel.gltf',
+
+  // === Medieval Props (Quaternius) ===
+  bookcase: 'quaternius/medieval-props/Bookcase_2.gltf',
+  book_stack_medieval: 'quaternius/medieval-props/Book_Stack_2.gltf',
+  scroll_ancient: 'quaternius/medieval-props/Scroll_1.gltf',
+  scroll_2: 'quaternius/medieval-props/Scroll_2.gltf',
+  potion_bottle: 'quaternius/medieval-props/Potion_2.gltf',
+  potion_flask: 'quaternius/medieval-props/Potion_4.gltf',
+  cauldron_medieval: 'quaternius/medieval-props/Cauldron.gltf',
+  candle_medieval: 'quaternius/medieval-props/Candle_1.gltf',
+  candlestick: 'quaternius/medieval-props/CandleStick.gltf',
+  candlestick_triple: 'quaternius/medieval-props/CandleStick_Triple.gltf',
+  lantern_wall: 'quaternius/medieval-props/Lantern_Wall.gltf',
+  coin_pile: 'quaternius/medieval-props/Coin_Pile_2.gltf',
+  mug_medieval: 'quaternius/medieval-props/Mug.gltf',
+  workbench: 'quaternius/medieval-props/Workbench.gltf',
+  bookstand: 'quaternius/medieval-props/BookStand.gltf',
+  chest_wood: 'quaternius/medieval-props/Chest_Wood.gltf',
+  barrel_medieval: 'quaternius/medieval-props/Barrel.gltf',
+  table_large: 'quaternius/medieval-props/Table_Large.gltf',
+  stool: 'quaternius/medieval-props/Stool.gltf',
+  shelf: 'quaternius/medieval-props/Shelf_Simple.gltf',
+
+  // === Halloween (KayKit) ===
+  candy_bucket: 'kaykit/packs/halloween/candy_bucket_B_decorated.gltf',
+  lollipop: 'kaykit/packs/halloween/lollipop_blue.gltf',
+  lollipop_pink: 'kaykit/packs/halloween/lollipop_pink.gltf',
+  lollipop_orange: 'kaykit/packs/halloween/lollipop_orange.gltf',
+  candy_blue: 'kaykit/packs/halloween/candy_blue_A.gltf',
+  candy_orange: 'kaykit/packs/halloween/candy_orange_A.gltf',
+  candy_pink: 'kaykit/packs/halloween/candy_pink_A.gltf',
+  candycorn: 'kaykit/packs/halloween/candycorn.gltf',
+  coffin: 'kaykit/packs/halloween/coffin_decorated.gltf',
+  grave: 'kaykit/packs/halloween/grave_A.gltf',
+  scarecrow: 'kaykit/packs/halloween/scarecrow.gltf',
+  pitchfork: 'kaykit/packs/halloween/pitchfork.gltf',
+  pumpkin: 'kaykit/packs/halloween/pumpkin_orange.gltf',
+  pumpkin_jackolantern: 'kaykit/packs/halloween/pumpkin_orange_jackolantern.gltf',
+  skull_candle: 'kaykit/packs/halloween/skull_candle.gltf',
+  wagon: 'kaykit/packs/halloween/wagon.gltf',
+  lantern_hanging: 'kaykit/packs/halloween/lantern_hanging.gltf',
+  lantern_standing: 'kaykit/packs/halloween/lantern_standing.gltf',
+
+  // === Bakery Interior (Tiny Treats) ===
+  bread_oven: 'tiny-treats/bakery-interior/bread_oven.gltf',
+  coffee_machine: 'tiny-treats/bakery-interior/coffee_machine.gltf',
+  stand_mixer: 'tiny-treats/bakery-interior/stand_mixer.gltf',
+  mixing_bowl: 'tiny-treats/bakery-interior/mixing_bowl.gltf',
+  dough_roller: 'tiny-treats/bakery-interior/dough_roller.gltf',
+  dough_ball: 'tiny-treats/bakery-interior/dough_ball.gltf',
+  flour_sack: 'tiny-treats/bakery-interior/flour_sack_open.gltf',
+  cookie_jar: 'tiny-treats/bakery-interior/cookie_jar.gltf',
+  counter_table: 'tiny-treats/bakery-interior/counter_table.gltf',
+  display_case: 'tiny-treats/bakery-interior/display_case_long.gltf',
+  pastry_stand: 'tiny-treats/bakery-interior/pastry_stand_A_decorated.gltf',
+  serving_tray: 'tiny-treats/bakery-interior/serving_tray.gltf',
+  whisk: 'tiny-treats/bakery-interior/whisk.gltf',
+  scale: 'tiny-treats/bakery-interior/scale.gltf',
+  cream_puff: 'tiny-treats/bakery-interior/cream_puff.gltf',
+  pretzel: 'tiny-treats/bakery-interior/pretzel.gltf',
+  macaron: 'tiny-treats/bakery-interior/macaron_pink.gltf',
+  macaron_blue: 'tiny-treats/bakery-interior/macaron_blue.gltf',
+  macaron_yellow: 'tiny-treats/bakery-interior/macaron_yellow.gltf',
+  egg: 'tiny-treats/bakery-interior/egg_A.gltf',
+  milk: 'tiny-treats/bakery-interior/milk.gltf',
+  cash_register: 'tiny-treats/bakery-interior/cash_register.gltf',
+  mug_bakery: 'tiny-treats/bakery-interior/mug_A_blue.gltf',
 
   // === Outdoors (Tiny Treats + Dungeon) ===
   tree: 'tiny-treats/pretty-park/tree.gltf',
   tree_large: 'tiny-treats/pretty-park/tree_large.gltf',
-  rock: 'kaykit/packs/dungeon/barrel_small.gltf',
+  rock: 'kaykit/packs/forest_nature/Rock_1_A_Color1.gltf',
   bush: 'tiny-treats/pretty-park/bush.gltf',
   bench: 'tiny-treats/pretty-park/bench.gltf',
-  fountain: 'tiny-treats/pretty-park/bench.gltf',
+  fountain: 'tiny-treats/pretty-park/fountain.gltf',
   river: 'tiny-treats/pretty-park/bench.gltf',
   lamp: 'kaykit/packs/dungeon/torch.gltf',
-  fence: 'kaykit/packs/dungeon/barrel_small.gltf',
+  fence: 'kaykit/packs/halloween/fence.gltf',
   sign: 'kaykit/packs/dungeon/banner_blue.gltf',
 
   // === Picnic & Food (Tiny Treats) ===
@@ -309,9 +404,302 @@ const PROP_PATHS: Record<string, string> = {
   lunchbox: 'tiny-treats/pleasant-picnic/cooler.gltf',
   'fire-extinguisher': 'kaykit/packs/restaurant/pot_large.gltf',
   'pillow-fort': 'kaykit/packs/dungeon/barrel_large.gltf',
-  potion: 'kaykit/packs/dungeon/barrel_small.gltf',
-  scroll: 'kaykit/packs/dungeon/book_tan.gltf',
+  potion: 'quaternius/medieval-props/Potion_1.gltf',
+  scroll: 'quaternius/medieval-props/Scroll_1.gltf',
   bow: 'kaykit/packs/rpg_tools/fishing_rod.gltf',
+
+  // =========================================================================
+  // EXTENDED PROP LIBRARY — For Level 4/5 freeform text support
+  // =========================================================================
+
+  // === Animals (Quaternius GLB — animated) ===
+  cat: 'quaternius/animals/kitty_001.glb',
+  dog: 'quaternius/animals/dog_001.glb',
+  horse: 'quaternius/animals/horse_001.glb',
+  chicken: 'quaternius/animals/chicken_001.glb',
+  deer: 'quaternius/animals/deer_001.glb',
+  penguin: 'quaternius/animals/pinguin_001.glb',
+  tiger: 'quaternius/animals/tiger_001.glb',
+
+  // === Animals (Poly-Pizza — static) ===
+  bear: 'poly-pizza/animals/animal-kit/Bear.glb',
+  fox: 'poly-pizza/animals/animal-kit/Fox.glb',
+  rabbit: 'poly-pizza/animals/animal-kit/Rabbit.glb',
+  sheep: 'poly-pizza/animals/animal-kit/Sheep.glb',
+  cow: 'poly-pizza/animals/animal-kit/Cow.glb',
+  pig: 'poly-pizza/animals/animal-kit/Penguin.glb',
+  duck: 'poly-pizza/animals/animal-kit/Duck.glb',
+  frog: 'poly-pizza/animals/animal-kit/Frog.glb',
+  bird: 'poly-pizza/animals/animal-kit/Bird.glb',
+  giraffe: 'poly-pizza/animals/animal-kit/Giraffe.glb',
+  shark: 'poly-pizza/animals/animal-kit/Shark.glb',
+  lizard: 'poly-pizza/animals/animal-kit/Lizard.glb',
+  corgi: 'poly-pizza/animals/animal-kit/Corgi.glb',
+  chick: 'poly-pizza/animals/animal-kit/Chick.glb',
+
+  // === Creatures (Quaternius — animated fantasy creatures) ===
+  dragon: 'quaternius/creatures/Dragon.gltf',
+  ghost: 'quaternius/creatures/Ghost.gltf',
+  goblin: 'quaternius/creatures/Goblin.gltf',
+  skeleton_creature: 'quaternius/creatures/Skeleton.gltf',
+  zombie: 'quaternius/creatures/Zombie.gltf',
+  bat: 'quaternius/creatures/Bat.gltf',
+  bee: 'quaternius/creatures/Bee.gltf',
+  crab: 'quaternius/creatures/Crab.gltf',
+  wolf: 'quaternius/creatures/Wolf.gltf',
+  orc: 'quaternius/creatures/Orc.gltf',
+  panda: 'quaternius/creatures/Panda.gltf',
+  mushroom_creature: 'quaternius/creatures/Mushroom.gltf',
+  hedgehog: 'quaternius/creatures/Hedgehog.gltf',
+  yeti: 'quaternius/creatures/Yeti.gltf',
+  raccoon: 'quaternius/creatures/Raccoon.gltf',
+  slime: 'quaternius/creatures/GreenBlob.gltf',
+  demon: 'quaternius/creatures/Demon.gltf',
+  cyclops: 'quaternius/creatures/Cyclops.gltf',
+  giant: 'quaternius/creatures/Giant.gltf',
+  alien: 'quaternius/creatures/Alien.gltf',
+  fish_creature: 'quaternius/creatures/Fish.gltf',
+  dino: 'quaternius/creatures/Dino.gltf',
+  ninja: 'quaternius/creatures/Ninja.gltf',
+  cactus_creature: 'quaternius/creatures/Cactus.gltf',
+  pigeon: 'quaternius/creatures/Pigeon.gltf',
+
+  // === Nature (Quaternius) ===
+  birch_tree: 'quaternius/nature/BirchTree_1.gltf',
+  common_tree: 'quaternius/nature/CommonTree_1.gltf',
+  pine_tree: 'quaternius/nature/Pine_1.gltf',
+  dead_tree: 'quaternius/nature/DeadTree_1.gltf',
+  flower: 'quaternius/nature/Flower_1.gltf',
+  flower_clump: 'quaternius/nature/Flower_1_Clump.gltf',
+  flower_group: 'quaternius/nature/Flower_3_Group.gltf',
+  fern: 'quaternius/nature/Fern_1.gltf',
+  clover: 'quaternius/nature/Clover_1.gltf',
+  mushroom: 'quaternius/nature/Mushroom_Common.gltf',
+  fruit_tree: 'quaternius/nature/Tree_Fruit.gltf',
+  bush_flowers: 'quaternius/nature/Bush_Flowers.gltf',
+  bush_fruit: 'quaternius/nature/Bush_Fruit.gltf',
+  cloud: 'quaternius/nature/Cloud_1.gltf',
+  pebble: 'quaternius/nature/Pebble_Round_1.gltf',
+  rock_platform: 'quaternius/nature/RockPlatforms_1.gltf',
+
+  // === Decorations / Japanese Kitchen (Quaternius) ===
+  bamboo: 'quaternius/decorations/Decoration_Bamboo.gltf',
+  bell: 'quaternius/decorations/Decoration_Bell.gltf',
+  carpet: 'quaternius/decorations/Decoration_Carpet.gltf',
+  painting: 'quaternius/decorations/Decoration_Painting.gltf',
+  plant_decor: 'quaternius/decorations/Decoration_Plant1.gltf',
+  sakura_tree: 'quaternius/decorations/Decoration_SakuraTree.gltf',
+  sakura_flower: 'quaternius/decorations/Decoration_SakuraFlower.gltf',
+  torii_gate: 'quaternius/decorations/Environment_ToriiGate.gltf',
+  sofa: 'quaternius/decorations/Environment_Sofa.gltf',
+  cutting_table: 'quaternius/decorations/Environment_CuttingTable.gltf',
+  kitchen_knives: 'quaternius/decorations/Environment_KitchenKnives.gltf',
+  japanese_bowl: 'quaternius/decorations/Environment_Bowl.gltf',
+  japanese_cabinet: 'quaternius/decorations/Environment_Cabinet_Doors.gltf',
+  japanese_fridge: 'quaternius/decorations/Environment_Fridge.gltf',
+  japanese_oven: 'quaternius/decorations/Environment_Oven.gltf',
+  truck: 'quaternius/decorations/Truck.gltf',
+
+  // === Fantasy Cards & Ships (Quaternius) ===
+  fireball: 'quaternius/fantasy/1_Fireball.gltf',
+  wizard_card: 'quaternius/fantasy/30_Wizard.gltf',
+  king_card: 'quaternius/fantasy/6_King.gltf',
+  ship_large: 'quaternius/fantasy/Ship_Large.gltf',
+  ship_small: 'quaternius/fantasy/Ship_Small.gltf',
+  dice: 'quaternius/fantasy/28_RollDice.gltf',
+
+  // === Items & Collectibles (Quaternius) ===
+  gem_blue: 'quaternius/items/Gem_Blue.gltf',
+  gem_green: 'quaternius/items/Gem_Green.gltf',
+  gem_pink: 'quaternius/items/Gem_Pink.gltf',
+  heart: 'quaternius/items/Heart.gltf',
+  star: 'quaternius/items/Star.gltf',
+  coin_item: 'quaternius/items/Coin.gltf',
+  gold_bag: 'quaternius/items/Prop_GoldBag.gltf',
+  thunder: 'quaternius/items/Thunder.gltf',
+  chest_closed: 'quaternius/items/Prop_Chest_Closed.gltf',
+  chest_gold_item: 'quaternius/items/Prop_Chest_Gold.gltf',
+
+  // === Vehicles (Quaternius — spaceships + cars) ===
+  spaceship: 'quaternius/vehicles/Spaceship_BarbaraTheBee.gltf',
+  spaceship_frog: 'quaternius/vehicles/Spaceship_FinnTheFrog.gltf',
+  rover: 'quaternius/vehicles/Rover_1.gltf',
+  pickup_truck: 'quaternius/vehicles/Vehicle_Pickup.gltf',
+  sports_car: 'quaternius/vehicles/Vehicle_Sports.gltf',
+  big_truck: 'quaternius/vehicles/Vehicle_Truck.gltf',
+  tank: 'quaternius/vehicles/Striker.gltf',
+
+  // === Game Mechanics (Quaternius) ===
+  cannon: 'quaternius/game-mechanics/Cannon.gltf',
+  cannonball: 'quaternius/game-mechanics/Cannonball.gltf',
+  bridge: 'quaternius/game-mechanics/Bridge_Small.gltf',
+  lever: 'quaternius/game-mechanics/Lever.gltf',
+  spikes: 'quaternius/game-mechanics/Spikes.gltf',
+  crystal_big: 'quaternius/game-mechanics/Crystal_Big.gltf',
+  crystal_small: 'quaternius/game-mechanics/Crystal_Small.gltf',
+  door_game: 'quaternius/game-mechanics/Door.gltf',
+  stairs: 'quaternius/game-mechanics/Stairs.gltf',
+  tower: 'quaternius/game-mechanics/Tower.gltf',
+  goal_flag: 'quaternius/game-mechanics/Goal_Flag.gltf',
+  cart: 'quaternius/game-mechanics/Cart.gltf',
+  pipe: 'quaternius/game-mechanics/Pipe_Straight.gltf',
+
+  // === Poly-Pizza Food Kit (massive — kid-friendly names) ===
+  bacon: 'poly-pizza/food/food-kit/Bacon.glb',
+  broccoli: 'poly-pizza/food/food-kit/Broccoli.glb',
+  cheese: 'poly-pizza/food/food-kit/Cheese Cut.glb',
+  cherries: 'poly-pizza/food/food-kit/Cherries.glb',
+  chocolate: 'poly-pizza/food/food-kit/Chocolate.glb',
+  cocktail: 'poly-pizza/food/food-kit/Cocktail.glb',
+  corn: 'poly-pizza/food/food-kit/Corn.glb',
+  corn_dog: 'poly-pizza/food/food-kit/Corn Dog.glb',
+  croissant: 'poly-pizza/food/food-kit/Croissant.glb',
+  cutting_board: 'poly-pizza/food/food-kit/Cutting Board.glb',
+  donut_chocolate: 'poly-pizza/food/food-kit/Donut Chocolate.glb',
+  donut_sprinkles: 'poly-pizza/food/food-kit/Donut Sprinkles.glb',
+  egg_cooked: 'poly-pizza/food/food-kit/Egg Cooked.glb',
+  fish_bones: 'poly-pizza/food/food-kit/Fish Bones.glb',
+  fries: 'poly-pizza/food/food-kit/Fries.glb',
+  frying_pan: 'poly-pizza/food/food-kit/Frying Pan.glb',
+  gingerbread: 'poly-pizza/food/food-kit/Ginger Bread.glb',
+  grapes: 'poly-pizza/food/food-kit/Grapes.glb',
+  honey: 'poly-pizza/food/food-kit/Honey.glb',
+  hot_dog: 'poly-pizza/food/food-kit/Hot Dog.glb',
+  knife_block: 'poly-pizza/food/food-kit/Knife Block.glb',
+  lemon: 'poly-pizza/food/food-kit/Lemon.glb',
+  loaf: 'poly-pizza/food/food-kit/Loaf.glb',
+  baguette: 'poly-pizza/food/food-kit/Loaf Baguette.glb',
+  lollypop_food: 'poly-pizza/food/food-kit/Lollypop.glb',
+  meat_ribs: 'poly-pizza/food/food-kit/Meat Ribs.glb',
+  muffin: 'poly-pizza/food/food-kit/Muffin.glb',
+  onion: 'poly-pizza/food/food-kit/Onion.glb',
+  orange: 'poly-pizza/food/food-kit/Orange.glb',
+  pancakes: 'poly-pizza/food/food-kit/Pancakes.glb',
+  peanut_butter: 'poly-pizza/food/food-kit/Peanut Butter.glb',
+  pear: 'poly-pizza/food/food-kit/Pear.glb',
+  pepper: 'poly-pizza/food/food-kit/Pepper.glb',
+  pie_food: 'poly-pizza/food/food-kit/Pie.glb',
+  pineapple: 'poly-pizza/food/food-kit/Pineapple.glb',
+  pizza_box: 'poly-pizza/food/food-kit/Pizza Box.glb',
+  pizza_food: 'poly-pizza/food/food-kit/Pizza.glb',
+  popsicle: 'poly-pizza/food/food-kit/Popsicle.glb',
+  pudding: 'poly-pizza/food/food-kit/Pudding.glb',
+  pumpkin_food: 'poly-pizza/food/food-kit/Pumpkin.glb',
+  rice_ball: 'poly-pizza/food/food-kit/Rice Ball.glb',
+  rolling_pin: 'poly-pizza/food/food-kit/Rolling Pin.glb',
+  salad: 'poly-pizza/food/food-kit/Salad.glb',
+  soda: 'poly-pizza/food/food-kit/Soda.glb',
+  soda_can: 'poly-pizza/food/food-kit/Soda Can.glb',
+  strawberry: 'poly-pizza/food/food-kit/Strawberry.glb',
+  sub_sandwich: 'poly-pizza/food/food-kit/Sub.glb',
+  sundae: 'poly-pizza/food/food-kit/Sundae.glb',
+  sushi_egg: 'poly-pizza/food/food-kit/Sushi Egg.glb',
+  sushi_salmon: 'poly-pizza/food/food-kit/Sushi Salmon.glb',
+  taco: 'poly-pizza/food/food-kit/Taco.glb',
+  turkey: 'poly-pizza/food/food-kit/Turkey.glb',
+  waffle: 'poly-pizza/food/food-kit/Waffle.glb',
+  watermelon: 'poly-pizza/food/food-kit/Watermelon.glb',
+  whipped_cream: 'poly-pizza/food/food-kit/Whipped Cream.glb',
+  whole_ham: 'poly-pizza/food/food-kit/Whole Ham.glb',
+  wine: 'poly-pizza/food/food-kit/Wine Red.glb',
+  cabbage: 'poly-pizza/food/food-kit/Cabbage.glb',
+  avocado: 'poly-pizza/food/food-kit/Avocado Half.glb',
+
+  // === Concert / Stage (Poly-Pizza) ===
+  concert_stage: 'poly-pizza/misc/concert-pack/Concert Stage.glb',
+  stage: 'poly-pizza/misc/concert-pack/Stage.glb',
+  spotlight: 'poly-pizza/misc/concert-pack/Spotlight.glb',
+  motorised_spotlight: 'poly-pizza/misc/concert-pack/Motorised Spotlight.glb',
+  barricade: 'poly-pizza/misc/concert-pack/Barricade.glb',
+  mic: 'poly-pizza/misc/concert-pack/Mic.glb',
+
+  // === Space (Poly-Pizza) ===
+  astronaut: 'poly-pizza/space/ultimate-space-kit/Astronaut.glb',
+  geodesic_dome: 'poly-pizza/space/ultimate-space-kit/Geodesic Dome.glb',
+  space_house: 'poly-pizza/space/ultimate-space-kit/House Single.glb',
+  planet: 'poly-pizza/space/ultimate-space-kit/Planet.glb',
+  mech: 'poly-pizza/space/ultimate-space-kit/Mech.glb',
+
+  // === House Plants (Tiny Treats) ===
+  cactus: 'tiny-treats/house-plants/cactus_A.gltf',
+  monstera: 'tiny-treats/house-plants/monstera_plant_medium_potted.gltf',
+  potted_plant: 'tiny-treats/house-plants/pothos_plant_medium_potted.gltf',
+  succulent: 'tiny-treats/house-plants/succulent_plant_pot_small.gltf',
+  watering_can: 'tiny-treats/house-plants/watering_can_A.gltf',
+  yucca: 'tiny-treats/house-plants/yucca_plant_medium_potted.gltf',
+
+  // === Bathroom (Tiny Treats — comedy props) ===
+  rubber_duck: 'tiny-treats/bubbly-bathroom/ducky.gltf',
+  bathtub: 'tiny-treats/bubbly-bathroom/bath.gltf',
+  toilet: 'tiny-treats/bubbly-bathroom/toilet.gltf',
+  shower: 'tiny-treats/bubbly-bathroom/shower.gltf',
+  mirror: 'tiny-treats/bubbly-bathroom/mirror.gltf',
+  slippers: 'tiny-treats/bubbly-bathroom/slippers.gltf',
+  soap: 'tiny-treats/bubbly-bathroom/soap_dish_blue.gltf',
+  towel: 'tiny-treats/bubbly-bathroom/towel_blue.gltf',
+  toothbrush: 'tiny-treats/bubbly-bathroom/toothbrush_blue.gltf',
+
+  // === Bedroom (Tiny Treats — party/school props) ===
+  bed: 'tiny-treats/playful-bedroom/bed_blue.gltf',
+  alarm_clock: 'tiny-treats/playful-bedroom/alarm_clock.gltf',
+  computer: 'tiny-treats/playful-bedroom/computer.gltf',
+  teddy_bear: 'tiny-treats/playful-bedroom/teddy_bear.gltf',
+  piggybank: 'tiny-treats/playful-bedroom/piggybank.gltf',
+  soccer_ball: 'tiny-treats/playful-bedroom/soccer_ball.gltf',
+  rubiks_cube: 'tiny-treats/playful-bedroom/rubicks_cube_A.gltf',
+  play_blocks: 'tiny-treats/playful-bedroom/play_block_A.gltf',
+  poster: 'tiny-treats/playful-bedroom/poster.gltf',
+  lamp_desk: 'tiny-treats/playful-bedroom/lamp_A.gltf',
+  closet: 'tiny-treats/playful-bedroom/closet_blue.gltf',
+  nightstand: 'tiny-treats/playful-bedroom/nightstand_blue.gltf',
+
+  // === Bakery Exterior (Tiny Treats) ===
+  parasol: 'tiny-treats/bakery-building/parasol_blue.gltf',
+  shop_cart: 'tiny-treats/bakery-building/shop_cart.gltf',
+  newspaper: 'tiny-treats/bakery-building/newspaper.gltf',
+  street_lantern: 'tiny-treats/bakery-building/street_lantern.gltf',
+  cafe_table: 'tiny-treats/bakery-building/table_round_A.gltf',
+  cafe_chair: 'tiny-treats/bakery-building/chair_A.gltf',
+  open_sign: 'tiny-treats/bakery-building/open_close_sign.gltf',
+  flower_box: 'tiny-treats/bakery-building/flower_box_straight.gltf',
+
+  // === Homely House (Tiny Treats) ===
+  mailbox: 'tiny-treats/homely-house/mailbox.gltf',
+  boots: 'tiny-treats/homely-house/boots.gltf',
+  doormat: 'tiny-treats/homely-house/doormat.gltf',
+  gate: 'tiny-treats/homely-house/gate_single.gltf',
+  package: 'tiny-treats/homely-house/package.gltf',
+  letter: 'tiny-treats/homely-house/letter.gltf',
+
+  // === Living Room (full furniture set) ===
+  aquarium: 'living-room/aquarium.gltf',
+  rocking_chair: 'living-room/rocking_chair_brown.gltf',
+  record_player: 'living-room/record_player_brown.gltf',
+  radio: 'living-room/radio_brown.gltf',
+  tv: 'living-room/tv_B_standing.gltf',
+  clock: 'living-room/clock_wall_A.gltf',
+  clock_standing: 'living-room/clock_standing.gltf',
+  calendar: 'living-room/calendar.gltf',
+  candles_lr: 'living-room/candles.gltf',
+  pillow: 'living-room/pillow_A_blue.gltf',
+  rug: 'living-room/rug_A_large.gltf',
+  couch_blue: 'living-room/couch_A_blue.gltf',
+  lamp_floor: 'living-room/lamp_standing_A.gltf',
+  picture_frame: 'living-room/picture_frame_A_blue.gltf',
+  flower_vase: 'living-room/flower_vase_A.gltf',
+  tray: 'living-room/tray_decorated.gltf',
+
+  // === Cartoon City ===
+  car: 'cartoon-city/Car_06.glb',
+  van: 'cartoon-city/Van.glb',
+  bus_stop: 'cartoon-city/Bus_Stop_02.glb',
+  futuristic_car: 'cartoon-city/Futuristic_Car_1.glb',
+  fountain_city: 'cartoon-city/Fountain_03.glb',
+  billboard: 'cartoon-city/Billboard_2x1_03.glb',
+  traffic_light: 'cartoon-city/traffic_light_001.glb',
+  trash_can: 'cartoon-city/Trash_Can_04.glb',
+  palm_tree: 'cartoon-city/Palm_03.glb',
+  spotlight_city: 'cartoon-city/Spotlight_01.glb',
 }
 
 /** Scale overrides for spawned props — Tiny Treats models are miniature and need scaling up */
@@ -342,6 +730,116 @@ const PROP_SCALE: Record<string, number> = {
   christmas_tree: 1.5, snowman: 1.5, present_xmas: 2.0, candy_cane: 2.0,
   wreath: 2.0, garland: 1.5, stocking: 2.0, fireplace_xmas: 1.2,
   cookie_xmas: 2.5, teapot_xmas: 2.5, armchair: 1.2, couch: 1.2,
+  // Musical instruments (Poly-Pizza GLB — life-size, scale down to match scene)
+  guitar: 1.5, guitar_amp: 1.2, drums: 1.0, drumstick: 2.0,
+  keyboard: 1.5, microphone: 2.0, bass_speakers: 1.0, speaker: 1.2,
+  floor_monitor: 1.2, effects_pedal: 2.0, headphones: 2.0,
+  // Medieval props (Quaternius GLTF — slightly large)
+  bookcase: 1.0, book_stack_medieval: 1.5, scroll_ancient: 2.0, scroll_2: 2.0,
+  potion_bottle: 2.0, potion_flask: 2.0, potion: 2.0,
+  cauldron_medieval: 1.2, candle_medieval: 2.0,
+  candlestick: 1.5, candlestick_triple: 1.5, lantern_wall: 1.5,
+  coin_pile: 2.0, mug_medieval: 2.0, workbench: 1.0,
+  bookstand: 1.2, chest_wood: 1.2, table_large: 1.0, stool: 1.2, shelf: 1.0,
+  // RPG Tools (KayKit — small items need scaling up)
+  pencil: 2.5, hammer: 2.0, saw: 2.0, anvil: 1.5,
+  magnifying_glass: 2.5, lantern: 2.0, key: 2.5,
+  scissors: 2.5, pickaxe: 1.5, shovel: 1.5, bucket: 1.5,
+  journal: 2.0, journal_closed: 2.0, map: 2.0, map_rolled: 2.0,
+  blueprint: 2.0, compass: 2.5, chisel: 2.5,
+  // Halloween (KayKit)
+  candy_bucket: 2.0, lollipop: 2.0, lollipop_pink: 2.0, lollipop_orange: 2.0,
+  candy_blue: 2.0, candy_orange: 2.0, candy_pink: 2.0, candycorn: 2.5,
+  coffin: 1.0, grave: 1.0, scarecrow: 1.0, pitchfork: 1.5,
+  pumpkin: 1.5, pumpkin_jackolantern: 1.5, skull_candle: 2.0,
+  wagon: 1.0, lantern_hanging: 1.5, lantern_standing: 1.5,
+  // Bakery Interior (Tiny Treats — miniature, need scaling up)
+  bread_oven: 2.0, coffee_machine: 2.5, stand_mixer: 2.5, mixing_bowl: 3.0,
+  dough_roller: 3.0, dough_ball: 3.0, flour_sack: 2.5, cookie_jar: 2.5,
+  counter_table: 2.0, display_case: 2.0, pastry_stand: 2.5,
+  serving_tray: 3.0, whisk: 3.0, scale: 2.5,
+  cream_puff: 3.0, pretzel: 3.0, macaron: 3.0, macaron_blue: 3.0, macaron_yellow: 3.0,
+  egg: 3.0, milk: 2.5, cash_register: 2.5, mug_bakery: 2.5,
+  // Outdoors
+  rock: 1.5, fence: 1.5,
+  // Extended library — Animals (Quaternius animated — scale varies)
+  cat: 1.0, dog: 1.0, horse: 0.8, chicken: 1.0, deer: 0.8, penguin: 1.0, tiger: 0.8,
+  // Animals (Poly-Pizza static — generally small)
+  bear: 1.5, fox: 1.5, rabbit: 1.5, sheep: 1.5, cow: 1.2, pig: 1.5,
+  duck: 1.5, frog: 2.0, bird: 1.5, giraffe: 0.8, shark: 1.0, lizard: 2.0,
+  corgi: 1.5, chick: 2.0,
+  // Creatures (Quaternius — variable sizes)
+  dragon: 0.8, ghost: 1.0, goblin: 1.0, skeleton_creature: 1.0, zombie: 1.0,
+  bat: 1.5, bee: 1.5, crab: 1.5, wolf: 1.0, orc: 0.8, panda: 1.0,
+  mushroom_creature: 1.0, hedgehog: 1.5, yeti: 0.8, raccoon: 1.0, slime: 1.5,
+  demon: 0.8, cyclops: 0.8, giant: 0.6, alien: 1.0, fish_creature: 1.5,
+  dino: 0.8, ninja: 1.0, cactus_creature: 1.0, pigeon: 1.5,
+  // Nature (Quaternius)
+  birch_tree: 1.0, common_tree: 1.0, pine_tree: 1.0, dead_tree: 1.0,
+  flower: 2.0, flower_clump: 1.5, flower_group: 1.5, fern: 1.5, clover: 2.0,
+  mushroom: 1.5, fruit_tree: 1.0, bush_flowers: 1.0, bush_fruit: 1.0,
+  cloud: 1.0, pebble: 2.0, rock_platform: 1.0,
+  // Decorations (Quaternius)
+  bamboo: 1.0, bell: 2.0, carpet: 1.0, painting: 1.5, plant_decor: 1.5,
+  sakura_tree: 1.0, sakura_flower: 2.0, torii_gate: 0.8, sofa: 1.0,
+  cutting_table: 1.0, kitchen_knives: 2.0, japanese_bowl: 2.0,
+  japanese_cabinet: 1.0, japanese_fridge: 1.0, japanese_oven: 1.0, truck: 0.8,
+  // Fantasy (Quaternius)
+  fireball: 2.0, wizard_card: 2.0, king_card: 2.0,
+  ship_large: 0.6, ship_small: 0.8, dice: 2.0,
+  // Items (Quaternius — small collectibles)
+  gem_blue: 2.5, gem_green: 2.5, gem_pink: 2.5, heart: 2.0, star: 2.0,
+  coin_item: 2.5, gold_bag: 1.5, thunder: 2.0, chest_closed: 1.5, chest_gold_item: 1.5,
+  // Vehicles (Quaternius)
+  spaceship: 0.8, spaceship_frog: 0.8, rover: 1.0,
+  pickup_truck: 0.8, sports_car: 0.8, big_truck: 0.6, tank: 0.8,
+  // Game Mechanics (Quaternius)
+  cannon: 1.0, cannonball: 2.0, bridge: 1.0, lever: 1.5, spikes: 1.5,
+  crystal_big: 1.0, crystal_small: 1.5, door_game: 1.0, stairs: 1.0,
+  tower: 0.8, goal_flag: 1.5, cart: 1.0, pipe: 1.5,
+  // Poly-Pizza Food Kit
+  bacon: 2.0, broccoli: 2.0, cheese: 2.0, cherries: 2.5, chocolate: 2.0,
+  cocktail: 2.0, corn: 2.0, corn_dog: 2.0, croissant: 2.0, cutting_board: 1.5,
+  donut_chocolate: 2.0, donut_sprinkles: 2.0, egg_cooked: 2.0, fish_bones: 2.0,
+  fries: 2.0, frying_pan: 1.5, gingerbread: 2.0, grapes: 2.0, honey: 2.0,
+  hot_dog: 2.0, knife_block: 1.5, lemon: 2.0, loaf: 2.0, baguette: 2.0,
+  lollypop_food: 2.0, meat_ribs: 2.0, muffin: 2.0, onion: 2.0, orange: 2.0,
+  pancakes: 2.0, peanut_butter: 2.0, pear: 2.0, pepper: 2.0, pie_food: 2.0,
+  pineapple: 1.5, pizza_box: 1.5, pizza_food: 1.5, popsicle: 2.0, pudding: 2.0,
+  pumpkin_food: 1.5, rice_ball: 2.0, rolling_pin: 2.0, salad: 2.0, soda: 2.0,
+  soda_can: 2.0, strawberry: 2.5, sub_sandwich: 2.0, sundae: 2.0,
+  sushi_egg: 2.0, sushi_salmon: 2.0, taco: 2.0, turkey: 1.5,
+  waffle: 2.0, watermelon: 1.5, whipped_cream: 2.0, whole_ham: 1.5,
+  wine: 2.0, cabbage: 2.0, avocado: 2.0,
+  // Concert/Stage (Poly-Pizza)
+  concert_stage: 0.5, stage: 0.5, spotlight: 1.5, motorised_spotlight: 1.0,
+  barricade: 1.0, mic: 2.0,
+  // Space (Poly-Pizza)
+  astronaut: 1.5, geodesic_dome: 0.8, space_house: 0.8, planet: 0.5, mech: 0.8,
+  // House Plants (Tiny Treats — miniature)
+  cactus: 2.5, monstera: 2.0, potted_plant: 2.0, succulent: 2.5,
+  watering_can: 2.5, yucca: 2.0,
+  // Bathroom (Tiny Treats)
+  rubber_duck: 3.0, bathtub: 2.0, toilet: 2.0, shower: 2.0,
+  mirror: 2.0, slippers: 3.0, soap: 3.0, towel: 2.5, toothbrush: 3.0,
+  // Bedroom (Tiny Treats)
+  bed: 2.0, alarm_clock: 3.0, computer: 2.5, teddy_bear: 2.5,
+  piggybank: 2.5, soccer_ball: 2.5, rubiks_cube: 3.0, play_blocks: 2.5,
+  poster: 2.0, lamp_desk: 2.5, closet: 2.0, nightstand: 2.0,
+  // Bakery Exterior (Tiny Treats)
+  parasol: 2.0, shop_cart: 2.0, newspaper: 3.0, street_lantern: 2.0,
+  cafe_table: 2.0, cafe_chair: 2.0, open_sign: 2.5, flower_box: 2.0,
+  // Homely House (Tiny Treats)
+  mailbox: 2.0, boots: 2.5, doormat: 2.5, gate: 2.0, package: 2.5, letter: 3.0,
+  // Living Room
+  aquarium: 1.5, rocking_chair: 1.5, record_player: 2.0, radio: 2.0,
+  tv: 1.5, clock: 2.0, clock_standing: 1.5, calendar: 2.0, candles_lr: 2.0,
+  pillow: 2.5, rug: 1.5, couch_blue: 1.2, lamp_floor: 1.5,
+  picture_frame: 2.0, flower_vase: 2.0, tray: 2.5,
+  // Cartoon City
+  car: 1.0, van: 0.8, bus_stop: 0.8, futuristic_car: 0.8,
+  fountain_city: 1.0, billboard: 0.8, traffic_light: 1.0,
+  trash_can: 1.5, palm_tree: 1.0, spotlight_city: 1.5,
 }
 
 function resolvePropScale(propId: string): number {
@@ -466,6 +964,36 @@ export function easeInOutQuad(t: number): number {
 
 export function easeInOutSine(t: number): number {
   return -(Math.cos(Math.PI * t) - 1) / 2
+}
+
+// ============================================================================
+// AUTO-SPREAD — prevent actors from overlapping at the same stage mark
+// ============================================================================
+
+/**
+ * When multiple actors spawn at the same position mark, each subsequent actor
+ * gets a small offset so they stand side-by-side instead of clipping through
+ * each other. Offsets are in local stage space (X = stage-left/right, Z = up/downstage).
+ *
+ * Layout: actors fan out in a 2-row grid around the mark center.
+ * Offset magnitude stays < 1.0 so actors remain "near" their mark
+ * without encroaching on adjacent marks (2.0 units apart on X, 1.5 on Z).
+ */
+const SPREAD_OFFSETS: [number, number][] = [
+  [0, 0],            // 1st actor: exact mark position
+  [0.9, 0.15],       // 2nd: stage-right, slightly downstage
+  [-0.9, 0.15],      // 3rd: stage-left, slightly downstage
+  [0, -0.7],         // 4th: upstage (behind)
+  [0.9, -0.7],       // 5th: upstage-right
+  [-0.9, -0.7],      // 6th: upstage-left
+]
+
+/** Wing/entrance positions where actors are transient — skip spread */
+const WING_POSITIONS = new Set(['off-left', 'off-right', 'off-top'])
+
+/** Build a coordinate key for occupancy tracking (local space, XZ only) */
+function positionKey(localPos: [number, number, number]): string {
+  return `${localPos[0].toFixed(1)},${localPos[2].toFixed(1)}`
 }
 
 // ============================================================================
@@ -628,98 +1156,84 @@ const WING_MARKS = [
   { x: 7,  z: 1, color: '#f87171' },  // off-right — red
 ]
 
-function StageFloor({ zoneId }: { zoneId: string }) {
+export function StageFloor({ zoneId }: { zoneId: string }) {
   // Convert local stage center [0, 0, 0] to world position
-  const stageCenter = zonePosition(zoneId, [0, 0.01, 0])
+  const stageCenter = zonePosition(zoneId, [0, 0.3, 0])
   const angle = getZoneAngle(zoneId)
 
   return (
     <group position={stageCenter} rotation={[0, angle, 0]}>
-      {/* Main stage platform — semi-transparent raised floor */}
+      {/* Solid stage platform base */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[10, 4]} />
         <meshStandardMaterial
-          color="#8B7355"
-          transparent
-          opacity={0.15}
-          depthWrite={false}
+          color="#3a2f25"
+          side={2}
         />
-      </mesh>
-
-      {/* Stage border — thin outline */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
-        <ringGeometry args={[0, 0, 4]} />
-        <meshStandardMaterial color="#8B7355" transparent opacity={0} />
       </mesh>
 
       {/* Border lines — 4 edges of the stage rectangle */}
       {/* Top edge (upstage) */}
-      <mesh position={[0, 0.02, -1.5]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[10, 0.03]} />
-        <meshStandardMaterial color="#60a5fa" emissive="#60a5fa" emissiveIntensity={0.5} transparent opacity={0.4} depthWrite={false} />
+      <mesh position={[0, 0.01, -1.5]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[10, 0.05]} />
+        <meshStandardMaterial color="#60a5fa" emissive="#60a5fa" emissiveIntensity={0.8} />
       </mesh>
       {/* Bottom edge (downstage) */}
-      <mesh position={[0, 0.02, 1.5]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[10, 0.03]} />
-        <meshStandardMaterial color="#4ade80" emissive="#4ade80" emissiveIntensity={0.5} transparent opacity={0.4} depthWrite={false} />
+      <mesh position={[0, 0.01, 1.5]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[10, 0.05]} />
+        <meshStandardMaterial color="#4ade80" emissive="#4ade80" emissiveIntensity={0.8} />
       </mesh>
       {/* Left edge */}
-      <mesh position={[-5, 0.02, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
-        <planeGeometry args={[4, 0.03]} />
-        <meshStandardMaterial color="#a78bfa" emissive="#a78bfa" emissiveIntensity={0.3} transparent opacity={0.3} depthWrite={false} />
+      <mesh position={[-5, 0.01, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
+        <planeGeometry args={[4, 0.05]} />
+        <meshStandardMaterial color="#a78bfa" emissive="#a78bfa" emissiveIntensity={0.5} />
       </mesh>
       {/* Right edge */}
-      <mesh position={[5, 0.02, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
-        <planeGeometry args={[4, 0.03]} />
-        <meshStandardMaterial color="#a78bfa" emissive="#a78bfa" emissiveIntensity={0.3} transparent opacity={0.3} depthWrite={false} />
+      <mesh position={[5, 0.01, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
+        <planeGeometry args={[4, 0.05]} />
+        <meshStandardMaterial color="#a78bfa" emissive="#a78bfa" emissiveIntensity={0.5} />
       </mesh>
 
-      {/* Row separator lines (center stage row) */}
-      <mesh position={[0, 0.015, -0.75]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[10, 0.02]} />
-        <meshStandardMaterial color="#facc15" transparent opacity={0.2} depthWrite={false} />
+      {/* Row separator lines */}
+      <mesh position={[0, 0.01, -0.75]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[10, 0.03]} />
+        <meshStandardMaterial color="#facc15" emissive="#facc15" emissiveIntensity={0.4} />
       </mesh>
-      <mesh position={[0, 0.015, 0.75]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[10, 0.02]} />
-        <meshStandardMaterial color="#facc15" transparent opacity={0.2} depthWrite={false} />
+      <mesh position={[0, 0.01, 0.75]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[10, 0.03]} />
+        <meshStandardMaterial color="#facc15" emissive="#facc15" emissiveIntensity={0.4} />
       </mesh>
 
-      {/* Stage mark dots — small circles at each of the 15 positions */}
+      {/* Stage mark dots — solid circles at each of the 15 positions */}
       {STAGE_MARK_ROWS.map((row) =>
         row.xs.map((x) => (
           <mesh
             key={`mark-${row.label}-${x}`}
             rotation={[-Math.PI / 2, 0, 0]}
-            position={[x, 0.025, row.z]}
+            position={[x, 0.02, row.z]}
           >
-            <circleGeometry args={[0.12, 16]} />
+            <circleGeometry args={[0.15, 16]} />
             <meshStandardMaterial
               color={row.color}
               emissive={row.color}
-              emissiveIntensity={0.6}
-              transparent
-              opacity={0.5}
-              depthWrite={false}
+              emissiveIntensity={1.0}
             />
           </mesh>
         ))
       )}
 
-      {/* Wing entrance markers — small red diamonds at off-left and off-right */}
+      {/* Wing entrance markers — solid red diamonds at off-left and off-right */}
       {WING_MARKS.map((wing) => (
         <mesh
           key={`wing-${wing.x}`}
           rotation={[-Math.PI / 2, 0, Math.PI / 4]}
-          position={[wing.x, 0.025, wing.z]}
+          position={[wing.x, 0.02, wing.z]}
         >
-          <planeGeometry args={[0.25, 0.25]} />
+          <planeGeometry args={[0.3, 0.3]} />
           <meshStandardMaterial
             color={wing.color}
             emissive={wing.color}
-            emissiveIntensity={0.8}
-            transparent
-            opacity={0.6}
-            depthWrite={false}
+            emissiveIntensity={1.0}
           />
         </mesh>
       ))}
@@ -750,6 +1264,8 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
   const actorRefs = useRef<Map<string, Character3DHandle | Prop3DHandle>>(new Map())
   const spawnedIds = useRef<Set<string>>(new Set()) // Track spawned actors (avoids stale closure)
   const actorPositionsRef = useRef<Map<string, [number, number, number]>>(new Map())
+  const markOccupancy = useRef<Map<string, number>>(new Map()) // Track actors per position for auto-spread
+  const actorMarkRef = useRef<Map<string, string>>(new Map()) // actorId → posKey (for decrement on move/remove)
   const playingRef = useRef(false)
   const abortControllerRef = useRef<AbortController | null>(null)
 
@@ -773,6 +1289,8 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
       setActors([])
       spawnedIds.current.clear()
       actorPositionsRef.current.clear()
+      markOccupancy.current.clear()
+      actorMarkRef.current.clear()
       return
     }
 
@@ -827,6 +1345,8 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
     setEmotes([])
     spawnedIds.current.clear()
     actorPositionsRef.current.clear()
+    markOccupancy.current.clear()
+    actorMarkRef.current.clear()
 
     // Inject player knight into the scene (facing camera, with a reaction anim)
     const playerKnight: ActiveActor = {
@@ -897,11 +1417,16 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
     if (playingRef.current) return
     playingRef.current = true
 
-    // Clear previous scene
+    // Clear previous scene (including stale actors from prior vignettes)
+    setActors([])
     setEffects([])
     setEmotes([])
     setTextPopups([])
     setScreenFlash(null)
+    spawnedIds.current.clear()
+    actorPositionsRef.current.clear()
+    markOccupancy.current.clear()
+    actorMarkRef.current.clear()
 
     const abortController = new AbortController()
     abortControllerRef.current = abortController
@@ -1175,7 +1700,22 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
 
   function handleSpawn(target: string, position: Position, resolvedPosition?: [number, number, number]) {
     const localPos = resolvedPosition || POSITION_MAP[position] || [0, 0, 0]
-    const pos = zonePosition(currentZone, localPos)
+
+    // Auto-spread: offset actors at occupied marks so they don't clip
+    const posKey = positionKey(localPos)
+    const isWing = WING_POSITIONS.has(position)
+    const occupancy = isWing ? 0 : (markOccupancy.current.get(posKey) || 0)
+
+    let finalLocalPos = localPos
+    if (occupancy > 0) {
+      const [ox, oz] = SPREAD_OFFSETS[Math.min(occupancy, SPREAD_OFFSETS.length - 1)]
+      finalLocalPos = [localPos[0] + ox, localPos[1], localPos[2] + oz]
+    }
+    if (!isWing) {
+      markOccupancy.current.set(posKey, occupancy + 1)
+    }
+
+    const pos = zonePosition(currentZone, finalLocalPos)
     const actorId = target
 
     // Strip numeric suffix for model resolution (cat_1 → cat) but keep full ID for tracking
@@ -1249,12 +1789,34 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
 
     spawnedIds.current.add(actorId)
     actorPositionsRef.current.set(actorId, pos)
+    if (!isWing) actorMarkRef.current.set(actorId, posKey)
     console.log(`[ScenePlayer3D] Spawned ${actorId} at ${position}${resolvedPosition ? ` [${resolvedPosition.join(', ')}]` : ''}`)
   }
 
   function handleMove(target: string, to: Position, style?: string, resolvedPosition?: [number, number, number], durationMs?: number): Promise<void> {
     const localPos = resolvedPosition || POSITION_MAP[to] || [0, 0, 0]
-    const newPos = zonePosition(currentZone, localPos)
+
+    // Auto-spread: decrement old mark, apply spread at new mark
+    const isWingDest = WING_POSITIONS.has(to)
+    const newPosKey = positionKey(localPos)
+    const oldPosKey = actorMarkRef.current.get(target)
+    if (oldPosKey) {
+      const oldCount = markOccupancy.current.get(oldPosKey) || 0
+      if (oldCount > 1) markOccupancy.current.set(oldPosKey, oldCount - 1)
+      else markOccupancy.current.delete(oldPosKey)
+    }
+    const destOccupancy = isWingDest ? 0 : (markOccupancy.current.get(newPosKey) || 0)
+    let finalLocalPos = localPos
+    if (destOccupancy > 0) {
+      const [ox, oz] = SPREAD_OFFSETS[Math.min(destOccupancy, SPREAD_OFFSETS.length - 1)]
+      finalLocalPos = [localPos[0] + ox, localPos[1], localPos[2] + oz]
+    }
+    if (!isWingDest) {
+      markOccupancy.current.set(newPosKey, destOccupancy + 1)
+      actorMarkRef.current.set(target, newPosKey)
+    }
+
+    const newPos = zonePosition(currentZone, finalLocalPos)
     let currentActor = actors.find(a => a.id === target)
 
     // Auto-spawn if actor doesn't exist yet
@@ -1424,6 +1986,14 @@ export default function ScenePlayer3D({ script, vignetteSteps, taskId, onComplet
   function handleRemove(target: string) {
     setActors((prev) => prev.filter((a) => a.id !== target))
     actorRefs.current.delete(target)
+    // Decrement occupancy at the actor's mark
+    const oldPosKey = actorMarkRef.current.get(target)
+    if (oldPosKey) {
+      const count = markOccupancy.current.get(oldPosKey) || 0
+      if (count > 1) markOccupancy.current.set(oldPosKey, count - 1)
+      else markOccupancy.current.delete(oldPosKey)
+      actorMarkRef.current.delete(target)
+    }
     SoundManager3D.play('remove')
     console.log(`[ScenePlayer3D] Removed ${target}`)
   }

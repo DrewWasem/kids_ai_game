@@ -7,7 +7,7 @@ interface TitleScreenProps {
 
 export default function TitleScreen({ onSelectCharacter }: TitleScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-quest-page-bg stars-bg-light px-6">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-quest-page-bg stars-bg-light px-6">
       {/* Logo */}
       <div className="font-display text-6xl sm:text-7xl font-bold flex items-center gap-3 mb-2">
         <span className="text-5xl sm:text-6xl animate-sparkle">{'\u{2728}'}</span>

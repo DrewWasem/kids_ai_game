@@ -77,8 +77,8 @@ const RANGER_VIGNETTES: Vignette[] = [
         { action: 'move', character: 'ranger', to: 'cs-center', style: 'linear' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'ranger', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'ranger', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
         { action: 'react', effect: 'hearts-float', position: 'center' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
@@ -192,8 +192,8 @@ const RANGER_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'spawn' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'ranger', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'ranger', anim: 'wave' },
+        { action: 'react', effect: 'glow-pulse', position: 'cs-center' },
         { action: 'text_popup', text: '🪤 PERFECT TRAP! 🪤', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
@@ -315,7 +315,7 @@ const DRUID_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'druid', anim: 'celebrate' },
+        { action: 'animate', character: 'druid', anim: 'taunt' },
         { action: 'text_popup', text: '🌸 FLOWER PARTY! 🌸', position: 'center', size: 'huge' },
       ], delayAfter: 1.5 },
     ],
@@ -397,7 +397,7 @@ const DRUID_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'druid', anim: 'celebrate' },
+        { action: 'animate', character: 'druid', anim: 'jump_big' },
         { action: 'react', effect: 'hearts-float', position: 'center' },
       ], delayAfter: 1.5 },
     ],
@@ -437,7 +437,7 @@ const DRUID_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'druid', anim: 'celebrate' },
+        { action: 'animate', character: 'druid', anim: 'Cheering' },
         { action: 'react', effect: 'hearts-float', position: 'center' },
       ], delayAfter: 1.5 },
     ],
@@ -517,7 +517,7 @@ const BARBARIAN_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
+        { action: 'animate', character: 'barbarian', anim: 'wave' },
         { action: 'react', effect: 'smoke', position: 'cs-center' },
         { action: 'text_popup', text: '💥 SMASH FIRST! 💥', position: 'center', size: 'huge' },
       ], delayAfter: 1.5 },
@@ -554,8 +554,8 @@ const BARBARIAN_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.8 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'animate', character: 'barbarian', anim: 'taunt' },
+        { action: 'react', effect: 'hearts-float', position: 'center' },
         { action: 'text_popup', text: '💪 VICTORY! 💪', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
@@ -663,8 +663,8 @@ const BARBARIAN_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'barbarian', anim: 'jump_big' },
+        { action: 'react', effect: 'stars-spin', position: 'cs-center' },
         { action: 'text_popup', text: '🪨 ROCK TRAP! 🪨', position: 'center', size: 'large' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
@@ -773,8 +773,8 @@ const NINJA_VIGNETTES: Vignette[] = [
         { action: 'react', effect: 'smoke', position: 'cs-center' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'ninja', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
         { action: 'react', effect: 'stars-spin', position: 'center' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
@@ -885,7 +885,7 @@ const NINJA_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'spawn' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
+        { action: 'animate', character: 'ninja', anim: 'wave' },
         { action: 'react', effect: 'stars-spin', position: 'cs-center' },
         { action: 'text_popup', text: '🥷 SILENT TRAP! 🥷', position: 'center', size: 'large' },
         { action: 'sfx', sound: 'success' },
@@ -997,8 +997,8 @@ const ROGUE_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'rogue', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'rogue', anim: 'jump_big' },
+        { action: 'react', effect: 'hearts-float', position: 'cs-center' },
         { action: 'react', effect: 'hearts-float', position: 'center' },
         { action: 'text_popup', text: '💰 JACKPOT! 💰', position: 'center', size: 'huge' },
       ], delayAfter: 1.5 },
@@ -1100,8 +1100,8 @@ const ROGUE_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'spawn' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'rogue', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'rogue', anim: 'Cheering' },
+        { action: 'react', effect: 'stars-spin', position: 'cs-center' },
         { action: 'text_popup', text: '🪤 SNEAKY TRAP! 🪤', position: 'center', size: 'large' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
@@ -1219,8 +1219,8 @@ const WHOLE_PARTY_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'crowd_react', characters: 'all', anim: 'wave' },
+        { action: 'react', effect: 'sparkle-magic', position: 'center' },
         { action: 'react', effect: 'hearts-float', position: 'center' },
         { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
       ], delayAfter: 0.8 },
@@ -1344,8 +1344,8 @@ const WHOLE_PARTY_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'spawn' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'crowd_react', characters: 'all', anim: 'taunt' },
+        { action: 'react', effect: 'glow-pulse', position: 'center' },
         { action: 'text_popup', text: '🪤 MEGA TRAP! 🪤', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 1.5 },
@@ -1636,7 +1636,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'rogue', anim: 'celebrate' },
+          { action: 'animate', character: 'rogue', anim: 'jump_big' },
           { action: 'spawn_rain', asset: 'coin', quantity: 6, position: 'cs-center' },
           { action: 'text_popup', text: '🤫 PERFECT HEIST! 🤫', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -1761,8 +1761,8 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ranger', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'ranger', anim: 'Cheering' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '🪤 Perfect Trap! 🪤', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2000,8 +2000,8 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'barbarian', anim: 'wave' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2059,7 +2059,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ninja', anim: 'celebrate' },
+          { action: 'animate', character: 'ninja', anim: 'taunt' },
           { action: 'react', effect: 'hearts-float', position: 'cs-center' },
           { action: 'text_popup', text: '✅ Safe! ✅', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2171,9 +2171,9 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'ranger', anim: 'jump_big' },
           { action: 'spawn_rain', asset: 'coin', quantity: 10, position: 'wide' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'text_popup', text: '🎉 BOLD FIND! 🎉', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2358,8 +2358,8 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'barbarian', anim: 'Cheering' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'text_popup', text: '🛡️ SMART DEFENSE! 🛡️', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2418,7 +2418,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'rogue', anim: 'celebrate' },
+          { action: 'animate', character: 'rogue', anim: 'wave' },
           { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
           { action: 'text_popup', text: '🔍 SAFE DISCOVERY! 🔍', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2481,7 +2481,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
           { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '🌅 PERFECT PICNIC! 🌅', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2539,7 +2539,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ranger', anim: 'celebrate' },
+          { action: 'animate', character: 'ranger', anim: 'taunt' },
           { action: 'react', effect: 'hearts-float', position: 'cs-center' },
           { action: 'text_popup', text: '🌞 Quiet in Sunlight! 🌞', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2666,8 +2666,8 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '🌅 TEAM COURAGE! 🌅', position: 'center', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2733,7 +2733,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
+          { action: 'animate', character: 'barbarian', anim: 'wave' },
           { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'text_popup', text: '🤫 SILENT TRAP! 🤫', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2785,7 +2785,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'druid', anim: 'celebrate' },
+          { action: 'animate', character: 'druid', anim: 'jump_big' },
           { action: 'react', effect: 'hearts-float', position: 'cs-center' },
           { action: 'text_popup', text: '🤩 INSTANT LOVE! 🤩', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2855,7 +2855,7 @@ export const ADVENTURERS_PICNIC_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'rogue', anim: 'celebrate' },
+          { action: 'animate', character: 'rogue', anim: 'Cheering' },
           { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
           { action: 'text_popup', text: '😋 LUCKY! 😋', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
@@ -2981,8 +2981,8 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'taunt' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -3029,8 +3029,8 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ranger', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+          { action: 'animate', character: 'ranger', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'cs-center' },
         ],
         delayAfter: 0.5,
       },
@@ -3046,7 +3046,7 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
           { action: 'react', effect: 'hearts-float', position: 'center' },
         ],
         delayAfter: 2.0,
@@ -3168,8 +3168,8 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
         ],
         delayAfter: 2.0,
       },
@@ -3215,7 +3215,7 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'druid', anim: 'celebrate' },
+          { action: 'animate', character: 'druid', anim: 'taunt' },
           { action: 'react', effect: 'hearts-float', position: 'cs-center' },
         ],
         delayAfter: 0.5,
@@ -3263,8 +3263,8 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'ds-left' },
+          { action: 'animate', character: 'barbarian', anim: 'wave' },
+          { action: 'react', effect: 'sparkle-magic', position: 'ds-left' },
         ],
         delayAfter: 0.3,
       },
@@ -3279,7 +3279,7 @@ export const ADVENTURERS_PICNIC_STAGE_3: Vignette[] = [
       {
         parallel: [
           { action: 'crowd_react', characters: 'all', anim: 'jump_small' },
-          { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+          { action: 'react', effect: 'glow-pulse', position: 'cs-center' },
           { action: 'react', effect: 'laugh-tears', position: 'center' },
           { action: 'camera_shake', intensity: 0.5, duration: 0.8 },
           { action: 'text_popup', text: '🎉😱 CELEBRATION PANIC! 😱🎉', position: 'center', size: 'huge' },

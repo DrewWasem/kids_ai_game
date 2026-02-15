@@ -60,13 +60,14 @@ export default function App() {
   const world = currentZone ? WORLDS[currentZone] : null;
   const earnedBadges = BADGES.filter(b => badges[b.id]);
 
-  if (!started) {
-    return <TitleScreen onSelectCharacter={(id) => { setSelectedCharacter(id); setStarted(true); setPlayingIntro(true); }} />;
-  }
-
   return (
     <ErrorBoundary>
-      <div className="flex flex-col h-screen bg-quest-page-bg stars-bg-light">
+      {/* TitleScreen overlays the canvas while world preloads behind it */}
+      {!started && (
+        <TitleScreen onSelectCharacter={(id) => { setSelectedCharacter(id); setStarted(true); setPlayingIntro(true); }} />
+      )}
+
+      <div className={`flex flex-col h-screen bg-quest-page-bg stars-bg-light ${!started ? 'invisible' : ''}`}>
         {/* Header */}
         <header className={`relative px-5 py-3 flex items-center justify-between z-10 ${expanded || playingIntro ? 'hidden' : ''}`}>
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-quest-purple/30 to-transparent" />
@@ -134,9 +135,9 @@ export default function App() {
 
         <div className="flex-1 min-h-0 flex flex-col">
           {/* Game Canvas */}
-          <div className={`flex-1 min-h-0 flex items-center justify-center ${expanded || playingIntro ? 'px-0 py-0' : 'px-4 py-2'}`}>
-            <div className={`relative overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30 ${expanded || playingIntro ? 'rounded-none' : 'rounded-game-lg'}`}
-                 style={expanded || playingIntro
+          <div className={`flex-1 min-h-0 flex items-center justify-center ${expanded || playingIntro || !started ? 'px-0 py-0' : 'px-4 py-2'}`}>
+            <div className={`relative overflow-hidden border-2 border-quest-canvas-border/50 shadow-glow-purple/30 ${expanded || playingIntro || !started ? 'rounded-none' : 'rounded-game-lg'}`}
+                 style={expanded || playingIntro || !started
                    ? { width: '100%', height: '100%' }
                    : { width: 1024, height: 576, maxWidth: '100%', maxHeight: '60vh' }
                  }>

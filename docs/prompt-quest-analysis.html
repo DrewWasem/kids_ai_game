@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Quest - Comprehensive Analysis Report</title>
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --card-hover: #222240;
+    --accent: #7c3aed;
+    --accent-light: #a78bfa;
+    --accent-glow: rgba(124, 58, 237, 0.3);
+    --green: #22c55e;
+    --green-bg: rgba(34, 197, 94, 0.1);
+    --yellow: #eab308;
+    --yellow-bg: rgba(234, 179, 8, 0.1);
+    --red: #ef4444;
+    --red-bg: rgba(239, 68, 68, 0.1);
+    --orange: #f97316;
+    --orange-bg: rgba(249, 115, 22, 0.1);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59, 130, 246, 0.1);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #2d2d4a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-light), var(--accent), #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    margin: 2.5rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h2 .emoji { font-size: 1.4rem; }
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 1.5rem 0 0.75rem;
+  }
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 1rem 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  p { margin-bottom: 1rem; color: var(--text); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-green { border-left: 4px solid var(--green); }
+  .card-yellow { border-left: 4px solid var(--yellow); }
+  .card-red { border-left: 4px solid var(--red); }
+  .card-blue { border-left: 4px solid var(--blue); }
+  .card-orange { border-left: 4px solid var(--orange); }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  th {
+    text-align: left;
+    padding: 0.75rem;
+    background: var(--card);
+    color: var(--accent-light);
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent);
+  }
+  td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  tr:hover td { background: var(--card-hover); }
+  code {
+    background: var(--card);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--accent-light);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  pre {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+  }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; color: var(--text); }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-light);
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+  .flow-diagram {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    margin: 1.5rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+  .flow-diagram .arrow { color: var(--accent); }
+  .flow-diagram .highlight { color: var(--accent-light); font-weight: 600; }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+  .toc h3 { margin-top: 0; color: var(--accent-light); }
+  .toc ol { counter-reset: toc; padding-left: 0; }
+  .toc li {
+    list-style: none;
+    counter-increment: toc;
+    padding: 0.3rem 0;
+  }
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent-light); }
+  .verdict {
+    background: linear-gradient(135deg, var(--card), var(--card-hover));
+    border: 2px solid var(--accent);
+    border-radius: 14px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+  .verdict h3 { color: var(--accent-light); margin-top: 0; }
+  .priority-label {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.7rem;
+    line-height: 18px;
+    font-weight: 700;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .p1 { background: var(--red); color: white; }
+  .p2 { background: var(--orange); color: white; }
+  .p3 { background: var(--yellow); color: #1a1a2e; }
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Prompt Quest Analysis Report</h1>
+<p class="subtitle">Teaching Methodology, Technical Architecture, Gaps, Limitations, and MVP Improvement Recommendations<br>
+<span style="font-size:0.85rem;">Generated 2026-02-14 | Branch: 3d-world | Solo Dev Hackathon Build (Feb 10-16)</span></p>
+
+<!-- Table of Contents -->
+<div class="toc">
+<h3>Table of Contents</h3>
+<ol>
+  <li><a href="#teaching">How the Game Teaches Prompting</a></li>
+  <li><a href="#methodology">Methodology and Goals</a></li>
+  <li><a href="#gaps">Gaps in the Approach</a></li>
+  <li><a href="#limitations">World Limitations</a></li>
+  <li><a href="#mvp">MVP Improvements</a></li>
+  <li><a href="#agents">Missing Agents and Skills</a></li>
+  <li><a href="#collaboration">Agent Collaboration Improvements</a></li>
+  <li><a href="#verdict">Final Verdict</a></li>
+</ol>
+</div>
+
+<!-- Stats -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-number">427</div>
+    <div class="stat-label">Authored Vignettes</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">7</div>
+    <div class="stat-label">Quest Zones</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">28</div>
+    <div class="stat-label">Characters</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">276</div>
+    <div class="stat-label">Asset References</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">139</div>
+    <div class="stat-label">Animation Clips</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">3</div>
+    <div class="stat-label">Stages per Zone</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: HOW IT TEACHES -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="teaching"><span class="emoji">🧠</span> 1. How the Game Teaches Prompting</h2>
+
+<div class="card card-green">
+<h3>Core Mechanic: Mad-Libs Fill-in-the-Blank</h3>
+<p>Kids don't write free-text prompts. Instead, they fill in blanks in a sentence template, each blank constrained to a set of emoji-labeled options. This is the central pedagogical scaffold.</p>
+
+<div class="flow-diagram">
+  <span class="highlight">Template</span>: "Plan a party with <span class="highlight">{FOOD}</span> and <span class="highlight">{ENTERTAINMENT}</span> for a <span class="highlight">{VIBE}</span> birthday"<br>
+  <span class="arrow">&darr;</span><br>
+  <span class="highlight">User picks</span>: cake + magic_show + spooky<br>
+  <span class="arrow">&darr;</span><br>
+  <span class="highlight">Tag combo</span>: {food: 'cake', entertainment: 'magic_show', vibe: 'spooky'}<br>
+  <span class="arrow">&darr;</span><br>
+  <span class="highlight">Vignette match</span> (5-priority system) <span class="arrow">&rarr;</span> <span class="highlight">3D animation</span> <span class="arrow">&rarr;</span> <span class="highlight">Feedback card</span>
+</div>
+
+<p>The implicit lesson: <strong>specific choices produce specific (and spectacular) outcomes</strong>. Vague or incomplete selections result in generic, less exciting animations &mdash; gently punishing ambiguity without shaming the child.</p>
+</div>
+
+<h3>The Teaching Loop</h3>
+<table>
+  <tr><th>Step</th><th>What the Kid Does</th><th>What the System Does</th><th>Learning Outcome</th></tr>
+  <tr>
+    <td>1. Fill blanks</td>
+    <td>Clicks emoji options for each slot</td>
+    <td>Captures tag selections</td>
+    <td>Understand that prompts need <em>components</em></td>
+  </tr>
+  <tr>
+    <td>2. Watch result</td>
+    <td>Sees 3D scene play out</td>
+    <td>Matches tags to vignette, renders animation</td>
+    <td>See direct cause-and-effect: choices &rarr; visual outcome</td>
+  </tr>
+  <tr>
+    <td>3. Read feedback</td>
+    <td>Reads "Why this worked" card</td>
+    <td>Shows skillTaught, tip, vagueComparison</td>
+    <td>Build meta-awareness of WHY specificity matters</td>
+  </tr>
+  <tr>
+    <td>4. Earn badge</td>
+    <td>Sees badge toast notification</td>
+    <td>Checks PromptAnalysis flags against badge criteria</td>
+    <td>Internalize skill categories: WHO, WHAT, HOW, WHERE</td>
+  </tr>
+  <tr>
+    <td>5. Try again</td>
+    <td>Changes choices, hits GO again</td>
+    <td>Matches new combo, may unlock Iterator badge</td>
+    <td>Learn that <strong>iteration improves prompts</strong></td>
+  </tr>
+</table>
+
+<h3>3-Level Curriculum (Per Zone)</h3>
+<div class="card card-blue">
+<table>
+  <tr><th>Level</th><th>Focus</th><th>Slots</th><th>Success Criteria</th><th>New Feature</th></tr>
+  <tr>
+    <td><span class="badge badge-green">Level 1</span></td>
+    <td>Basic Prompt Structure</td>
+    <td>3 slots</td>
+    <td>Hit a predefined success combo</td>
+    <td>Fill in the blanks correctly</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-yellow">Level 2</span></td>
+    <td>Specificity Matters</td>
+    <td>4-5 slots</td>
+    <td>More complex combos</td>
+    <td><code>vagueComparison</code> &mdash; shows vague vs specific side-by-side</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-orange">Level 3</span></td>
+    <td>Discovery &amp; Experimentation</td>
+    <td>2 combo slots</td>
+    <td>Discover 4+ unique vignettes</td>
+    <td>Progressive hint system (vague &rarr; medium &rarr; specific)</td>
+  </tr>
+</table>
+</div>
+
+<h3>Feedback Mechanism</h3>
+<table>
+  <tr><th>Prompt Score</th><th>Visual Response</th><th>Feedback Tone</th><th>Teaching Strategy</th></tr>
+  <tr>
+    <td><span class="badge badge-green">PERFECT</span></td>
+    <td>Spectacular custom scene</td>
+    <td>Celebrate what they did right</td>
+    <td>"You named WHO, WHAT, and HOW &mdash; amazing!"</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-yellow">PARTIAL</span></td>
+    <td>Decent but not spectacular</td>
+    <td>Acknowledge + one concrete next step</td>
+    <td>"Nice start! Can you describe WHAT each guest does?"</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-orange">CHAOTIC</span></td>
+    <td>Hilariously wrong</td>
+    <td>Redirect with concrete example</td>
+    <td>"The skeleton needs more to work with! Try telling WHO should come."</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-blue">FUNNY_FAIL</span></td>
+    <td>Intentionally absurd</td>
+    <td>Celebrate the chaos + nudge</td>
+    <td>"LOL! That was wild. Want to try being more specific?"</td>
+  </tr>
+</table>
+
+<h3>Badge System (8 Badges)</h3>
+<table>
+  <tr><th>Badge</th><th>Unlock Condition</th><th>Prompt Engineering Skill</th></tr>
+  <tr><td>🎯 Commander</td><td>Named a specific character</td><td>WHO matters</td></tr>
+  <tr><td>🎬 Director</td><td>Described a specific action</td><td>WHAT matters</td></tr>
+  <tr><td>📖 Storyteller</td><td>Put events in sequence</td><td>WHEN matters</td></tr>
+  <tr><td>🔍 Detail Master</td><td>Added vivid details</td><td>HOW matters</td></tr>
+  <tr><td>🌍 World Builder</td><td>Referenced the environment</td><td>WHERE matters</td></tr>
+  <tr><td>👑 Combo King</td><td>Multiple characters interact</td><td>Multi-part prompts</td></tr>
+  <tr><td>🔄 Iterator</td><td>Improved a prompt on retry</td><td>Iteration is learning</td></tr>
+  <tr><td>⭐ Prompt Master</td><td>4+ skills in one prompt</td><td>Mastery milestone</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: METHODOLOGY -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="methodology"><span class="emoji">🎯</span> 2. Methodology and Goals</h2>
+
+<div class="card card-green">
+<h3>Pedagogical Framework</h3>
+<p>The game is built on <strong>Piaget's Concrete Operational Stage</strong> (ages 7-11), where children learn through direct manipulation and immediate, visible feedback &mdash; not abstract instruction.</p>
+
+<h4>Three Design Pillars</h4>
+<ol>
+  <li><strong>Specificity is Visible</strong> &mdash; More specific choices produce visually better 3D scenes. This is the primary teaching mechanism.</li>
+  <li><strong>Comedy-First Pedagogy</strong> &mdash; FUNNY_FAIL must be funnier than FULL_SUCCESS. Kids learn from failure without feeling punished. The comedy lowers stakes.</li>
+  <li><strong>Scaffolded Autonomy</strong> &mdash; Level 1 constrains choices to 3 slots. Level 3 opens up experimental combo discovery. The scaffold gradually loosens.</li>
+</ol>
+</div>
+
+<h3>What the Game Teaches vs. What It Claims to Teach</h3>
+<table>
+  <tr><th>Claimed Skill</th><th>How It's Actually Taught</th><th>Effectiveness</th></tr>
+  <tr>
+    <td>Specificity</td>
+    <td>Vague combos &rarr; boring results; specific combos &rarr; spectacular results</td>
+    <td><span class="badge badge-green">Strong</span></td>
+  </tr>
+  <tr>
+    <td>Completeness</td>
+    <td>More filled slots = better outcome; vagueComparison shows the difference</td>
+    <td><span class="badge badge-green">Strong</span></td>
+  </tr>
+  <tr>
+    <td>Iteration</td>
+    <td>Iterator badge rewards re-trying; "New Sentence" button refreshes template</td>
+    <td><span class="badge badge-yellow">Moderate</span></td>
+  </tr>
+  <tr>
+    <td>Sequencing</td>
+    <td>Steps play in authored order, but user doesn't control sequence</td>
+    <td><span class="badge badge-red">Weak</span></td>
+  </tr>
+  <tr>
+    <td>Constraint awareness</td>
+    <td>Options are limited to asset vocabulary; implicit but not explicit</td>
+    <td><span class="badge badge-yellow">Moderate</span></td>
+  </tr>
+  <tr>
+    <td>Multi-part prompts</td>
+    <td>Combo King badge tracks multi-character interactions</td>
+    <td><span class="badge badge-yellow">Moderate</span></td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: GAPS -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="gaps"><span class="emoji">🕳️</span> 3. Gaps in the Approach</h2>
+
+<div class="card card-red">
+<h3>Gap 1: No Free-Text Input</h3>
+<p>The game teaches prompt <em>components</em> via mad-libs but never lets kids write actual prompts. There is no transition from structured fill-in-the-blank to open-ended text input. A child completing all 7 zones would understand WHAT makes a good prompt but wouldn't have practiced WRITING one.</p>
+<p><strong>Impact:</strong> The primary skill (typing natural language instructions to an AI) is never exercised.</p>
+</div>
+
+<div class="card card-red">
+<h3>Gap 2: No Sequencing Control</h3>
+<p>Vignette steps play in pre-authored order. The child never decides "first do X, then Y, then Z." The Storyteller badge (sequencing) is awarded based on <code>has_sequence</code> flag in PromptAnalysis, but this is set by the vignette author, not earned through user action.</p>
+<p><strong>Impact:</strong> Sequencing (arguably the most important prompt engineering skill) is taught passively, not actively.</p>
+</div>
+
+<div class="card card-yellow">
+<h3>Gap 3: No Negative Feedback Loop for Bad Patterns</h3>
+<p>The system shows what good prompts produce, but there's no mechanism to show WHY a bad pattern fails repeatedly. If a child keeps picking the same vague combo, they see the same default vignette each time with the same feedback &mdash; no escalating hints or adaptive nudging.</p>
+</div>
+
+<div class="card card-yellow">
+<h3>Gap 4: No Transfer to Real AI Tools</h3>
+<p>The game uses slot-based input with emoji options. Real AI prompting uses natural language. There's no bridge between the two &mdash; no "now try typing what you learned" moment.</p>
+</div>
+
+<div class="card card-yellow">
+<h3>Gap 5: Limited Meta-Cognitive Reflection</h3>
+<p>Feedback cards show tips after each vignette, but there's no mechanism for the child to reflect on their learning across attempts. No prompt history comparison, no "look how you improved" visualization, no journal or portfolio of what they've discovered.</p>
+</div>
+
+<div class="card card-yellow">
+<h3>Gap 6: Badge Criteria Are Author-Set, Not User-Earned</h3>
+<p>The PromptAnalysis flags (<code>has_character</code>, <code>has_action</code>, etc.) are hardcoded per vignette by the author, not dynamically analyzed from user input. Badge unlocks feel arbitrary from the child's perspective &mdash; they don't know WHY they earned a badge.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: LIMITATIONS -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="limitations"><span class="emoji">🏗️</span> 4. World Limitations</h2>
+
+<h3>Technical Architecture</h3>
+<div class="card card-orange">
+<h4>Response System is 2-Tier, Not 3-Tier</h4>
+<p>The CLAUDE.md describes a 3-tier system (Cache &rarr; Live API &rarr; Fallback). The actual implementation is <strong>2-tier</strong> (Live API &rarr; Fallback). The cache system (<code>cache.ts</code>) exists but is never called by the resolver. No <code>demo-cache.json</code> file exists despite ROADMAP.md claiming "166 golden cache entries."</p>
+<p><strong>Impact:</strong> Every interaction calls the live Claude API. No offline demo capability. If the API key expires during a demo, the experience degrades to generic fallback scripts.</p>
+</div>
+
+<div class="card card-orange">
+<h4>No Backend &mdash; Pure Client-Side</h4>
+<p>The Claude API key is embedded in the browser via <code>VITE_ANTHROPIC_API_KEY</code> and sent with a <code>dangerous-direct-browser-access</code> header. There is no server-side proxy.</p>
+<p><strong>Risks:</strong></p>
+<ul>
+  <li>API key is visible in browser DevTools and build artifacts</li>
+  <li>No rate limiting, abuse protection, or usage monitoring</li>
+  <li>No request logging or analytics</li>
+  <li>CORS restrictions may vary by deployment environment</li>
+</ul>
+</div>
+
+<h3>Asset Limitations</h3>
+<table>
+  <tr><th>Category</th><th>Available</th><th>Missing</th></tr>
+  <tr><td>Characters</td><td>28 models (5 series)</td><td>No female-presenting characters, no diverse body types</td></tr>
+  <tr><td>Animations</td><td>139 clips (shared rig)</td><td>No eating, cooking, reading, writing, building animations</td></tr>
+  <tr><td>Props</td><td>87 paths</td><td>No vehicles, interactive objects, modern items, natural elements</td></tr>
+  <tr><td>Effects</td><td>10 particle effects</td><td>No real fire/smoke, weather, water, lighting changes</td></tr>
+  <tr><td>Environments</td><td>7 zone backdrops</td><td>Static only, no time-of-day, no weather, no dynamic terrain</td></tr>
+</table>
+
+<h3>Scene Script Limitations</h3>
+<ul>
+  <li><strong>No physics</strong> &mdash; Movement is tween-based, no collision or gravity</li>
+  <li><strong>No camera control</strong> &mdash; Camera shake is CSS transform, no smooth camera moves or cinematic cuts</li>
+  <li><strong>No runtime asset loading</strong> &mdash; All GLTFs must be pre-bundled in <code>public/assets/3d/</code></li>
+  <li><strong>No branching</strong> &mdash; Vignettes are linear sequences, no conditional logic or player choices mid-scene</li>
+  <li><strong>No dynamic text</strong> &mdash; Text popups use hardcoded strings, can't incorporate user input</li>
+  <li><strong>Max 6 actions per step</strong> &mdash; Limits scene complexity</li>
+</ul>
+
+<h3>Missing Systems</h3>
+<table>
+  <tr><th>System</th><th>Status</th><th>Impact</th></tr>
+  <tr><td>Save/Load</td><td><span class="badge badge-red">Missing</span></td><td>Progress lost on clear/new device</td></tr>
+  <tr><td>User Accounts</td><td><span class="badge badge-red">Missing</span></td><td>No profiles, no cloud sync</td></tr>
+  <tr><td>Analytics</td><td><span class="badge badge-red">Missing</span></td><td>No usage data, error tracking, or learning metrics</td></tr>
+  <tr><td>Tutorial</td><td><span class="badge badge-yellow">Partial</span></td><td>Inline hints only, no structured onboarding</td></tr>
+  <tr><td>Accessibility</td><td><span class="badge badge-red">Missing</span></td><td>No font size, contrast, or input mode options</td></tr>
+  <tr><td>Parental Controls</td><td><span class="badge badge-red">Missing</span></td><td>No usage limits, content filters, or progress reports</td></tr>
+  <tr><td>Voice Input</td><td><span class="badge badge-yellow">Partial</span></td><td>Mentioned in CLAUDE.md, not tested</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: MVP IMPROVEMENTS -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="mvp"><span class="emoji">🚀</span> 5. MVP Improvements</h2>
+
+<div class="card card-green">
+<h3><span class="priority-label p1">1</span> Priority 1: Add a Free-Text Mode (Level 4)</h3>
+<p>After completing Level 3, unlock a <strong>Free-Text Mode</strong> where kids type natural language prompts. Use the existing Claude API + vocabulary contract to generate scene scripts from free text. The mad-libs levels become training wheels; free-text is the destination.</p>
+<h4>Implementation sketch</h4>
+<ul>
+  <li>Add a text input component as a Level 4 stage type</li>
+  <li>System prompt constrains Claude to vocabulary contract + scene script schema</li>
+  <li>Reuse existing ScenePlayer3D to render the result</li>
+  <li>Feedback card compares the free-text prompt against the structured mad-libs equivalent</li>
+</ul>
+</div>
+
+<div class="card card-green">
+<h3><span class="priority-label p1">2</span> Priority 1: Activate the Golden Response Cache</h3>
+<p>The cache infrastructure exists but is unused. Wire <code>cache.ts</code> into <code>resolver.ts</code> as Tier 1 (before API calls). Pre-generate 20-30 responses per zone. This enables:</p>
+<ul>
+  <li>Offline demo mode (critical for hackathon presentation)</li>
+  <li>Instant responses for common combos</li>
+  <li>Reduced API costs and latency</li>
+</ul>
+</div>
+
+<div class="card card-green">
+<h3><span class="priority-label p1">3</span> Priority 1: Add a Structured Tutorial</h3>
+<p>Create a guided first-play experience for the Skeleton Birthday zone:</p>
+<ul>
+  <li>Highlight the first blank with a pulsing animation</li>
+  <li>Show a tooltip: "Click here to pick the food!"</li>
+  <li>After filling all blanks, arrow points to GO button</li>
+  <li>After first vignette, highlight the feedback card</li>
+  <li>After second attempt, show the "New Sentence" button</li>
+</ul>
+</div>
+
+<div class="card card-yellow">
+<h3><span class="priority-label p2">4</span> Priority 2: Add Prompt History Comparison</h3>
+<p>Show a sidebar or modal with the child's last 3-5 attempts per stage, visually comparing how their prompts improved. Makes the iteration learning loop explicit.</p>
+</div>
+
+<div class="card card-yellow">
+<h3><span class="priority-label p2">5</span> Priority 2: Dynamic Badge Explanation</h3>
+<p>When a badge unlocks, show exactly WHY it was earned: "You earned 🎯 Commander because you chose <strong>the knight</strong> as a specific character!" Currently badges just pop up with a generic description.</p>
+</div>
+
+<div class="card card-yellow">
+<h3><span class="priority-label p2">6</span> Priority 2: Adaptive Nudging for Repeated Failures</h3>
+<p>If a child hits the default vignette 3+ times in a row, escalate the feedback:</p>
+<ul>
+  <li>Attempt 1: Standard feedback + tip</li>
+  <li>Attempt 2: Feedback + "Try this exact combo: cake + magic + spooky"</li>
+  <li>Attempt 3: Auto-fill one slot and say "I picked this for you &mdash; now try the rest!"</li>
+</ul>
+</div>
+
+<div class="card card-blue">
+<h3><span class="priority-label p3">7</span> Priority 3: Backend API Proxy</h3>
+<p>Move the Claude API key server-side. Even a simple Vercel serverless function would protect the key and enable rate limiting.</p>
+</div>
+
+<div class="card card-blue">
+<h3><span class="priority-label p3">8</span> Priority 3: Analytics / Learning Metrics</h3>
+<p>Track per-child: attempts per stage, badge unlock order, time-to-completion, most common tag choices. Even localStorage-only metrics would inform iteration.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 6: MISSING AGENTS/SKILLS -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="agents"><span class="emoji">🤖</span> 6. Missing Agents and Skills</h2>
+
+<h3>Current Ecosystem</h3>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-number">11</div>
+    <div class="stat-label">Custom Agents</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">14</div>
+    <div class="stat-label">Command Workflows</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">7</div>
+    <div class="stat-label">Domain SMEs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">23</div>
+    <div class="stat-label">Installed 3D Skills</div>
+  </div>
+</div>
+
+<h3>Missing Agents</h3>
+<table>
+  <tr><th>Agent</th><th>Purpose</th><th>Why It's Needed</th></tr>
+  <tr>
+    <td><code>test-runner</code></td>
+    <td>Automatically run Vitest suite after code changes</td>
+    <td>Currently manual; should auto-run after implementer finishes</td>
+  </tr>
+  <tr>
+    <td><code>visual-regression</code></td>
+    <td>Run Puppeteer screenshot tests and compare diffs</td>
+    <td>22 visual tests exist but aren't wired into the agent pipeline</td>
+  </tr>
+  <tr>
+    <td><code>cache-generator</code></td>
+    <td>Generate golden response cache entries per zone/stage</td>
+    <td>Cache infrastructure exists but has no content; needs bulk generation</td>
+  </tr>
+  <tr>
+    <td><code>playtest-bot</code></td>
+    <td>Automated playtesting via Puppeteer &mdash; fill random combos, verify no crashes</td>
+    <td>427 vignettes, impossible to manually test all paths</td>
+  </tr>
+  <tr>
+    <td><code>accessibility-auditor</code></td>
+    <td>Check WCAG compliance, color contrast, keyboard navigation</td>
+    <td>No accessibility testing exists</td>
+  </tr>
+</table>
+
+<h3>Missing SMEs</h3>
+<table>
+  <tr><th>SME</th><th>Domain</th><th>Gap It Fills</th></tr>
+  <tr>
+    <td><code>ux-researcher</code></td>
+    <td>User testing, feedback analysis, usability</td>
+    <td>No user research perspective in content pipeline</td>
+  </tr>
+  <tr>
+    <td><code>performance-engineer</code></td>
+    <td>Bundle size, load time, memory, frame rate</td>
+    <td>3D game development SME covers patterns but not profiling/measurement</td>
+  </tr>
+  <tr>
+    <td><code>accessibility-expert</code></td>
+    <td>WCAG, screen readers, motor accessibility</td>
+    <td>Not a concern for hackathon but critical for production</td>
+  </tr>
+</table>
+
+<h3>Missing Skills</h3>
+<table>
+  <tr><th>Skill</th><th>Purpose</th><th>Priority</th></tr>
+  <tr>
+    <td><code>vignette-validator</code></td>
+    <td>Validate that all vignette asset references exist in the manifest</td>
+    <td><span class="badge badge-red">High</span></td>
+  </tr>
+  <tr>
+    <td><code>deploy-vercel</code></td>
+    <td>Automated deployment with pre-flight checks</td>
+    <td><span class="badge badge-yellow">Medium</span></td>
+  </tr>
+  <tr>
+    <td><code>bundle-analyzer</code></td>
+    <td>Track build size regression</td>
+    <td><span class="badge badge-blue">Low</span></td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 7: AGENT COLLABORATION -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="collaboration"><span class="emoji">🤝</span> 7. Agent Collaboration Improvements</h2>
+
+<h3>Current Workflow</h3>
+<div class="flow-diagram">
+  <span class="highlight">/conductor</span> <span class="arrow">&rarr;</span>
+  <span class="highlight">/research</span> <span class="arrow">&rarr;</span>
+  <span class="highlight">/create-plan</span> <span class="arrow">&rarr;</span>
+  <span class="highlight">/implement-plan</span> <span class="arrow">&rarr;</span>
+  <span class="highlight">/validate-plan</span><br>
+  <span style="color: var(--text-muted); font-size: 0.8rem;">(with SME review gates at plan and implement stages)</span>
+</div>
+
+<h3>What Works Well</h3>
+<div class="card card-green">
+<ul>
+  <li><strong>Agent specialization</strong> &mdash; Read-only agents (researcher, analyzer) never suggest changes; write agents (implementer) follow strict protocols. This prevents scope creep.</li>
+  <li><strong>SME routing table</strong> &mdash; The <code>/create-plan</code> command has a clear routing table mapping content types to relevant SMEs.</li>
+  <li><strong>Memory system</strong> &mdash; Persistent context across sessions via structured memory tree with indexes and tags.</li>
+  <li><strong>Context Guardian hook</strong> &mdash; Automatically saves state when context window fills up, preventing lost work.</li>
+  <li><strong>Compose-task pipeline</strong> &mdash; 7-stage SME pipeline with human checkpoints for new game content.</li>
+</ul>
+</div>
+
+<h3>What Needs Improvement</h3>
+
+<div class="card card-red">
+<h4>Problem 1: No Automated Testing in the Pipeline</h4>
+<p>After <code>/implement-plan</code>, there's no automatic test run. The implementer agent can write code and verify it compiles, but doesn't run the Vitest suite or visual regression tests. Human must manually run <code>npm test</code>.</p>
+<p><strong>Fix:</strong> Add a <code>test-runner</code> agent that automatically executes after the implementer. Wire it into <code>/implement-plan</code> as a verification step.</p>
+</div>
+
+<div class="card card-red">
+<h4>Problem 2: SME Reviews Are Manual Prompts, Not Structured Outputs</h4>
+<p>When an SME reviews content, it produces free-text feedback. There's no structured format (pass/fail criteria, severity levels, action items). The conductor has to interpret unstructured SME output.</p>
+<p><strong>Fix:</strong> Give each SME a structured review schema:</p>
+<pre>{
+  "verdict": "pass | needs_changes | fail",
+  "issues": [
+    { "severity": "critical | warning | suggestion",
+      "what": "description",
+      "where": "file:line",
+      "fix": "proposed solution" }
+  ]
+}</pre>
+</div>
+
+<div class="card card-yellow">
+<h4>Problem 3: No Agent-to-Agent Communication</h4>
+<p>Agents communicate only through the parent context window. If the researcher discovers something the implementer needs, the parent must relay it. This wastes context and introduces information loss.</p>
+<p><strong>Fix:</strong> Use the memory tree as a shared agent bus. Researchers write findings to <code>memory/research/</code>; the implementer reads from it. Add a <code>memory/handoffs/</code> domain for agent-to-agent messages.</p>
+</div>
+
+<div class="card card-yellow">
+<h4>Problem 4: Conductor Can't Resume After Compaction</h4>
+<p>If context compaction happens mid-pipeline (Research &rarr; Plan &rarr; <em>compact</em> &rarr; Implement), the conductor loses the plan state. The post-compact hook re-injects context but doesn't re-establish the pipeline stage.</p>
+<p><strong>Fix:</strong> Persist pipeline state to <code>memory/plans/</code> with explicit stage markers. After compaction, <code>/conductor</code> reads the plan and resumes from the last checkpoint.</p>
+</div>
+
+<div class="card card-blue">
+<h4>Problem 5: No Parallel Agent Execution</h4>
+<p>The compose-task pipeline runs SMEs sequentially (story-writer &rarr; character-director &rarr; prompt-writer). Some of these could run in parallel (e.g., ece-professor and child-game-design reviews).</p>
+<p><strong>Fix:</strong> Identify independent stages in the pipeline and dispatch them as parallel Task calls. Group reviews (stages 5-6) can run simultaneously.</p>
+</div>
+
+<div class="card card-blue">
+<h4>Problem 6: Memory Tree Has Unpopulated Domains</h4>
+<p>The memory tree has domains for <code>preferences/</code>, <code>plans/</code>, and <code>files/</code> that are empty. The <code>/remember</code> command doesn't populate all domains evenly.</p>
+<p><strong>Fix:</strong> Add domain-specific remember triggers. When a plan is approved, auto-save to <code>plans/</code>. When user preferences are detected, auto-save to <code>preferences/</code>.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 8: VERDICT -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="verdict"><span class="emoji">⚖️</span> 8. Final Verdict</h2>
+
+<div class="verdict">
+<h3>Overall Assessment</h3>
+<p>Prompt Quest is an <strong>impressive solo hackathon build</strong> with a well-designed pedagogical core and a remarkably sophisticated development infrastructure. The mad-libs system effectively teaches prompt components through visual cause-and-effect, and the 3-level curriculum provides genuine skill progression.</p>
+
+<h3>Strengths</h3>
+<ul>
+  <li><strong>427 hand-authored vignettes</strong> across 7 zones &mdash; massive content depth for a 5-day build</li>
+  <li><strong>Comedy-first design</strong> &mdash; kids learn from failure without frustration</li>
+  <li><strong>Specificity as visual reward</strong> &mdash; the core teaching mechanism is sound and concrete-operational-appropriate</li>
+  <li><strong>SME pipeline</strong> &mdash; content creation is systematically reviewed by 7 domain experts</li>
+  <li><strong>Context management</strong> &mdash; guardian hooks, session transfer, and memory persistence are production-grade infrastructure</li>
+  <li><strong>Failsafe architecture</strong> &mdash; every failure path has a fallback; the demo never crashes</li>
+</ul>
+
+<h3>Critical Gaps for a Production Product</h3>
+<ol>
+  <li><strong>No free-text mode</strong> &mdash; kids never actually write prompts</li>
+  <li><strong>No working cache</strong> &mdash; depends on live API for every interaction</li>
+  <li><strong>No tutorial</strong> &mdash; 8-year-olds need more onboarding than inline hints</li>
+  <li><strong>No backend</strong> &mdash; API key exposed in browser</li>
+  <li><strong>No sequencing control</strong> &mdash; a key prompt engineering skill is only taught passively</li>
+</ol>
+
+<h3>For the Hackathon Demo (Immediate)</h3>
+<p>The three highest-impact improvements for the Feb 16 deadline:</p>
+<ol>
+  <li><span class="priority-label p1">1</span> <strong>Activate the cache</strong> &mdash; wire <code>cache.ts</code> into <code>resolver.ts</code>, pre-generate 20 responses. Enables offline demo.</li>
+  <li><span class="priority-label p1">2</span> <strong>Add a 30-second tutorial overlay</strong> for first-time players in the Skeleton Birthday zone.</li>
+  <li><span class="priority-label p1">3</span> <strong>Record a backup demo video</strong> in case of API/network issues during presentation.</li>
+</ol>
+
+<h3>For Post-Hackathon (Next Steps)</h3>
+<ol>
+  <li>Free-text Level 4 mode with Claude API</li>
+  <li>Backend proxy for API key security</li>
+  <li>Automated playtest bot (Puppeteer) for regression coverage</li>
+  <li>Prompt history comparison UI</li>
+  <li>Adaptive nudging for repeated failures</li>
+</ol>
+</div>
+
+<footer>
+  Generated by Claude Opus 4.6 | Prompt Quest Analysis | 2026-02-14<br>
+  Solo dev hackathon build (Feb 10-16, 2026) | Branch: 3d-world
+</footer>
+
+</div>
+</body>
+</html>

@@ -26,6 +26,7 @@ import { ASSET_BASE } from '../data/asset-manifest'
 import { ZONE_CENTERS, ZONE_META } from '../stores/gameStore'
 import { registerCollision, unregisterCollision, getCollisionBoxes, getGeneration, type CollisionBox } from './collision-registry'
 import { QuestZoneCircle } from './QuestZoneCircle'
+import { StageFloor } from './ScenePlayer3D'
 
 // ============================================================================
 // HEX GRID HELPERS
@@ -1810,6 +1811,29 @@ function VillageClouds() {
 // Shows auto-measured bounding boxes from collision registry
 // ============================================================================
 
+function DebugStageGrids() {
+  const [visible, setVisible] = useState(false)
+
+  const toggle = useCallback((e: KeyboardEvent) => {
+    if (e.code === 'Slash') setVisible(v => !v)
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('keydown', toggle)
+    return () => window.removeEventListener('keydown', toggle)
+  }, [toggle])
+
+  if (!visible) return null
+
+  return (
+    <group name="debug-stage-grids">
+      {Object.keys(ZONE_CENTERS).map(zoneId => (
+        <StageFloor key={zoneId} zoneId={zoneId} />
+      ))}
+    </group>
+  )
+}
+
 function DebugClearanceRings() {
   const [visible, setVisible] = useState(false)
 
@@ -1987,6 +2011,8 @@ export function VillageWorld() {
         )
       })}
 
+      {/* Debug: stage grids at all zones — press / to toggle */}
+      <DebugStageGrids />
       {/* Debug: collision radius rings — press . to toggle */}
       <DebugClearanceRings />
     </group>

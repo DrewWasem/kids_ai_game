@@ -593,33 +593,39 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'magic_show', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'mage', position: 'cs-right', anim: 'spawn_air' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'mage', anim: 'cast_long' },
-        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'spawn', asset: 'dinner_plate', position: 'cs-left' },
-        { action: 'spawn', asset: 'burger', position: 'cs-center' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'taunt', emote: '🍖',
+      }),
+      dramaticReveal('mage', MARK.CS_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.3,
+      }),
+      [{ parallel: [
+        { action: 'spawn_rain', asset: 'burger', quantity: 3, position: MARK.CS_LEFT },
+        { action: 'spawn_rain', asset: 'pizza', quantity: 3, position: MARK.CS_CENTER },
+        { action: 'spawn_rain', asset: 'cake_birthday', quantity: 2, position: MARK.CS_RIGHT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'text_popup', text: '✨ ENDLESS FEAST! ✨', position: 'top', size: 'huge' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'arc' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '✨ Magic Feast!',
-      message: 'The wizard made food appear forever! The table never runs out!',
+      message: 'The wizard conjured an endless stream of food! The table overflows with magical dishes!',
       skillTaught: 'Specificity',
       tip: 'Feast + Magic Show = infinite food! Magic makes everything bigger!',
     },
@@ -632,52 +638,50 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'fireworks', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'center' },
-        { action: 'spawn', asset: 'table_long', position: 'left' },
-        { action: 'spawn', asset: 'table_long', position: 'right' },
-        { action: 'sfx', sound: 'spawn' },
-      ], delayAfter: 0.3 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'center', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'left', anim: 'spawn_air' },
-        { action: 'spawn_character', character: 'knight', position: 'right', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'mage', position: 'bottom', anim: 'spawn_air' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn', asset: 'dinner_plate', position: 'center' },
-        { action: 'spawn', asset: 'burger', position: 'left' },
-        { action: 'spawn', asset: 'cookie', position: 'right' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+        { asset: 'table_long', mark: MARK.CS_LEFT },
+        { asset: 'table_long', mark: MARK.CS_RIGHT },
+      ]),
+      enterGroup([
+        { character: 'skeleton_warrior', mark: MARK.DS_CENTER },
+        { character: 'skeleton_mage', mark: MARK.DS_LEFT },
+        { character: 'knight', mark: MARK.DS_RIGHT },
+      ], 'left', { arrivalAnim: 'taunt' }),
+      dramaticReveal('mage', MARK.DS_FAR_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.3,
+      }),
+      [{ parallel: [
+        { action: 'spawn', asset: 'dinner_plate', position: MARK.CS_CENTER },
+        { action: 'spawn', asset: 'pizza', position: MARK.CS_LEFT },
+        { action: 'spawn', asset: 'cake_birthday', position: MARK.CS_RIGHT },
         { action: 'sfx', sound: 'success' },
         { action: 'text_popup', text: '⚔️ EPIC FEAST! ⚔️', position: 'top', size: 'huge' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
         { action: 'animate', character: 'mage', anim: 'cast_spell' },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.3 },
-      { parallel: [
-        { action: 'react', effect: 'explosion-cartoon', position: 'top' },
-        { action: 'react', effect: 'stars-spin', position: 'center' },
-        { action: 'react', effect: 'sparkle-magic', position: 'left' },
+      ], delayAfter: 0.3 }],
+      [{ parallel: [
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.FLY_SPACE },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_LEFT },
         { action: 'camera_shake', intensity: 0.4, duration: 1.0 },
-        { action: 'sfx', sound: 'success' },
         { action: 'screen_flash', color: 'gold', duration: 0.2 },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn', asset: 'banner_red', position: 'top' },
-        { action: 'text_popup', text: '🎆 LEGENDARY BIRTHDAY! 🎆', position: 'center', size: 'huge' },
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 2.0 },
-    ],
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'spawn', asset: 'banner_red', position: MARK.FLY_SPACE },
+        { action: 'text_popup', text: '🎆 LEGENDARY BIRTHDAY! 🎆', position: 'center', size: 'huge' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'confetti-burst', position: MARK.CENTER },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 2.0 }],
+    ),
     feedback: {
       title: '🏆 LEGENDARY!',
       message: "An epic feast with fireworks?! That's EXACTLY how a legendary skeleton celebrates! You nailed every detail.",
@@ -693,30 +697,42 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'music', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'cs-center' },
-        { action: 'spawn', asset: 'dinner_plate', position: 'cs-left' },
-        { action: 'spawn', asset: 'dinner_plate', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'knight', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-        { action: 'text_popup', text: '🎵 DINNER SYMPHONY! 🎵', position: 'top', size: 'large' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+        { asset: 'dinner_plate', mark: MARK.CS_LEFT },
+        { asset: 'dinner_plate', mark: MARK.CS_RIGHT },
+        { asset: 'guitar', mark: MARK.US_LEFT },
+        { asset: 'drums', mark: MARK.US_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎵',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_LEFT },
+        { character: 'knight', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'wave' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Hammering' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'interact' },
+        { action: 'animate', character: 'knight', anim: 'interact' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_CENTER, style: 'arc', duration: 0.6 },
+        { action: 'text_popup', text: '🎵 DINNER SYMPHONY! 🎵', position: 'top', size: 'large' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎵 Musical Feast!',
-      message: 'The feast creates music! Plates and cups clink together in perfect harmony!',
+      message: 'The skeletons drum on plates and strum guitars! The whole feast becomes a concert!',
       skillTaught: 'Specificity',
       tip: 'Feast + Music = dining becomes a concert! Everything makes sound!',
     },
@@ -729,35 +745,42 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'combat', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'cs-center' },
-        { action: 'spawn', asset: 'burger', position: 'cs-left' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'knight', position: 'cs-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
-        { action: 'animate', character: 'knight', anim: 'taunt' },
-        { action: 'emote', character: 'skeleton_warrior', emoji: '🍖' },
-        { action: 'emote', character: 'knight', emoji: '⚔️' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'explosion-cartoon', position: 'center' },
-        { action: 'camera_shake', intensity: 0.5, duration: 0.8 },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+        { asset: 'burger', mark: MARK.CS_LEFT },
+        { asset: 'pizza', mark: MARK.CS_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'taunt', emote: '🍖',
+      }),
+      enterFromWing('knight', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'taunt', emote: '⚔️',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'straight' },
+        { action: 'move', character: 'knight', to: MARK.CS_RIGHT, speed: 'fast', style: 'straight' },
         { action: 'text_popup', text: '⚔️ EATING CONTEST! ⚔️', position: 'center', size: 'huge' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'interact' },
+        { action: 'animate', character: 'knight', anim: 'interact' },
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.CS_CENTER },
+        { action: 'camera_shake', intensity: 0.5, duration: 0.8 },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'knight', anim: 'die_flop' },
+        { action: 'react', effect: 'laugh-tears', position: MARK.DS_RIGHT },
+        { action: 'react', effect: 'stars-spin', position: MARK.DS_LEFT },
+        { action: 'text_popup', text: '🏆 WINNER! 🏆', position: MARK.DS_LEFT, size: 'huge' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '⚔️ Food Battle!',
-      message: 'The feast became a competitive eating contest! Who can eat the most?',
+      message: 'The feast became a competitive eating contest! The skeleton warrior wins by a mile!',
       skillTaught: 'Specificity',
       tip: 'Feast + Combat = eating competition! Turn dinner into a challenge!',
     },
@@ -770,31 +793,40 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'dance', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'cs-center' },
-        { action: 'spawn', asset: 'dinner_plate', position: 'cs-center' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'ds-right', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'clown', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'skeleton_mage', anim: 'celebrate' },
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+        { asset: 'dinner_plate', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'Cheering', emote: '💃',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_RIGHT },
+        { character: 'clown', mark: MARK.DS_CENTER },
+      ], 'right', { arrivalAnim: 'Cheering' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'spin_attack' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'jump_big' },
+        { action: 'animate', character: 'clown', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'text_popup', text: '💃 FEAST DANCE! 💃', position: 'top', size: 'large' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, style: 'arc', duration: 0.6 },
+        { action: 'move', character: 'skeleton_mage', to: MARK.CS_RIGHT, style: 'arc', duration: 0.6 },
+        { action: 'move', character: 'clown', to: MARK.DS_FAR_LEFT, style: 'arc', duration: 0.6 },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '💃 Dancing Dinner!',
-      message: 'Everyone dances around the feast! Food and fun combine perfectly!',
+      message: 'Everyone dances around the feast table! Spinning, jumping, and cheering!',
       skillTaught: 'Specificity',
       tip: 'Feast + Dance = celebration around food! The party surrounds the meal!',
     },
@@ -807,30 +839,57 @@ const FEAST_VIGNETTES: Vignette[] = [
     trigger: { food: 'feast', entertainment: 'games', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'table_long', position: 'cs-center' },
-        { action: 'spawn', asset: 'chest', position: 'cs-left' },
-        { action: 'spawn', asset: 'chest', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'rogue', position: 'ds-left', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'rogue', anim: 'celebrate' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-center' },
-        { action: 'react', effect: 'stars-spin', position: 'cs-center' },
-        { action: 'text_popup', text: '🎯 FOUND IT! 🎯', position: 'center', size: 'large' },
-        { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'table_long', mark: MARK.CS_CENTER },
+        { asset: 'chest', mark: MARK.CS_LEFT },
+        { asset: 'chest', mark: MARK.CS_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎯',
+      }),
+      enterFromWing('rogue', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'sneak',
+      }),
+      [{
+        parallel: [
+          { action: 'move', character: 'rogue', to: MARK.CS_LEFT, speed: 'fast', style: 'direct' },
+          { action: 'text_popup', text: '🔍 SEARCHING... 🔍', position: 'top', size: 'large' },
+        ], delayAfter: 0.5,
+      }],
+      [{
+        parallel: [
+          { action: 'animate', character: 'rogue', anim: 'interact' },
+          { action: 'spawn', asset: 'burger', position: MARK.CS_LEFT },
+          { action: 'react', effect: 'stars-spin', position: MARK.CS_LEFT },
+          { action: 'sfx', sound: 'react' },
+        ], delayAfter: 0.5,
+      }],
+      [{
+        parallel: [
+          { action: 'move', character: 'rogue', to: MARK.CS_RIGHT, speed: 'fast', style: 'direct' },
+        ], delayAfter: 0.4,
+      }],
+      [{
+        parallel: [
+          { action: 'animate', character: 'rogue', anim: 'interact' },
+          { action: 'spawn', asset: 'cake_birthday', position: MARK.CS_RIGHT },
+          { action: 'react', effect: 'sparkle-magic', position: MARK.CS_RIGHT },
+          { action: 'text_popup', text: '🎯 JACKPOT! 🎯', position: MARK.CENTER, size: 'huge' },
+          { action: 'sfx', sound: 'success' },
+        ], delayAfter: 0.6,
+      }],
+      [{
+        parallel: [
+          { action: 'animate', character: 'rogue', anim: 'Cheering' },
+          { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
+          { action: 'react', effect: 'confetti-burst', position: MARK.CENTER },
+        ], delayAfter: 1.5,
+      }],
+    ),
     feedback: {
       title: '🎯 Feast Hunt!',
-      message: 'The feast is hiding treasures! Find all the hidden treats!',
+      message: 'The rogue found all the hidden feast treats! Every chest had delicious food!',
       skillTaught: 'Specificity',
       tip: 'Feast + Games = treasure hunt for food! Turn eating into adventure!',
     },
@@ -847,28 +906,43 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'magic_show', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'mage', position: 'cs-right', anim: 'spawn_air' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'animate', character: 'mage', anim: 'cast_long' },
-        { action: 'spawn_rain', asset: 'apple', quantity: 5, position: 'center' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-      ], delayAfter: 0.6 },
-      { parallel: [
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'apple', mark: MARK.DS_LEFT },
+        { asset: 'banana', mark: MARK.DS_RIGHT },
+        { asset: 'peach', mark: MARK.DS_FAR_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.CS_LEFT, {
+        arrivalAnim: 'wave', emote: '🍎',
+      }),
+      dramaticReveal('mage', MARK.CS_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.3,
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'mage', to: MARK.CS_CENTER, style: 'arc', duration: 0.8 },
+        { action: 'grow', asset: 'apple', scale: 3.0, duration: 1.0 },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.DS_LEFT },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'spawn_rain', asset: 'banana', quantity: 5, position: 'center' },
+        { action: 'animate', character: 'mage', anim: 'cast_spell' },
+        { action: 'react', effect: 'stars-spin', position: 'center' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
         { action: 'text_popup', text: '✨ FRUIT MAGIC! ✨', position: 'top', size: 'huge' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+        { action: 'react', effect: 'glow-pulse', position: 'center' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: 'center' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '✨ Fruit Transformation!',
-      message: 'The wizard made fruit fly and transform! Magic apples everywhere!',
+      message: 'The wizard made giant fruit appear and rain from the sky! Magic produce everywhere!',
       skillTaught: 'Specificity',
       tip: 'Fruit + Magic Show = enchanted produce! Fruit becomes magical!',
     },
@@ -881,30 +955,35 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'fireworks', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+    steps: composeBlocking(
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'taunt', emote: '🎆',
+      }),
+      enterFromWing('mage', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'cast_spell',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'mage', to: MARK.CS_CENTER, style: 'straight', duration: 0.6 },
         { action: 'spawn_rain', asset: 'apple', quantity: 6, position: 'wide' },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'fire-sneeze', position: 'top' },
-        { action: 'react', effect: 'splash', position: 'cs-left' },
-        { action: 'react', effect: 'splash', position: 'cs-right' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'react', effect: 'fire-sneeze', position: MARK.FLY_SPACE },
+        { action: 'react', effect: 'splash', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'splash', position: MARK.CS_RIGHT },
         { action: 'camera_shake', intensity: 0.5, duration: 1.0 },
         { action: 'text_popup', text: '🍎 FRUIT BOOM! 🍎', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'stars-spin', position: 'center' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🍎 Juice Explosion!',
-      message: 'Fruit exploded like fireworks! Juice spray everywhere!',
+      message: 'The wizard launched fruit fireworks! Juice spray everywhere like colorful explosions!',
       skillTaught: 'Specificity',
       tip: 'Fruit + Fireworks = juicy explosions! Messy but spectacular!',
     },
@@ -917,28 +996,40 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'music', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
-        { action: 'spawn', asset: 'apple', position: 'cs-left' },
-        { action: 'spawn', asset: 'apple', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'apple', mark: MARK.CS_LEFT },
+        { asset: 'apple', mark: MARK.CS_RIGHT },
+        { asset: 'banana', mark: MARK.CS_FAR_LEFT },
+        { asset: 'peach', mark: MARK.CS_FAR_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎵',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_LEFT },
+        { character: 'skeleton_minion', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'wave' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Hammering' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'interact' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'interact' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_RIGHT },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_CENTER, style: 'arc', duration: 0.6 },
         { action: 'text_popup', text: '🎵 FRUIT BEATS! 🎵', position: 'top', size: 'large' },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: 'center' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎵 Fruit Orchestra!',
-      message: 'The fruit bounces to make music! Apples play percussion!',
+      message: 'The skeletons drum on fruit to make music! Apples and bananas play percussion!',
       skillTaught: 'Specificity',
       tip: 'Fruit + Music = fruity rhythms! Food becomes instruments!',
     },
@@ -951,45 +1042,42 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'combat', vibe: '*' },
     tier: 'absolute_chaos',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'center', anim: 'skel_spawn' },
-        { action: 'emote', character: 'skeleton_warrior', emoji: '🤔' },
-        { action: 'sfx', sound: 'spawn' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+    steps: composeBlocking(
+      enterFromWing('skeleton_warrior', 'left', MARK.CS_CENTER, {
+        arrivalAnim: 'taunt', emote: '🤔',
+      }),
+      [{ parallel: [
         { action: 'spawn_rain', asset: 'apple', quantity: 8, position: 'wide' },
         { action: 'sfx', sound: 'react' },
         { action: 'text_popup', text: '🍎 FRUIT STORM! 🍎', position: 'top', size: 'huge' },
         { action: 'camera_shake', intensity: 0.3, duration: 1.5 },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'knight', position: 'left', anim: 'spawn_ground' },
-        { action: 'animate', character: 'knight', anim: 'sword_slash' },
-        { action: 'sfx', sound: 'move' },
-      ], delayAfter: 0.3 },
-      { parallel: [
+      ], delayAfter: 0.5 }],
+      enterFromWing('knight', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'sword_slash',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'knight', to: MARK.DS_CENTER, style: 'straight', duration: 0.4 },
         { action: 'animate', character: 'knight', anim: 'die_flop' },
         { action: 'sfx', sound: 'fail' },
-        { action: 'react', effect: 'stars-spin', position: 'left' },
+        { action: 'react', effect: 'stars-spin', position: MARK.DS_CENTER },
         { action: 'emote', character: 'knight', emoji: '🍌' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'clown', position: 'right', anim: 'spawn_air' },
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'react', effect: 'laugh-tears', position: 'right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
-        { action: 'react', effect: 'laugh-tears', position: 'center' },
+      ], delayAfter: 0.5 }],
+      enterFromWing('clown', 'right', MARK.DS_FAR_RIGHT, {
+        arrivalAnim: 'Cheering',
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt_long' },
+        { action: 'animate', character: 'clown', anim: 'Cheering' },
+        { action: 'react', effect: 'laugh-tears', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'laugh-tears', position: MARK.DS_FAR_RIGHT },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
         { action: 'text_popup', text: '🎪 SILLY BRAWL! 🎪', position: 'center', size: 'huge' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-        { action: 'sfx', sound: 'success' },
-      ], delayAfter: 2.0 },
-    ],
+        { action: 'animate', character: 'knight', anim: 'lie_idle' },
+        { action: 'react', effect: 'dust', position: MARK.DS_CENTER },
+      ], delayAfter: 2.0 }],
+    ),
     feedback: {
       title: '🤪 SILLY CHAOS!',
       message: "A fruit fight at a birthday party? The knight slipped on a banana and the clown loved it! Your wild combo made everyone laugh.",
@@ -1005,31 +1093,43 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'dance', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
-        { action: 'spawn', asset: 'apple', position: 'cs-left' },
-        { action: 'spawn', asset: 'apple', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'clown', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'ninja', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'apple', mark: MARK.US_LEFT },
+        { asset: 'apple', mark: MARK.US_RIGHT },
+        { asset: 'banana', mark: MARK.US_FAR_LEFT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.CS_CENTER, {
+        arrivalAnim: 'Cheering', emote: '💃',
+      }),
+      enterGroup([
+        { character: 'clown', mark: MARK.DS_LEFT },
+        { character: 'ninja', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'Cheering' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'clown', anim: 'Cheering' },
+        { action: 'animate', character: 'ninja', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.US_LEFT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.US_RIGHT },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'clown', to: MARK.CS_LEFT, style: 'arc', duration: 0.6 },
+        { action: 'move', character: 'ninja', to: MARK.CS_RIGHT, style: 'arc', duration: 0.6 },
+        { action: 'spawn_rain', asset: 'peach', quantity: 4, position: 'center' },
         { action: 'text_popup', text: '💃 DANCING FRUIT! 💃', position: 'top', size: 'large' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'clown', anim: 'Cheering' },
+        { action: 'animate', character: 'ninja', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: 'center' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '💃 Fruit Ballet!',
-      message: 'The fruit dances in the air! Everyone catches dancing apples!',
+      message: 'Everyone dances with fruit in the air! They catch dancing apples while performing!',
       skillTaught: 'Specificity',
       tip: 'Fruit + Dance = floating fruit ballet! Snacks become performers!',
     },
@@ -1042,29 +1142,39 @@ const FRUIT_VIGNETTES: Vignette[] = [
     trigger: { food: 'fruit', entertainment: 'games', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn', asset: 'apple', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-left', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_minion', anim: 'celebrate' },
-        { action: 'react', effect: 'splash', position: 'cs-center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+        { asset: 'apple', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎯',
+      }),
+      enterGroup([
+        { character: 'skeleton_minion', mark: MARK.DS_LEFT },
+        { character: 'skeleton_mage', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'wave' }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_minion', to: MARK.CS_LEFT, style: 'straight', duration: 0.5 },
+        { action: 'animate', character: 'skeleton_minion', anim: 'interact' },
+        { action: 'react', effect: 'splash', position: MARK.CS_CENTER },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_minion', anim: 'Cheering' },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_LEFT },
         { action: 'text_popup', text: '🎯 GOT ONE! 🎯', position: 'center', size: 'large' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'laugh-tears', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'wave' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'taunt' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎯 Apple Bobbing!',
-      message: 'Apple bobbing game is on! The apples are fast but the skeletons are faster!',
+      message: 'Apple bobbing game is on! The minion got one! The apples are fast but the skeletons are faster!',
       skillTaught: 'Specificity',
       tip: 'Fruit + Games = classic party game! Tradition meets fun!',
     },
@@ -1081,30 +1191,39 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'magic_show', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'mage', position: 'cs-right', anim: 'spawn_air' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'animate', character: 'mage', anim: 'cast_long' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'cs-left' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-center' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right' },
+    steps: composeBlocking(
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🍬',
+      }),
+      dramaticReveal('mage', MARK.CS_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.3,
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'mage', anim: 'cast_spell' },
+        { action: 'spawn_rain', asset: 'cookie', quantity: 6, position: 'wide' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'grow', asset: 'cookie', scale: 3.0, duration: 1.0 },
         { action: 'text_popup', text: '✨ CANDY MAGIC! ✨', position: 'top', size: 'huge' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'arc' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '✨ Sweet Magic!',
-      message: 'The wizard conjured floating candy! Sweet treats everywhere!',
+      message: 'The wizard conjured a rain of candy that grew to giant size! Sweet treats everywhere!',
       skillTaught: 'Specificity',
       tip: 'Candy + Magic Show = sugary spells! Magic makes candy appear!',
     },
@@ -1117,31 +1236,42 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'fireworks', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+    steps: composeBlocking(
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'taunt', emote: '🎆',
+      }),
+      enterFromWing('mage', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'cast_spell',
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'mage', anim: 'cast_long' },
         { action: 'spawn_rain', asset: 'cookie', quantity: 8, position: 'wide' },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'fire-sneeze', position: 'top' },
-        { action: 'react', effect: 'explosion-cartoon', position: 'cs-left' },
-        { action: 'react', effect: 'explosion-cartoon', position: 'cs-right' },
-        { action: 'react', effect: 'stars-spin', position: 'center' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'react', effect: 'fire-sneeze', position: MARK.FLY_SPACE },
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.CS_RIGHT },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_CENTER },
         { action: 'camera_shake', intensity: 0.5, duration: 1.0 },
+        { action: 'screen_flash', color: 'pink', duration: 0.2 },
         { action: 'text_popup', text: '🍬 CANDY BOOM! 🍬', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'get_hit' },
+        { action: 'animate', character: 'mage', anim: 'dodge_back' },
+        { action: 'react', effect: 'dust', position: MARK.DS_LEFT },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
+        { action: 'react', effect: 'confetti-burst', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🍬 Sugar Explosion!',
-      message: 'Candy exploded like colorful fireworks! Sweet treats rain down!',
+      message: 'The wizard launched candy fireworks! Sweet treats exploded across the sky!',
       skillTaught: 'Specificity',
       tip: 'Candy + Fireworks = sugar bombs! Sweet and explosive!',
     },
@@ -1154,29 +1284,41 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'music', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-left' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'clown', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'cookie', mark: MARK.CS_LEFT },
+        { asset: 'cookie', mark: MARK.CS_RIGHT },
+        { asset: 'guitar', mark: MARK.US_LEFT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎵',
+      }),
+      enterGroup([
+        { character: 'skeleton_minion', mark: MARK.DS_LEFT },
+        { character: 'clown', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'wave' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Hammering' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'interact' },
+        { action: 'animate', character: 'clown', anim: 'interact' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_RIGHT },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_CENTER, style: 'arc', duration: 0.6 },
         { action: 'text_popup', text: '🎵 CANDY CHORUS! 🎵', position: 'top', size: 'large' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'hearts-float', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎵 Sweet Symphony!',
-      message: 'Candy wrappers make music! The crinkles create a sweet melody!',
+      message: 'The skeletons play candy wrapper percussion! Crinkles create a sweet melody!',
       skillTaught: 'Specificity',
       tip: 'Candy + Music = wrapper orchestra! Sweets make sound!',
     },
@@ -1189,35 +1331,46 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'combat', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'knight', position: 'cs-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'cs-left' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
-        { action: 'animate', character: 'knight', anim: 'taunt' },
-        { action: 'emote', character: 'skeleton_warrior', emoji: '🍭' },
-        { action: 'emote', character: 'knight', emoji: '⚔️' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'stars-spin', position: 'center' },
-        { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'sword', mark: MARK.CS_LEFT },
+        { asset: 'shield', mark: MARK.CS_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_FAR_LEFT, {
+        arrivalAnim: 'taunt', emote: '🍭',
+      }),
+      enterFromWing('knight', 'right', MARK.DS_FAR_RIGHT, {
+        arrivalAnim: 'taunt', emote: '⚔️',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'straight' },
+        { action: 'move', character: 'knight', to: MARK.CS_RIGHT, speed: 'fast', style: 'straight' },
         { action: 'text_popup', text: '⚔️ CANDY CLASH! ⚔️', position: 'center', size: 'huge' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'sword_slash' },
+        { action: 'animate', character: 'knight', anim: 'block' },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_CENTER },
+        { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'animate', character: 'knight', anim: 'sword_slash' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'get_hit' },
+        { action: 'spawn_rain', asset: 'cookie', quantity: 5, position: MARK.CS_CENTER },
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.CS_CENTER },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'die_dramatic' },
+        { action: 'animate', character: 'knight', anim: 'Cheering' },
+        { action: 'react', effect: 'laugh-tears', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'confetti-burst', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '⚔️ Sweet Battle!',
-      message: 'A candy combat! They fight with candy cane swords and lollipop shields!',
+      message: 'A candy combat! They fought with swords and candy rained from every hit!',
       skillTaught: 'Specificity',
       tip: 'Candy + Combat = sugary warfare! Sweet treats become weapons!',
     },
@@ -1230,31 +1383,40 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'dance', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
-        { action: 'spawn', asset: 'cookie', position: 'cs-center' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'clown', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'animate', character: 'skeleton_minion', anim: 'celebrate' },
-        { action: 'react', effect: 'stars-spin', position: 'center' },
-        { action: 'camera_shake', intensity: 0.5, duration: 1.0 },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'cookie', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'Cheering', emote: '💃',
+      }),
+      enterGroup([
+        { character: 'clown', mark: MARK.DS_CENTER },
+        { character: 'skeleton_minion', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'Cheering' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'spin_attack' },
+        { action: 'animate', character: 'clown', anim: 'jump_big' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'spin_attack' },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_CENTER },
+        { action: 'camera_shake', intensity: 0.3, duration: 1.0 },
         { action: 'text_popup', text: '💃 SUGAR RUSH! 💃', position: 'top', size: 'huge' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, style: 'arc', duration: 0.5 },
+        { action: 'move', character: 'clown', to: MARK.CS_RIGHT, style: 'arc', duration: 0.5 },
+        { action: 'move', character: 'skeleton_minion', to: MARK.CS_FAR_RIGHT, style: 'arc', duration: 0.5 },
+        { action: 'spawn_rain', asset: 'cookie', quantity: 4, position: 'center' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '💃 Sugar Rush Dance!',
-      message: 'The candy gave everyone a sugar rush! They cannot stop dancing!',
+      message: 'The candy gave everyone a sugar rush! They spin and jump nonstop!',
       skillTaught: 'Specificity',
       tip: 'Candy + Dance = hyperactive party! Sugar makes everyone energetic!',
     },
@@ -1267,29 +1429,45 @@ const CANDY_VIGNETTES: Vignette[] = [
     trigger: { food: 'candy', entertainment: 'games', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'rogue', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_minion', anim: 'celebrate' },
-        { action: 'react', effect: 'stars-spin', position: 'cs-center' },
-        { action: 'text_popup', text: '🎯 STUCK! 🎯', position: 'center', size: 'large' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'cookie', mark: MARK.CS_CENTER },
+        { asset: 'cookie', mark: MARK.CS_LEFT },
+        { asset: 'cookie', mark: MARK.CS_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎯',
+      }),
+      enterGroup([
+        { character: 'skeleton_minion', mark: MARK.DS_LEFT },
+        { character: 'rogue', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'sneak' }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_minion', to: MARK.CS_LEFT, speed: 'fast', style: 'straight' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'interact' },
+        { action: 'text_popup', text: '🔍 SEARCHING... 🔍', position: 'top', size: 'large' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_minion', anim: 'die_flop' },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_LEFT },
+        { action: 'text_popup', text: '🎯 STUCK! 🎯', position: MARK.CS_LEFT, size: 'large' },
+        { action: 'sfx', sound: 'fail' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'move', character: 'rogue', to: MARK.CS_RIGHT, speed: 'fast', style: 'direct' },
+        { action: 'animate', character: 'rogue', anim: 'interact' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_RIGHT },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'laugh-tears', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'rogue', anim: 'Cheering' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
+        { action: 'react', effect: 'laugh-tears', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎯 Sticky Games!',
-      message: 'The candy game got sticky! Everyone is stuck to the candy!',
+      message: 'The minion got stuck to the candy! But the rogue found the prize!',
       skillTaught: 'Specificity',
       tip: 'Candy + Games = sticky fun! Sweet treats make games messy!',
     },
@@ -1306,31 +1484,41 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'magic_show', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'mage', position: 'cs-right', anim: 'spawn_air' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'mage', anim: 'cast_long' },
-        { action: 'react', effect: 'smoke', position: 'cs-center' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-      ], delayAfter: 0.6 },
-      { parallel: [
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🍲',
+      }),
+      dramaticReveal('mage', MARK.CS_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.3,
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'mage', anim: 'cast_spell' },
+        { action: 'react', effect: 'smoke', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'grow', asset: 'barrel', scale: 2.0, duration: 1.0 },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CS_CENTER },
         { action: 'text_popup', text: '✨ MAGIC SOUP! ✨', position: 'top', size: 'huge' },
-        { action: 'react', effect: 'steam', position: 'cs-center' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'arc' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '✨ Enchanted Soup!',
-      message: 'The wizard brewed magical soup! The cauldron bubbles with enchantment!',
+      message: 'The wizard brewed magical soup! The cauldron grew and bubbles with enchantment!',
       skillTaught: 'Specificity',
       tip: 'Soup + Magic Show = potion brewing! Soup becomes a magic spell!',
     },
@@ -1343,32 +1531,45 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'fireworks', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-left', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'react', effect: 'steam', position: 'cs-center' },
-        { action: 'react', effect: 'bubbles', position: 'cs-center' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'fire-sneeze', position: 'top' },
-        { action: 'react', effect: 'explosion-cartoon', position: 'center' },
-        { action: 'react', effect: 'splash', position: 'cs-left' },
-        { action: 'react', effect: 'splash', position: 'cs-right' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'taunt', emote: '🎆',
+      }),
+      enterFromWing('mage', 'right', MARK.DS_RIGHT, {
+        arrivalAnim: 'cast_spell',
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'mage', anim: 'cast_long' },
+        { action: 'react', effect: 'smoke', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CS_CENTER },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'react', effect: 'fire-sneeze', position: MARK.FLY_SPACE },
+        { action: 'react', effect: 'explosion-cartoon', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'splash', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'splash', position: MARK.CS_RIGHT },
         { action: 'camera_shake', intensity: 0.6, duration: 1.0 },
+        { action: 'screen_flash', color: 'orange', duration: 0.2 },
         { action: 'text_popup', text: '🍲 SOUP VOLCANO! 🍲', position: 'center', size: 'huge' },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.8 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'get_hit' },
+        { action: 'animate', character: 'mage', anim: 'dodge_back' },
+        { action: 'react', effect: 'dust', position: MARK.DS_LEFT },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'react', effect: 'confetti-burst', position: MARK.CENTER },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🍲 Soup Eruption!',
-      message: 'The soup boiled over like a volcano! Broth exploded everywhere!',
+      message: 'The soup boiled over like a volcano! Broth exploded and splashed everyone!',
       skillTaught: 'Specificity',
       tip: 'Soup + Fireworks = explosive cooking! Hot soup becomes volcanic!',
     },
@@ -1381,28 +1582,40 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'music', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'ds-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'ds-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'bubbles', position: 'cs-center' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+        { asset: 'guitar', mark: MARK.US_LEFT },
+        { asset: 'drums', mark: MARK.US_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '🎵',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_LEFT },
+        { character: 'skeleton_minion', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'wave' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Hammering' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'interact' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'interact' },
+        { action: 'react', effect: 'smoke', position: MARK.CS_CENTER },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_CENTER, style: 'arc', duration: 0.6 },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
         { action: 'text_popup', text: '🎵 SOUP SONG! 🎵', position: 'top', size: 'large' },
         { action: 'sfx', sound: 'react' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎵 Bubbling Beat!',
-      message: 'The soup bubbles make music! Gurgling creates a rhythmic melody!',
+      message: 'The soup bubbles in rhythm while the skeletons play instruments! A cooking concert!',
       skillTaught: 'Specificity',
       tip: 'Soup + Music = cooking concert! Bubbles become beats!',
     },
@@ -1415,34 +1628,47 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'combat', vibe: '*' },
     tier: 'spectacular',
     promptScore: 'chaotic',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'knight', position: 'cs-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
-        { action: 'animate', character: 'knight', anim: 'taunt' },
-        { action: 'emote', character: 'skeleton_warrior', emoji: '🍲' },
-        { action: 'emote', character: 'knight', emoji: '⚔️' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'splash', position: 'center' },
-        { action: 'react', effect: 'splash', position: 'cs-left' },
-        { action: 'react', effect: 'splash', position: 'cs-right' },
-        { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_FAR_LEFT, {
+        arrivalAnim: 'taunt', emote: '🍲',
+      }),
+      enterFromWing('knight', 'right', MARK.DS_FAR_RIGHT, {
+        arrivalAnim: 'taunt', emote: '⚔️',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'fast', style: 'straight' },
+        { action: 'move', character: 'knight', to: MARK.CS_RIGHT, speed: 'fast', style: 'straight' },
         { action: 'text_popup', text: '⚔️ LADLE DUEL! ⚔️', position: 'center', size: 'huge' },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'sword_slash' },
+        { action: 'animate', character: 'knight', anim: 'sword_slash' },
+        { action: 'react', effect: 'splash', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'splash', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'splash', position: MARK.CS_RIGHT },
+        { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'get_hit' },
+        { action: 'animate', character: 'knight', anim: 'get_hit' },
+        { action: 'react', effect: 'dust', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'dust', position: MARK.CS_RIGHT },
         { action: 'sfx', sound: 'fail' },
-      ], delayAfter: 0.8 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'laugh-tears', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'die_flop' },
+        { action: 'animate', character: 'knight', anim: 'die_flop' },
+        { action: 'react', effect: 'laugh-tears', position: MARK.CENTER },
+        { action: 'text_popup', text: '🍲 BOTH SOAKED! 🍲', position: 'center', size: 'huge' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '⚔️ Soup Fight!',
-      message: 'A ladle duel! They battle with soup spoons and broth splashes everywhere!',
+      message: 'A ladle duel! Both warriors ended up soaked in soup — nobody wins a food fight!',
       skillTaught: 'Specificity',
       tip: 'Soup + Combat = messy food fight! Liquid warfare!',
     },
@@ -1455,31 +1681,39 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'dance', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-left', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
-        { action: 'spawn_character', character: 'skeleton_mage', position: 'ds-right', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'clown', position: 'ds-center', anim: 'spawn_ground' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'skeleton_mage', anim: 'celebrate' },
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'react', effect: 'sparkle-magic', position: 'center' },
-        { action: 'react', effect: 'bubbles', position: 'cs-center' },
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_LEFT, {
+        arrivalAnim: 'Cheering', emote: '💃',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_RIGHT },
+        { character: 'clown', mark: MARK.DS_CENTER },
+      ], 'right', { arrivalAnim: 'Cheering' }),
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'spin_attack' },
+        { action: 'animate', character: 'skeleton_mage', anim: 'jump_big' },
+        { action: 'animate', character: 'clown', anim: 'spin_attack' },
+        { action: 'react', effect: 'smoke', position: MARK.CS_CENTER },
         { action: 'text_popup', text: '💃 SOUP SWIRL! 💃', position: 'top', size: 'large' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'react', effect: 'hearts-float', position: 'center' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, style: 'arc', duration: 0.6 },
+        { action: 'move', character: 'skeleton_mage', to: MARK.CS_RIGHT, style: 'arc', duration: 0.6 },
+        { action: 'move', character: 'clown', to: MARK.CS_FAR_LEFT, style: 'arc', duration: 0.6 },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
         { action: 'sfx', sound: 'success' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '💃 Soup Swirl!',
-      message: 'Everyone dances around the soup pot in a swirling circle! The soup spins too!',
+      message: 'Everyone dances around the soup pot! Spinning and jumping makes the soup swirl too!',
       skillTaught: 'Specificity',
       tip: 'Soup + Dance = stirring party! Movement makes the soup swirl!',
     },
@@ -1492,29 +1726,44 @@ const SOUP_VIGNETTES: Vignette[] = [
     trigger: { food: 'soup', entertainment: 'games', vibe: '*' },
     tier: 'moderate',
     promptScore: 'perfect',
-    steps: [
-      { parallel: [
-        { action: 'spawn', asset: 'barrel', position: 'cs-center' },
-        { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-left', anim: 'spawn_ground' },
-        { action: 'spawn_character', character: 'skeleton_minion', position: 'cs-right', anim: 'spawn_ground' },
-      ], delayAfter: 0.5 },
-      { parallel: [
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'barrel', mark: MARK.CS_CENTER },
+        { asset: 'dinner_plate', mark: MARK.CS_FAR_RIGHT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_FAR_LEFT, {
+        arrivalAnim: 'wave', emote: '🍲',
+      }),
+      enterFromWing('skeleton_minion', 'right', MARK.DS_FAR_RIGHT, {
+        arrivalAnim: 'wave', emote: '🎯',
+      }),
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, speed: 'medium', style: 'straight' },
         { action: 'animate', character: 'skeleton_warrior', anim: 'walk' },
-        { action: 'react', effect: 'steam', position: 'cs-left' },
-      ], delayAfter: 0.4 },
-      { parallel: [
-        { action: 'react', effect: 'splash', position: 'cs-center' },
-        { action: 'text_popup', text: '🎯 CAREFUL! 🎯', position: 'center', size: 'large' },
+        { action: 'react', effect: 'smoke', position: MARK.CS_LEFT },
+        { action: 'text_popup', text: '🍲 CAREFUL! 🍲', position: 'top', size: 'large' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'die_flop' },
+        { action: 'react', effect: 'splash', position: MARK.CS_LEFT },
+        { action: 'react', effect: 'stars-spin', position: MARK.CS_LEFT },
         { action: 'sfx', sound: 'fail' },
-      ], delayAfter: 0.6 },
-      { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'laugh-tears', position: 'center' },
-      ], delayAfter: 1.5 },
-    ],
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_minion', to: MARK.CS_RIGHT, speed: 'medium', style: 'straight' },
+        { action: 'animate', character: 'skeleton_minion', anim: 'walk' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_minion', anim: 'Cheering' },
+        { action: 'text_popup', text: '🏆 MADE IT! 🏆', position: MARK.CS_RIGHT, size: 'huge' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_RIGHT },
+        { action: 'react', effect: 'laugh-tears', position: MARK.CS_LEFT },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 1.5 }],
+    ),
     feedback: {
       title: '🎯 Soup Relay!',
-      message: 'Hot soup relay race! Try not to spill the hot broth!',
+      message: 'Hot soup relay race! The warrior spilled but the minion made it! Balance and speed!',
       skillTaught: 'Specificity',
       tip: 'Soup + Games = careful competition! Balance and speed!',
     },
@@ -1542,43 +1791,34 @@ export const SKELETON_BIRTHDAY_STAGE_1: Vignette[] = [
     trigger: { food: '*', entertainment: '*', vibe: 'spooky' },
     tier: 'moderate',
     promptScore: 'partial',
-    steps: [
-      {
-        parallel: [
-          { action: 'spawn_character', character: 'skeleton_warrior', position: 'center', anim: 'awaken' },
-          { action: 'sfx', sound: 'spawn' },
-          { action: 'spawn', asset: 'candle_triple', position: 'left' },
-          { action: 'spawn', asset: 'candle_triple', position: 'right' },
-        ],
-        delayAfter: 0.8,
-      },
-      {
-        parallel: [
-          { action: 'spawn', asset: 'skull', position: 'center' },
-          { action: 'spawn', asset: 'pumpkin_jackolantern', position: 'left' },
-          { action: 'react', effect: 'fire-sneeze', position: 'center' },
-          { action: 'sfx', sound: 'react' },
-        ],
-        delayAfter: 0.5,
-      },
-      {
-        parallel: [
-          { action: 'spawn_character', character: 'skeleton_mage', position: 'left', anim: 'spawn_ground' },
-          { action: 'spawn_character', character: 'necromancer', position: 'right', anim: 'spawn_ground' },
-        ],
-        delayAfter: 0.5,
-      },
-      {
-        parallel: [
-          { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'sparkle-magic', position: 'center' },
-          { action: 'sfx', sound: 'success' },
-          { action: 'text_popup', text: '👻 SPOOKY PARTY! 👻', position: 'center', size: 'large' },
-        ],
-        delayAfter: 2.0,
-      },
-    ],
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'candle_triple', mark: MARK.US_LEFT },
+        { asset: 'candle_triple', mark: MARK.US_RIGHT },
+        { asset: 'skull', mark: MARK.CS_CENTER },
+        { asset: 'pumpkin_jackolantern', mark: MARK.CS_LEFT },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'awaken', emote: '👻',
+      }),
+      enterGroup([
+        { character: 'skeleton_mage', mark: MARK.DS_LEFT },
+        { character: 'necromancer', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'sneak' }),
+      [{ parallel: [
+        { action: 'react', effect: 'fire-sneeze', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'skull-burst', position: MARK.CS_LEFT },
+        { action: 'camera_shake', intensity: 0.2, duration: 0.5 },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
+        { action: 'animate', character: 'necromancer', anim: 'cast_spell' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.DS_RIGHT },
+        { action: 'text_popup', text: '👻 SPOOKY PARTY! 👻', position: 'center', size: 'large' },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 2.0 }],
+    ),
     feedback: {
       title: '👻 Spooky Vibes!',
       message: "The spooky atmosphere was great! The candles and skulls set the mood. Try adding specific food and entertainment to make it even more epic!",
@@ -1594,42 +1834,33 @@ export const SKELETON_BIRTHDAY_STAGE_1: Vignette[] = [
     trigger: { food: '*', entertainment: '*', vibe: 'fancy' },
     tier: 'moderate',
     promptScore: 'partial',
-    steps: [
-      {
-        parallel: [
-          { action: 'spawn', asset: 'pillar', position: 'left' },
-          { action: 'spawn', asset: 'pillar', position: 'right' },
-          { action: 'spawn', asset: 'rug', position: 'center' },
-          { action: 'sfx', sound: 'spawn' },
-        ],
-        delayAfter: 0.4,
-      },
-      {
-        parallel: [
-          { action: 'spawn_character', character: 'skeleton_warrior', position: 'center', anim: 'spawn_ground' },
-          { action: 'spawn', asset: 'chest_gold', position: 'center' },
-          { action: 'react', effect: 'sparkle-magic', position: 'center' },
-        ],
-        delayAfter: 0.5,
-      },
-      {
-        parallel: [
-          { action: 'spawn_character', character: 'knight', position: 'left', anim: 'walk_swagger' },
-          { action: 'spawn_character', character: 'mage', position: 'right', anim: 'walk_swagger' },
-        ],
-        delayAfter: 0.5,
-      },
-      {
-        parallel: [
-          { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
-          { action: 'crowd_react', characters: 'all', anim: 'wave' },
-          { action: 'text_popup', text: '🎩 FANCY! 🎩', position: 'center', size: 'large' },
-          { action: 'react', effect: 'sparkle-magic', position: 'center' },
-          { action: 'sfx', sound: 'success' },
-        ],
-        delayAfter: 2.0,
-      },
-    ],
+    steps: composeBlocking(
+      setupProps([
+        { asset: 'pillar', mark: MARK.US_LEFT },
+        { asset: 'pillar', mark: MARK.US_RIGHT },
+        { asset: 'rug', mark: MARK.CS_CENTER },
+        { asset: 'chest_gold', mark: MARK.CS_CENTER },
+      ]),
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'walk_swagger', emote: '🎩',
+      }),
+      enterGroup([
+        { character: 'knight', mark: MARK.DS_LEFT },
+        { character: 'mage', mark: MARK.DS_RIGHT },
+      ], 'right', { arrivalAnim: 'walk_swagger' }),
+      [{ parallel: [
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'glow-pulse', position: MARK.CS_CENTER },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.5 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
+        { action: 'crowd_react', characters: 'all', anim: 'wave' },
+        { action: 'text_popup', text: '🎩 FANCY! 🎩', position: 'center', size: 'large' },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 2.0 }],
+    ),
     feedback: {
       title: '🎩 Fancy Vibes!',
       message: "What an elegant party! The pillars and gold set the scene. Now add specific food and entertainment to really complete the picture.",
@@ -1645,34 +1876,32 @@ export const SKELETON_BIRTHDAY_STAGE_1: Vignette[] = [
     trigger: { food: '*', entertainment: 'magic_show', vibe: '*' },
     tier: 'moderate',
     promptScore: 'partial',
-    steps: [
-      {
-        parallel: [
-          { action: 'spawn_character', character: 'skeleton_warrior', position: 'center', anim: 'skel_spawn' },
-          { action: 'spawn_character', character: 'mage', position: 'right', anim: 'spawn_air' },
-          { action: 'sfx', sound: 'spawn' },
-        ],
-        delayAfter: 0.5,
-      },
-      {
-        parallel: [
-          { action: 'animate', character: 'mage', anim: 'cast_long' },
-          { action: 'react', effect: 'sparkle-magic', position: 'center' },
-          { action: 'sfx', sound: 'react' },
-        ],
-        delayAfter: 1.0,
-      },
-      {
-        parallel: [
-          { action: 'spawn', asset: 'potion_red', position: 'center' },
-          { action: 'react', effect: 'sparkle-magic', position: 'center' },
-          { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-          { action: 'sfx', sound: 'success' },
-          { action: 'text_popup', text: '✨ MAGIC! ✨', position: 'center', size: 'large' },
-        ],
-        delayAfter: 2.0,
-      },
-    ],
+    steps: composeBlocking(
+      enterFromWing('skeleton_warrior', 'left', MARK.DS_CENTER, {
+        arrivalAnim: 'wave', emote: '✨',
+      }),
+      dramaticReveal('mage', MARK.CS_RIGHT, {
+        preEffects: ['sparkle-magic'],
+        revealAnim: 'cast_long',
+        cameraShake: 0.2,
+      }),
+      [{ parallel: [
+        { action: 'animate', character: 'mage', anim: 'cast_spell' },
+        { action: 'spawn', asset: 'potion_red', position: MARK.CS_CENTER },
+        { action: 'react', effect: 'sparkle-magic', position: MARK.CS_CENTER },
+        { action: 'sfx', sound: 'react' },
+      ], delayAfter: 0.6 }],
+      [{ parallel: [
+        { action: 'move', character: 'skeleton_warrior', to: MARK.CS_LEFT, style: 'arc', duration: 0.5 },
+      ], delayAfter: 0.4 }],
+      [{ parallel: [
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'mage', anim: 'wave' },
+        { action: 'text_popup', text: '✨ MAGIC! ✨', position: 'center', size: 'large' },
+        { action: 'react', effect: 'hearts-float', position: MARK.CENTER },
+        { action: 'sfx', sound: 'success' },
+      ], delayAfter: 2.0 }],
+    ),
     feedback: {
       title: '✨ Magic Show!',
       message: "The magic show was great! The wizard pulled off some tricks. Try adding specific food and a party vibe for a full combo.",
@@ -1754,12 +1983,12 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'cs-center', scale: 0.2 },
+        { action: 'spawn', asset: 'cake_birthday', position: 'cs-center', scale: 0.2 },
         { action: 'text_popup', text: 'tiny cake!', position: 'top', size: 'small' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
         { action: 'emote', character: 'skeleton_warrior', emoji: '🎂' },
       ], delayAfter: 1.5 },
     ],
@@ -1833,12 +2062,12 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-center', scale: 0.2 },
+        { action: 'spawn', asset: 'pizza', position: 'cs-center', scale: 0.2 },
         { action: 'text_popup', text: '🎵 tiny pizza 🎵', position: 'top', size: 'small' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
         { action: 'animate', character: 'skeleton_mage', anim: 'taunt' },
       ], delayAfter: 1.5 },
     ],
@@ -1879,14 +2108,14 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'camera_shake', intensity: 0.6, duration: 1.0 },
       ], delayAfter: 0.8 },
       { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'center', scale: 3.0 },
+        { action: 'spawn', asset: 'cake_birthday', position: 'center', scale: 3.0 },
         { action: 'react', effect: 'explosion-cartoon', position: 'center' },
         { action: 'text_popup', text: 'MEGA CAKE!', position: 'top', size: 'huge' },
         { action: 'screen_flash', color: 'white', duration: 0.2 },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt_long' },
         { action: 'animate', character: 'mage', anim: 'taunt' },
         { action: 'react', effect: 'confetti-burst', position: 'center' },
       ], delayAfter: 1.5 },
@@ -1931,7 +2160,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'screen_flash', color: 'yellow', duration: 0.3 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
         { action: 'react', effect: 'confetti-burst', position: 'center' },
         { action: 'react', effect: 'sparkle-magic', position: 'top' },
       ], delayAfter: 2.0 },
@@ -1959,7 +2188,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
       { parallel: [
         { action: 'spawn', asset: 'table_long', position: 'cs-center', scale: 2.5 },
         { action: 'spawn', asset: 'burger', position: 'cs-left', scale: 2.0 },
-        { action: 'spawn', asset: 'cookie', position: 'cs-right', scale: 2.0 },
+        { action: 'spawn', asset: 'cake_birthday', position: 'cs-right', scale: 2.0 },
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground', scale: 1.5 },
@@ -1980,7 +2209,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2007,7 +2236,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
       ], delayAfter: 0.3 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'jump_big' },
         { action: 'emote', character: 'skeleton_warrior', emoji: '🎉' },
       ], delayAfter: 0.4 },
       { parallel: [
@@ -2100,7 +2329,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'taunt_long' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2173,7 +2402,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'barbarian', position: 'ds-right', anim: 'spawn_ground' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-center', scale: 3.0 },
+        { action: 'spawn', asset: 'pizza', position: 'cs-center', scale: 3.0 },
         { action: 'camera_shake', intensity: 0.5, duration: 0.8 },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
@@ -2182,8 +2411,8 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'react', effect: 'explosion-cartoon', position: 'center' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
+        { action: 'animate', character: 'barbarian', anim: 'Cheering' },
         { action: 'emote', character: 'skeleton_warrior', emoji: '🍕' },
       ], delayAfter: 1.5 },
     ],
@@ -2211,7 +2440,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'skeleton_warrior', position: 'cs-center', anim: 'spawn_ground' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'spawn', asset: 'burger', position: 'cs-center', scale: 0.1 },
+        { action: 'spawn', asset: 'pizza', position: 'cs-center', scale: 0.1 },
         { action: 'text_popup', text: 'tiny pizza?', position: 'center', size: 'small' },
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.6 },
@@ -2253,7 +2482,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'camera_shake', intensity: 0.7, duration: 1.2 },
       ], delayAfter: 1.0 },
       { parallel: [
-        { action: 'spawn', asset: 'cookie', position: 'center', scale: 4.0 },
+        { action: 'spawn', asset: 'cake_birthday', position: 'center', scale: 4.0 },
         { action: 'react', effect: 'explosion-cartoon', position: 'center' },
         { action: 'screen_flash', color: 'white', duration: 0.3 },
         { action: 'sfx', sound: 'success' },
@@ -2263,7 +2492,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'react', effect: 'confetti-burst', position: 'center' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'wave' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2293,7 +2522,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'spawn_character', character: 'clown', position: 'cs-left', anim: 'spawn_ground' },
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'jump_big' },
       ], delayAfter: 0.6 },
       { parallel: [
         { action: 'animate', character: 'clown', anim: 'Cheering' },
@@ -2411,7 +2640,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'clown', position: 'ds-right', anim: 'spawn_ground' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
         { action: 'animate', character: 'clown', anim: 'Cheering' },
         { action: 'react', effect: 'sparkle-magic', position: 'center' },
       ], delayAfter: 0.6 },
@@ -2446,7 +2675,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground', scale: 0.5 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
         { action: 'emote', character: 'skeleton_warrior', emoji: '🍎' },
       ], delayAfter: 0.4 },
       { parallel: [
@@ -2501,7 +2730,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'spin_attack' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2577,7 +2806,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'skeleton_warrior', position: 'ds-center', anim: 'spawn_ground', scale: 1.5 },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'jump_big' },
         { action: 'emote', character: 'skeleton_warrior', emoji: '🎉' },
         { action: 'camera_shake', intensity: 0.5, duration: 0.8 },
       ], delayAfter: 0.6 },
@@ -2674,7 +2903,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2702,8 +2931,8 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'spawn_character', character: 'knight', position: 'cs-right', anim: 'spawn_ground' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'jump_big' },
+        { action: 'animate', character: 'knight', anim: 'wave' },
       ], delayAfter: 0.4 },
       { parallel: [
         { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
@@ -2716,7 +2945,7 @@ const STAGE2_SIZE_MOOD_VIGNETTES: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'sword_slash' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2810,7 +3039,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'react', effect: 'confetti-burst', position: 'center' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2838,8 +3067,8 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'animate', character: 'knight', anim: 'taunt' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'wave' },
+        { action: 'animate', character: 'knight', anim: 'wave' },
         { action: 'react', effect: 'sparkle-magic', position: 'center' },
       ], delayAfter: 0.6 },
       { parallel: [
@@ -2853,7 +3082,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'spin_attack' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2877,8 +3106,8 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'spawn_character', character: 'knight', position: 'cs-right', anim: 'spawn_ground' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'Cheering' },
+        { action: 'animate', character: 'knight', anim: 'Cheering' },
       ], delayAfter: 0.6 },
       { parallel: [
         { action: 'animate', character: 'skeleton_warrior', anim: 'taunt' },
@@ -2886,8 +3115,8 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'center' },
       ], delayAfter: 0.6 },
       { parallel: [
-        { action: 'animate', character: 'skeleton_warrior', anim: 'celebrate' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
+        { action: 'animate', character: 'skeleton_warrior', anim: 'jump_big' },
+        { action: 'animate', character: 'knight', anim: 'jump_big' },
         { action: 'camera_shake', intensity: 0.4, duration: 0.8 },
       ], delayAfter: 0.6 },
       { parallel: [
@@ -2896,7 +3125,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'taunt_long' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2938,7 +3167,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'react', effect: 'confetti-burst', position: 'center' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'wave' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -2981,7 +3210,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'screen_flash', color: 'yellow', duration: 0.2 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
       ], delayAfter: 1.5 },
     ],
     feedback: {
@@ -3024,7 +3253,7 @@ const STAGE3_SECRET_COMBOS: Vignette[] = [
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
       ], delayAfter: 1.5 },
     ],
     feedback: {

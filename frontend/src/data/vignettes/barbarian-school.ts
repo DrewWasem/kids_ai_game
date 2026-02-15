@@ -47,8 +47,8 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'explosion-cartoon', position: 'cs-right' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'barbarian', anim: 'Cheering' },
+        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
     ],
@@ -180,7 +180,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
       ], delayAfter: 0.3 },
       { parallel: [
         { action: 'move', character: 'barbarian', to: 'off-right', style: 'charge' },
-        { action: 'react', effect: 'confetti-burst', position: 'off-right' },
+        { action: 'react', effect: 'glow-pulse', position: 'off-right' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
     ],
@@ -308,10 +308,10 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
       { parallel: [
         { action: 'animate', character: 'robot', anim: 'get_bonked' },
         { action: 'react', effect: 'splash', position: 'cs-right' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-right' },
+        { action: 'react', effect: 'hearts-float', position: 'cs-right' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
+        { action: 'animate', character: 'clown', anim: 'wave' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
     ],
@@ -437,7 +437,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
       ], delayAfter: 0.4 },
       { parallel: [
         { action: 'animate', character: 'clown', anim: 'sit_floor' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-right' },
+        { action: 'react', effect: 'stars-spin', position: 'cs-right' },
         { action: 'react', effect: 'laugh-tears', position: 'cs-right' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
@@ -479,8 +479,8 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.3 },
       { parallel: [
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-center' },
+        { action: 'animate', character: 'clown', anim: 'taunt' },
+        { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
     ],
@@ -522,7 +522,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'dust', position: 'cs-right' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
+        { action: 'animate', character: 'clown', anim: 'jump_big' },
         { action: 'react', effect: 'laugh-tears', position: 'cs-center' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
@@ -570,7 +570,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'dust', position: 'cs-center' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
+        { action: 'animate', character: 'ninja', anim: 'Cheering' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0 },
     ],
@@ -698,8 +698,8 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'sfx', sound: 'magic' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'us-right' },
+        { action: 'animate', character: 'ninja', anim: 'wave' },
+        { action: 'react', effect: 'glow-pulse', position: 'us-right' },
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'move', character: 'robot', from: 'ds-center', to: 'cs-center', duration: 0.4, style: 'normal' },
@@ -749,7 +749,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'clown', anim: 'celebrate' },
+        { action: 'animate', character: 'clown', anim: 'taunt' },
         { action: 'react', effect: 'laugh-tears', position: 'ds-right' },
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0 },
@@ -782,7 +782,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'dust', position: 'cs-center' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
+        { action: 'animate', character: 'ninja', anim: 'jump_big' },
         { action: 'react', effect: 'sparkle-magic', position: 'us-left' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
@@ -832,8 +832,8 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.4 },
       { parallel: [
-        { action: 'animate', character: 'robot', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'us-left' },
+        { action: 'animate', character: 'robot', anim: 'Cheering' },
+        { action: 'react', effect: 'hearts-float', position: 'us-left' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0 },
     ],
@@ -874,8 +874,8 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'sfx', sound: 'fail' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'cs-right' },
+        { action: 'animate', character: 'barbarian', anim: 'wave' },
+        { action: 'react', effect: 'stars-spin', position: 'cs-right' },
         { action: 'react', effect: 'question-marks', position: 'cs-center' },
       ], delayAfter: 0 },
     ],
@@ -915,7 +915,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
       ], delayAfter: 0.3 },
       { parallel: [
         { action: 'animate', character: 'robot', anim: 'get_bonked' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
+        { action: 'animate', character: 'knight', anim: 'taunt' },
         { action: 'react', effect: 'stars-spin', position: 'cs-left' },
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0.5 },
@@ -965,7 +965,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
       ], delayAfter: 0.5 },
       { parallel: [
         { action: 'move', character: 'ninja', from: 'cs-center', to: 'us-right', duration: 0.3, style: 'dash' },
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
+        { action: 'animate', character: 'ninja', anim: 'jump_big' },
       ], delayAfter: 0 },
     ],
     feedback: {
@@ -1005,7 +1005,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'sparkle-magic', position: 'top' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'mage', anim: 'celebrate' },
+        { action: 'animate', character: 'mage', anim: 'Cheering' },
         { action: 'react', effect: 'laugh-tears', position: 'ds-right' },
         { action: 'sfx', sound: 'react' },
       ], delayAfter: 0 },
@@ -1093,7 +1093,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'animate', character: 'ninja', anim: 'run_panic' },
       ], delayAfter: 0.3 },
       { parallel: [
-        { action: 'animate', character: 'caveman', anim: 'celebrate' },
+        { action: 'animate', character: 'caveman', anim: 'wave' },
         { action: 'react', effect: 'dust', position: 'cs-center' },
       ], delayAfter: 0.5 },
     ],
@@ -1201,7 +1201,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'question-marks', position: 'ds-left' },
       ], delayAfter: 1.0 },
       { parallel: [
-        { action: 'animate', character: 'robot', anim: 'celebrate' },
+        { action: 'animate', character: 'robot', anim: 'taunt' },
         { action: 'animate', character: 'knight', anim: 'wave' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
@@ -1248,7 +1248,7 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'move', character: 'mage', from: 'ds-right', to: 'off-right', duration: 0.8 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'caveman', anim: 'celebrate' },
+        { action: 'animate', character: 'caveman', anim: 'jump_big' },
       ], delayAfter: 0.5 },
     ],
     feedback: {
@@ -1454,12 +1454,12 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'react', effect: 'dust', position: 'ds-right' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'ninja', anim: 'celebrate' },
+        { action: 'animate', character: 'ninja', anim: 'Cheering' },
         { action: 'animate', character: 'robot', anim: 'wave' },
         { action: 'animate', character: 'barbarian', anim: 'sit_floor' },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'react', effect: 'confetti-burst', position: 'cs-right' },
+        { action: 'react', effect: 'sparkle-magic', position: 'cs-right' },
         { action: 'sfx', sound: 'success' },
       ], delayAfter: 0.5 },
     ],
@@ -1505,9 +1505,9 @@ export const BARBARIAN_SCHOOL_STAGE_1: Vignette[] = [
         { action: 'move', character: 'clown', from: 'us-right', to: 'off-right', duration: 0.8 },
       ], delayAfter: 0.5 },
       { parallel: [
-        { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-        { action: 'animate', character: 'knight', anim: 'celebrate' },
-        { action: 'animate', character: 'robot', anim: 'celebrate' },
+        { action: 'animate', character: 'barbarian', anim: 'wave' },
+        { action: 'animate', character: 'knight', anim: 'taunt' },
+        { action: 'animate', character: 'robot', anim: 'jump_big' },
         { action: 'react', effect: 'sparkle-magic', position: 'cs-center' },
       ], delayAfter: 0.5 },
     ],
@@ -1586,8 +1586,8 @@ export const BARBARIAN_SCHOOL_DEFAULT: Vignette = {
     },
     {
       parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+        { action: 'react', effect: 'glow-pulse', position: 'center' },
         { action: 'sfx', sound: 'success' },
         { action: 'text_popup', text: '🎪 RECESS TIME! 🎪', position: 'center', size: 'large' },
       ],
@@ -1722,7 +1722,7 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '🤖 ROBOT FLIES AWAY! 🤖', position: 'center', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -1851,7 +1851,7 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
         parallel: [
           { action: 'spawn_character', character: 'clown', position: 'right', anim: 'spawn_ground' },
           { action: 'spawn_character', character: 'robot', position: 'bottom', anim: 'spawn_ground' },
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
           { action: 'react', effect: 'snowflakes', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -1971,9 +1971,9 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
+          { action: 'animate', character: 'barbarian', anim: 'taunt' },
           { action: 'animate', character: 'caveman', anim: 'idle' },
-          { action: 'react', effect: 'confetti-burst', position: 'left' },
+          { action: 'react', effect: 'stars-spin', position: 'left' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2227,8 +2227,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2282,9 +2282,9 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ninja', anim: 'celebrate' },
-          { action: 'animate', character: 'robot', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'ninja', anim: 'Cheering' },
+          { action: 'animate', character: 'robot', anim: 'wave' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2348,8 +2348,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'taunt' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'text_popup', text: '☀️ SUNNY CHAOS! ☀️', position: 'center', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2575,8 +2575,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'caveman', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'animate', character: 'caveman', anim: 'jump_big' },
+          { action: 'react', effect: 'stars-spin', position: 'center' },
           { action: 'text_popup', text: '🌪️ WIND CAN\'T STOP ME! 🌪️', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -2643,8 +2643,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2709,7 +2709,7 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       {
         parallel: [
           { action: 'react', effect: 'stars-spin', position: 'right' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -2888,8 +2888,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3008,8 +3008,8 @@ export const BARBARIAN_SCHOOL_STAGE_2: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'barbarian', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'left' },
+          { action: 'animate', character: 'barbarian', anim: 'taunt' },
+          { action: 'react', effect: 'stars-spin', position: 'left' },
           { action: 'text_popup', text: '🏁 STEADY WIN! 🏁', position: 'center', size: 'large' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -3121,8 +3121,8 @@ export const BARBARIAN_SCHOOL_DEFAULT_2: Vignette = {
     },
     {
       parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-        { action: 'react', effect: 'confetti-burst', position: 'center' },
+        { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
+        { action: 'react', effect: 'sparkle-magic', position: 'center' },
         { action: 'sfx', sound: 'success' },
         { action: 'text_popup', text: '🎪 RECESS CONTINUES! 🎪', position: 'center', size: 'large' },
       ],
@@ -3200,8 +3200,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3267,8 +3267,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3334,8 +3334,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'animate', character: 'ninja', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'right' },
+          { action: 'animate', character: 'ninja', anim: 'taunt' },
+          { action: 'react', effect: 'stars-spin', position: 'right' },
           { action: 'text_popup', text: '🏆 PARKOUR CHAMPION! 🏆', position: 'center', size: 'huge' },
           { action: 'sfx', sound: 'success' },
         ],
@@ -3404,8 +3404,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'jump_big' },
+          { action: 'react', effect: 'sparkle-magic', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3475,8 +3475,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'Cheering' },
+          { action: 'react', effect: 'glow-pulse', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3543,8 +3543,8 @@ export const BARBARIAN_SCHOOL_STAGE_3: Vignette[] = [
       },
       {
         parallel: [
-          { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
-          { action: 'react', effect: 'confetti-burst', position: 'center' },
+          { action: 'crowd_react', characters: 'all', anim: 'wave' },
+          { action: 'react', effect: 'hearts-float', position: 'center' },
           { action: 'sfx', sound: 'success' },
         ],
         delayAfter: 2.0,
@@ -3585,7 +3585,7 @@ export const BARBARIAN_SCHOOL_DEFAULT_3: Vignette = {
     },
     {
       parallel: [
-        { action: 'crowd_react', characters: 'all', anim: 'celebrate' },
+        { action: 'crowd_react', characters: 'all', anim: 'taunt' },
         { action: 'react', effect: 'question-marks', position: 'center' },
         { action: 'text_popup', text: '🤔 Trying to combine... 🤔', position: 'center', size: 'large' },
         { action: 'sfx', sound: 'react' },

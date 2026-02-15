@@ -220,3 +220,10 @@ tmp_render/
 # Dev test pages
 frontend/test-*.html
 frontend/src/test-*.tsx
+
+# Claude Code context guardian state
+.claude/.context-guard-fired
+.claude/context-saves/
+
+# Context Session Transfer temp files
+.claude/context-session-transfer/temp/
