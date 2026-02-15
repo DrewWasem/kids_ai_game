@@ -377,7 +377,8 @@ function HexTerrain() {
     const result: { model: string; position: [number, number, number]; rotation?: [number, number, number]; scale?: number }[] = []
     const roadPositions = new Set<string>()
 
-    // 1. Grass tiles everywhere (transition tiles removed — they cause white checkerboard)
+    // 1. Grass tiles everywhere — DO NOT add zone-based transition tiles here.
+    //    Grass must remain uniform across the entire map. (Locked by design.)
     for (let col = -55; col <= 55; col++) {
       for (let row = -60; row <= 50; row++) {
         const [wx, , wz] = hexToWorld(col, row)
