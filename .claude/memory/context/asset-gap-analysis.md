@@ -45,6 +45,7 @@ Project has 1.32GB of downloaded 3D assets but only 0.63% (81 files) are actuall
    - Pizza, burger, cake, sushi, taco, hot dog, fries, ice cream, croissant, pancakes, 180+ more
    - Kitchen utensils: frying pan, cutting board, knife block, rolling pin, whisk, spatula
    - Transforms Skeleton Pizza + Mage Kitchen zones
+   - **UPDATE 2026-02-14:** FoodMegaPack (173 GLB models) deployed instead. See emoji-food-integration session.
 
 2. **Kenney Fantasy Town Kit** — 160 models, FREE, CC0 — kenney.nl/assets/fantasy-town-kit
    - Medieval market stalls, wagons, barrels, crates, banners, signs, fences, wells, bridges

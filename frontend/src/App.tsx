@@ -8,6 +8,8 @@ import LoadingScreen from './components/LoadingScreen';
 import TitleScreen from './components/TitleScreen';
 import { useGameStore } from './stores/gameStore';
 import { preloadAllAnimations } from './game/AnimationController';
+import { SoundManager3D } from './game/SoundManager3D';
+import type { MusicZone } from './game/SoundManager3D';
 import { useGLTF } from '@react-three/drei';
 import { CHARACTERS, ASSET_BASE } from './data/asset-manifest';
 import { PLAYER_CHARACTERS } from './data/player-characters';
@@ -43,19 +45,31 @@ export default function App() {
     return getQuestStage(currentZone, stageNumber);
   }, [currentZone, stageNumber]);
 
-  // Preload shared animations + selectable character GLBs on mount
+  // Preload shared animations + selectable character GLBs + audio on mount
   useEffect(() => {
     try {
       preloadAllAnimations();
       for (const char of PLAYER_CHARACTERS) {
         useGLTF.preload(`${ASSET_BASE}${CHARACTERS[char.id]}`);
       }
+      SoundManager3D.preload();
     } catch {
       // Preload is best-effort
     }
     const timer = setTimeout(() => setLoading3D(false), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Background music — switch track on zone change
+  useEffect(() => {
+    if (!started) return;
+    const zone = currentZone as MusicZone | null;
+    if (zone) {
+      SoundManager3D.playMusic(zone);
+    } else {
+      SoundManager3D.playMusic('village');
+    }
+  }, [currentZone, started]);
 
   const world = currentZone ? WORLDS[currentZone] : null;
   const earnedBadges = BADGES.filter(b => badges[b.id]);
